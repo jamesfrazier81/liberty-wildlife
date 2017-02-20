@@ -1,0 +1,4 @@
+.obi
+.obiignore
+_resources
+/wp-content/themes/liberty-wildlife/node_modules
