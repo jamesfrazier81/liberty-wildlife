@@ -17,7 +17,7 @@ gulp.task('serve', function() {
 	];
 
 	browserSync.init(files, {
-		proxy: 'fff.dev'
+		proxy: 'libertywildlife.dev'
 	});
 	
 	gulp.watch('./sass/*.scss', ['sass']);
