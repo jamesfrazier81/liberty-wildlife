@@ -56,11 +56,11 @@ if ( WP_ENV == 'local' ) {
 	define('DB_PASSWORD', '}*#Z%vH&utLw'); // staging_db_password
 
 	/** MySQL hostname */
-	define('DB_HOST', 'localhost'); // staging_db_host
+	define('DB_HOST', '107.180.51.25'); // staging_db_host
 
-	define('WP_SITEURL', "http://wordpress.libertywildlife.com"); // staging_site_url
+	define('WP_SITEURL', "http://staging.libertywildlife.com"); // staging_site_url
 
-	define('WP_HOME', "http://wordpress.libertywildlife.com"); // staging_home_url
+	define('WP_HOME', "http://staging.libertywildlife.com"); // staging_home_url
 
 } else {
 	// ** MySQL settings - You can get this info from your web host ** //
@@ -74,7 +74,7 @@ if ( WP_ENV == 'local' ) {
 	define('DB_PASSWORD', 'ngJGa,rvMLLr'); // production_db_password
 
 	/** MySQL hostname */
-	define('DB_HOST', 'localhost'); // production_db_host
+	define('DB_HOST', '107.180.51.25'); // production_db_host
 
 	define('WP_SITEURL', "https://www.libertywildlife.org"); // production_site_url
 
