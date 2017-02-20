@@ -16,6 +16,11 @@ function my_login_logo() { ?>
         	background-size: cover;
         	background-position: top center;
         }
+        body.login div#login {
+        	/*padding: 8%;
+        	margin: 0;
+        	float: right;*/
+        }
 		body.login div#login h1 a {
 			background-image: url('/wp-content/themes/liberty-wildlife/img/dist/logo-liberty-wildlife.png');
 			background-size: 100%;
@@ -23,19 +28,26 @@ function my_login_logo() { ?>
 			height: 187px;
 		}
 		body.login div#login form#loginform {
-			background-color: rgba(255, 255, 255, 0.5);
+			background-color: rgba(255, 255, 255, 0.75);
 			/*box-shadow: none;*/
 		}
 		body.login div#login form#loginform p label {
 			font-weight: bold;
 			color: #da5834;
-			text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+			text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
 		}
 		body.login div#login form#loginform input#user_login {
+			font-weight: normal;
 			background-color: rgba(255, 255, 255, 0.5);
 			color: #da5834;
 		}
 		body.login div#login form#loginform input#user_pass {
+			font-weight: normal;
+			background-color: rgba(255, 255, 255, 0.5);
+			color: #da5834;
+		}
+		body.login div#login form#loginform input#aiowps-captcha-answer {
+			font-weight: normal;
 			background-color: rgba(255, 255, 255, 0.5);
 			color: #da5834;
 		}
@@ -44,6 +56,18 @@ function my_login_logo() { ?>
 			border-color: transparent;
 			box-shadow: none;
 			text-shadow: none;
+		}
+		body.login div#login p#nav {}
+		body.login div#login p#nav a {
+			font-weight: bold;
+			color: #da5834;
+			text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+		}
+		body.login div#login p#backtoblog {}
+		body.login div#login p#backtoblog a {
+			font-weight: bold;
+			color: #da5834;
+			text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 		}
     </style>
 <?php }
