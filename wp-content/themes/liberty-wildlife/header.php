@@ -70,9 +70,6 @@ wp_head();
 	
 
 	<div id='wrap_all'>
-	<div id='emergencies'>
-		<p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Wildlife-related emergencies: 480-998-5550</p>
-	</div>
 	<?php 
 	if(!$blank) //blank templates dont display header nor footer
 	{ 
