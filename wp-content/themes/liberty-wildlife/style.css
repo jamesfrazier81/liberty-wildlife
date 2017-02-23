@@ -8,3 +8,48 @@
  Version:      1.0.0
  Text Domain:  enfold-child
 */
+@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,700");
+html, body {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 300; }
+
+h1 {
+  font-size: 2.75em;
+  font-weight: 100; }
+
+h2 {
+  font-size: 2em;
+  font-weight: 100; }
+
+h3 {
+  font-size: 1.75em;
+  font-weight: 100; }
+
+h4 {
+  font-size: 1em;
+  font-weight: bold; }
+
+#top #wrap_all #emergencies {
+  background-color: #da5834; }
+  #top #wrap_all #emergencies p {
+    margin: 0;
+    color: white;
+    font-size: 0.75em;
+    font-weight: 700;
+    text-align: center; }
+
+#top #wrap_all #header_main .av-logo-container {
+  height: 120px; }
+  #top #wrap_all #header_main .av-logo-container .inner-container {
+    padding: 20px; }
+
+#top #wrap_all #header_main_alternate {
+  background-color: #333333; }
+  #top #wrap_all #header_main_alternate #avia-menu li a {
+    color: white;
+    font-size: 0.85em;
+    font-weight: 300; }
+    #top #wrap_all #header_main_alternate #avia-menu li a .avia-menu-fx {
+      background-color: #da5834;
+      border-color: #da5834; }

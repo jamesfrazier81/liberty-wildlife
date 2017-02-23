@@ -22,7 +22,7 @@ function my_login_logo() { ?>
         	float: right;*/
         }
 		body.login div#login h1 a {
-			background-image: url('/wp-content/themes/liberty-wildlife/img/dist/logo-liberty-wildlife.png');
+			background-image: url('/wp-content/themes/liberty-wildlife/img/dist/logo-liberty-wildlife-vert.png');
 			background-size: 100%;
 			width: 100%;
 			height: 187px;

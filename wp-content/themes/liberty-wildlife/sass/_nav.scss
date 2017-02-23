@@ -1,0 +1,16 @@
+#top #wrap_all #header_main_alternate {
+	background-color:$color-gray-dark;
+
+	#avia-menu {
+		li a {
+			color: white;
+			font-size: 0.85em;
+			font-weight: 300;
+
+			.avia-menu-fx {
+				background-color: $color-orange;
+				border-color: $color-orange;
+			}
+		}
+	}
+}

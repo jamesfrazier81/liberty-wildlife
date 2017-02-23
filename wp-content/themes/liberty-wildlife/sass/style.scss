@@ -9,5 +9,9 @@
  Text Domain:  enfold-child
 */
 
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,700');
+
 @import 'variables',
-		'base';
+		'base',
+		'header',
+		'nav';
