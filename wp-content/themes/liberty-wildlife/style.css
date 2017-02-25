@@ -8,64 +8,127 @@
  Version:      1.0.0
  Text Domain:  enfold-child
 */
-@import url("https://fonts.googleapis.com/css?family=Roboto:100,300,700");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,800");
 html, body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px;
   font-weight: 300; }
 
-h1 {
+#top #wrap_all #main h1 {
   font-size: 2.75em;
   font-weight: 100; }
 
-h2 {
+#top #wrap_all #main h2 {
   font-size: 2em;
-  font-weight: 100; }
+  font-weight: 300;
+  text-transform: none;
+  color: #da5834; }
 
-h3 {
+#top #wrap_all #main h3 {
   font-size: 1.75em;
   font-weight: 100; }
 
-h4 {
+#top #wrap_all #main h4 {
   font-size: 1em;
   font-weight: bold; }
 
-#top #wrap_all #emergencies {
-  background-color: #da5834; }
-  #top #wrap_all #emergencies p {
-    margin: 0;
-    color: white;
-    font-size: 0.75em;
-    font-weight: 700;
-    text-align: center; }
-
-#top #wrap_all #header_main .av-logo-container {
-  height: 120px; }
-  #top #wrap_all #header_main .av-logo-container .inner-container {
-    padding: 20px; }
+#top #wrap_all #header {
+  position: fixed; }
 
 #top #wrap_all #header_main_alternate {
-  background-color: #333333; }
+  background-color: rgba(218, 88, 52, 0.95);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
+  #top #wrap_all #header_main_alternate .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0; }
+    #top #wrap_all #header_main_alternate .container .main_menu .avia-menu {
+      height: 70px; }
   #top #wrap_all #header_main_alternate #avia-menu {
-    display: flex; }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px; }
     #top #wrap_all #header_main_alternate #avia-menu li {
       flex: 1;
       text-align: center;
-      padding: 0;
-      border-left: 1px solid rgba(255, 255, 255, 0.25); }
+      padding: 0; }
       #top #wrap_all #header_main_alternate #avia-menu li a {
         color: white;
-        font-size: 0.85em;
-        font-weight: 300;
+        font-size: 1em;
+        font-weight: 400;
         padding: 0; }
         #top #wrap_all #header_main_alternate #avia-menu li a .avia-menu-fx {
           background-color: #da5834;
           border-color: #da5834; }
-      #top #wrap_all #header_main_alternate #avia-menu li:last-child {
-        border-right: 1px solid rgba(255, 255, 255, 0.25); }
-      #top #wrap_all #header_main_alternate #avia-menu li:nth-child(4) {
+      #top #wrap_all #header_main_alternate #avia-menu li:nth-child(3) {
         flex: 0.75; }
-      #top #wrap_all #header_main_alternate #avia-menu li:nth-child(6) {
-        flex: 1.75; }
-      #top #wrap_all #header_main_alternate #avia-menu li:nth-child(10) {
-        flex: 0.45; }
+      #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5) {
+        flex: 1;
+        position: relative; }
+        #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5) .avia-bullet {
+          display: none; }
+        #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5) .avia-menu-text {
+          display: block;
+          text-indent: -9999px;
+          background-image: url(/wp-content/uploads/2017/02/icon-liberty-wildlife-white.png);
+          background-repeat: no-repeat;
+          background-size: 50px;
+          background-position: center center;
+          color: transparent; }
+        #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5):after {
+          position: absolute;
+          content: '';
+          top: 50px;
+          width: 0;
+          height: 0;
+          border-style: solid;
+          border-width: 15px 100% 0 100%;
+          border-color: #da5834 transparent transparent transparent; }
+
+#top #wrap_all #main .av-section-bottom-logo {
+  display: none; }
+
+@media screen and (max-width: 768px) {
+  .responsive #top #wrap_all #main .av-section-bottom-logo {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    border: none;
+    display: block;
+    background-color: rgba(218, 88, 52, 0.95);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
+    .responsive #top #wrap_all #main .av-section-bottom-logo .container {
+      max-width: 95%;
+      width: 95%; }
+      .responsive #top #wrap_all #main .av-section-bottom-logo .container .logo {
+        height: 70px !important; }
+        .responsive #top #wrap_all #main .av-section-bottom-logo .container .logo a img {
+          max-height: 50px; }
+      .responsive #top #wrap_all #main .av-section-bottom-logo .container #advanced_menu_toggle {
+        background-color: transparent;
+        color: white;
+        border: none; }
+        .responsive #top #wrap_all #main .av-section-bottom-logo .container #advanced_menu_toggle:before {
+          content: '\f0c9';
+          font-family: FontAwesome;
+          color: white; } }
+
+#top #wrap_all #main {
+  position: absolute;
+  top: 70px;
+  width: 100%; }
+  #top #wrap_all #main #section-black, #top #wrap_all #main #section-orange {
+    background-color: #333333; }
+    #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h6, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h6 {
+      color: white; }
+    #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading .av-subheading p, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading .av-subheading p {
+      color: white; }
+    #top #wrap_all #main #section-black .container .template-page .flex_column .av_textblock_section p, #top #wrap_all #main #section-orange .container .template-page .flex_column .av_textblock_section p {
+      color: white; }
+  #top #wrap_all #main #section-orange {
+    background-color: #da5834; }
+
+@media screen and (max-width: 768px) {
+  .responsive #top #wrap_all #main {
+    top: 0; } }

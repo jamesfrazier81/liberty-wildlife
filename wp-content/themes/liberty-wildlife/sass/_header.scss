@@ -1,25 +1,124 @@
 #top #wrap_all {
-	#emergencies {
-		background-color: $color-orange;
+    #header {
+    	position: fixed;
+    }
 
-		p {
-			margin: 0;
-			color: white;
-			font-size: 0.75em;
-			font-weight: 700;
-			text-align: center;
-		}
-	}
+    #header_main_alternate {
+        background-color: rgba($color-orange, 0.95);
+        box-shadow: 0 0 10px rgba(black, 0.5);
 
-	#header_main {
-	    .av-logo-container {
-	        height: 120px;
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
 
-	        .inner-container {
-	            padding: 20px;
+            .main_menu .avia-menu {
+                height: 70px;
+            }
+        }
 
-	            .logo {}
-	        }
-	    }
-	}
+        #avia-menu {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 70px;
+
+            li {
+                flex: 1;
+                text-align: center;
+                padding: 0;
+
+                a {
+                    color: white;
+                    font-size: 1em;
+                    font-weight: $font-normal;
+                    padding: 0;
+
+                    .avia-menu-fx {
+                        background-color: $color-orange;
+                        border-color: $color-orange;
+                    }
+                }
+
+                &:nth-child(3) {
+					flex: 0.75;
+                }
+
+                &:nth-child(5) {
+                    flex: 1;
+                    position: relative;
+
+                    .avia-bullet {
+                        display: none;
+                    }
+
+                    .avia-menu-text {
+                        display: block;
+                        text-indent: -9999px;
+                        background-image: url(/wp-content/uploads/2017/02/icon-liberty-wildlife-white.png);
+                        background-repeat: no-repeat;
+                        background-size: 50px;
+                        background-position: center center;
+                        color: transparent;
+                    }
+
+                    &:after {
+                        position: absolute;
+                        content: '';
+                        top: 50px;
+                        width: 0;
+                        height: 0;
+                        border-style: solid;
+                        border-width: 15px 100% 0 100%;
+                        border-color: #da5834 transparent transparent transparent;
+                    }
+                }
+            }
+        }
+    }
+
+    #main {
+        .av-section-bottom-logo {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: $media-tablet) {
+    .responsive #top #wrap_all #main {
+        .av-section-bottom-logo {
+        	position: fixed;
+        	z-index: 999;
+        	width: 100%;
+        	border: none;
+            display: block;
+            background-color: rgba($color-orange, 0.95);
+            box-shadow: 0 0 10px rgba(black, 0.5);
+
+            .container {
+                max-width: 95%;
+                width: 95%;
+
+                .logo {
+                	height: 70px !important;
+
+                    a img {
+                        max-height: 50px;
+                    }
+                }
+
+                #advanced_menu_toggle {
+                	background-color: transparent;
+                	color: white;
+                	border: none;
+
+                	&:before {
+                		content: '\f0c9';
+                		font-family: $font-awesome;
+                		color: white;
+                	}
+                }
+            }
+        }
+    }
 }

@@ -1,0 +1,37 @@
+#top #wrap_all #main {
+	position: absolute;
+	top: 70px;
+	width: 100%;
+
+	#section-black, #section-orange {
+		background-color: $color-gray-dark;
+
+		.container .template-page .flex_column {
+			.av-special-heading {
+				h1, h2, h3, h4, h5, h6 {
+					color: white;
+				}
+
+				.av-subheading p {
+					color: white;
+				}			
+			}
+
+			.av_textblock_section {
+				p {
+					color: white;
+				}
+			}
+		}
+	}
+
+	#section-orange {
+		background-color: $color-orange;
+	}
+}
+
+@media screen and (max-width: $media-tablet) {
+	.responsive #top #wrap_all #main {
+		top: 0;
+	}
+}
