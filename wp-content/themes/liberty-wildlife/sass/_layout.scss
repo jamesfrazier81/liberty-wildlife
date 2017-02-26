@@ -28,6 +28,45 @@
 	#section-orange {
 		background-color: $color-orange;
 	}
+
+	// Fullwidth sliders
+	.avia-fullwidth-slider {
+		.avia-slideshow .caption_fullwidth {
+			.slideshow_caption .slideshow_align_caption {
+				padding: 0;
+
+				.avia-caption-title {
+					font-family: $font-acme;
+					font-size: 3rem;
+					color: white;
+					margin: 0 0 -7px 0;
+					text-transform: uppercase;
+				}
+			}
+		}
+	}
+
+	// 3/5, 2/5
+	#inner-3-5 {
+		.av_two_fifth {
+			background-color: $color-orange;
+			padding: 30px;
+
+			.av-special-heading {
+				.av-special-heading-tag {
+					color: white;
+				}
+			}
+
+			.av_textblock_section {
+				.avia_textblock {
+					p {
+						color: white;
+					}
+				}
+			}
+		}
+	}
 }
 
 @media screen and (max-width: $media-tablet) {

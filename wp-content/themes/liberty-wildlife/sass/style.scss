@@ -9,10 +9,12 @@
  Text Domain:  enfold-child
 */
 
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,800');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,800'),
+		url('https://fonts.googleapis.com/css?family=Acme|Shadows+Into+Light');
 
 @import 'variables',
 		'base',
 		'header',
 		'layout',
-		'footer';
+		'footer',
+		'home';

@@ -9,28 +9,44 @@
  Text Domain:  enfold-child
 */
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,800");
+@import url("https://fonts.googleapis.com/css?family=Acme|Shadows+Into+Light");
 html, body {
   font-family: "Open Sans", sans-serif;
   font-size: 16px;
   font-weight: 300; }
 
 #top #wrap_all #main h1 {
-  font-size: 2.75em;
-  font-weight: 100; }
+  font-size: 2.75rem;
+  font-weight: 100;
+  line-height: 3.25rem;
+  color: #333333; }
 
 #top #wrap_all #main h2 {
-  font-size: 2em;
+  font-size: 2rem;
   font-weight: 300;
   text-transform: none;
-  color: #da5834; }
+  line-height: 2.75rem;
+  color: #333333; }
 
 #top #wrap_all #main h3 {
-  font-size: 1.75em;
-  font-weight: 100; }
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 2.25rem;
+  color: #da5834; }
 
 #top #wrap_all #main h4 {
-  font-size: 1em;
-  font-weight: bold; }
+  font-family: "Shadows Into Light", cursive;
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 2.25rem;
+  color: #333333; }
+
+#top #wrap_all #main p {
+  color: #333333; }
+
+@media screen and (max-width: 480px) {
+  html, body {
+    font-size: 14px; } }
 
 #top #wrap_all #header {
   position: fixed; }
@@ -53,11 +69,31 @@ html, body {
       flex: 1;
       text-align: center;
       padding: 0; }
+      #top #wrap_all #header_main_alternate #avia-menu li .sub-menu {
+        width: 100%; }
+        #top #wrap_all #header_main_alternate #avia-menu li .sub-menu li a {
+          background-color: rgba(218, 88, 52, 0.95);
+          height: auto;
+          padding: 10px;
+          line-height: 18px;
+          font-size: 0.75rem;
+          border: none;
+          border-top: 1px dashed rgba(255, 255, 255, 0.25); }
+          #top #wrap_all #header_main_alternate #avia-menu li .sub-menu li a:hover {
+            background-color: rgba(189, 80, 50, 0.95); }
+        #top #wrap_all #header_main_alternate #avia-menu li .sub-menu li .avia-menu-text {
+          background-image: none;
+          text-indent: 0;
+          color: white; }
       #top #wrap_all #header_main_alternate #avia-menu li a {
+        height: 70px;
         color: white;
         font-size: 1em;
         font-weight: 400;
+        line-height: 70px;
         padding: 0; }
+        #top #wrap_all #header_main_alternate #avia-menu li a:hover {
+          background-color: rgba(51, 51, 51, 0.15); }
         #top #wrap_all #header_main_alternate #avia-menu li a .avia-menu-fx {
           background-color: #da5834;
           border-color: #da5834; }
@@ -76,15 +112,6 @@ html, body {
           background-size: 50px;
           background-position: center center;
           color: transparent; }
-        #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5):after {
-          position: absolute;
-          content: '';
-          top: 50px;
-          width: 0;
-          height: 0;
-          border-style: solid;
-          border-width: 15px 100% 0 100%;
-          border-color: #da5834 transparent transparent transparent; }
 
 #top #wrap_all #main .av-section-bottom-logo {
   display: none; }
@@ -128,7 +155,72 @@ html, body {
       color: white; }
   #top #wrap_all #main #section-orange {
     background-color: #da5834; }
+  #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_align_caption {
+    padding: 0; }
+    #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_align_caption .avia-caption-title {
+      font-family: "Acme", sans-serif;
+      font-size: 3rem;
+      color: white;
+      margin: 0 0 -7px 0;
+      text-transform: uppercase; }
+  #top #wrap_all #main #inner-3-5 .av_two_fifth {
+    background-color: #da5834;
+    padding: 30px; }
+    #top #wrap_all #main #inner-3-5 .av_two_fifth .av-special-heading .av-special-heading-tag {
+      color: white; }
+    #top #wrap_all #main #inner-3-5 .av_two_fifth .av_textblock_section .avia_textblock p {
+      color: white; }
 
 @media screen and (max-width: 768px) {
   .responsive #top #wrap_all #main {
     top: 0; } }
+
+#top #wrap_all #main {
+  /* Fullscreen slider with logo
+	.avia-fullscreen-slider {
+		.avia-slideshow .caption_fullwidth .caption_container {
+			max-width: 100%;
+			width: 100%;
+
+			.slideshow_caption {
+				padding: 20px 40px;
+
+				.slideshow_align_caption {
+					vertical-align: top;
+
+					p {
+						text-align: center;
+						
+						img {
+							max-width: 250px;
+						}
+					}
+				}
+			}
+		}
+	} */ }
+  #top #wrap_all #main #home-1-3 .av_one_third .av-special-heading h2 {
+    color: white; }
+  #top #wrap_all #main #home-1-3 .av_one_third .av_textblock_section p {
+    color: white; }
+  #top #wrap_all #main #home-1-3 .av_two_third .avia-image-container-inner {
+    max-width: 150px; }
+  #top #wrap_all #main #home-1-3 .av_two_third .av-special-heading h4 {
+    color: white; }
+  #top #wrap_all #main #home-3-3 .av_one_third .avia-image-container {
+    margin: 0; }
+    #top #wrap_all #main #home-3-3 .av_one_third .avia-image-container .avia-image-container-inner {
+      width: 100%;
+      max-height: 500px;
+      overflow: hidden; }
+      #top #wrap_all #main #home-3-3 .av_one_third .avia-image-container .avia-image-container-inner img {
+        width: 100%;
+        height: auto; }
+  #top #wrap_all #main #home-3-3 .av_one_third .flex_column {
+    padding: 30px; }
+    #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading .av-subheading p {
+      color: #333333; }
+    #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading h3 {
+      color: #da5834; }
+    #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av_textblock_section p {
+      color: #333333; }

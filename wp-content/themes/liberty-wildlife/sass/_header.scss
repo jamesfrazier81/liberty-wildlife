@@ -28,11 +28,44 @@
                 text-align: center;
                 padding: 0;
 
+                // Sub-menu
+                .sub-menu {
+                    width: 100%;
+
+                    li {
+                        a {
+                            background-color: rgba($color-orange, 0.95);
+                            height: auto;
+                            padding: 10px;
+                            line-height: 18px;
+                            font-size: 0.75rem;
+                            border: none;
+                            border-top: 1px dashed rgba(white, 0.25);
+
+                            &:hover {
+                                background-color: rgba($color-orange-dark, 0.95);
+                            }
+                        }
+
+                        .avia-menu-text {
+                            background-image: none;
+                            text-indent: 0;
+                            color: white;
+                        }
+                    }
+                }
+
                 a {
+                    height: 70px;
                     color: white;
                     font-size: 1em;
                     font-weight: $font-normal;
+                    line-height: 70px;
                     padding: 0;
+
+                    &:hover {
+                        background-color: rgba($color-gray-dark, 0.15);
+                    }
 
                     .avia-menu-fx {
                         background-color: $color-orange;
@@ -60,17 +93,6 @@
                         background-size: 50px;
                         background-position: center center;
                         color: transparent;
-                    }
-
-                    &:after {
-                        position: absolute;
-                        content: '';
-                        top: 50px;
-                        width: 0;
-                        height: 0;
-                        border-style: solid;
-                        border-width: 15px 100% 0 100%;
-                        border-color: #da5834 transparent transparent transparent;
                     }
                 }
             }
