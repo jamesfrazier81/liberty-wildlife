@@ -21,7 +21,7 @@ html, body {
     }
 
     h3 {
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         font-weight: $font-light;
         line-height: 2.25rem;
         color: $color-orange;
@@ -29,7 +29,7 @@ html, body {
 
     h4 {
         font-family: $font-shadows;
-        font-size: 1.75rem;
+        font-size: 1.25rem;
         font-weight: $font-normal;
         line-height: 2.25rem;
         color: $color-gray-dark;
@@ -37,6 +37,16 @@ html, body {
 
     p {
         color: $color-gray-dark;
+
+        a {
+            color: $color-orange;
+            font-weight: $font-bold;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 

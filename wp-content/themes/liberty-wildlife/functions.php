@@ -79,4 +79,16 @@ function avia_year_func( $atts ){
 }
 add_shortcode( 'cur_year', 'avia_year_func' );
 
+// Add Avia Builder for CPT items
+add_filter('avf_builder_boxes', 'avia_register_meta_boxes', 10, 1); //Add meta boxes to custom post types
+function avia_register_meta_boxes($boxes) {
+	if(!empty($boxes)) {
+		foreach($boxes as $key => $box)	{
+			$boxes[$key]['page'][] = 'team';
+			$boxes[$key]['page'][] = 'publication';
+		}
+	}
+	return $boxes;
+}
+
 ?>

@@ -1,0 +1,36 @@
+#top #wrap_all #main {
+    // Avia Content Slider (archives)
+    // Remove meta info from Team archive
+    .avia-content-slider {
+        .slide-entry-wrap {
+            margin: 0;
+
+            .slide-entry {
+                .entry-content-header {
+                    .blog-categories {
+                        display: none;
+                    }
+                }
+
+                .slide-meta {
+                    display: none;
+                }
+
+                .slide-entry-excerpt {
+                    .read-more-link a {
+                        color: $color-orange;
+                        font-weight: $font-bold;
+
+                        .more-link-arrow {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .slide-entry-wrap {
+        margin: 0;
+    }
+}
