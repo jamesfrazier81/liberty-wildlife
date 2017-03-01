@@ -1,6 +1,6 @@
 #top #wrap_all {
     #header {
-    	position: fixed;
+        position: fixed;
     }
 
     #header_main_alternate {
@@ -31,6 +31,7 @@
                 // Sub-menu
                 .sub-menu {
                     width: 100%;
+                    z-index: 999;
 
                     li {
                         a {
@@ -74,7 +75,7 @@
                 }
 
                 &:nth-child(3) {
-					flex: 0.75;
+                    flex: 0.75;
                 }
 
                 &:nth-child(5) {
@@ -106,40 +107,73 @@
     }
 }
 
-@media screen and (max-width: $media-tablet) {
-    .responsive #top #wrap_all #main {
-        .av-section-bottom-logo {
-        	position: fixed;
-        	z-index: 999;
-        	width: 100%;
-        	border: none;
-            display: block;
-            background-color: rgba($color-orange, 0.95);
-            box-shadow: 0 0 10px rgba(black, 0.5);
+@media screen and (max-width: $media-navswitch) {
+    #top #wrap_all {
+        #header {
+            position: relative;
+        }
 
-            .container {
-                max-width: 95%;
-                width: 95%;
+        #main {
+            .av-section-bottom-logo {
+                // position: fixed;
+                z-index: 999;
+                width: 100%;
+                border: none;
+                display: block;
+                background-color: rgba($color-orange, 0.95);
+                box-shadow: 0 0 10px rgba(black, 0.5);
 
-                .logo {
-                	height: 70px !important;
+                .container {
+                    max-width: 95%;
+                    width: 95%;
+                    padding: 0;
+                    height: 70px;
 
-                    a img {
-                        max-height: 50px;
+                    .inner-container {
+                        width: 100%;
+
+                        .logo {
+                            left: 100px;
+                            top: 10px;
+
+                            a {
+                                display: block;
+                                height: auto;
+
+                                img {
+                                    max-height: 50px;
+                                }
+                            }
+                        }
+                    }
+
+                    #advanced_menu_toggle {
+                        background-color: transparent;
+                        color: white;
+                        border: none;
+
+                        &:before {
+                            content: '\f0c9';
+                            font-family: $font-awesome;
+                            color: white;
+                        }
                     }
                 }
 
-                #advanced_menu_toggle {
-                	background-color: transparent;
-                	color: white;
-                	border: none;
-
-                	&:before {
-                		content: '\f0c9';
-                		font-family: $font-awesome;
-                		color: white;
-                	}
+                &.fixed {
+                    position: fixed;
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $media-tablet) {
+    .responsive #top #wrap_all #main {
+        .av-section-bottom-logo .container .inner-container {
+            .logo {
+                left: 5px;
+                position: relative;
             }
         }
     }

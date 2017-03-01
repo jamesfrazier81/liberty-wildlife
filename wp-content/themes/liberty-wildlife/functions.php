@@ -3,6 +3,7 @@
 // Enqueue styles and scripts
 function enqueue_child_theme_styles() {
     wp_enqueue_style( 'font-awesome', get_stylesheet_directory_uri() . '/bower_components/font-awesome/css/font-awesome.min.css');
+    wp_enqueue_style( 'animate-css', get_stylesheet_directory_uri() . '/bower_components/animate.css/animate.min.css');
 	wp_enqueue_script( 'child-script', get_stylesheet_directory_uri() . '/js/dist/scripts.min.js', array( 'jquery' ), '1.0', true );
 }
 add_action( 'wp_enqueue_scripts', 'enqueue_child_theme_styles');
