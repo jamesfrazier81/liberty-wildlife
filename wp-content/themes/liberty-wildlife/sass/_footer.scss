@@ -1,3 +1,115 @@
-#top #wrap_all #main footer {
-	// background-color: $color-gray-dark;
+#top #wrap_all #main {
+    #footer {
+        padding: 0;
+
+        .container {
+            width: 100%;
+            max-width: 100%;            
+            padding: 0;
+            display: flex;
+
+            .flex_column {
+                flex: 1;
+                margin: 0;
+                padding: 30px;
+
+                .widget {
+                    margin: 0;
+
+                    .widgettitle {
+                        margin: 0;
+                        font-weight: $font-light;
+                        font-size: 2rem;
+                        text-transform: none;
+                    }
+
+                    .textwidget {
+                        p [class^="btn-"] {
+                        	display: inline-block;
+                            padding: 6px 12px;
+                            border-radius: 3px;
+                            margin-top: 20px;
+
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(1) {
+                    background-color: $color-gray-dark;
+
+                    .widgettitle {
+                        color: white;
+                    }
+
+                    .textwidget {
+                        p {
+                            color: white;
+
+                            .btn-donate {
+                                background-color: $color-orange;
+                                color: white;
+                            }
+                        }
+                    }
+                }
+
+                &:nth-child(2) {
+                    background-color: $color-tan-dark;
+
+                    .widgettitle {
+                        color: $color-gray-dark;
+                    }
+
+                    .textwidget {
+                        line-height: inherit;
+
+                        p, small {
+                            color: $color-gray-dark;
+
+                            .btn-emergency {
+                                background-color: $color-gray-dark;
+                                color: white;
+                            }
+                        }
+
+                        small {
+                            line-height: 0.25rem;
+                        }
+                    }
+                }
+
+                &:nth-child(3) {
+                    background-color: $color-orange;
+
+                    .widgettitle {
+                        color: white;
+                    }
+
+                    .textwidget {
+                        p {
+                            color: white;
+
+                            .btn-map {
+                                background-color: white;
+                                color: $color-orange;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $media-tablet) {
+    .responsive #top #wrap_all #main {
+        #footer {
+            .container {
+                flex-direction: column;
+            }
+        }
+    }
 }
