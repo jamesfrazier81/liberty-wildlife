@@ -3,6 +3,13 @@
 	top: 70px;
 	width: 100%;
 
+	// Standard inner layout
+	.main_color {
+		.template-page.av-content-small {
+			border-color: $color-orange;
+		}
+	}
+
 	#section-black, #section-orange {
 		background-color: $color-gray-dark;
 

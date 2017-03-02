@@ -189,6 +189,8 @@ html, body {
   position: absolute;
   top: 70px;
   width: 100%; }
+  #top #wrap_all #main .main_color .template-page.av-content-small {
+    border-color: #da5834; }
   #top #wrap_all #main #section-black, #top #wrap_all #main #section-orange {
     background-color: #333333; }
     #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h6, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h6 {
@@ -218,6 +220,18 @@ html, body {
 @media screen and (max-width: 989px) {
   .responsive #top #wrap_all #main {
     top: 0; } }
+
+#top #wrap_all #main .sidebar {
+  border-color: #da5834; }
+  #top #wrap_all #main .sidebar .widget .nested_nav li a, #top #wrap_all #main .sidebar .widget #menu-team-members li a, #top #wrap_all #main .sidebar .widget .textwidget ul li a {
+    font-weight: 700;
+    color: #da5834; }
+    #top #wrap_all #main .sidebar .widget .nested_nav li a:hover, #top #wrap_all #main .sidebar .widget #menu-team-members li a:hover, #top #wrap_all #main .sidebar .widget .textwidget ul li a:hover {
+      text-decoration: underline; }
+  #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item {
+    background-color: #da5834; }
+    #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item a, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item a {
+      color: white; }
 
 #top #wrap_all #main #footer {
   padding: 0; }

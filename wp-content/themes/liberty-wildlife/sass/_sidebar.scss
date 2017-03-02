@@ -1,0 +1,29 @@
+#top #wrap_all #main {
+	.sidebar {
+		// background-color: $color-gray-dark;
+		border-color: $color-orange;
+
+		.widget {
+			.nested_nav, #menu-team-members, .textwidget ul {
+				li {
+					a {
+						font-weight: $font-bold;
+						color: $color-orange;
+
+						&:hover {
+							text-decoration: underline;
+						}
+					}
+
+					&.current_page_item, &.current-menu-item {
+						background-color: $color-orange;
+
+						a {
+							color: white;
+						}
+					}
+				}
+			}
+		}
+	}
+}
