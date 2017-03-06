@@ -72,6 +72,7 @@
 	<a href="https://profiles.wordpress.org/webaware/" target="_blank">webaware</a>,
 	<a href="https://profiles.wordpress.org/escribirelmundo/" target="_blank">escribirelmundo</a>,
 	<a href="https://profiles.wordpress.org/casiepa/" target="_blank">Pascal Casier</a>,
+	<a href="https://profiles.wordpress.org/shoheitanaka/" target="_blank">Shohei Tanaka</a>,
 	<a href="https://profiles.wordpress.org/nurron/" target="_blank">Nurron Shodiqin</a>,
 	<a href="https://profiles.wordpress.org/aprmndr/" target="_blank">Alyssa Primandaru</a>,
 	<a href="https://profiles.wordpress.org/facestoro/" target="_blank">facestoro</a>,

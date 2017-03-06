@@ -520,6 +520,10 @@ function aiosp_seometa_import() {
 			'META Description' => 'description',
 			'META Keywords'    => 'keywords',
 		),
+		'SEOpressor'                 => array(
+			'Custom Doctitle'  => '_seopressor_meta_title',
+			'META Description' => '_seopressor_meta_description',
+		),
 		'SEO Title Tag'                => array(
 			'Custom Doctitle'  => 'title_tag',
 			'META Description' => 'meta_description',
