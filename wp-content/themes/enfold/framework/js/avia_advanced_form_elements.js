@@ -24,7 +24,7 @@ jQuery(function($) {
     
 
     //unify select dropdowns
-    $('.avia_select_unify select').live('change', function()
+    $('body').on('change', '.avia_select_unify select', function()
     {
     	var el = $(this);
     	el.next('.avia_select_fake_val').text(el.find('option:selected').text());

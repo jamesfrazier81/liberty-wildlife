@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_contact' ) )
 				$this->config['shortcode'] 	= 'av_contact';
 				$this->config['shortcode_nested'] = array('av_contact_field');
 				$this->config['tooltip'] 	= __('Creates a customizable contact form', 'avia_framework' );
+				$this->config['preview'] 	= "large";
 			}
 
 			/**

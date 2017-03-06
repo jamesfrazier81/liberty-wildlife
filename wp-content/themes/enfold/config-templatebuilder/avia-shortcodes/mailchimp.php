@@ -30,7 +30,7 @@ if ( !class_exists( 'avia_sc_mailchimp' ) )
 				$this->config['shortcode'] 	= 'av_mailchimp';
 				$this->config['shortcode_nested'] = array('av_mailchimp_field');
 				$this->config['tooltip'] 	= __('Creates a mailschimp signup form', 'avia_framework' );
-
+				$this->config['preview'] 	= false;
 			}
 
 			/**

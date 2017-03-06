@@ -446,6 +446,8 @@ if ( !class_exists( 'avia_masonry' ) )
 					$this->loop[$key]['content'] 	= avia_backend_truncate($entry->post_content, apply_filters( 'avf_masonry_excerpt_length' , 60) , apply_filters( 'avf_masonry_excerpt_delimiter' , " "), "…", true, '');
 				}
 				
+				$this->loop[$key]['content'] = nl2br( trim($this->loop[$key]['content']) );
+				
 				//post type specific
 				switch($entry->post_type)
 				{
@@ -577,6 +579,7 @@ if ( !class_exists( 'avia_masonry' ) )
 		//fetch new entries
 		public function query_entries($params = array(), $ajax = false)
 		{
+			
 			global $avia_config;
 
 			if(empty($params)) $params = $this->atts;
@@ -584,7 +587,8 @@ if ( !class_exists( 'avia_masonry' ) )
 			if(empty($params['custom_query']))
             {
 				$query = array();
-
+				$avialable_terms = array();
+				
 				if(!empty($params['categories']))
 				{
 					//get the portfolio categories
@@ -594,11 +598,12 @@ if ( !class_exists( 'avia_masonry' ) )
 				$page = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : get_query_var( 'page' );
 				if(!$page || $params['paginate'] == 'no') $page = 1;
 
+				
 				//if we find no terms for the taxonomy fetch all taxonomy terms
 				if(empty($terms[0]) || is_null($terms[0]) || $terms[0] === "null")
 				{
 					$terms = array();
-					$allTax = get_terms( $params['taxonomy']);
+					$allTax = get_terms( $params['taxonomy'] );
 					foreach($allTax as $tax)
 					{
 						if( is_object($tax) )
@@ -607,6 +612,47 @@ if ( !class_exists( 'avia_masonry' ) )
 						}
 					}
 				}
+				
+				
+				
+				if(!empty($params['taxonomy']))
+				{
+					$allTax = get_terms( $params['taxonomy'] );
+					foreach($allTax as $tax)
+					{
+						if( is_object($tax) )
+						{
+							$avialable_terms[] = $tax->term_id;
+						}
+					}
+				}
+				
+				
+				//check if any of the terms passed are valid. if not all existing terms are used
+				$valid_terms = array();
+				foreach($terms as $term)
+				{
+					if(in_array($term, $avialable_terms))
+					{
+						$valid_terms[] = $term;
+					}
+				}
+				
+				if(!empty($valid_terms))
+				{
+					$terms = $valid_terms;
+					$this->atts['categories'] = implode(",", $terms);
+				}
+				else
+				{
+					$terms = $avialable_terms;
+					$this->atts['categories'] = implode(",", $terms);
+				}
+				
+				
+				
+				
+				
 				
 				
 					if(empty($params['post_type'])) $params['post_type'] = get_post_types();

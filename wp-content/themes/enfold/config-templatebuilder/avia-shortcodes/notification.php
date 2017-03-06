@@ -20,7 +20,8 @@ if ( !class_exists( 'avia_sc_notification' ) )
 				$this->config['target']		= 'avia-target-insert';
 				$this->config['shortcode'] 	= 'av_notification';
 				$this->config['tooltip'] 	= __('Creates a notification box to inform visitors', 'avia_framework' );
-				$this->config['tinyMCE']    = array('tiny_always'=>true);			
+				$this->config['tinyMCE']    = array('tiny_always'=>true);	
+				$this->config['preview'] 	= true;
 			}
 		
 			/**

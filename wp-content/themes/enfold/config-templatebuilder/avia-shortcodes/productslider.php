@@ -351,7 +351,7 @@ if ( !class_exists( 'avia_product_slider' ) )
 					else
 					{
 						$cart_url = $product->add_to_cart_url();
-						$ajax_class = $product->is_purchasable() ? "add_to_cart_button" : "";
+						$ajax_class = $product->is_purchasable() ? "add_to_cart_button ajax_add_to_cart" : "";
 						$rel = $product->is_purchasable() ? "rel='nofollow'" : "";
 					}
 					

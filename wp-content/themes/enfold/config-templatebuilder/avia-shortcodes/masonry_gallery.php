@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 				$this->config['shortcode'] 		= 'av_masonry_gallery';
 				$this->config['tooltip'] 	    = __('Display a fullwidth masonry/grid gallery', 'avia_framework' );
 				$this->config['drag-level'] 	= 3;
+				$this->config['preview'] 		= false;
 			}
 			
 			

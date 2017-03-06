@@ -19,7 +19,7 @@ function layerslider_settings_menu() {
 	global $layerslider_hook;
 
 	$capability = get_option('layerslider_custom_capability', 'manage_options');
-	$icon = version_compare(get_bloginfo('version'), '3.8', '>=') ? 'dashicons-images-alt2' : LS_ROOT_URL.'/static/img/icon_16x16.png';
+	$icon = version_compare(get_bloginfo('version'), '3.8', '>=') ? 'dashicons-images-alt2' : LS_ROOT_URL.'/static/admin/img/icon_16x16.png';
 
 	// Add main page
 	$layerslider_hook = add_menu_page(
@@ -50,13 +50,22 @@ function layerslider_settings_menu() {
 		'layerslider', 'LayerSlider WP Transition Builder', __('Transition Builder', 'LayerSlider'),
 		$capability, 'ls-transition-builder', 'layerslider_router');
 
+	// Add "System Status" submenu
+	add_submenu_page(
+		'layerslider', 'LayerSlider WP System Status', __('System Status', 'LayerSlider'),
+		$capability, 'ls-system-status', 'layerslider_router');
+
+	// Add "About" submenu
+	add_submenu_page(
+		'layerslider', 'About LayerSlider WP', __('About', 'LayerSlider'),
+		$capability, 'ls-about', 'layerslider_router');
 }
 
 // Help menu
 add_filter('contextual_help', 'layerslider_help', 10, 3);
 function layerslider_help($contextual_help, $screen_id, $screen) {
 
-	if(strpos($screen->base, 'layerslider') !== false) {
+	if(strpos($screen->base, 'layerslider') !== false && (!empty($_GET['page']) && $_GET['page'] !== 'ls-about')) {
 		$screen->add_help_tab(array(
 			'id' => 'help',
 			'title' => 'Getting Help',
@@ -70,11 +79,26 @@ function layerslider_router() {
 	// Get current screen details
 	$screen = get_current_screen();
 
+
 	if(strpos($screen->base, 'ls-skin-editor') !== false) {
 		include(LS_ROOT_PATH.'/views/skin_editor.php');
 
 	} elseif(strpos($screen->base, 'ls-transition-builder') !== false) {
 		include(LS_ROOT_PATH.'/views/transition_builder.php');
+
+	} elseif(strpos($screen->base, 'ls-system-status') !== false) {
+		include(LS_ROOT_PATH.'/views/system_status.php');
+
+	} elseif(strpos($screen->base, 'ls-about') !== false) {
+		if(!empty($_GET['section']) && $_GET['section'] == 'getting-started') {
+			include(LS_ROOT_PATH.'/views/getting-started.php');
+
+		} elseif(!empty($_GET['section']) && $_GET['section'] == 'faqs') {
+			include(LS_ROOT_PATH.'/views/faqs.php');
+
+		} else {
+			include(LS_ROOT_PATH.'/views/about.php');
+		}
 
 	} elseif(strpos($screen->base, 'ls-style-editor') !== false) {
 		include(LS_ROOT_PATH.'/views/style_editor.php');

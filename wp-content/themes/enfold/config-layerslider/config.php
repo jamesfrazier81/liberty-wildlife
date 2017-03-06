@@ -33,97 +33,6 @@ if(!function_exists('avia_find_layersliders'))
 }
 
 
-/********************************************************/
-/* Action to import sample slider  - modified version          */
-/********************************************************/
-
-if(!function_exists('avia_remove_default_import'))
-{
-	add_action('admin_menu', 'avia_remove_default_import',1);
-	
-	function avia_remove_default_import()
-	{
-		if(isset($_GET['page']) && $_GET['page'] == 'layerslider' && isset($_GET['action']) && $_GET['action'] == 'import_sample') 
-		{
-			remove_action(	'admin_init' , 'layerslider_import_sample_slider');
-			add_action(		'admin_init' , 'avia_import_sample_slider');
-		}
-	}
-}
-
-
-
-if(!function_exists('avia_import_sample_slider'))
-{
-	function avia_import_sample_slider() {
-		
-		// Base64 encoded, serialized slider export code
-		$path = "avia-samples/";
-		$sample_file = "sample_sliders.txt";
-		$sample_slider = json_decode(base64_decode(file_get_contents(dirname(__FILE__)."/LayerSlider/{$path}{$sample_file}")), true);
-		
-		
-		//echo"<pre>";
-		//print_r(base64_encode(str_replace('avia-samples','sampleslider', base64_decode(file_get_contents(dirname(__FILE__).'/LayerSlider/sampleslider/sample_sliders2.txt'))))) ;
-		//echo"<pre>";
-		//die();
-		
-
-		// Iterate over the sliders
-		foreach($sample_slider as $sliderkey => $slider) {
-	
-			// Iterate over the layers
-			foreach($sample_slider[$sliderkey]['layers'] as $layerkey => $layer) {
-	
-				// Change background images if any
-				if(!empty($sample_slider[$sliderkey]['layers'][$layerkey]['properties']['background'])) {
-					$sample_slider[$sliderkey]['layers'][$layerkey]['properties']['background'] = $GLOBALS['lsPluginPath'].$path.basename($layer['properties']['background']);
-				}
-	
-				// Change thumbnail images if any
-				if(!empty($sample_slider[$sliderkey]['layers'][$layerkey]['properties']['thumbnail'])) {
-					$sample_slider[$sliderkey]['layers'][$layerkey]['properties']['thumbnail'] = $GLOBALS['lsPluginPath'].$path.basename($layer['properties']['thumbnail']);
-				}
-	
-				// Iterate over the sublayers
-				if(isset($layer['sublayers']) && !empty($layer['sublayers'])) {
-					foreach($layer['sublayers'] as $sublayerkey => $sublayer) {
-		
-						// Only IMG sublayers
-						if($sublayer['type'] == 'img') {
-							$sample_slider[$sliderkey]['layers'][$layerkey]['sublayers'][$sublayerkey]['image'] = $GLOBALS['lsPluginPath'].$path.basename($sublayer['image']);
-						}
-					}
-				}
-			}
-		}
-	
-		// Get WPDB Object
-		global $wpdb;
-	
-		// Table name
-		$table_name = $wpdb->prefix . "layerslider";
-	
-		// Append duplicate
-		foreach($sample_slider as $key => $val) {
-	
-			// Insert the duplicate
-			$wpdb->query(
-				$wpdb->prepare("INSERT INTO $table_name
-									(name, data, date_c, date_m)
-								VALUES (%s, %s, %d, %d)",
-								$val['properties']['title'],
-								json_encode($val),
-								time(),
-								time()
-				)
-			);
-		}
-	
-	}
-}
-
-
 if(!function_exists('avia_layerslider_remove_setup_fonts'))
 {
 	add_action('layerslider_installed','avia_layerslider_remove_setup_fonts');
@@ -168,38 +77,43 @@ function avia_include_layerslider()
 		{
 			if(get_option("{$themeNice}_layerslider_activated", '0') == '0') 
 			{
-		        //import sample sliders
-		 		avia_import_sample_slider();
-		 		
 		        // Save a flag that it is activated, so this won't run again
 		        update_option("{$themeNice}_layerslider_activated", '1');
 		    }
 		}
 		else //not active, use theme version instead
-		{
+		{	
 		    // Include the file
 		    include $layerslider;
-		    
+		    $skins = LS_Sources::getSkins();
+		    $allowed = apply_filters('avf_allowed_layerslider_skins', array('fullwidth','noskin') ); //if $allowed is set to bool true all skins are allowed
+			
+			if($allowed !== true)
+			{
+				foreach($skins as $key => $skin)
+				{
+					if(!in_array($key, $allowed))
+					{
+						LS_Sources::removeSkin( $key );
+					}
+				}
+			}
+
 		    $GLOBALS['lsPluginPath'] 	= get_template_directory_uri() . '/config-layerslider/LayerSlider/';
 		    $GLOBALS['lsAutoUpdateBox'] = false;
-		 
+		    
 		    // Activate the plugin if necessary
 		    if(get_option("{$themeNice}_layerslider_activated", '0') == '0') {
 		 
 		        // Run activation script
-		        layerslider_activation_scripts();
-		        
-		        //import sample sliders
-		 		avia_import_sample_slider();
+		        //layerslider_activation_scripts();
 		 		
 		        // Save a flag that it is activated, so this won't run again
 		        update_option("{$themeNice}_layerslider_activated", '1');
+		        update_option('ls-show-support-notice', 0);
 		    }
 	    }
 	}
 }
-
-
-
 
 

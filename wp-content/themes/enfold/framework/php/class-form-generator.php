@@ -906,7 +906,7 @@ if( ! class_exists( 'avia_form' ) )
 				{
 					if(!defined('AV_TESTSERVER'))
 					{
-						$send_to_mail = get_admin_url();
+						$send_to_mail = get_option('admin_email');
 					}
 				}
 				

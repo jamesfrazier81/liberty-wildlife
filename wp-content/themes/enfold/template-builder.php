@@ -70,13 +70,21 @@
 		}else{
 		    $avia_config['currently_viewing'] = 'page';
 		}
+		
 		get_sidebar();
+		
 	}
 	else
 	{
 		echo "<div><div>";
 		
 	}
+
+// global fix for http://www.kriesi.at/support/topic/footer-disseapearing/#post-427764
+if(in_array($last_el['tag'], AviaBuilder::$full_el_no_section ))
+{
+	avia_sc_section::$close_overlay = "";
+}
 
 
 echo avia_sc_section::$close_overlay;

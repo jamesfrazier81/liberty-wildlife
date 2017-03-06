@@ -20,8 +20,7 @@
 		//bind click event to the upload button, which sets all variables and opens thickbox
 		bind_click: function()
 		{
-			
-			$('.avia_gallery_delete_all').live('click', function()
+			$('body').on('click', '.avia_gallery_delete_all', function()
 			{
 				var element 		= $(this),
 					container		= element.parents('.avia_gallery_upload_container:eq(0)'),
@@ -33,8 +32,7 @@
 
 			
 			
-			
-			$('.avia_gallery_uploader').live('click', function()
+			$('body').on('click', '.avia_gallery_uploader', function()
 			{
 				//collect current link properties
 				var element 		= $(this),
@@ -105,8 +103,7 @@
 		insert_click: function()
 		{
 			
-		
-			$('.avia_send_to_gallery').live('click', function()
+			$('body').on('click', '.avia_send_to_gallery', function()
 			{
 				var link 			= $(this),
 					attachment_id 	= link.data('attachment-id'),
@@ -153,7 +150,7 @@
 		
 		open_close_click: function()
 		{
-			$('.open_set').live('click', function()
+			$('body').on('click', '.open_set', function()
 			{
 				var el = $(this),
 					parent = el.parents('.avia_set:eq(0)');
@@ -538,8 +535,9 @@
 		
 		//clone the insert button
 		avia_media_advanced.clone_insert_button();
-		$(".media-item").live('mouseenter',avia_media_advanced.clone_insert_button);
-		
+		$('body').on('mouseenter', '.media-item',avia_media_advanced.clone_insert_button);
+
+
 		//adds an insert all button 
 		avia_media_advanced.add_insert_all_button();
 	

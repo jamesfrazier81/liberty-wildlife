@@ -184,12 +184,14 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 							"std" 	=> "",
 							"type" 	=> "checkbox"),
 							
+/*
 						array(	
 							"name" 	=> __("Map dragging on mobile", 'avia_framework' ),
 							"desc" 	=> __("Check to disable the users ability to drag the map on mobile devices. This ensures that the user can scroll down the page, even if the map fills the whole viewport of the mobile device", 'avia_framework' )  ,
 							"id" 	=> "mobile_drag_control",
 							"std" 	=> "",
 							"type" 	=> "checkbox"),
+*/
 				);
 
 			}

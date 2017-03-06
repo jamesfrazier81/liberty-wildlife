@@ -6,7 +6,8 @@
 	
    	$.AviaModal.register_callback.modal_start_sorting = function(passed_scope)
 	{
-		var scope	= passed_scope || this.modal,
+		var _self 	= this,
+			scope	= passed_scope || this.modal,
 			target	= scope.find('.avia-modal-group'),
 			params	= {
 					handle: '.avia-attach-modal-element-move',
@@ -22,6 +23,9 @@
 					{
 						//obj.updateTextarea();
 						ui.item.parents('.avia-modal-group:eq(0)').trigger('av-item-moved', [ui.item]);
+						
+						//trigger update for the live preview
+						ui.item.find('textarea[data-name="text-shortcode"]').trigger('av-update-preview-instant');
 					},
 					stop: function( event, ui ) 
 					{

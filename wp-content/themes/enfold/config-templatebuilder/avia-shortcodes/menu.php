@@ -26,6 +26,7 @@ if ( !class_exists( 'avia_sc_submenu' ) )
 				$this->config['tooltip'] 	    = __('Display a sub menu', 'avia_framework' );
 				$this->config['tinyMCE'] 		= array('disable' => "true");
 				$this->config['drag-level'] 	= 1;
+				$this->config['preview'] 		= false;
 			}
 
 			/**

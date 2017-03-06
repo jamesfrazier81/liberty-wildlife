@@ -43,7 +43,7 @@ if(!avia_builder_plugin_enabled())
 	$builder->setMode( 'safe' ); 
 	
 	//set all elements that are fullwidth and need to interact with the section shortcode. av_section is included automatically
-	$builder->setFullwidthElements( array('av_revolutionslider', 'av_layerslider' ,'av_slideshow_full', 'av_fullscreen', 'av_masonry_entries','av_masonry_gallery', 'av_google_map', 'av_slideshow_accordion', 'av_image_hotspot', 'av_portfolio', 'av_submenu', 'av_layout_row', 'av_button_big','av_feature_image_slider') ); 
+	$builder->setFullwidthElements( array('av_revolutionslider', 'av_layerslider' ,'av_slideshow_full', 'av_fullscreen', 'av_masonry_entries','av_masonry_gallery', 'av_google_map', 'av_slideshow_accordion', 'av_image_hotspot', 'av_portfolio', 'av_submenu', 'av_layout_row', 'av_button_big','av_feature_image_slider','av_tab_section') ); 
 }
 
 

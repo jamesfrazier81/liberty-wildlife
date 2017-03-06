@@ -2,7 +2,7 @@
 /*
 Plugin Name: Avia Template Builder
 Description: The Template Builder helps you create modern and unqiue page layouts with the help of a drag and drop interface
-Version: 0.9.4
+Version: 0.9.5
 Author: Christian "Kriesi" Budschedl
 Author URI: http://kriesi.at
 Text Domain: avia_framework

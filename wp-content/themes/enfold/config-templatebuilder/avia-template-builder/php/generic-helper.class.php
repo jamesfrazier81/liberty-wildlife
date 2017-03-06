@@ -348,7 +348,7 @@ if ( !class_exists( 'AviaHelper' ) ) {
     					'Ü'						=> 'Ue',
     					'ß'						=> 'ss',
     					'[^a-z0-9\-\._]'		=> '',
-    					$replace.'+'			=> $replace,
+    					//$replace.'+'			=> $replace, //allow doubles like -- or __
     					$replace.'$'			=> $replace,
     					'^'.$replace			=> $replace,
     					'\.+$'					=> ''

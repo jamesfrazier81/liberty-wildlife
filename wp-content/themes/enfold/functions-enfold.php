@@ -373,7 +373,8 @@ if(!function_exists('avia_title'))
 			'title' 		=> get_the_title($id),
 			'subtitle' 		=> "", //avia_post_meta($id, 'subtitle'),
 			'link'			=> get_permalink($id),
-			'html'			=> "<div class='{class} title_container'><div class='container'><{heading} class='main-title entry-title'>{title}</{heading}>{additions}</div></div>",
+			'html'			=> "<div class='{class} title_container'><div class='container'>{heading_html}{additions}</div></div>",
+			'heading_html'	=> "<{heading} class='main-title entry-title'>{title}</{heading}>",
 			'class'			=> 'stretch_full container_wrap alternate_color '.avia_is_dark_bg('alternate_color', true),
 			'breadcrumb'	=> true,
 			'additions'		=> "",
@@ -414,6 +415,10 @@ if(!function_exists('avia_title'))
 		if($breadcrumb) $additions .= avia_breadcrumbs(array('separator' => '/', 'richsnippet' => true));
 
 
+		if(!$title) $heading_html = "";
+		$html = str_replace('{heading_html}', $heading_html, $html);
+		
+		
 		$html = str_replace('{class}', $class, $html);
 		$html = str_replace('{title}', $title, $html);
 		$html = str_replace('{additions}', $additions, $html);
@@ -808,6 +813,7 @@ if(!function_exists('avia_header_setting'))
 		$header['header_transparency'] = "";
 		if(!empty($transparency)) $header['header_transparency'] = 'header_transparency';
 		if(!empty($transparency) && strpos($transparency, 'glass')) $header['header_transparency'] .= ' header_glassy';
+		if(!empty($transparency) && strpos($transparency, 'with_border')) $header['header_transparency'] .= ' header_with_border';
 		if(!empty($transparency) && strpos($transparency, 'hidden')) $header['disabled'] = true;
 		if(!empty($transparency) && strpos($transparency, 'scrolldown')) 
 		{

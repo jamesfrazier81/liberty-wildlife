@@ -240,6 +240,9 @@ bottom: auto;
 }
 
 
+
+
+
 .avia-modal.flexscreen{
 min-height:0;
 }
@@ -487,7 +490,7 @@ border-bottom:none;
     left: -20px;
     width: calc(100% + 14px);
 }
-.wp-admin .avia-datepicker-div.ui-datepicker .ui-datepicker-prev, .wp-admin .avia-datepicker-div.ui-datepicker .ui-datepicker-next { position:absolute; top: 0px; width: 50px; height: 100%;  text-align: center; line-height: 1.8em; cursor: pointer; border:none; border-radius:0;}
+.wp-admin .avia-datepicker-div.ui-datepicker .ui-datepicker-prev, .wp-admin .avia-datepicker-div.ui-datepicker .ui-datepicker-next { position:absolute; top: 0px; width: 80px; height: 100%;  text-align: center; line-height: 47px; cursor: pointer; border:none; border-radius:0;}
 
 .wp-admin .avia-datepicker-div.ui-datepicker .ui-datepicker-header a{background: transparent;}
 .wp-admin .avia-datepicker-div.ui-datepicker .ui-datepicker-header a:hover{background: #ffffff;}
@@ -678,4 +681,144 @@ user-select: none;
   text-align: center;
   color: #999;
 }
+
+
+
+
+/*modal preview window*/
+
+.avia-modal.modal-preview-active{
+left: 10%; right: 10%;	
+}
+
+.avia-modal.modal-preview-active.modal-preview-large{
+left:4%; right:4%;
+}
+
+.avia-modal.modal-preview-active.modal-preview-xlarge{
+left:2%; right:2%;
+}
+
+.modal-preview-active .avia-modal-inner-content{ right:400px; }
+.modal-preview-active .avia-modal-inner-header{ margin-right: 400px; }
+.modal-preview-active .avia-modal-inner-footer{ left: 0; right: 400px; width: auto; }
+
+
+.modal-preview-active.modal-preview-large .avia-modal-inner-content{ right:600px; }
+.modal-preview-active.modal-preview-large .avia-modal-inner-header{ margin-right: 600px; }
+.modal-preview-active.modal-preview-large .avia-modal-inner-footer{ right: 600px;}
+
+
+.modal-preview-active.modal-preview-xlarge .avia-modal-inner-content{ right:780px; }
+.modal-preview-active.modal-preview-xlarge .avia-modal-inner-header{ margin-right: 780px; }
+.modal-preview-active.modal-preview-xlarge .avia-modal-inner-footer{ right: 780px;}
+
+.avia-modal-preview{
+	position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px;
+    bottom: 0;
+    background: #f1f1f1;
+    z-index: 2;
+    border-left: 1px solid #e1e1e1;
+}
+
+.modal-preview-large .avia-modal-preview{ width:600px;}
+.modal-preview-xlarge .avia-modal-preview{ width:780px;}
+
+.avia-modal-preview-header{
+	height: 50px;
+    border-bottom: 1px solid #DFDFDF;
+    box-shadow: 0 4px 4px -4px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    position: relative;
+    z-index: 2;
+}
+
+.avia-modal-preview-content{
+	position: absolute;
+	top:50px;
+	bottom: 50px;
+	width: 100%;
+}
+
+.avia-modal-preview-footer{
+	height: 50px;
+    border-top: 1px solid #DFDFDF;
+    box-shadow: inset 0 4px 4px -4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    bottom: 0;
+    background: #FCFCFC;
+    width: 100%;
+    line-height: 50px;
+    text-align: center;
+}
+
+.avia-modal-preview-footer span{
+	padding:0 10px;
+	display: inline-block;
+	color:#aaa;
+}
+
+.avia-modal-preview-footer a{
+	display: inline-block;
+	height:24px;
+	width:24px;
+	border:1px solid #e1e1e1;
+	margin:0 5px 0 0;
+	position: relative;
+    top: 8px;
+    border-radius: 2px;
+}
+
+.avia-modal-preview-footer a:hover{
+	border:1px solid #b1b1b1;
+}
+
+.avia-modal-preview iframe{
+	position: absolute;
+	height:100%;
+	width:100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.avia-modal-preview-header .avia_loading{
+	left: auto;
+    right: 11px;
+    top: 23px;
+}
+
+.avia-modal-preview-header.loading .avia_loading{
+	visibility: visible;
+}
+
+@media only screen and (max-width: 1240px) {
+	.modal-preview-xlarge .avia-modal-preview{ width:500px;}
+	.modal-preview-active.modal-preview-xlarge .avia-modal-inner-content{right:500px;}
+	.modal-preview-active.modal-preview-xlarge .avia-modal-inner-header{margin-right: 500px;}
+	.modal-preview-active.modal-preview-xlarge .avia-modal-inner-footer{right: 500px;}
+
+	.modal-preview-large .avia-modal-preview{ width:400px;}
+	.modal-preview-active.modal-preview-large .avia-modal-inner-content{right:400px;}
+	.modal-preview-active.modal-preview-large .avia-modal-inner-header{margin-right: 400px;}
+	.modal-preview-active.modal-preview-large .avia-modal-inner-footer{right: 400px;}
+}
+
+
+
+@media only screen and (max-width: 979px) {
+
+	.avia-modal .avia-modal-preview{display:none;}
+	
+	.avia-modal.modal-preview-active .avia-modal-inner-content{right:0;}
+	.avia-modal.modal-preview-active .avia-modal-inner-header{margin-right: 0;}
+	.avia-modal.modal-preview-active .avia-modal-inner-footer{right: 0;}
+}
+
+
+
+
+
 

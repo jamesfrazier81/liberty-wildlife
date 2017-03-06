@@ -82,7 +82,7 @@ if ( !class_exists( 'avia_sc_columns' ) )
 	
 				$dataString  = AviaHelper::create_data_string($data);
 				
-				
+				$el_bg = !empty($args['background_color']) ? " style='background:".$args['background_color'].";'" : "";
 				
 				$extraClass = isset($args[0]) ? $args[0] == 'first' ? ' avia-first-col' : "" : "";
 
@@ -95,7 +95,8 @@ if ( !class_exists( 'avia_sc_columns' ) )
 				$output .= "<a class='avia-delete'  href='#delete' title='".__('Delete Column','avia_framework' )."'>x</a>";
 				$output .= "<a class='avia-save-element'  href='#save-element' title='".__('Save Element as Template','avia_framework' )."'>+</a>";
 			    //$output .= "<a class='avia-new-target'  href='#new-target' title='".__('Move Element','avia_framework' )."'>+</a>";
-				$output .= "<a class='avia-clone'  href='#clone' title='".__('Clone Column','avia_framework' )."' >".__('Clone Column','avia_framework' )."</a>";
+				$output .= "<a class='avia-clone'  href='#clone' title='".__('Clone Column','avia_framework' )."' >".__('Clone Column','avia_framework' )."</a><span class='avia-element-bg-color' ".$el_bg."></span>";
+				
 				if(!empty($this->config['popup_editor']))
     			{
     				$output .= "    <a class='avia-edit-element'  href='#edit-element' title='".__('Edit Cell','avia_framework' )."'>edit</a>";
@@ -109,9 +110,51 @@ if ( !class_exists( 'avia_sc_columns' ) )
 					$content = $this->builder->do_shortcode_backend($content);
 				}
 				$output .= $content;
-				$output .= "</div></div>";
+				$output .= "</div>";
+				$output .= "<div class='avia-layout-element-bg' ".$this->get_bg_string($args)."></div>";
+				$output .= "</div>";
 
 				return $output;
+			}
+			
+			function get_bg_string($args)
+			{
+				$style = "";
+			
+				if(!empty($args['attachment']))
+				{
+					$image = false;
+					$src = wp_get_attachment_image_src($args['attachment'], $args['attachment_size']);
+					if(!empty($src[0])) $image = $src[0];
+					
+					
+					if($image)
+					{
+						$bg 	= !empty($args['background_color']) ? 		$args['background_color'] : "transparent"; $bg = "transparent";
+						$pos 	= !empty($args['background_position'])  ? 	$args['background_position'] : "center center";
+						$repeat = !empty($args['background_repeat']) ?		$args['background_repeat'] : "no-repeat";
+						$extra	= "";
+						
+						if($repeat == "stretch")
+						{
+							$repeat = "no-repeat";
+							$extra = "background-size: cover;";
+						}
+						
+						if($repeat == "contain")
+						{
+							$repeat = "no-repeat";
+							$extra = "background-size: contain;";
+						}
+						
+						
+						
+						$style = "style='background: $bg url($image) $repeat $pos; $extra'";
+					}
+					
+				}
+				
+				return $style;
 			}
 			
 			

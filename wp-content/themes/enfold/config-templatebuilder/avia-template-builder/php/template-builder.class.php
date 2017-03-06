@@ -10,7 +10,7 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 
 	class AviaBuilder
 	{
-		const VERSION = '0.9.4';
+		const VERSION = '0.9.5';
 		public static $mode = "";
 		public static $path = array();
 		public static $resources_to_load = array();
@@ -59,7 +59,9 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			add_action('init', array(&$this, 'init') , 10 );
 			
 			//restore meta information if user restores a revision
-	                add_action('wp_restore_post_revision', array(&$this, 'avia_builder_restore_revision'), 10, 2);
+	        add_action('wp_restore_post_revision', array(&$this, 'avia_builder_restore_revision'), 10, 2);
+	        
+	        
 		}
 		
 		/**
@@ -67,12 +69,15 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 		 **/
 		public function init()
 	 	{
+		 	
+		 	
 	 		if(isset($_GET['avia_mode']))
 			{
 				AviaBuilder::$mode = esc_attr($_GET['avia_mode']);
 			}
-	 	
+			
 			$this->createShortcode();
+			
 			$this->addActions();
             AviaStoragePost::generate_post_type();           
 			
@@ -85,6 +90,7 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 				if(empty( $_POST['avia_request'] )) return;
                 $this->admin_init();
 	 	    } 
+
 	 	}
 		
 		
@@ -164,6 +170,8 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 		    			
 			//custom ajax actions
 			add_action('wp_ajax_avia_ajax_text_to_interface', array($this,'text_to_interface'));
+			add_action('wp_ajax_avia_ajax_text_to_preview', array($this,'text_to_preview'));
+			
 		}
 
 		
@@ -200,6 +208,9 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			*/
 			
 			echo $output;
+			
+			//output preview css paths
+			echo $this->load_preview_css( $output );
 		}
 		
 	
@@ -233,8 +244,89 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 					wp_localize_script( $key, str_replace('_js', '_L10n', $key), $string );
 				}
 			}
+			
+			
 		}
 		
+		
+		public function load_preview_css( $icon_font = "", $css = "" )
+		{
+			$output				= "";
+			$template_url 		= get_template_directory_uri();
+			$child_theme_url 	= get_stylesheet_directory_uri();
+			$avia_dyn_stylesheet_url = false;
+			$ver = AviaBuilder::VERSION;
+			
+			global $avia;
+			$safe_name = avia_backend_safe_string($avia->base_data['prefix']);
+			$safe_name = apply_filters('avf_dynamic_stylesheet_filename', $safe_name);
+	
+	        if( get_option('avia_stylesheet_exists'.$safe_name) == 'true' )
+	        {
+	            $avia_upload_dir = wp_upload_dir();
+	            if(is_ssl()) $avia_upload_dir['baseurl'] = str_replace("http://", "https://", $avia_upload_dir['baseurl']);
+	
+	            $avia_dyn_stylesheet_url = $avia_upload_dir['baseurl'] . '/dynamic_avia/'.$safe_name.'.css';
+	        }
+	        
+	        $google_fonts = array(avia_get_option('google_webfont'), avia_get_option('default_font'));
+	        
+	        foreach($google_fonts as $font)
+	        {
+	        	$font_weight = "";
+
+				if(strpos($font, ":") !== false)
+				{
+					$data = explode(':',$font);
+					$font = $data[0];
+					$font_weight = $data[1];
+				}
+	        
+		        if(strpos($font, 'websave') === false)
+				{
+					$avia->style->add_google_font($font, $font_weight);
+				}
+	        }
+	        
+			
+			if(empty($css))
+			{
+				$css = array(
+					$template_url."/css/grid.css" => 1,
+					$template_url."/css/base.css" => 1,
+					$template_url."/css/layout.css" => 1,
+					$template_url."/css/shortcodes.css" => 1,
+					$template_url."/js/aviapopup/magnific-popup.css" => 1,
+					$template_url."/js/mediaelement/skin-1/mediaelementplayer.css" => 1,
+					$template_url."/css/rtl.css" => is_rtl(),
+					$template_url."/css/custom.css" => 1,
+					$avia_dyn_stylesheet_url => $avia_dyn_stylesheet_url,
+					$child_theme_url."/style.css" => $template_url != $child_theme_url,
+					$template_url."/css/admin-preview.css" => 1,
+				);
+			}
+			
+			if(is_array($css))
+			{
+				foreach($css as $url => $load)
+				{
+					if($load) $output .= "<link rel='stylesheet' href='".$url."?ver=".$ver."' type='text/css' media='all' />";
+				}
+			}
+			
+			
+			
+			$output .= "<script type='text/javascript' src='".includes_url('/js/jquery/jquery.js')."?ver=".$ver."'></script>";
+			$output .= "<script type='text/javascript' src='".$template_url."/js/avia-admin-preview.js?ver=".$ver."'></script>";
+			$output .= $avia->style->link_google_font();
+			
+			
+			$error = __('It seems you are currently adding some HTML markup or other special characters. Once all HTML tags are closed the preview will be available again. If this message persists please check your input for special characters and try to remove them.','avia_framework');
+			$html  = "<script type='text/javascript'>var avia_preview = " . json_encode( array( "error" => $error, "paths" => $output.$icon_font, 'title' => __('Element Preview','avia_framework') , 'background' => __('Set preview background:','avia_framework')) )  . "; \n";
+			$html .= "</script>";
+		
+			return $html;
+		}
 
 		/**
 		 *mulilanguage activation
@@ -362,7 +454,7 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			    	 
 			    	 if($allow)
 			    	 {
-			    	 	$this->shortcode_class[$class]->init();
+			    	 	$this->shortcode_class[$class]->init(); 
 			    	 	$this->shortcode[$this->shortcode_class[$class]->config['shortcode']] = $class;
 			    	 	
 			    	 	//save shortcode as allowed by default. if we only want to display the shortcode in tinymce remove it from the list but keep the class instance alive
@@ -383,6 +475,8 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			    	 }
 			    }
 			}
+			
+			
 	 	}
 
 		
@@ -431,10 +525,11 @@ if ( !class_exists( 'AviaBuilder' ) ) {
                 //extract all shortcodes from the post array and store them so we know what we are dealing with when the user opens a page. 
                 //usesfull for special elements that we might need to render outside of the default loop like fullscreen slideshows
 			    preg_match_all("/".ShortcodeHelper::get_fake_pattern()."/s", $_POST['content'], $matches);
-	
+				
 			    if(is_array($matches) && !empty($matches[0]))
 			    {
                     $matches = ShortcodeHelper::build_shortcode_tree($matches);
+                    
                     update_post_meta((int) $_POST['post_ID'], '_avia_builder_shortcode_tree', $matches);
 			    }
             }
@@ -641,7 +736,6 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			// $clean_data = htmlentities($clean_data, ENT_QUOTES, get_bloginfo( 'charset' )); //entity-test: added htmlentities
 			
 			$output .= "	<textarea id='_aviaLayoutBuilderCleanData' name='_aviaLayoutBuilderCleanData'>".$clean_data."</textarea>"; 
-			
 			$nonce	= 			wp_create_nonce ('avia_nonce_loader');
 			$output .= '		<input type="hidden" name="avia-loader-nonce" id="avia-loader-nonce" value="'.$nonce.'" />';
 			$output .= "</div>";
@@ -739,6 +833,21 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			}
 		}
 		
+		public function text_to_preview($text = NULL)
+		{
+			if(!current_user_can('edit_posts')) die();
+			check_ajax_referer('avia_nonce_loader', '_ajax_nonce' );
+			
+			$text = ""; 
+			if(isset($_POST['text'])) $text = stripslashes( $_POST['text'] ); 
+	        
+			$text = do_shortcode($text);
+			echo $text;
+			exit();
+			
+		}
+		
+		
 		
 		public function do_shortcode_backend($text)
 		{
@@ -761,6 +870,9 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 	        $values['tag']		= $m[2];
 	        $values['attr']		= shortcode_parse_atts( stripslashes($m[3]) );
 	        
+	       
+	        
+	        
 	        if(is_array($values['attr']))
 	        {
 		        $charset = get_bloginfo( 'charset' );
@@ -770,12 +882,15 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 		        }
 			}
 			
+			 
+			
 	        if(isset($_POST['params']['extract']))
 	        {
 	        	//if we open a modal window also check for nested shortcodes
 	        	if($values['content']) $values['content'] = $this->do_shortcode_backend($values['content']);
 	        	
 	        	$_POST['extracted_shortcode'][] = $values;
+	        	
 	        	return $m[0];
 	        }
 			

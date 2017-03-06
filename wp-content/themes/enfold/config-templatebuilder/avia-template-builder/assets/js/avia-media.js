@@ -245,7 +245,7 @@
 							{
 								fakeImg.val('<img src="'+preview_img+'" />');
 							}
-
+							
 							return element[options.fetch];
 						}
 						else if(options.fetch == 'template')
@@ -277,8 +277,7 @@
 						
 					});
 					
-									
-					
+										
 					if(target.length)
 						target.val( values.join(',') ).trigger('change');	
 					

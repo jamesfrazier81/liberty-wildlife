@@ -18,6 +18,7 @@ if ( !class_exists( 'avia_sc_catalogue' ) )
 				$this->config['shortcode'] 	= 'av_catalogue';
 				$this->config['shortcode_nested'] = array('av_catalogue_item');
 				$this->config['tooltip'] 	= __('Creates a pricing list', 'avia_framework' );
+				$this->config['preview'] 	= true;
 			}
 
 			/**

@@ -121,7 +121,6 @@ Modified by kreatura for LayerSlider
 }
 
 .cm-s-solarized .CodeMirror-lines .CodeMirror-cursor {
-  margin-left: 6px;
   border-left: 1px solid black;
 }
 
@@ -150,6 +149,7 @@ View-port and gutter both get little noise background to give it a real feel.
 }
 
 .CodeMirror-focused .CodeMirror-selected {
+  margin-left: 0;
   background: #d9ecff;
 }
 
@@ -199,5 +199,5 @@ View-port and gutter both get little noise background to give it a real feel.
 }
 
 .CodeMirror .cm-tab {
-  background: url(../../img/cm-tab.png) center right no-repeat;
+  background: url(cm-tab.png) center right no-repeat;
 }

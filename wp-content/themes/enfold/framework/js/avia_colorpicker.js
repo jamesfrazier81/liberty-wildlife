@@ -21,7 +21,7 @@ jQuery(function($)
 	{
 		return this.each(function()
 		{
-			var button = $('.avia_autodetect').live('click', function()
+			var button = $('.avia_autodetect').on('click', function()
 			{
 				var container = $(this).parents('.avia_control:eq(0)'),
 					colorfield = $('.avia_color_picker', container),
@@ -946,7 +946,7 @@ if (!$.easing.easeout) {
 		var currentTab = $('ul.navigationTabs a')
 							.bind('click', showTab)
 							.filter('a[rel="' + hash + '"]');
-		if (currentTab.size() == 0) {
+		if (currentTab.length == 0) {
 			currentTab = $('ul.navigationTabs a:first');
 		}
 		showTab.apply(currentTab.get(0));

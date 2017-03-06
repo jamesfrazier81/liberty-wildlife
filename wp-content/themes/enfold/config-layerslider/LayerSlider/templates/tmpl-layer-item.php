@@ -8,22 +8,7 @@
 		</span>
 		<div class="ls-sublayer-thumb"></div>
 		<input type="text" name="subtitle" class="ls-sublayer-title" value="Layer #1">
-		<a href="#" title="<?php _e('Remove this layer', 'LayerSlider') ?>" class="dashicons dashicons-admin-page duplicate"></a>
+		<a href="#" title="<?php _e('Duplicate this layer', 'LayerSlider') ?>" class="dashicons dashicons-admin-page duplicate"></a>
 		<a href="#" title="<?php _e('Remove this layer', 'LayerSlider') ?>" class="dashicons dashicons-trash remove"></a>
-
-		<div class="ls-tl">
-			<div class="ls-tl-border"></div>
-			<table>
-				<tbody>
-					<tr>
-						<td data-help="Delay in: " class="ls-tl-delayin"></td>
-						<td data-help="Duration in: " class="ls-tl-durationin"></td>
-						<td data-help="Show Until: " class="ls-tl-showuntil"></td>
-						<td data-help="Duration out: " class="ls-tl-durationout"></td>
-						<td class="ls-tl-helper"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
 	</li>
 </script>

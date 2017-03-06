@@ -124,7 +124,7 @@
 						modal_title: 		shortcode.name, 
 						modal_ajax_hook: 	shortcode.shortcode ,
                         scope: 				tinyMCE.activeEditor,
-						ajax_param: 		{extract: true, shortcode: ""},
+						ajax_param: 		{extract: true, shortcode: "", _ajax_nonce: $('#avia-loader-nonce').val()},
                         on_load: 			shortcode.modal_on_load,
 						on_save: 			function(values)
 						{

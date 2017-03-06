@@ -2,11 +2,11 @@
 
 /*
 Plugin Name: LayerSlider WP
-Plugin URI: http://codecanyon.net/user/kreatura/
+Plugin URI: https://codecanyon.net/item/layerslider-responsive-wordpress-slider-plugin-/1362246
 Description: LayerSlider is the most advanced responsive WordPress slider plugin with the famous Parallax Effect and over 200 2D & 3D transitions.
-Version: 5.6.8
+Version: 6.1.6
 Author: Kreatura Media
-Author URI: https://kreaturamedia.com/
+Author URI: https://layerslider.kreaturamedia.com
 Text Domain: LayerSlider
 */
 
@@ -23,27 +23,25 @@ if(!defined('ABSPATH')) {
 /*                        Actions                       */
 /********************************************************/
 
-	// Action to redirect to Layerslider's admin page after activation
-	add_action('admin_init', 'layerslider_activation_redirect');
-
 	// Legacy, will be dropped
-	$GLOBALS['lsAutoUpdateBox'] = false;
+	$GLOBALS['lsAutoUpdateBox'] = true;
 
 	// Basic configuration
 	define('LS_DB_TABLE', 'layerslider');
-	define('LS_PLUGIN_VERSION', '5.6.8');
+	define('LS_DB_VERSION', '6.0.1');
+	define('LS_PLUGIN_VERSION', '6.1.6');
 
 	// Path info
 	define('LS_ROOT_FILE', __FILE__);
 	define('LS_ROOT_PATH', dirname(__FILE__));
 	define('LS_ROOT_URL', get_template_directory_uri() . '/config-layerslider/LayerSlider' );
-
+	
 	// Other constants
 	define('LS_PLUGIN_SLUG', basename(dirname(__FILE__)));
 	define('LS_PLUGIN_BASE', plugin_basename(__FILE__));
 	define('LS_MARKETPLACE_ID', '1362246');
 	define('LS_TEXTDOMAIN', 'LayerSlider');
-	define('LS_REPO_BASE_URL', 'https://repository.kreaturamedia.com/v3/');
+	define('LS_REPO_BASE_URL', 'https://repository.kreaturamedia.com/v4/');
 
 	if(!defined('NL')) { define("NL", "\r\n"); }
 	if(!defined('TAB')) { define("TAB", "\t"); }
@@ -65,9 +63,8 @@ if(!defined('ABSPATH')) {
 	LS_Shortcode::registerShortcode();
 
 	// Add demo sliders and skins
-	LS_Sources::addDemoSlider(LS_ROOT_PATH.'/demos/');
-	LS_Sources::addSkins(LS_ROOT_PATH.'/static/skins/');
-	LS_Sources::removeSkin('preview');
+	//LS_Sources::addDemoSlider(LS_ROOT_PATH.'/demos/');
+	LS_Sources::addSkins(LS_ROOT_PATH.'/static/layerslider/skins/');
 
 
 	// Back-end only
@@ -88,7 +85,8 @@ if(!defined('ABSPATH')) {
 		require_once LS_ROOT_PATH.'/classes/class.km.autoupdate.plugins.v3.php';
 	}
 
-		new KM_PluginUpdatesV3(array(
+	$GLOBALS['LS_AutoUpdate'] = new KM_PluginUpdatesV3(array(
+			'name' => 'LayerSlider WP',
 			'repoUrl' => LS_REPO_BASE_URL,
 			'root' => LS_ROOT_FILE,
 			'version' => LS_PLUGIN_VERSION,
@@ -104,17 +102,7 @@ if(!defined('ABSPATH')) {
 	add_action('plugins_loaded', 'layerslider_load_lang');
 
 
-// Redirect to LayerSlider's main admin page after plugin activation.
-// Should not trigger on multisite bulk activation or after upgrading
-// the plugin to a newer versions.
-function layerslider_activation_redirect() {
-	if(get_option('layerslider_do_activation_redirect', false)) {
-		delete_option('layerslider_do_activation_redirect');
-		if(isset($_GET['activate']) && !isset($_GET['activate-multi'])) {
-			wp_redirect(admin_url('admin.php?page=layerslider'));
-		}
-	}
-}
+
 
 function layerslider_load_lang() {
 	load_plugin_textdomain('LayerSlider', false, LS_PLUGIN_SLUG . '/locales/' );
@@ -160,13 +148,15 @@ function ls_ordinal_number($number) {
 
 
 
-function layerslider_check_unit($str) {
+function layerslider_check_unit($str, $key = '') {
 
 	if(strstr($str, 'px') == false && strstr($str, '%') == false) {
-		return $str.'px';
-	} else {
-		return $str;
+		if( $key !== 'z-index' && $key !== 'font-weight' && $key !== 'opacity') {
+			return $str.'px';
+		}
 	}
+
+	return $str;
 }
 
 function layerslider_convert_urls($arr) {

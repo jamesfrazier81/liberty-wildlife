@@ -20,6 +20,7 @@ if ( !class_exists( 'avia_sc_animated_numbers' ) )
 				$this->config['target']		= 'avia-target-insert';
 				$this->config['shortcode'] 	= 'av_animated_numbers';
 				$this->config['tooltip'] 	= __('Display an animated Number with subtitle', 'avia_framework' );
+				$this->config['preview'] 	= true;
 			}
 		
 		
@@ -284,7 +285,7 @@ if ( !class_exists( 'avia_sc_animated_numbers' ) )
 			{
 				$number = strip_tags(apply_filters('avf_big_number', $number));
 				$number = preg_replace('!(\D+)!','<span class="avia-no-number">$1</span>',$number);
-				$number = preg_replace('!(\d+)!','<span class="avia-single-number" data-number="$1">$1</span>',$number);
+				$number = preg_replace('!(\d+)!','<span class="avia-single-number __av-single-number" data-number="$1">$1</span>',$number);
 				return $number;
 			}
 			

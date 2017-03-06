@@ -24,7 +24,7 @@ if (have_posts()) :
 
                 //display the actual post content
                 echo '<div class="entry-content" '.avia_markup_helper(array('context' => 'entry_content','echo'=>false)).'>';
-                    the_content(__('Read more','avia_framework').'<span class="more-link-arrow">  &rarr;</span>');
+                    the_content(__('Read more','avia_framework').'<span class="more-link-arrow"></span>');
                 echo '</div>';
 
                 echo '<footer class="entry-footer">';

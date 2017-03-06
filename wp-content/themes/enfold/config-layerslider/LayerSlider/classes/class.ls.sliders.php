@@ -77,7 +77,7 @@ class LS_Sliders {
 			$defaults = array(
 				'columns' => '*',
 				'where' => '',
-				'exclude' => array('hidden', 'removed'),
+				'exclude' => array('removed'),
 				'orderby' => 'date_c',
 				'order' => 'DESC',
 				'limit' => 10,
@@ -87,11 +87,15 @@ class LS_Sliders {
 
 			// User data
 			foreach($defaults as $key => $val) {
-				if(!isset($args[$key])) { $args[$key] = $val; } }
+				if(!isset($args[$key])) { $args[$key] = $val; }
+			}
 
 			// Escape user data
 			foreach($args as $key => $val) {
-				$args[$key] = esc_sql($val); }
+				if( $key !== 'where' ) {
+					$args[$key] = esc_sql($val);
+				}
+			}
 
 			// Exclude
 			if(!empty($args['exclude'])) {
@@ -161,7 +165,11 @@ class LS_Sliders {
 
 		// Slider data
 		$data = !empty($data) ? $data : array(
-			'properties' => array('title' => $title, 'new' => true),
+			'properties' => array(
+				'sliderVersion' => LS_DB_VERSION,
+				'title' => $title,
+				'new' => true,
+			),
 			'layers' => array(array()),
 		);
 
@@ -215,15 +223,41 @@ class LS_Sliders {
 			$title = substr($title, 0, (99-strlen($title)) );
 		}
 
+		// Status
+		$status = 0;
+		if( empty($data['properties']['status']) || $data['properties']['status'] === 'false') {
+			$status = 1;
+		}
+
+		// Schedule
+		$schedule = array('schedule_start' => 0, 'schedule_end' => 0);
+		foreach($schedule as $key => $val) {
+			if( ! empty($data['properties'][$key]) ) {
+				if( is_numeric($data['properties'][$key]) ) {
+					$schedule[$key] = (int) $data['properties'][$key];
+				} else {
+					$tz = date_default_timezone_get();
+					date_default_timezone_set( get_option('timezone_string') );
+					$schedule[$key] = (int) strtotime($data['properties'][$key]);
+					date_default_timezone_set( $tz );
+				}
+			}
+		}
+
+
+
 		// Insert slider, WPDB will escape data automatically
 		$wpdb->update($wpdb->prefix.LS_DB_TABLE, array(
 				'name' => $title,
 				'slug' => $slug,
 				'data' => json_encode($data),
-				'date_m' => time()
+				'schedule_start' => $schedule['schedule_start'],
+				'schedule_end' => $schedule['schedule_end'],
+				'date_m' => time(),
+				'flag_hidden' => $status
 			),
 			array('id' => $id),
-			array('%s', '%s', '%s', '%d')
+			array('%s', '%s', '%s', '%d', '%d', '%d', '%d')
 		);
 
 		// Return insert database ID

@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_team' ) )
 				$this->config['shortcode'] 	= 'av_team_member';
 				$this->config['shortcode_nested'] = array('av_team_icon');
 				$this->config['tooltip'] 	= __('Display a team members image with additional information', 'avia_framework' );
+				$this->config['preview'] 		= true;
 			}
 
 

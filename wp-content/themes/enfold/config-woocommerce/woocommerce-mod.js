@@ -112,8 +112,9 @@ function update_cart_dropdown(event)
 var avia_clicked_product = {};
 function track_ajax_add_to_cart()
 {
-	jQuery('body').on('click','.add_to_cart_button', function()
+	jQuery('body').on('click','.add_to_cart_button', function(e)
 	{	
+		
 		var productContainer = jQuery(this).parents('.product').eq(0), product = {};
 			product.name	 = productContainer.find('.inner_product_header h3').text();
 			product.image	 = productContainer.find('.thumbnail_container img');
@@ -189,7 +190,7 @@ function product_add_to_cart_click()
 		
 	if(catalogue.length) loader	= jQuery.avia_utilities.loading(); 
 
-	jbody.on('click', '.add_to_cart_button', function()
+	jbody.on('click', '.add_to_cart_button', function(e)
 	{
 		var button = jQuery(this);
 		button.parents('.product:eq(0)').addClass('adding-to-cart-loading').removeClass('added-to-cart-check');
@@ -198,6 +199,8 @@ function product_add_to_cart_click()
 		{
 			loader.show();
 		}
+		
+		//e.preventDefault();
 	})
 	
 	jbody.bind('added_to_cart', function()

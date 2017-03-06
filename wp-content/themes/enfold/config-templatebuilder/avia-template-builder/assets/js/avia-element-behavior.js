@@ -232,8 +232,6 @@
 	{
 		$("body").on('click', '.avia-attach-element-select', function()
 		{
-			
-		
 			var clicked = $(this),
 				parent  = clicked.parents('.avia-attach-element-container:eq(0)'),
 				old 	= parent.find('.avia-active-element').removeClass('avia-active-element'),
@@ -250,6 +248,8 @@
 				//window.prompt ("Copy to clipboard: Ctrl+C, Enter", clicked.data('element-nr'));
 				//clicked.css({display:'none'});
 				
+				
+				input.trigger('change');
 				return false;
 		});
 	}

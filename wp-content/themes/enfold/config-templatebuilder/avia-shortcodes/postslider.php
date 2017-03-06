@@ -316,7 +316,7 @@ if ( !class_exists( 'avia_post_slider' ) )
 					}
 
 
-					$permalink = '<div class="read-more-link"><a href="'.get_permalink($the_id).'" class="more-link">'.__('Read more','avia_framework').'<span class="more-link-arrow">  &rarr;</span></a></div>';
+					$permalink = '<div class="read-more-link"><a href="'.get_permalink($the_id).'" class="more-link">'.__('Read more','avia_framework').'<span class="more-link-arrow"></span></a></div>';
 					$prepare_excerpt = !empty($entry->post_excerpt) ? $entry->post_excerpt : avia_backend_truncate($entry->post_content, apply_filters( 'avf_postgrid_excerpt_length' , $excerpt_length) , apply_filters( 'avf_postgrid_excerpt_delimiter' , " "), "…", true, '');
 
 		                  	if($format == 'link')
@@ -393,6 +393,7 @@ if ( !class_exists( 'avia_post_slider' ) )
 
                     $markup = avia_markup_helper(array('context' => 'entry_title','echo'=>false, 'id'=>$the_id, 'custom_markup'=>$custom_markup));
                     $output .= '<header class="entry-content-header">';
+                    $meta_out = "";
                     
                     if (!empty($title))
                     {
@@ -416,13 +417,16 @@ if ( !class_exists( 'avia_post_slider' ) )
 			                
 			                if(!empty($cats))
 		                    {
-		                        $output .= '<span class="blog-categories minor-meta">';
-		                        $output .= $cats;
-		                        $output .= '</span>';
+		                        $meta_out .= '<span class="blog-categories minor-meta">';
+		                        $meta_out .= $cats;
+		                        $meta_out .= '</span>';
 		                    }
 	                    }
 	                    
+	                    if( strpos($blogstyle, 'modern-blog') === false && $blogstyle != "") $output .= $meta_out;
                     	$output .=  "<h3 class='slide-entry-title entry-title' $markup><a href='{$link}' title='".esc_attr(strip_tags($title))."'>".$title."</a></h3>";
+                    	
+                    	if( strpos($blogstyle, 'modern-blog') !== false && $blogstyle != "") $output .= $meta_out;
                     	$output .= '<span class="av-vertical-delimiter"></span>';
                     }
                     
@@ -442,7 +446,7 @@ if ( !class_exists( 'avia_post_slider' ) )
 						$meta .= "<time class='slide-meta-time updated' $markup>" .get_the_time(get_option('date_format'), $the_id)."</time>";
 						$meta .= "</div>";
 						
-						if($blogstyle !== "elegant-blog")
+						if( strpos($blogstyle, 'elegant-blog') === false )
 						{
 							$output .= $meta;
 							$meta = "";

@@ -81,11 +81,12 @@
 
 			// you can filter and remove the backlink with an add_filter function
 			// from your themes (or child themes) functions.php file if you dont want to edit this file
+			// you can also remove the kriesi.at backlink by adding [nolink] to your custom copyright field in the admin area
 			// you can also just keep that link. I really do appreciate it ;)
-			$kriesi_at_backlink = kriesi_backlink(get_option(THEMENAMECLEAN."_initial_version"));
+			$kriesi_at_backlink = kriesi_backlink(get_option(THEMENAMECLEAN."_initial_version"), 'Enfold');
 
 
-			//you can also remove the kriesi.at backlink by adding [nolink] to your custom copyright field in the admin area
+			
 			if($copyright && strpos($copyright, '[nolink]') !== false)
 			{
 				$kriesi_at_backlink = "";

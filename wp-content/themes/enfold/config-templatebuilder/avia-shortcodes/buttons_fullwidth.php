@@ -23,6 +23,7 @@ if ( !class_exists( 'avia_sc_button_full' ) )
 				$this->config['shortcode'] 	= 'av_button_big';
 				$this->config['tooltip'] 	= __('Creates a colored button that stretches across the full width', 'avia_framework' );
 				$this->config['tinyMCE']    = array('tiny_always'=>true);
+				$this->config['preview'] 	= true;
 			}
 		
 			/**

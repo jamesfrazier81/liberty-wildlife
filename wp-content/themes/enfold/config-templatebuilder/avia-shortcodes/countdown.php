@@ -20,7 +20,7 @@ if ( !class_exists( 'avia_sc_countdown' ) )
 				$this->config['target']		= 'avia-target-insert';
 				$this->config['shortcode'] 	= 'av_countdown';
 				$this->config['tooltip'] 	= __('Display a countdown to a specific date', 'avia_framework' );
-				
+				$this->config['preview'] 	= "xlarge";
 				$this->time_array = array(
 								__('Second',  	'avia_framework' ) 	=>'1',
 								__('Minute',  	'avia_framework' ) 	=>'2',	
@@ -186,13 +186,13 @@ if ( !class_exists( 'avia_sc_countdown' ) )
 				
 				$this->full_time_array = array(
 				
-					1 => array("interval" => 1000		, 'class'=>'seconds', 	'label' => __('Second', 'avia_framework' ),	'label_multi' => __('Seconds',  'avia_framework')),
-					2 => array("interval" => 60000		, 'class'=>'minutes', 	'label' => __('Minute', 'avia_framework' ),	'label_multi' => __('Minutes',  'avia_framework')),
-					3 => array("interval" => 3600000	, 'class'=>'hours', 	'label' => __('Hour',  	'avia_framework'),	'label_multi' => __('Hours',  	'avia_framework')),
-					4 => array("interval" => 86400000	, 'class'=>'days', 		'label' => __('Day',  	'avia_framework' ), 'label_multi' => __('Days',  	'avia_framework')),
-					5 => array("interval" => 604800000	, 'class'=>'weeks', 	'label' => __('Week',  	'avia_framework' ),	'label_multi' => __('Weeks',  	'avia_framework')),
-					6 => array("interval" => 2678400000	, 'class'=>'months', 	'label' => __('Month',  'avia_framework' ),	'label_multi' => __('Months',  	'avia_framework')),
-					7 => array("interval" => 31536000000, 'class'=>'years', 	'label' => __('Year',  	'avia_framework' ),	'label_multi' => __('Years',  	'avia_framework'))
+					1 => array("interval" => 1000		 , 'class'=>'seconds', 	'label' => __('Second', 'avia_framework' ),	'label_multi' => __('Seconds',  'avia_framework')),
+					2 => array("interval" => 60000		 , 'class'=>'minutes', 	'label' => __('Minute', 'avia_framework' ),	'label_multi' => __('Minutes',  'avia_framework')),
+					3 => array("interval" => 3600000	 , 'class'=>'hours', 	'label' => __('Hour',  	'avia_framework'),	'label_multi' => __('Hours',  	'avia_framework')),
+					4 => array("interval" => 86400000	 , 'class'=>'days', 	'label' => __('Day',  	'avia_framework' ), 'label_multi' => __('Days',  	'avia_framework')),
+					5 => array("interval" => 604800000	 , 'class'=>'weeks', 	'label' => __('Week',  	'avia_framework' ),	'label_multi' => __('Weeks',  	'avia_framework')),
+					6 => array("interval" => 2678400000	 , 'class'=>'months', 	'label' => __('Month',  'avia_framework' ),	'label_multi' => __('Months',  	'avia_framework')),
+					7 => array("interval" => 31536000000 , 'class'=>'years', 	'label' => __('Year',  	'avia_framework' ),	'label_multi' => __('Years',  	'avia_framework'))
 				
 				);
 				

@@ -20,7 +20,7 @@
 		// bind the click event to all elements with the class avia_uploader 
 		bind_click: function()
 		{
-			$('.avia_uploader').live('click', function()
+			$('body').on('click', '.avia_uploader', function()
 			{
 				var title  = this.title,
 					idBased = "";
@@ -57,7 +57,7 @@
 		// bind the click event of the remove image links to the removing function
 		bind_remove: function()
 		{
-			$('.avia_remove_image').live('click', function()
+			$('body').on('click', '.avia_remove_image', function()
 			{
 				var container = $(this).parents('.avia_upload_container');
 					
@@ -70,7 +70,7 @@
 		
 		bind_blur: function()
 		{
-			$('.avia_upload_input').live('blur change', function()
+			$('body').on('blur change', '.avia_upload_input', function()
 			{
 				var input = $(this),
 					value = input.val(),
@@ -315,7 +315,7 @@
 		avia_media.idBasedUpload();
 		avia_media.hijack_uploader();
 		avia_media.change_label();
-		$(".slidetoggle").live('mouseenter',avia_media.change_label);
+		$('body').on('mouseenter', '.slidetoggle',avia_media.change_label);
  	});
 
 	

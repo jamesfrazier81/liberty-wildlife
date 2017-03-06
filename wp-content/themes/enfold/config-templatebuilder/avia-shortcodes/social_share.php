@@ -20,7 +20,7 @@ if ( !class_exists( 'avia_sc_social_share' ) )
 				$this->config['target']			= 'avia-target-insert';
 				$this->config['shortcode'] 		= 'av_social_share';
 				$this->config['tooltip'] 	    = __('Creates one or more social share buttons ', 'avia_framework' );
-
+				$this->config['preview'] 		= true;
 			}
 
 			/**

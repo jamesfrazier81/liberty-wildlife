@@ -90,7 +90,7 @@ if (have_posts()) :
 	                    }
 	                }
 					//elegant blog
-	            	if( $blog_global_style == 'elegant-blog' )
+	            	if( strpos($blog_global_style, 'elegant-blog') !== false )
 	            	{
 		            	if(!empty($cats))
 	                    {

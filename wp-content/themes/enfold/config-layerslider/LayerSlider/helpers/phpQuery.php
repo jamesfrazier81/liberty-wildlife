@@ -1,4 +1,11 @@
 <?php
+namespace LayerSlider\PHPQuery;
+use DOMDocument, DOMElement, DOMNodeList, DOMNode, DOMXPath, Iterator, Countable, ArrayAccess;
+
+if( ! defined('LS_phpQuery') ) {
+	define('LS_phpQuery', true);
+}
+
 /**
  * phpQuery is a server-side, chainable, CSS3 selector driven
  * Document Object Model (DOM) API based on jQuery JavaScript Library.
@@ -14,10 +21,10 @@
 
 // class names for instanceof
 // TODO move them as class constants into phpQuery
-define('DOMDOCUMENT', 'DOMDocument');
-define('DOMELEMENT', 'DOMElement');
-define('DOMNODELIST', 'DOMNodeList');
-define('DOMNODE', 'DOMNode');
+if ( !defined('DOMDOCUMENT') ) define('DOMDOCUMENT', 'DOMDocument');
+if ( !defined('DOMELEMENT') ) define('DOMELEMENT', 'DOMElement');
+if ( !defined('DOMNODELIST') ) define('DOMNODELIST', 'DOMNodeList');
+if ( !defined('DOMNODE') ) define('DOMNODE', 'DOMNode');
 
 /**
  * DOMEvent class.
@@ -280,7 +287,7 @@ class DOMDocumentWrapper {
 		// @see http://www.w3.org/International/O-HTTP-charset
 		if (! $documentCharset) {
 			$documentCharset = 'ISO-8859-1';
-			$addDocumentCharset = true;	
+			$addDocumentCharset = true;
 		}
 		// Should be careful here, still need 'magic encoding detection' since lots of pages have other 'default encoding'
 		// Worse, some pages can have mixed encodings... we'll try not to worry about that
@@ -567,7 +574,7 @@ class DOMDocumentWrapper {
 //					if ($fake === false)
 //						throw new Exception("Error loading documentFragment markup");
 //					else
-//						$return = array_merge($return, 
+//						$return = array_merge($return,
 //							$this->import($fake->root->childNodes)
 //						);
 //				} else {
@@ -969,24 +976,24 @@ interface ICallbackNamed {
 }
 /**
  * Callback class introduces currying-like pattern.
- * 
+ *
  * Example:
  * function foo($param1, $param2, $param3) {
  *   var_dump($param1, $param2, $param3);
  * }
- * $fooCurried = new Callback('foo', 
- *   'param1 is now statically set', 
+ * $fooCurried = new Callback('foo',
+ *   'param1 is now statically set',
  *   new CallbackParam, new CallbackParam
  * );
  * phpQuery::callbackRun($fooCurried,
  * 	array('param2 value', 'param3 value'
  * );
- * 
- * Callback class is supported in all phpQuery methods which accepts callbacks. 
+ *
+ * Callback class is supported in all phpQuery methods which accepts callbacks.
  *
  * @link http://code.google.com/p/phpquery/wiki/Callbacks#Param_Structures
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
- * 
+ *
  * @TODO??? return fake forwarding function created via create_function
  * @TODO honor paramStructure
  */
@@ -995,7 +1002,7 @@ class Callback
 	public $callback = null;
 	public $params = null;
 	protected $name;
-	public function __construct($callback, $param1 = null, $param2 = null, 
+	public function __construct($callback, $param1 = null, $param2 = null,
 			$param3 = null) {
 		$params = func_get_args();
 		$params = array_slice($params, 1);
@@ -1024,11 +1031,11 @@ class Callback
 }
 /**
  * Shorthand for new Callback(create_function(...), ...);
- * 
+ *
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  */
 class CallbackBody extends Callback {
-	public function __construct($paramList, $code, $param1 = null, $param2 = null, 
+	public function __construct($paramList, $code, $param1 = null, $param2 = null,
 			$param3 = null) {
 		$params = func_get_args();
 		$params = array_slice($params, 2);
@@ -1038,7 +1045,7 @@ class CallbackBody extends Callback {
 }
 /**
  * Callback type which on execution returns reference passed during creation.
- * 
+ *
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  */
 class CallbackReturnReference extends Callback
@@ -1060,7 +1067,7 @@ class CallbackReturnReference extends Callback
 }
 /**
  * Callback type which on execution returns value passed during creation.
- * 
+ *
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
  */
 class CallbackReturnValue extends Callback
@@ -1087,7 +1094,7 @@ class CallbackReturnValue extends Callback
 }
 /**
  * CallbackParameterToReference can be used when we don't really want a callback,
- * only parameter passed to it. CallbackParameterToReference takes first 
+ * only parameter passed to it. CallbackParameterToReference takes first
  * parameter's value and passes it to reference.
  *
  * @author Tobiasz Cudnik <tobiasz.cudnik/gmail.com>
@@ -1095,7 +1102,7 @@ class CallbackReturnValue extends Callback
 class CallbackParameterToReference extends Callback {
 	/**
 	 * @param $reference
-	 * @TODO implement $paramIndex; 
+	 * @TODO implement $paramIndex;
 	 * param index choose which callback param will be passed to reference
 	 */
 	public function __construct(&$reference){
@@ -2228,7 +2235,7 @@ class phpQueryObject
 	/**
 	 * @access private
 	 */
-	protected function __pseudoClassParam($paramsString) {
+	protected function _pseudoClassParam($paramsString) {
 		// TODO;
 	}
 	/**
@@ -2454,7 +2461,7 @@ class phpQueryObject
 			'type' => $data ? 'POST' : 'GET',
 			'data' => $data,
 			'complete' => $callback,
-			'success' => array($this, '__loadSuccess')
+			'success' => array($this, '_loadSuccess')
 		);
 		phpQuery::ajax($ajax);
 		return $this;
@@ -2464,7 +2471,7 @@ class phpQueryObject
 	 * @param $html
 	 * @return unknown_type
 	 */
-	public function __loadSuccess($html) {
+	public function _loadSuccess($html) {
 		if ($this->_loadSelector) {
 			$html = phpQuery::newDocument($html)->find($this->_loadSelector);
 			unset($this->_loadSelector);
@@ -2619,7 +2626,7 @@ class phpQueryObject
 		return phpQuery::pq($wrapper, $this->getDocumentID())
 			->clone()
 			->insertBefore($this->get(0))
-			->map(array($this, '___wrapAllCallback'))
+			->map(array($this, '_wrapAllCallback'))
 			->append($this);
 	}
   /**
@@ -2628,7 +2635,7 @@ class phpQueryObject
 	 * @return unknown_type
 	 * @access private
    */
-	public function ___wrapAllCallback($node) {
+	public function _wrapAllCallback($node) {
 		$deepest = $node;
 		while($deepest->firstChild && $deepest->firstChild instanceof DOMELEMENT)
 			$deepest = $deepest->firstChild;
@@ -2992,7 +2999,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param $code
 	 * @return unknown_type
 	 */
@@ -3003,7 +3010,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param $code
 	 * @return unknown_type
 	 */
@@ -3718,7 +3725,16 @@ class phpQueryObject
 	}
 	public function attr($attr = null, $value = null) {
 		foreach($this->stack(1) as $node) {
-			if (! is_null($value)) {
+			if( is_array($attr) ) {
+				foreach($attr as $key => $a) {
+					$oldValue = $node->getAttribute($key);
+					$oldAttr = $node->hasAttribute($key);
+					// TODO raises an error when charset other than UTF-8
+					// while document's charset is also not UTF-8
+					@$node->setAttribute($key, $a);
+					$this->attrEvents($key, $oldAttr, $oldValue, $node);
+				}
+			} else if (! is_null($value)) {
 				$loop = $attr == '*'
 					? $this->getNodeAttrs($node)
 					: array($attr);
@@ -4032,7 +4048,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param <type> $key
 	 * @param <type> $value
 	 */
@@ -4049,7 +4065,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param <type> $key
 	 */
 	public function removeData($key) {
@@ -4182,7 +4198,7 @@ class phpQueryObject
 					: "{$node->tagName}[{$i}]";
 				$node = $node->parentNode;
 			}
-			$xpath = join('/', array_reverse($xpath));
+			$xpath = implode('/', array_reverse($xpath));
 			$return[] = '/'.$xpath;
 		}
 		return $oneNode
@@ -4204,7 +4220,7 @@ class phpQueryObject
 					.($node->getAttribute('id')
 						? '#'.$node->getAttribute('id'):'')
 					.($node->getAttribute('class')
-						? '.'.join('.', split(' ', $node->getAttribute('class'))):'')
+						? '.'.implode('.', explode(' ', $node->getAttribute('class'))):'')
 					.($node->getAttribute('name')
 						? '[name="'.$node->getAttribute('name').'"]':'')
 					.($node->getAttribute('value') && strpos($node->getAttribute('value'), '<'.'?php') === false
@@ -4265,21 +4281,21 @@ class phpQueryObject
 		$debug = phpQuery::$debug;
 		phpQuery::$debug = false;
 		foreach($this->stack() as $node)
-			$output .= $this->__dumpTree($node);
+			$output .= $this->_dumpTree($node);
 		phpQuery::$debug = $debug;
 		print $html
 			? nl2br(str_replace(' ', '&nbsp;', $output))
 			: $output;
 		return $this;
 	}
-	private function __dumpTree($node, $intend = 0) {
+	private function _dumpTree($node, $intend = 0) {
 		$whois = $this->whois($node);
 		$return = '';
 		if ($whois)
 			$return .= str_repeat(' - ', $intend).$whois."\n";
 		if (isset($node->childNodes))
 			foreach($node->childNodes as $chNode)
-				$return .= $this->__dumpTree($chNode, $intend+1);
+				$return .= $this->_dumpTree($chNode, $intend+1);
 		return $return;
 	}
 	/**
@@ -4390,8 +4406,8 @@ if (!function_exists('mb_substr_count'))
  */
 abstract class phpQuery {
 	/**
-	 * XXX: Workaround for mbstring problems 
-	 * 
+	 * XXX: Workaround for mbstring problems
+	 *
 	 * @var bool
 	 */
 	public static $mbstringSupport = true;
@@ -5633,10 +5649,11 @@ abstract class phpQuery {
 			if (isset($document->data[$id][$name]))
 				unset($document->data[$id][$name]);
 			$name = null;
-			foreach($document->data[$id] as $name)
-				break;
-			if (! $name)
-				self::removeData($node, $name, $documentID);
+			foreach($document->data[$id] as $name) {
+				if (! $name) {
+					self::removeData($node, $name, $documentID);
+				}
+			}
 		} else {
 			self::dataRemoveNode($node, $documentID);
 		}

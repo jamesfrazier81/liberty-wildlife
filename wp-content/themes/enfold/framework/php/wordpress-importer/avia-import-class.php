@@ -9,7 +9,6 @@ class avia_wp_import extends WP_Import
 	
 	function saveOptions($option_file, $import_only = false)
 	{	
-
 		if($option_file) @include_once($option_file);
 		
 		switch($import_only)
@@ -18,6 +17,7 @@ class avia_wp_import extends WP_Import
 			case 'dynamic_pages': $options = $dynamic_elements = false; break;
 			case 'dynamic_elements': $options = $dynamic_pages = false; break;
 		}
+		
 		
 		
 		if(!isset($options) && !isset($dynamic_pages) && !isset($dynamic_elements)  ) { return false; }
@@ -56,6 +56,11 @@ class avia_wp_import extends WP_Import
 			$this->import_iconfont( $fonts );
 		}
 		
+		if(!empty($layerslider))
+		{
+			$this->import_layerslides( $layerslider );
+		}
+		
 		
 		if(!empty($widget_settings))
 		{
@@ -72,6 +77,46 @@ class avia_wp_import extends WP_Import
 		
 		
 	}
+	
+	public function import_layerslides( $layerslider )
+	{
+		$slider 		= urlencode( $layerslider );
+		$remoteURL 		= 'http://www.kriesi.at/themes/wp-content/uploads/avia-sample-layerslides/'.$slider.".zip";
+	
+		$uploads 		= wp_upload_dir();
+		$downloadPath 	= $uploads['basedir'].'/lsimport.zip';
+	
+		// Download package
+		$request = wp_remote_post($remoteURL, array(
+			'method' => 'POST',
+			'timeout' => 300,
+			'body' => array()
+		));
+
+		$zip = wp_remote_retrieve_body($request);
+		
+		if( ! $zip ) {
+			die("LayerSlider couldn't download your selected slider. Please check LayerSlider -> System Status for potential issues. The WP Remote functions may be unavailable or your web hosting provider has to allow external connections to our domain."
+			);
+		}
+	
+		// Save package
+		if( ! file_put_contents($downloadPath, $zip) ) 
+		{
+			die("LayerSlider couldn't save the downloaded slider on your server. Please check LayerSlider -> System Status for potential issues. The most common reason for this issue is the lack of write permission on the /wp-content/uploads/ directory.");
+			
+		}
+	
+		// Load importUtil & import the slider
+		include LS_ROOT_PATH.'/classes/class.ls.importutil.php';
+		$import = new LS_ImportUtil( $downloadPath );
+	
+		// Remove package
+		unlink( $downloadPath );
+	}
+	
+	
+	
 	
 	public function import_iconfont( $new_fonts )
 	{

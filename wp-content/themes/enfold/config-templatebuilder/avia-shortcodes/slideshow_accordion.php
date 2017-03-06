@@ -24,6 +24,7 @@ if ( !class_exists( 'avia_sc_slider_accordion' ) )
 				$this->config['shortcode_nested'] = array('av_slide_accordion');
 				$this->config['tooltip'] 	    = __('Display an accordion slider with images or post entries', 'avia_framework' );
 				$this->config['drag-level'] 	= 3;
+				$this->config['preview'] 		= false;
 			}
 
 			/**

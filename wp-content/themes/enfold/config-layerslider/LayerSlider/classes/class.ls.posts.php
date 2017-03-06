@@ -52,19 +52,21 @@ class LS_Posts {
 		}
 
 		foreach($this->posts as $key => $val) {
+			$this->post = $val;
 			$ret[$key]['post-id'] = $val->ID;
 			$ret[$key]['post-slug'] = $val->post_name;
 			$ret[$key]['post-url'] = get_permalink($val->ID);
 			$ret[$key]['date-published'] = date(get_option('date_format'), strtotime($val->post_date));
 			$ret[$key]['date-modified'] = date(get_option('date_format'), strtotime($val->post_modified));
 			$ret[$key]['thumbnail'] = $this->getPostThumb($val->ID);
-			$ret[$key]['thumbnail'] = !empty($ret[$key]['thumbnail']) ? $ret[$key]['thumbnail'] : LS_ROOT_URL . '/static/img/blank.gif';
+			$ret[$key]['thumbnail'] = !empty($ret[$key]['thumbnail']) ? $ret[$key]['thumbnail'] : LS_ROOT_URL . '/static/admin/img/blank.gif';
 			$ret[$key]['image'] = '<img src="'.$ret[$key]['thumbnail'].'" alt="">';
 			$ret[$key]['image-url'] = $ret[$key]['thumbnail'];
-			$ret[$key]['title'] = htmlspecialchars(__($val->post_title), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE);
-			$ret[$key]['content'] = wp_strip_all_tags(__($val->post_content));
+			$ret[$key]['title'] = htmlspecialchars($this->getTitle(), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE);
+			$ret[$key]['content'] = $this->getContent();
 			$ret[$key]['excerpt'] = $this->getExcerpt();
 			$ret[$key]['author'] = get_userdata($val->post_author)->user_nicename;
+			$ret[$key]['author-name'] = get_userdata($val->post_author)->display_name;
 			$ret[$key]['author-id'] = $val->post_author;
 			$ret[$key]['categories'] = $this->getCategoryList($val);
 			$ret[$key]['tags'] = $this->getTagList($val);
@@ -124,11 +126,7 @@ class LS_Posts {
 
 		// Title
 		if(stripos($str, '[title]') !== false) {
-			if(!empty($textlength)) {
-				$str = str_replace('[title]', substr($this->getTitle(), 0, $textlength), $str);
-			} else {
-				$str = str_replace('[title]', $this->getTitle(), $str);
-			}
+			$str = str_replace('[title]', $this->getTitle($textlength), $str);
 		}
 
 		// Content
@@ -140,9 +138,13 @@ class LS_Posts {
 			$str = str_replace('[excerpt]', $this->getExcerpt($textlength), $str);
 		}
 
-		// Author
+		// Author nickname
 		if(stripos($str, '[author]') !== false) {
-			$str = str_replace('[author]', $this->getAuthor(), $str); }
+			$str = str_replace('[author]', $this->getAuthor(true), $str); }
+
+		// Author display name
+		if(stripos($str, '[author-name]') !== false) {
+			$str = str_replace('[author-name]', $this->getAuthor(false), $str); }
 
 		// Author ID
 		if(stripos($str, '[author-id]') !== false) {
@@ -183,9 +185,16 @@ class LS_Posts {
 	 * Returns the lastly selected post's title
 	 * @return string The title of the post
 	 */
-	public function getTitle() {
-		if(is_object($this->post)) { return __($this->post->post_title); }
-			else { return false; }
+	public function getTitle($length = 0) {
+
+		if(!is_object($this->post)) { return false; }
+
+		$title = __($this->post->post_title);
+		if(!empty($length)) {
+			$title = substr($title, 0, $length);
+		}
+
+		return $title;
 	}
 
 
@@ -210,10 +219,12 @@ class LS_Posts {
 	}
 
 
-	public function getAuthor() {
-		if(is_object($this->post)) { return get_userdata($this->post->post_author)->user_nicename; }
+	public function getAuthor($nick = true) {
+		$key = $nick ? 'user_nicename' : 'display_name';
+		if(is_object($this->post)) { return get_userdata($this->post->post_author)->$key; }
 			else { return false; }
 	}
+
 
 	public function getCategoryList($post = null) {
 
@@ -223,7 +234,7 @@ class LS_Posts {
 			$cats = wp_get_post_categories($this->post->ID);
 			foreach($cats as $val) {
 				$cat = get_category($val);
-				$list[] = '<a href="/category/'.$cat->slug.'/">'.$cat->name.'</a>';
+				$list[] = '<a href="'.get_category_link($val).'">'.$cat->name.'</a>';
 			}
 			return '<div>'.implode(', ', $list).'</div>';
 		} else {
@@ -257,11 +268,12 @@ class LS_Posts {
 
 		if(!is_object($this->post)) { return false; }
 
-		if(empty($length)) {
-			return wp_strip_all_tags(__($this->post->post_content));
-		} else {
-			return substr(wp_strip_all_tags(__($this->post->post_content)), 0, $length);
+		$content = __($this->post->post_content);
+		if(!empty($length)) {
+			$content = substr(wp_strip_all_tags($content), 0, $length);
 		}
+
+		return nl2br($content);
 	}
 
 	/**

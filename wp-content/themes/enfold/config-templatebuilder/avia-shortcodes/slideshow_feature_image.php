@@ -20,6 +20,7 @@ if ( !class_exists( 'avia_sc_featureimage_slider' ))
 			$this->config['shortcode'] 	= 'av_feature_image_slider';
 			$this->config['tooltip'] 	= __('Display a Slideshow of featured images from various posts', 'avia_framework' );
 			$this->config['drag-level'] = 3;
+			$this->config['preview'] 		= 0;
 		}
 
 		/**

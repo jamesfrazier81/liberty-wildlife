@@ -24,7 +24,7 @@ if( !class_exists( 'avia_wp_export' ) )
 		
 			$this->avia_superobject = $avia_superobject;
 			$this->subpages = $avia_superobject->subpages;
-			$this->options  = $avia_superobject->options;
+			$this->options  = apply_filters( 'avia_filter_global_options_export', $avia_superobject->options );
 			$this->db_prefix = $avia_superobject->option_prefix;
 			
 			add_action('admin_init',array(&$this, 'initiate'),200);
@@ -89,6 +89,14 @@ if( !class_exists( 'avia_wp_export' ) )
 				print_r($fonts);
 				echo '";</pre>';
 			}
+			
+			if(isset($_GET['layerslider']))
+            {
+                echo '<pre>'."\n";
+				echo '$layerslider = "';
+				print_r($_GET['layerslider']);
+				echo '";</pre>';
+            }
 			
 
 			exit();

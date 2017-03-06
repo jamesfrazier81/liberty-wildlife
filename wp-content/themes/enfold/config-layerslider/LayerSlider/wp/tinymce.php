@@ -16,7 +16,7 @@ function ls_register_mce_buttons($buttons) {
 
 function ls_register_mce_js($plugins) {
 
-	$plugins['layerslider_button'] = LS_ROOT_URL.'/static/js/ls-admin-tinymce.js';
+	$plugins['layerslider_button'] = LS_ROOT_URL.'/static/admin/js/ls-admin-tinymce.js';
 	return $plugins;
 }
 

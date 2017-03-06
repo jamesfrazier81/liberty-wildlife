@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_partner_logo' ) )
 				$this->config['shortcode'] 		= 'av_partner';
 				$this->config['shortcode_nested'] = array('av_partner_logo');
 				$this->config['tooltip'] 	    = __('Display a partner/logo Grid or Slider', 'avia_framework' );
+				$this->config['preview'] 		= false;
 			}
 
 			/**

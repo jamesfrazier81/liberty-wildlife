@@ -2,8 +2,8 @@
 
 // Private filters, can change at any time
 add_filter('ls_slider_title', 'ls_filter_slider_title', 10, 2);
-add_filter('ls_get_preview_for_slider', 'ls_filter_get_perview_for_slider', 10, 1);
-add_filter('ls_get_thumbnail', 'ls_get_thumbnail', 10, 2);
+add_filter('ls_preview_for_slider', 'ls_preview_for_slider', 10, 1);
+add_filter('ls_get_thumbnail', 'ls_get_thumbnail', 10, 3);
 add_filter('ls_get_image', 'ls_get_image', 10, 2);
 
 // Public filters
@@ -14,29 +14,37 @@ function ls_filter_slider_title($sliderName = '', $maxLength = 50) {
 	return isset($name[$maxLength]) ? substr($name, 0, $maxLength) . ' ...' : $name;
 }
 
-function ls_filter_get_perview_for_slider( $sliderObj = array() ) {
+function ls_preview_for_slider( $slider = array() ) {
+
+	// Attempt to find pre-defined slider banner
+	if( ! empty($slider['data']['meta']) && ! empty($slider['data']['meta']['preview']) ) {
+		return $slider['data']['meta']['preview'];
+	}
+
 
 	// Find an image
-	if(isset($sliderObj['data']['layers'])) {
-		foreach($sliderObj['data']['layers'] as $layer) {
-			if(!empty($layer['properties']['background']) &&
-				$layer['properties']['background'] != '[image-url]'
-			) {
+	if( isset($slider['data']['layers']) ) {
+		foreach( $slider['data']['layers'] as $layer) {
+			if( !empty($layer['properties']['background']) && $layer['properties']['background'] !== '[image-url]' ) {
 				$image = $layer['properties']['background'];
+
+				if( ! empty($layer['properties']['backgroundId'] ) ) {
+					$src = wp_get_attachment_image_src( $layer['properties']['backgroundId'], 'medium');
+					if( ! empty( $src[0] ) ) {
+						$image = $src[0];
+					}
+				}
+
 				break;
 			}
 		}
 	}
 
-	if(isset($image)) {
-		return $image;
-	} else {
-		return LS_ROOT_URL.'/static/img/slider_preview.jpg';
-	}
+	return ! empty( $image ) ? $image : '';
 }
 
 
-function ls_get_thumbnail($id = null, $url = null) {
+function ls_get_thumbnail($id = null, $url = null, $blankPlaceholder = false) {
 
 	// Image ID
 	if(!empty($id)) {
@@ -53,41 +61,83 @@ function ls_get_thumbnail($id = null, $url = null) {
 		if(file_exists($file)) { return $thumb; } else { return $url; }
 	}
 
-	return LS_ROOT_URL.'/static/img/not_set.png';
+	return LS_ROOT_URL.'/static/admin/img/blank.gif';
 }
 
 function ls_get_image($id = null, $url = null) {
 
-	if(!empty($id)) {
+	if( ! empty( $id )) {
 		if($image = wp_get_attachment_url($id, 'thumbnail')) {
 			return $image;
 		}
+	} elseif( ! empty( $url ) ) {
+		return $url;
 	}
 
-	return $url;
+	return LS_ROOT_URL.'/static/admin/img/blank.gif';
 }
 
 
 function ls_parse_defaults($defaults = array(), $raw = array()) {
 
+
+	$activated = get_option('layerslider-authorized-site', false);
+	$permission = current_user_can('publish_posts');
 	$ret = array();
+
 	foreach($defaults as $key => $default) {
+
+		// Check premium features
+		$isPremium = false;
+		if( ! empty( $default['premium'] ) && ! $activated ) {
+			if( ! $permission ) {
+				continue;
+			}
+			// var_dump($default);
+			$isPremium = true;
+		}
+
 		$phpKey = is_string($default['keys']) ? $default['keys'] : $default['keys'][0];
 		$jsKey  = is_string($default['keys']) ? $default['keys'] : $default['keys'][1];
 		$retKey = isset($default['props']['meta']) ? 'props' : 'attrs';
 
-		if(isset($raw[$phpKey]) && is_array($raw[$phpKey])) {
+		if( isset($default['props']['forceoutput']) ) {
+			if( ! isset($raw[$phpKey]) ) {
+				$ret[$retKey][$jsKey] = $default['value'];
+			} else {
+				$ret[$retKey][$jsKey] = $raw[$phpKey];
+			}
+
+		} elseif(isset($raw[$phpKey]) && isset($default['props']['output']) ) {
 			$ret[$retKey][$jsKey] = $raw[$phpKey];
-		} elseif(is_bool($default['value'])) {
+
+		} elseif(isset($raw[$phpKey]) && is_array($raw[$phpKey])) {
+			$ret[$retKey][$jsKey] = $raw[$phpKey];
+
+		} elseif(isset($raw[$phpKey]) && is_bool($default['value'])) {
 			if($default['value'] == true && empty($raw[$phpKey])) {
 				$ret[$retKey][$jsKey] = false;
 			} elseif($default['value'] == false && !empty($raw[$phpKey])) {
 				$ret[$retKey][$jsKey] = true;
 			}
+
 		} elseif(isset($raw[$phpKey])) {
-			if(isset($default['props']['meta']) || $default['value'] != $raw[$phpKey]) {
+
+			if(
+				isset($default['props']['meta']) ||
+				(
+					(string)$default['value'] !== (string)$raw[$phpKey] &&
+					(string)$raw[$phpKey] !== '')
+				)
+			{
 				$raw[$phpKey] = isset($default['props']['raw']) ? addslashes($raw[$phpKey]) : $raw[$phpKey];
-				$ret[$retKey][$jsKey] = is_numeric($raw[$phpKey]) ? (float) $raw[$phpKey] : stripslashes($raw[$phpKey]);
+				$ret[$retKey][$jsKey] = stripslashes($raw[$phpKey]);
+			}
+		}
+
+		if( ! $activated && empty($GLOBALS['lsPremiumNotice']) ) {
+			if( $isPremium && isset($ret[$retKey][$jsKey]) ) {
+				$GLOBALS['lsPremiumNotice'] = true;
 			}
 		}
 	}
@@ -99,8 +149,8 @@ function ls_array_to_attr($arr, $mode = '') {
 	if(!empty($arr) && is_array($arr)) {
 		$ret = array();
 		foreach($arr as $key => $val) {
-			if($mode == 'css' && is_numeric($val)) {
-				$ret[] = ''.$key.':'.layerslider_check_unit($val).';';
+			if($mode == 'css' && is_numeric($val) ) {
+				$ret[] = ''.$key.':'.layerslider_check_unit($val, $key).';';
 			} elseif(is_bool($val)) {
 				$bool = $val ? 'true' : 'false';
 				$ret[] = "$key:$bool;";

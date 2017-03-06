@@ -1,7 +1,6 @@
 <?php
 /**
- * Sidebar
- * Displays one of the registered Widget Areas of the theme
+ * Testimonials
  */
 
 if ( !class_exists( 'avia_sc_testimonial' ) )
@@ -13,6 +12,7 @@ if ( !class_exists( 'avia_sc_testimonial' ) )
 			static $counter;
 			static $columns;
 			static $style;
+			static $grid_style;
 
 			/**
 			 * Create the config array for the shortcode button
@@ -27,8 +27,9 @@ if ( !class_exists( 'avia_sc_testimonial' ) )
 				$this->config['shortcode'] 	= 'av_testimonials';
 				$this->config['shortcode_nested'] = array('av_testimonial_single');
 				$this->config['tooltip'] 	= __('Creates a Testimonial Grid', 'avia_framework' );
-			}
-
+				$this->config['preview'] 	= "xlarge";
+				}
+				
 			/**
 			 * Popup Elements
 			 *
@@ -128,7 +129,6 @@ array(
 							)
 						),
 
-
 						array(
 							"name" 	=> __("Testimonial Grid Columns", 'avia_framework' ),
 							"desc" 	=> __("How many columns do you want to display", 'avia_framework' ) ,
@@ -137,6 +137,20 @@ array(
 							"type" 	=> "select",
 							"std" 	=> "2",
 							"subtype" => AviaHtmlHelper::number_array(1,4,1)
+							),
+							
+						array(
+							"name" 	=> __("Testimonial Grid Style", 'avia_framework' ),
+							"desc" 	=> __("Set the styling for the testimonial grid", 'avia_framework' ) ,
+							"id" 	=> "grid_style",
+							"required" 	=> array('style', 'equals', 'grid'),
+							"type" 	=> "select",
+							"std" 	=> "",
+							"subtype" => array(	
+												__('Default Grid', 'avia_framework' ) =>'',
+												__('Minimal Grid', 'avia_framework' ) =>'av-minimal-grid-style',
+												__('Boxed Grid', 'avia_framework' ) =>'av-minimal-grid-style av-boxed-grid-style',
+							)
 							),
 
 						array(
@@ -244,6 +258,7 @@ array(
 					'font_color'=>'', 
 					'custom_title'=>'', 
 					'custom_content'=>'',
+					'grid_style'	=> ''
 				
 				
 				), $atts, $this->config['shortcode']);
@@ -251,6 +266,9 @@ array(
 				
 				$custom_class = !empty($meta['custom_class']) ? $meta['custom_class'] : "";
 				extract($atts);
+				
+				
+				if($style != "grid") $grid_style = "";
 				
 				$this->title_styling 		= "";
 				$this->content_styling 		= "";
@@ -296,13 +314,16 @@ array(
 				}
 				
 				
-				$output .= "<div {$data} class='avia-testimonial-wrapper avia-{$style}-testimonials avia-{$style}-{$columns}-testimonials avia_animate_when_almost_visible {$custom_class}'>";
+				$output .= "<div {$data} class='avia-testimonial-wrapper avia-{$style}-testimonials avia-{$style}-{$columns}-testimonials avia_animate_when_almost_visible {$custom_class} {$grid_style}'>";
 
 				avia_sc_testimonial::$counter = 1;
 				avia_sc_testimonial::$rows = 1;
 				avia_sc_testimonial::$columnClass = $columnClass;
 				avia_sc_testimonial::$columns = $columns;
 				avia_sc_testimonial::$style = $style;
+				avia_sc_testimonial::$grid_style = $grid_style;
+
+
 
 				//if we got a slider we only need a single row wrpper
 				if($style != "grid") avia_sc_testimonial::$columns = 100000;
@@ -344,6 +365,7 @@ array(
 				$output = "";
 				$avatar = "";
 				$grid = avia_sc_testimonial::$style == 'grid' ? true :false;
+				$grid_style = $grid == true? avia_sc_testimonial::$grid_style : "";
 				$class = avia_sc_testimonial::$columnClass." avia-testimonial-row-".avia_sc_testimonial::$rows." ";
 				//if(count($testimonials) <= $rows * $columns) $class.= " avia-testimonial-row-last ";
 				if(avia_sc_testimonial::$counter == 1) $class .= "avia-first-testimonial";
@@ -384,12 +406,14 @@ array(
 				
 				$output .= "<div class='avia-testimonial {$class}' $markup>";
 				$output .= "<div class='avia-testimonial_inner'>";
-	if($grid)   $output .= $avatar;
+				
+	if($grid && $grid_style == "")   $output .= $avatar;
+	
 				$output .= 		"<div class='avia-testimonial-content {$this->content_class}'  {$this->content_styling} {$markup_text}>";
 				$output .= 		ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop($content));
 				$output .= 		"</div>";
 				$output .= 			"<div class='avia-testimonial-meta'><div class='avia-testimonial-arrow-wrap'><div class='avia-arrow'></div></div>";
-	if(!$grid)  $output .=  $avatar;
+	if(!$grid || ($grid && $grid_style != ""))  $output .=  $avatar;
 				$output .= 				"<div class='avia-testimonial-meta-mini'>";
 	if($name)	$output .= 					"<strong  class='avia-testimonial-name'  {$this->title_styling} {$markup_name}>{$name}</strong>";
 if($subtitle)	$output .= 					"<span  class='avia-testimonial-subtitle {$this->subtitle_class}' {$this->title_styling}  {$markup_job}>{$subtitle}</span>";

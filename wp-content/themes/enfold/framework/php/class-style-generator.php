@@ -407,6 +407,8 @@ if( !class_exists( 'avia_style_generator' ) )
 		
 			$this->extra_output .= "\n<!-- google webfont font replacement -->\n";
 			$this->extra_output .= "<link rel='stylesheet' id='avia-google-webfont' href='//fonts.googleapis.com/css?family=".apply_filters('avf_google_fontlist', $this->google_fontlist)."' type='text/css' media='all'/> \n";
+			
+			return $this->extra_output;
 		}
 		
 		

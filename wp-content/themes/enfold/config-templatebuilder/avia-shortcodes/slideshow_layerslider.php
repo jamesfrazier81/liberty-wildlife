@@ -98,6 +98,17 @@ if ( !class_exists( 'avia_sc_layerslider' ))
 										AND flag_deleted = '0'
 										ORDER BY date_c DESC LIMIT 1" , ARRAY_A);
 										
+				//if the slider does not exist query the last slider
+				if(empty($slider))
+				{
+					$slider = $wpdb->get_row("SELECT * FROM $table_name
+										WHERE flag_hidden = '0'
+										AND flag_deleted = '0'
+										ORDER BY date_c DESC LIMIT 1" , ARRAY_A);
+										
+					$atts['id'] = $slider['id'];
+				}
+			
 										
 				if(!empty($slider))
 				{		

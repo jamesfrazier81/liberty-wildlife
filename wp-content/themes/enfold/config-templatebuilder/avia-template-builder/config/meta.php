@@ -278,6 +278,7 @@ array(
         "class" => "avia-style",
         "subtype" => array( __("No transparency",'avia_framework') => '',
                             __('Transparent Header','avia_framework') =>'header_transparent',
+                            __('Transparent Header with border','avia_framework') =>'header_transparent header_with_border',
                             __('Transparent & Glassy Header','avia_framework') =>'header_transparent header_glassy ',
                             __('Header is invisible and appears once the users scrolls down ','avia_framework') =>'header_transparent header_scrolldown ',
                             __('Hide Header on this page ','avia_framework') =>'header_transparent header_hidden ',

@@ -100,13 +100,14 @@
    		{
    		
    			var content	= this.options.modal_content ? this.options.modal_content : '',
+   				attach	= this.options.attach_content ? this.options.attach_content : "",
    				loading = this.options.modal_content ? "" : ' preloading ',
    				title	= '<h3 class="avia-modal-title">'+this.options.modal_title+'</h3>',
    				output  = '<div class="avia-modal-inner">';
    				output += '<div class="avia-modal-inner-header">'+title+'<a href="#close" class="avia-modal-close avia-attach-close-event">X</a></div>';
    				output += '<div class="avia-modal-inner-content '+loading+'">'+content+'</div>';
+   				output += attach;
    				output += '<div class="avia-modal-inner-footer">';
-   				
    				if(this.options.button == "save")
    				{
    					output += '<a href="#save" class="avia-modal-save button button-primary button-large">' + avia_modal_L10n.save + '</a>';
@@ -172,7 +173,7 @@
 						instance: this.instanceNr,
 						avia_request: true
 					},
-					error: function()
+					wpColorPicker: function()
 					{
 						$.AviaModal.openInstance[0].close();
 						new $.AviaModalNotification({mode:'error', msg:avia_modal_L10n.ajax_error});
@@ -238,6 +239,8 @@
    			$.AviaModal.openInstance.shift(); //remove the first entry from the openInstance array 
    		
    			this.doc.trigger('avia_modal_before_close', [ this ]); 
+   			this.doc.trigger('avia_modal_before_close_instance'+this.namespace, [ this ]); 
+   			
    			this.modal.remove();
    			this.backdrop.remove();
    			this.doc.trigger('avia_modal_close', [ this ]).unbind('keydown'+this.namespace); 
@@ -271,9 +274,9 @@
 		   return o;
    		},
    		
-   		execute_callback: function()
-   		{	
-   			var values = this.modal.find('input, select, radio, textarea').serializeArray(), 
+   		get_final_values: function()
+   		{
+	   		var values = this.modal.find('input, select, radio, textarea').serializeArray(), 
    				value_array = this.convert_values(values);
    				
    				//filter function for the value array in case we got a special shortcode like tables
@@ -281,8 +284,14 @@
    				{
    					value_array = $.AviaModal.register_callback[this.options['before_save']].call(this.options.scope, value_array, this.options.save_param);
    				}
-   				
-   			var close_allowed = this.options['on_save'].call(this.options.scope, value_array, this.options.save_param);
+   			
+   			return value_array;
+   		},
+   		
+   		execute_callback: function()
+   		{	
+   			var value_array 	= this.get_final_values();
+   			var close_allowed 	= this.options['on_save'].call(this.options.scope, value_array, this.options.save_param);
    			
    			if(close_allowed !== false)
    			{
@@ -343,7 +352,7 @@
    	
    	$.AviaModal.register_callback = $.AviaModal.register_callback || {};
    	
-   	
+   	//gets overwritten by the tab toggle function
    	$.AviaModal.register_callback.modal_start_sorting = function(passed_scope)
 	{
 		var scope	= passed_scope || this.modal,
@@ -371,6 +380,8 @@
 			
 			target.find('.avia-modal-group-element, .avia-insert-area').disableSelection();	
 			target.sortable(params);
+			
+			
 	}
    	
    	
@@ -378,14 +389,28 @@
    	$.AviaModal.register_callback.modal_load_colorpicker = function()
 	{
 	
-		var picerOpts 		= {palettes:['#000000','#ffffff','#B02B2C','#edae44','#eeee22','#83a846','#7bb0e7','#745f7e','#5f8789','#d65799','#4ecac2']},
+		var picerOpts 		= {
+				palettes:['#000000','#ffffff','#B02B2C','#edae44','#eeee22','#83a846','#7bb0e7','#745f7e','#5f8789','#d65799','#4ecac2'],
+				change: function(event, ui)
+				{
+					$(this).trigger('av-update-preview');
+				},
+				clear: function() {
+	            	$(this).trigger('keyup');
+				},
+			},
+			self			= this, 
 			scope			= this.modal,
 			colorpicker		= scope.find('.av-colorpicker').avia_wpColorPicker(picerOpts), 
 			picker_button	= scope.find('.wp-color-result');
+			//picker_button.unbind();
 			
+			//
+						
 			colorpicker.click(function(e)
 			{
-				var parent 	= $(this).parents('.wp-picker-container:eq(0)'),
+				var picker  = $(this),
+					parent 	= $(this).parents('.wp-picker-container:eq(0)'),
 					button 	= parent.find('.wp-color-result'),
 					iris	= parent.find('.wp-picker-holder .iris-picker');
 					
@@ -398,15 +423,30 @@
 					if(iris.css('display') == "block") iris.css({display:'none'});
 					if(button.hasClass('wp-picker-open')) button.removeClass('wp-picker-open');
 				} );
+				
 			});
 			
 			picker_button.click(function(e)
 			{
+				//var parent 	= $(this).parents('.wp-picker-container:eq(0)'),
+				//	picker  = parent.find('.av-colorpicker').trigger('click');
+					
+			
 				if(typeof e.originalEvent != "undefined")
 				{
 					var open = scope.find('.wp-picker-open').not(this).trigger('click');
 				}
+				
 			});
+			
+			//fixes the error caused by removing the modal window from the dom. unbinding the events and recalling the iris function both seems to be necessary
+			$(document).one('avia_modal_before_close_instance'+self.namespace, function()
+			{
+				picker_button.unbind().remove();
+				colorpicker.unbind().remove();
+				colorpicker.iris();
+			});
+			
 	}
    	
    	
@@ -679,17 +719,11 @@
 				switch_btn	= parent.find('.wp-switch-editor').removeAttr("onclick"),
 				settings	= {id: this.id , buttons: "strong,em,link,block,del,ins,img,ul,ol,li,code,spell,close"},
 				tinyVersion = false,
-				executeAdd  = "mceAddControl",
-				executeRem	= "mceRemoveControl",
+				executeAdd  = "mceAddEditor",
+				executeRem	= "mceRemoveEditor",
 				open		= true;
 			
 			if(window.tinyMCE) tinyVersion = window.tinyMCE.majorVersion;
-			
-			if(tinyVersion >= 4)
-			{
-				executeAdd = "mceAddEditor";
-				executeRem = "mceRemoveEditor";
-			}
 			
 			// add quicktags for text editor
 			quicktags(settings);
@@ -706,6 +740,20 @@
 					window.tinyMCE.execCommand(executeAdd, true, el_id);
 					window.tinyMCE.get(el_id).setContent(window.switchEditors.wpautop(textarea.val()), {format:'raw'});
 					
+					//trigger updates for preview window
+					tinymce.activeEditor.on('keyup change', function(e) 
+					{	
+						var content_to_send = textarea.val();
+						if(window.tinyMCE.get(el_id))
+						{	
+							/*fixes the problem with galleries and more tag that got an image representation of the shortcode*/
+							content_to_send = window.tinyMCE.get(el_id).getContent();
+						}
+						
+						//trigger tinymce update event and send the actual content that is located in the textarea
+						textarea.trigger("av-update-preview-tinymce", window.switchEditors._wp_Nop( content_to_send ) );
+					});
+					
 				}
 				else
 				{
@@ -718,9 +766,12 @@
 					
 					parent.removeClass('tmce-active').addClass('html-active');
 					window.tinyMCE.execCommand(executeRem, true, el_id);
-					if(tinyVersion >= 4) textarea.val( window.switchEditors._wp_Nop( the_value ) );
+					textarea.val( window.switchEditors._wp_Nop( the_value ) );
 				}
 			});
+			
+			
+			
 			
 			//activate the visual editor
 			switch_btn.filter('.switch-tmce').trigger('click');
@@ -731,18 +782,17 @@
 				switch_btn.filter('.switch-html').trigger('click');
 			});
 			
+			
+
 			//make sure that the instance is removed if the modal was closed in any way
-			if(tinyVersion >= 4)
-			{ 
-				$doc.bind('avia_modal_before_close' + _self.namespace + "tiny_close", function(e, modal)
+			$doc.bind('avia_modal_before_close' + _self.namespace + "tiny_close", function(e, modal)
+			{
+				if(_self.namespace == modal.namespace)
 				{
-					if(_self.namespace == modal.namespace)
-					{
-						window.tinyMCE.execCommand(executeRem, true, el_id); 
-						$doc.unbind('avia_modal_before_close'  + _self.namespace + "tiny_close"); 
-					}
-				});
-			}
+					window.tinyMCE.execCommand(executeRem, true, el_id); 
+					$doc.unbind('avia_modal_before_close'  + _self.namespace + "tiny_close"); 
+				}
+			});
 			
 		});
 	}
@@ -946,7 +996,131 @@
    	}
 	
 	
-	
+	//script that generates the preview
+	$.AviaModal.register_callback.modal_preview_script = function()
+	{
+		var _self	 			= this,
+			preview_heading		= _self.modal.find('.avia-modal-preview-header'),
+			iframe_container	= _self.modal.find('.avia-modal-preview-content'),
+			preview_footer		= _self.modal.find('.avia-modal-preview-footer'),
+			preview_bg_stored	= _self.modal.find('#aviaTBadmin_preview_bg'),
+			iframe				= false,
+			elements			= _self.modal.find('input, select, radio, textarea'),
+			res					= window.avia_preview.paths,
+			errorMsg			= window.avia_preview.error,
+			delay				= 400,
+			timeout				= false,
+			xhr					= false,
+			newframe			= false,
+			iframe_content		= false,
+			methods				= {};
+				
+		methods = 
+		{	
+			change_preview_bg: function(e)
+			{				
+				e.preventDefault();
+								
+				var color = e.currentTarget.style.background;
+				
+				iframe_container.css('background',color);
+				preview_bg_stored.val(color);
+			},
+		
+			update_iframe_with_delay: function(e, content)
+			{
+				clearTimeout(timeout);
+			
+				timeout = setTimeout( function()
+				{
+					if(e.type == "av-update-preview-tinymce")
+					{
+						e.currentTarget.value = content;
+					}
+				
+					methods.update_iframe();
+					
+				}, delay);
+			},
+		
+			update_iframe: function()
+			{
+				var value_array = _self.get_final_values();
+				var shortcode = _self.options['on_save'].call(_self.options.scope, value_array, _self.options.save_param.clone(), 'return');
+				
+				preview_heading.addClass('loading');
+				
+				xhr = $.ajax({
+					type: "POST",
+					url: ajaxurl,
+					data: 
+					{
+						action: 'avia_ajax_text_to_preview',
+						text: shortcode,
+						avia_request: true,
+						_ajax_nonce: $('#avia-loader-nonce').val()
+					},
+					success: function(response)
+					{
+						methods.set_frame_content( response );
+					},
+					complete: function()
+					{
+						preview_heading.removeClass('loading');
+					}
+				});
+				
+			},
+			
+			set_frame_content: function( response )
+			{
+				
+				if( response.indexOf("[" + _self.options.ajax_param.allowed) !== -1 || response.indexOf(_self.options.ajax_param.allowed + "]") !== -1 )
+				{
+					response = "<div class='avia-preview-error'>" + errorMsg + "</div>";
+				}
+				
+				if(newframe == false)
+				{
+					newframe = document.createElement('iframe');
+					iframe_container.html("").append(newframe);
+				
+					response = "<html class='responsive'><head>" +res+ "</head><body id='top'><div id='wrap_all'><div id='av-admin-preview' class='entry-content-wrapper main_color all_colors'>" +response+ "</div></div></body></html>";
+					
+					newframe.contentWindow.contents = response;
+					newframe.src = 'javascript:window["contents"]'; 
+					newframe.onload = function()
+					{
+						iframe_content = $(newframe).contents().find("#av-admin-preview");
+					};
+				}
+				else
+				{
+					if(iframe_content.length) //check if the frame still exists. window might be closed already
+					{
+						iframe_content.html(response);
+					}
+				}
+			}
+			
+		}
+		
+		methods.set_frame_content("");
+		methods.update_iframe();
+		
+		//preset bg color
+		if(preview_bg_stored.val() != "") { iframe_container.css('background',preview_bg_stored.val()); }
+		
+		
+		_self.modal.on('av-update-preview-instant change', 'input, select, radio, textarea', methods.update_iframe);
+		_self.modal.on('av-update-preview keyup', 'input, select, radio, textarea', methods.update_iframe_with_delay);
+		_self.modal.on('av-update-preview-tinymce', 'textarea', methods.update_iframe_with_delay);
+		preview_footer.on('click', 'a', methods.change_preview_bg);
+		
+		
+		
+		
+	}
 	
 	
 	
@@ -1045,6 +1219,8 @@
 
             $this.closest('.wp-picker-container').find('.av-alpha-slider-offset').css('background-color', ui_color_value);
             $this.val(ui_color_value).trigger('change');
+            
+            $(this).trigger('av-update-preview');
 
           },
 

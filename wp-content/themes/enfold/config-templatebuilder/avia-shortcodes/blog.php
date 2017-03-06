@@ -20,6 +20,7 @@ if ( !class_exists( 'avia_sc_blog' ) )
 				$this->config['target']		= 'avia-target-insert';
 				$this->config['shortcode'] 	= 'av_blog';
 				$this->config['tooltip'] 	= __('Displays Posts from your Blog', 'avia_framework' );
+				$this->config['preview'] 	= false;
 			}
 
 			/**

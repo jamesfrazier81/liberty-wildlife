@@ -20,6 +20,7 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 				$this->config['target']			= 'avia-target-insert';
 				$this->config['shortcode'] 		= 'av_icon_box';
 				$this->config['tooltip'] 	    = __('Creates a content block with icon to the left or above', 'avia_framework' );
+				$this->config['preview'] 	= 1;
 			}
 
 			/**
@@ -56,6 +57,17 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 												__('Display a large icon at the right side of the whole content block', 'avia_framework' )=>'right_content',
 												__('Display a large icon above the title',  'avia_framework' )=>'top')),
 												
+					
+					array(
+							"name" 	=> __("Icon display", 'avia_framework' ),
+							"desc" 	=> __("Select how to display the icon beside your content", 'avia_framework' ),
+							"id" 	=> "icon_style",
+							"type" 	=> "select",
+							"std" 	=> "",
+							"required" => array('position','contains','content'),
+							"subtype" => array( __('Small with border', 'avia_framework' )=>'',
+												__('Big without border', 'avia_framework' )=>'av-icon-style-no-border',
+							)),
 					
 					
 					array(
@@ -286,8 +298,9 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 				
 				'font_color' => "",
 				'custom_title' => '',
-				'custom_content' => ''
+				'custom_content' => '',
 				
+				'icon_style'	=> ''
 				
 				), $atts, $this->config['shortcode']));
 
@@ -308,7 +321,7 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
                     switch($linkelement)
                     {
                         case 'both':
-                            $title = "<a href='{$link}' title='".esc_attr($linktitle)."' $blank>$linktitle</a>";
+                            if($title) $title = "<a href='{$link}' title='".esc_attr($linktitle)."' $blank>$linktitle</a>";
                             $display_char_wrapper['start'] = "a href='{$link}' title='".esc_attr($linktitle)."' {$blank}";
                             $display_char_wrapper['end'] = 'a';
                             break;
@@ -317,7 +330,7 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
                             $display_char_wrapper['end'] = 'a';
                             break;
                         default:
-                            $title = "<a href='{$link}' title='".esc_attr($linktitle)."' {$blank} >$linktitle</a>";
+                            if($title) $title = "<a href='{$link}' title='".esc_attr($linktitle)."' {$blank} >$linktitle</a>";
                             $display_char_wrapper['start'] = 'div';
                             $display_char_wrapper['end'] = 'div';
                             break;
@@ -358,7 +371,7 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 				}
 				
 				
-				
+				$meta['el_class'] .= " ".$icon_style;
 				
 				
 				$icon_html = '<'.$display_char_wrapper['start'].' class="iconbox_icon heading-color" '.$display_char.' '.$icon_html_styling.' ></'.$display_char_wrapper['end'].'>';
@@ -376,7 +389,7 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
                 $output .= 			'<header class="entry-content-header">';
         		$output .= 			$icon_html;
                 $markup = avia_markup_helper(array('context' => 'entry_title','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-        		$output .= 			"<h3 class='iconbox_content_title' {$markup} {$title_styling}>".$title."</h3>";
+        		if($title) $output .= 			"<h3 class='iconbox_content_title' {$markup} {$title_styling}>".$title."</h3>";
                 $output .= 			'</header>';
 
                 $markup = avia_markup_helper(array('context' => 'entry_content','echo'=>false, 'custom_markup'=>$meta['custom_markup']));

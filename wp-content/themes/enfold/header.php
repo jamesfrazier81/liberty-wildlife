@@ -10,10 +10,10 @@
 	$preloader			= avia_get_option('preloader') == "preloader" ? 'av-preloader-active av-preloader-enabled' : 'av-preloader-disabled';
 	$sidebar_styling 	= avia_get_option('sidebar_styling');
 	$filterable_classes = avia_header_class_filter( avia_header_class_string() );
-
+	$av_classes_manually= "av-no-preview";
 	
 ?><!DOCTYPE html>
-<html <?php language_attributes(); ?> class="<?php echo "html_{$style} ".$responsive." ".$preloader." ".$av_lightbox." ".$filterable_classes ?> ">
+<html <?php language_attributes(); ?> class="<?php echo "html_{$style} ".$responsive." ".$preloader." ".$av_lightbox." ".$filterable_classes." ".$av_classes_manually ?> ">
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
 <?php

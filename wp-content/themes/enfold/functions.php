@@ -296,8 +296,8 @@ if(!function_exists('avia_register_frontend_scripts'))
 
 	function avia_register_frontend_scripts()
 	{
-		$template_url = get_template_directory_uri();
-		$child_theme_url = get_stylesheet_directory_uri();
+		$template_url 		= get_template_directory_uri();
+		$child_theme_url 	= get_stylesheet_directory_uri();
 
 		//register js
 		wp_enqueue_script( 'avia-compat', $template_url.'/js/avia-compat.js', array('jquery'), 2, false ); //needs to be loaded at the top to prevent bugs

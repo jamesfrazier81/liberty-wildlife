@@ -83,12 +83,14 @@ if ( !class_exists( 'avia_sc_cell' ) )
 	
 				$dataString  = AviaHelper::create_data_string($data);
 				
-			
+				$el_bg = !empty($args['background_color']) ? " style='background:".$args['background_color'].";'" : "";
+				
+				
 
 				$output  = "<div class='avia_layout_column avia_layout_cell avia_pop_class avia-no-visual-updates ".$name." av_drag' {$dataString} data-width='{$name}'>";
 				$output .= "<div class='avia_sorthandle'>";
 
-				$output .= "<span class='avia-col-size'>".$size[$name]."</span>";
+				$output .= "<span class='avia-col-size'><span class='avia-element-bg-color' ".$el_bg."></span>".$size[$name]."</span>";
 				$output .= "<a class='avia-delete'  href='#delete' title='".__('Delete Cell','avia_framework' )."'>x</a>";
 				$output .= "<a class='avia-clone'  href='#clone' title='".__('Clone Cell','avia_framework' )."' >".__('Clone Cell','avia_framework' )."</a>";
 				
@@ -104,10 +106,54 @@ if ( !class_exists( 'avia_sc_cell' ) )
 					$content = $this->builder->do_shortcode_backend($content);
 				}
 				$output .= $content;
-				$output .= "</div></div>";
+				$output .= "</div>";
+				$output .= "<div class='avia-layout-element-bg' ".$this->get_bg_string($args)."></div>";
+				$output .= "</div>";
+
 
 				return $output;
 			}
+			
+			function get_bg_string($args)
+			{
+				$style = "";
+			
+				if(!empty($args['attachment']))
+				{
+					$image = false;
+					$src = wp_get_attachment_image_src($args['attachment'], $args['attachment_size']);
+					if(!empty($src[0])) $image = $src[0];
+					
+					
+					if($image)
+					{
+						$bg 	= !empty($args['background_color']) ? 		$args['background_color'] : "transparent"; $bg = "transparent";
+						$pos 	= !empty($args['background_position'])  ? 	$args['background_position'] : "center center";
+						$repeat = !empty($args['background_repeat']) ?		$args['background_repeat'] : "no-repeat";
+						$extra	= "";
+						
+						if($repeat == "stretch")
+						{
+							$repeat = "no-repeat";
+							$extra = "background-size: cover;";
+						}
+						
+						if($repeat == "contain")
+						{
+							$repeat = "no-repeat";
+							$extra = "background-size: contain;";
+						}
+						
+						
+						
+						$style = "style='background: $bg url($image) $repeat $pos; $extra'";
+					}
+					
+				}
+				
+				return $style;
+			}
+			
 			
 			
 			/**

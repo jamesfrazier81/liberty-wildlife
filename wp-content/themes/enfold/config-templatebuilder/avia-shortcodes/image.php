@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_image' ) )
 				$this->config['shortcode'] 		= 'av_image';
 				//$this->config['modal_data']     = array('modal_class' => 'mediumscreen');
 				$this->config['tooltip'] 	    = __('Inserts an image of your choice', 'avia_framework' );
+				$this->config['preview'] 		= 1;
 			}
 
 			/**

@@ -18,6 +18,7 @@ if ( !class_exists( 'avia_sc_headline_rotator' ) )
 				$this->config['shortcode'] 	= 'av_headline_rotator';
 				$this->config['shortcode_nested'] = array('av_rotator_item');
 				$this->config['tooltip'] 	= __('Creates a text rotator for dynamic headings', 'avia_framework' );
+				$this->config['preview'] 	= "large";
 			}
 
 			/**

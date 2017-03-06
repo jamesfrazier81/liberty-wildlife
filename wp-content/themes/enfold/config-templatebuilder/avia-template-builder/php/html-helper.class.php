@@ -780,7 +780,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			
 			if(isset($new_std[1])) $element['std'] = $new_std[1];
 
-			$original['subtype'] = ""; 
+			$original['subtype'] = array(); 
 			foreach($element['subtype'] as $value => $key) //register templates
 			{
 				switch($key)
@@ -863,12 +863,13 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			
 			if(isset($element['delete'])) $output .= '<a href="#" class="button avia-delete-gallery-button" title="'.esc_attr($element['delete']).'">'.$element['delete'].'</a>';
 				
+			
 			$attachmentids 	= !empty($element['shortcode_data']['attachment']) ? explode(',', $element['shortcode_data']['attachment']) : array();
 			$attachmentid 	= !empty($attachmentids[self::$imageCount]) ? $attachmentids[self::$imageCount] : '';
 			$attachmentsize = !empty($element['shortcode_data']['attachment_size']) ? $element['shortcode_data']['attachment_size'] : "";		
 				
-			//get image based on id if possible
-			if(!empty($attachmentid) && !empty($attachmentsize))
+			//get image based on id if possible - use the force_id_fetch param in conjunction with the secondary_img when you need a secondary image based on id and not on url like pattern overlay. size of a secondary image can not be stored. tab section element is a working example
+			if(!empty($attachmentid) && !empty($attachmentsize) && empty($element['force_id_fetch']))
 			{
 				$fake_img 	= wp_get_attachment_image( $attachmentid, $attachmentsize);
 				$url		= wp_get_attachment_image_src( $attachmentid, $attachmentsize);
@@ -907,12 +908,16 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				
 				if($fetch == 'url' && empty($element['secondary_img']))
 				{
+				
 					$output .= '<input type="hidden" class="hidden-attachment-id '.$element['class'].'" value="'.$attachmentid.'" id="'.$img_id_field.'" name="'.$img_id_field.'"/>';
 					$output .= '<input type="hidden" class="hidden-attachment-size '.$element['class'].'" value="'.$attachmentsize.'" id="'.$img_size_field.'" name="'.$img_size_field.'"/>';
 				}
 			}
 
-			self::$imageCount++;
+			if(empty($element['force_id_fetch']))
+			{
+				self::$imageCount++;
+			}
 			return $output;
 		}
 		
@@ -1491,13 +1496,13 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				
 				$output .= "	<div class='avia-table-cell ".$extraclass."'>";
 				$output .= "		<div class='avia-table-content'>";
-				$output .= 	$params['content'] ? stripslashes($params['content']) : "";
+				$output .= 	stripslashes($params['content']);
 				$output .= "		</div>";
 				
 				if(empty($params['no-edit']) && empty($values))
 				{
 					$output .= "		<textarea class='avia-table-data-container' name='content'>";
-					$output .= 	$params['content'] ? stripslashes($params['content']) : "";
+					$output .= 	stripslashes($params['content']);;
 					$output .= 			"</textarea>";
 				}
 				$output .= "	</div>";

@@ -21,7 +21,7 @@ if ( !class_exists( 'avia_sc_text' ) )
 				$this->config['shortcode'] 		= 'av_textblock';
 				$this->config['tinyMCE'] 	    = array('disable' => true);
 				$this->config['tooltip'] 	    = __('Creates a simple text block', 'avia_framework' );
-
+				$this->config['preview'] 		= "large";
 			}
 
 			/**

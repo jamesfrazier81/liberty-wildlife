@@ -110,7 +110,7 @@ if(!function_exists('avia_markup_helper'))
                 break;
 
             case 'image_url':
-                $attributes['itemprop']  = 'contentURL';
+                $attributes['itemprop']  = 'thumbnailUrl';
                 break;
 
             case 'name':

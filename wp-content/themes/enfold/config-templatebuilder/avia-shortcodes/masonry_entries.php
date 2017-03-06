@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 				$this->config['shortcode'] 		= 'av_masonry_entries';
 				$this->config['tooltip'] 	    = __('Display a fullwidth masonry/grid with blog entries', 'avia_framework' );
 				$this->config['drag-level'] 	= 3;
+				$this->config['preview'] 		= false;
 			}
 			
 			

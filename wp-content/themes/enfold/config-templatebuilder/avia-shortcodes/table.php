@@ -24,6 +24,7 @@ if ( !class_exists( 'avia_sc_table' ) )
 				$this->config['modal_data'] = array('modal_class' => 'bigscreen', 'before_save' => 'before_table_save');
 				$this->config['shortcode_nested'] = array('av_row', 'av_cell','av_button');
 				$this->config['tooltip'] 	= __('Creates a data or pricing table', 'avia_framework' );
+				$this->config['preview'] 	= false;
 			}
 			
 			
@@ -268,7 +269,8 @@ if ( !class_exists( 'avia_sc_table' ) )
 						foreach($ul['content'] as $key => $li)
 						{
 							$content = trim(do_shortcode($li['content']));
-							if(empty($content)) 
+				
+							if(empty($content) && $content !== "0") 
 							{ 
 								$ul['attr'][$key]['row_style'] .= " empty-table-cell"; 
 								$content = "{{content-{$key}}}";

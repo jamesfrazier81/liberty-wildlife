@@ -1,12 +1,14 @@
 <?php
 
+// Activation events
+add_action('admin_init', 'layerslider_activation_redirect');
+
 // Activation and de-activation hooks
-register_activation_hook(LS_ROOT_FILE, 'layerslider_activation_scripts');
+add_action('admin_init', 'layerslider_activation_routine');
+register_activation_hook(LS_ROOT_FILE, 'layerslider_activation');
 register_deactivation_hook(LS_ROOT_FILE, 'layerslider_deactivation_scripts');
 register_uninstall_hook(LS_ROOT_FILE, 'layerslider_uninstall_scripts');
 
-// Run activation scripts when adding new sites to a multisite installation
-add_action('wpmu_new_blog', 'layerslider_new_site');
 
 // Update handler
 if(get_option('ls-plugin-version', '1.0.0') !== LS_PLUGIN_VERSION) {
@@ -14,60 +16,58 @@ if(get_option('ls-plugin-version', '1.0.0') !== LS_PLUGIN_VERSION) {
 	layerslider_update_scripts();
 }
 
-function layerslider_activation_scripts() {
-
-	// Multi-site
-	if(is_multisite()) {
-
-		// Get WPDB Object
-		global $wpdb;
-
-		// Get current site
-		$old_site = $wpdb->blogid;
-
-		// Get all sites
-		$sites = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
-
-		// Iterate over the sites
-		foreach($sites as $site) {
-			switch_to_blog($site);
-			layerslider_create_db_table();
+// Redirect to LayerSlider's main admin page after plugin activation.
+// Should not trigger on multisite bulk activation or after upgrading
+// the plugin to a newer versions.
+function layerslider_activation_redirect() {
+	if(get_option('layerslider_do_activation_redirect', false)) {
+		delete_option('layerslider_do_activation_redirect');
+		if(isset($_GET['activate']) && !isset($_GET['activate-multi'])) {
+			wp_redirect(admin_url('admin.php?page=ls-about'));
 		}
-
-		// Switch back the old site
-		switch_to_blog($old_site);
-
-	// Single-site
-	} else {
-		layerslider_create_db_table();
 	}
+}
+
+function layerslider_activation( ) {
+
+	// Plugin activation routines should take care of this, but
+	// call DB scripts anyway to avoid user intervention issues
+	// like partially removing the plugin by only deleting the
+	// database table.
+	layerslider_create_db_table();
 
 	// Call "activated" hook
-	if(has_action('layerslider_activated')) {
+	if( has_action('layerslider_activated') ) {
 		do_action('layerslider_activated');
 	}
-
-	// Check new install
-	layerslider_install_scripts();
 
 	// Redirect to LS's admin page after activation
 	update_option('layerslider_do_activation_redirect', 1);
 }
 
-function layerslider_install_scripts() {
+function layerslider_activation_routine( ) {
 
-	// Check new install
-	if(!get_option('ls-installed')) {
+	// Bail out early if everything is up-to-date
+	// and there is nothing to be done.
+	if( ! version_compare( get_option('ls-db-version', '1.0.0'), LS_DB_VERSION, '<' ) ) {
+		return;
+	}
+
+	// Update database
+	layerslider_create_db_table();
+	update_option('ls-db-version', '6.0.0');
+
+	// Fresh installation
+	if( ! get_option('ls-installed') ) {
 		update_option('ls-installed', 1);
 
-		// Google Fonts
-		$fonts = array();
-		$fonts[] = array( 'param' => 'Lato:100,300,regular,700,900', 'admin' => false );
-		$fonts[] = array( 'param' => 'Open+Sans:300', 'admin' => false );
-		$fonts[] = array( 'param' => 'Indie+Flower:regular', 'admin' => false );
-		$fonts[] = array( 'param' => 'Oswald:300,regular,700', 'admin' => false );
-
-		update_option('ls-google-fonts', $fonts);
+		// Set pre-defined Google Fonts
+		update_option('ls-google-fonts', array(
+			array( 'param' => 'Lato:100,300,regular,700,900', 'admin' => false ),
+			array( 'param' => 'Open+Sans:300', 'admin' => false ),
+			array( 'param' => 'Indie+Flower:regular', 'admin' => false ),
+			array( 'param' => 'Oswald:300,regular,700', 'admin' => false )
+		));
 
 		// Call "installed" hook
 		if(has_action('layerslider_installed')) {
@@ -76,34 +76,21 @@ function layerslider_install_scripts() {
 	}
 
 	// Install date
-	if(!get_option('ls-date-installed', 0)) {
+	if( ! get_option('ls-date-installed', 0) ) {
 		update_option('ls-date-installed', time());
 	}
 }
 
 function layerslider_update_scripts() {
 
-	// Check new install
-	layerslider_activation_scripts();
+	// Update database
+	layerslider_activation_routine();
 
 	if(has_action('layerslider_updated')) {
 		do_action('layerslider_updated');
 	}
 }
 
-
-function layerslider_new_site($blog_id) {
-
-
-    // Get current site
-    global $wpdb;
-	$old_site = $wpdb->blogid;
-
-	// Switch to new site
-	switch_to_blog($blog_id);
-	layerslider_create_db_table();
-	switch_to_blog($old_site);
-}
 
 function layerslider_create_db_table() {
 
@@ -112,11 +99,11 @@ function layerslider_create_db_table() {
 	$table_name = $wpdb->prefix . "layerslider";
 
 	// Get DB collate
-	if(!empty($wpdb->charset)) {
+	if( ! empty($wpdb->charset) ) {
 		$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";
 	}
 
-	if(!empty($wpdb->collate)) {
+	if( ! empty($wpdb->collate) ) {
 		$charset_collate .= " COLLATE $wpdb->collate";
 	}
 
@@ -124,22 +111,21 @@ function layerslider_create_db_table() {
 	$sql = "CREATE TABLE $table_name (
 			  id int(10) NOT NULL AUTO_INCREMENT,
 			  author int(10) NOT NULL DEFAULT 0,
-			  name varchar(100) NOT NULL,
-			  slug varchar(100) NOT NULL,
+			  name varchar(100) DEFAULT '',
+			  slug varchar(100) DEFAULT '',
 			  data mediumtext NOT NULL,
 			  date_c int(10) NOT NULL,
-			  date_m int(11) NOT NULL,
+			  date_m int(10) NOT NULL,
+			  schedule_start int(10) NOT NULL DEFAULT 0,
+			  schedule_end int(10) NOT NULL DEFAULT 0,
 			  flag_hidden tinyint(1) NOT NULL DEFAULT 0,
 			  flag_deleted tinyint(1) NOT NULL DEFAULT 0,
 			  PRIMARY KEY  (id)
 			) $charset_collate;";
 
-	// Executing the query
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
 	// Execute the query
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	dbDelta($sql);
-	update_option('ls-db-version', '5.0.0');
 }
 
 

@@ -20857,10 +20857,10 @@ msgstr "Archivio per mese:"
 
 # @ avia_framework
 #~ msgid ""
-#~ "<a href='http://wordpress.org/plugins/woocommerce/' "
+#~ "<a href='http://woocommerce.com/?ref=84' "
 #~ "target='_blank'>WooCommerce</a> (for shop functionality)"
 #~ msgstr ""
-#~ "<a href='http://wordpress.org/plugins/woocommerce/' "
+#~ "<a href='http://woocommerce.com/?ref=84' "
 #~ "target='_blank'>WooCommerce</a> (per la funzionalità negozio)"
 
 # @ avia_framework
@@ -20889,10 +20889,10 @@ msgstr "Archivio per mese:"
 
 # @ avia_framework
 #~ msgid ""
-#~ "<a href='http://wordpress.org/plugins/woocommerce/' "
+#~ "<a href='http://woocommerce.com/?ref=84' "
 #~ "target='_blank'>WooCommerce</a> (if you want to sell photos online)"
 #~ msgstr ""
-#~ "<a href='http://wordpress.org/plugins/woocommerce/' "
+#~ "<a href='http://woocommerce.com/?ref=84' "
 #~ "target='_blank'>WooCommerce</a> (se volete vendere foto online)"
 
 # @ avia_framework
@@ -20905,11 +20905,11 @@ msgstr "Archivio per mese:"
 
 # @ avia_framework
 #~ msgid ""
-#~ "<a href='http://wordpress.org/plugins/woocommerce/' "
+#~ "<a href='http://woocommerce.com/?ref=84' "
 #~ "target='_blank'>WooCommerce</a> (if you want to provide online ordering "
 #~ "and delivery)"
 #~ msgstr ""
-#~ "<a href='http://wordpress.org/plugins/woocommerce/' "
+#~ "<a href='http://woocommerce.com/?ref=84' "
 #~ "target='_blank'>WooCommerce</a> (se si desidera fornire ordinazione "
 #~ "online e consegna)"
 

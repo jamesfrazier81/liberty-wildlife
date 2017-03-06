@@ -26,6 +26,7 @@ if ( !class_exists( 'avia_sc_heading' ) )
 				$this->config['shortcode'] 	= 'av_heading';
 				$this->config['modal_data'] = array('modal_class' => 'mediumscreen');
 				$this->config['tooltip'] 	= __('Creates a special Heading', 'avia_framework' );
+				$this->config['preview'] 	= true;
 			}
 			
 			
@@ -175,7 +176,8 @@ if ( !class_exists( 'avia_sc_heading' ) )
 			 */
 			function editor_element($params)
 			{
-				$params['args'] = shortcode_atts(array('tag' => 'h3', 'padding' => '5', 'heading'=>'', 'color'=>'', 'style'=>'', 'custom_font'=>'', 'size'=>'', 'subheading_active' => '', 'subheading_size'=>'', 'custom_class'=>''), $params['args'], $this->config['shortcode']);
+				
+				$params['args'] = shortcode_atts(array('tag' => 'h3', 'padding' => '5', 'heading'=>'', 'color'=>'', 'style'=>'', 'custom_font'=>'', 'size'=>'', 'subheading_active' => '', 'subheading_size'=>'', 'custom_class'=>'', 'admin_preview_bg'=>''), $params['args'], $this->config['shortcode']);
 				
 				$templateNAME  	= $this->update_template("name", "{{name}}");
 				

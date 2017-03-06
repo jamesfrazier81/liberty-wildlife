@@ -23,6 +23,7 @@ if ( !class_exists( 'avia_sc_magazine' ))
 			$this->config['shortcode'] 	= 'av_magazine';
 			$this->config['tooltip'] 	= __('Display entries in a magazine like fashion', 'avia_framework' );
 			$this->config['drag-level'] = 3;
+			$this->config['preview'] 	= 1;
 		}
 
 		/**

@@ -64,18 +64,13 @@
 			<textarea rows="10" cols="50" name="contents" class="ls-codemirror"><?php if(!empty($contents)) {
 					echo htmlentities($contents);
 				} else {
-					_e('/* You can type here any CSS code that will be loaded both on your admin and front-end pages.', 'LayerSlider');
-					echo NL;
-					_e('Let us help you by giving a few exmaple CSS classes: */', 'LayerSlider');
-					echo NL . NL;
-					echo '/* Front-end sliders & preview */' . NL . NL;
-					echo '.ls-container { /* The slider itself */' . NL . NL . '}' .NL.NL;
-					echo '.ls-slide { ' . NL  . NL . '}' . NL.NL;
-					echo '.ls-slide a:hover {' . NL.TAB . 'color: blue;' . NL.TAB . 'text-decoration: underline;' . NL . '}' . NL.NL;
-					echo '.ls-slide #yourID {' . NL  . NL . '}' . NL.NL;
-					echo '.ls-slide .yourClass {' . NL  . NL . '}' . NL.NL;
-					echo '/* Side color of 3D objects */' . NL;
-					echo '.ls-3d-box div { background: #777; }' .NL;
+					echo '/*' . NL . TAB . __('You can type here custom CSS code, which will be loaded both on your admin and front-end pages.', 'LayerSlider');
+					echo NL . TAB . __('Please make sure to not override layout properties (positions and sizes), as they can interfere', 'LayerSlider');
+					echo NL . TAB . __('with the sliders built-in responsive functionality. Here are few example targets to help you get started:', 'LayerSlider');
+					echo NL . '*/' . NL . NL;
+					echo '.ls-container { /* Slider container */' . NL . NL . '}' .NL.NL;
+					echo '.ls-layers { /* Layers wrapper */ ' . NL  . NL . '}' . NL.NL;
+					echo '.ls-3d-box div { /* Sides of 3D transition objects */ ' . NL  . NL . '}';
 				}?></textarea>
 			<p class="footer">
 				<?php if(!is_writable($upload_dir['basedir'])) { ?>

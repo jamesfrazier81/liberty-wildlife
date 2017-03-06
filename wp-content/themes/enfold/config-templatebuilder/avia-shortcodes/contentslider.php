@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_content_slider' ) )
 				$this->config['shortcode'] 		= 'av_content_slider';
 				$this->config['shortcode_nested'] = array('av_content_slide');
 				$this->config['tooltip'] 	    = __('Display a content slider element', 'avia_framework' );
+				$this->config['preview'] 		= false;
 			}
 
 			/**

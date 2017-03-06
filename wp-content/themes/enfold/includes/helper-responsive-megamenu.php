@@ -193,6 +193,14 @@ if( !class_exists( 'avia_responsive_mega_menu' ) )
 				$this->mega_active	= get_post_meta( $item->ID, '_menu-item-avia-megamenu', true);
 				$style 				= get_post_meta( $item->ID, '_menu-item-avia-style', true);
 			}
+			
+			
+			if(!empty($item->url) && strpos($item->url, "[domain]") !== false)
+			{
+				$replace = str_replace( "http://", "", get_home_url() );
+				$replace = str_replace( "https://", "", $replace );
+				$item->url = str_replace( "[domain]", $replace, $item->url);
+			}
 
 
 			if($depth === 1 && $this->mega_active && $this->mega_allowed)

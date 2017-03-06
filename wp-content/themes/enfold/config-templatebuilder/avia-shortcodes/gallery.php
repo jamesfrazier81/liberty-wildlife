@@ -25,6 +25,7 @@ if ( !class_exists( 'avia_sc_gallery' ) )
 				$this->config['shortcode'] 		= 'av_gallery';
 				$this->config['modal_data']     = array('modal_class' => 'mediumscreen');
 				$this->config['tooltip']        = __('Creates a custom gallery', 'avia_framework' );
+				$this->config['preview'] 		= 1;
 			}
 
 			/**
@@ -91,7 +92,7 @@ if ( !class_exists( 'avia_sc_gallery' ) )
                     ),
 
 					array(
-							"name" 	=> __("Gallery Columns", 'avia_framework' ),
+							"name" 	=> __("Thumbnail Columns", 'avia_framework' ),
 							"desc" 	=> __("Choose the column count of your Gallery", 'avia_framework' ),
 							"id" 	=> "columns",
 							"type" 	=> "select",
@@ -257,7 +258,8 @@ if ( !class_exists( 'avia_sc_gallery' ) )
 					
 					if(!empty($this->extra_style))
 					{
-						if(!empty($atts['ajax_request']))
+						
+						if(!empty($atts['ajax_request']) || !empty($_POST['avia_request']))
 						{
 							$output .= $this->extra_style;
 							$this->extra_style = "";

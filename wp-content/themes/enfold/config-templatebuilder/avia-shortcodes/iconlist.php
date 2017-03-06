@@ -17,6 +17,8 @@ if ( !class_exists( 'avia_sc_iconlist' ) )
 				$this->config['shortcode'] 	= 'av_iconlist';
 				$this->config['shortcode_nested'] = array('av_iconlist_item');
 				$this->config['tooltip'] 	= __('Creates a list with nice icons beside', 'avia_framework' );
+				$this->config['preview'] 	= true;
+
 			}
 
 			/**
@@ -329,6 +331,7 @@ if ( !class_exists( 'avia_sc_iconlist' ) )
 				$this->title_styling 		= "";
 				$this->content_styling 		= "";
 				$this->content_class 		= "";
+				$this->title_class 			= "";
 				$this->iconlist_styling 	= $iconlist_styling == 'av-iconlist-small' ? "av-iconlist-small" : "av-iconlist-big";
 				
 				if($color == "custom")
@@ -348,6 +351,12 @@ if ( !class_exists( 'avia_sc_iconlist' ) )
 					{
 						$this->content_class = "av_inherit_color";
 					}
+					
+					if($this->title_styling)
+					{
+						$this->title_class = "av_inherit_color";
+					}
+					
 				}
 				
 				if($custom_title_size)
@@ -402,7 +411,7 @@ if ( !class_exists( 'avia_sc_iconlist' ) )
                         switch($atts['linkelement'])
                         {
                             case 'both':
-                                $atts['title'] = "<a href='{$atts['link']}' title='".esc_attr($linktitle)."'{$blank}>{$linktitle}</a>";
+                                if($atts['title']) $atts['title'] = "<a href='{$atts['link']}' title='".esc_attr($linktitle)."'{$blank}>{$linktitle}</a>";
                                 $display_char_wrapper['start'] = "a href='{$atts['link']}' title='".esc_attr($linktitle)."' {$blank}";
                                 $display_char_wrapper['end'] = 'a';
                                 break;
@@ -411,7 +420,7 @@ if ( !class_exists( 'avia_sc_iconlist' ) )
                                 $display_char_wrapper['end'] = 'a';
                                 break;
                             default:
-                                $atts['title'] = "<a href='{$atts['link']}' title='".esc_attr($linktitle)."'{$blank}>{$linktitle}</a>";
+                                if($atts['title']) $atts['title'] = "<a href='{$atts['link']}' title='".esc_attr($linktitle)."'{$blank}>{$linktitle}</a>";
                                 $display_char_wrapper['start'] = 'div';
                                 $display_char_wrapper['end'] = 'div';
                                 break;
@@ -443,12 +452,12 @@ if ( !class_exists( 'avia_sc_iconlist' ) )
 
 				$output  = "";
 				$output .= "<li>";
-				$output .= 		"<{$display_char_wrapper['start']} {$this->icon_html_styling} class='iconlist_icon avia-font-".$atts['font']."'><span class='iconlist-char' {$display_char}></span></{$display_char_wrapper['end']}>";
+				$output .= 		"<{$display_char_wrapper['start']} {$this->icon_html_styling} class='iconlist_icon  avia-font-".$atts['font']."'><span class='iconlist-char' {$display_char}></span></{$display_char_wrapper['end']}>";
                 $output .=          '<article class="article-icon-entry '.$contentClass.'" '.avia_markup_helper(array('context' => 'entry','echo'=>false, 'custom_markup'=>$atts['custom_markup'])).'>';
 				$output .=              "<div class='iconlist_content_wrap'>";
                 $output .=                  '<header class="entry-content-header">';
                 $markup = avia_markup_helper(array('context' => 'entry_title','echo'=>false, 'custom_markup'=>$atts['custom_markup']));
-				$output .=                      "<{$title_el} class='iconlist_title{$iconlist_title}' {$markup} {$this->title_styling}>".$atts['title']."</{$title_el}>";
+				if(!empty($atts['title'])) $output .="<{$title_el} class='av_iconlist_title iconlist_title{$iconlist_title} {$this->title_class}' {$markup} {$this->title_styling}>".$atts['title']."</{$title_el}>";
                 $output .=                  '</header>';
                 $markup = avia_markup_helper(array('context' => 'entry_content','echo'=>false, 'custom_markup'=>$atts['custom_markup']));
 				$output .=                  "<div class='iconlist_content {$this->content_class}' {$markup} {$this->content_styling}>".ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop( $content ) )."</div>";

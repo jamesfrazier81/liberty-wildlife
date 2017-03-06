@@ -228,7 +228,9 @@
 						post_id: avia_globals.post_id,
 						templateName: name,
 						avia_request: true,
-						'avia-save-nonce': $('#avia-save-nonce').val()
+						'avia-save-nonce': $('#avia-save-nonce').val(),
+						_ajax_nonce: $('#avia-loader-nonce').val()
+						
 					},
 					beforeSend: function()
 					{
@@ -301,7 +303,8 @@
 						templateName: name,
 						avia_request: true,
 						templateValue: obj.template_val,
-						'avia-save-nonce': $('#avia-save-nonce').val()
+						'avia-save-nonce': $('#avia-save-nonce').val(),
+						_ajax_nonce: $('#avia-loader-nonce').val()
 					},
 					beforeSend: function()
 					{

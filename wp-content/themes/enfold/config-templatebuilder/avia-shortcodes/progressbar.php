@@ -21,6 +21,7 @@ if ( !class_exists( 'avia_sc_progressbar' ) )
 				$this->config['shortcode'] 	= 'av_progress';
 				$this->config['shortcode_nested'] = array('av_progress_bar');
 				$this->config['tooltip'] 	= __('Create some progress bars', 'avia_framework' );
+				$this->config['preview'] 	= true;
 			}
 
 			/**
@@ -63,7 +64,7 @@ if ( !class_exists( 'avia_sc_progressbar' ) )
 										"id" 	=> "progress",
 										"type" 	=> "select",
 										"std" 	=> "100",
-										"subtype" => AviaHtmlHelper::number_array(0,100,1)
+										"subtype" => AviaHtmlHelper::number_array(0,100,1, array(), '%')
 										),
 
 									array(
@@ -109,16 +110,15 @@ if ( !class_exists( 'avia_sc_progressbar' ) )
 								),
 								
 								array(
-									"name" 	=> __("Progress Bar Style", 'avia_framework' ),
-									"desc" 	=> __("Chose the styling of the progress bar here", 'avia_framework' ),
+									"name" 	=> __("Progress Bar Coloring", 'avia_framework' ),
+									"desc" 	=> __("Chose the coloring of the progress bar here", 'avia_framework' ),
 									"id" 	=> "bar_styling",
 									"type" 	=> "select",
 									"std" 	=> "av-striped-bar",
 									"subtype" => array(
 									__('Striped',  'avia_framework' ) =>'av-striped-bar',
 									__('Single Color',  'avia_framework' ) =>'av-flat-bar')),
-								
-							
+															
 							array(
 									"name" 	=> __("Progress Bar Animation enabled?", 'avia_framework' ),
 									"desc" 	=> __("Chose if you want to enable the continuous animation of the progress bar", 'avia_framework' ),
@@ -129,6 +129,42 @@ if ( !class_exists( 'avia_sc_progressbar' ) )
 									"subtype" => array(
 									__('Enabled',  'avia_framework' ) 	=>'av-animated-bar',
 									__('Disabled',  'avia_framework' )	=>'av-fixed-bar')),
+									
+							array(
+									"name" 	=> __("Progress Bar Style", 'avia_framework' ),
+									"desc" 	=> __("Chose the styling of the progress bar here", 'avia_framework' ),
+									"id" 	=> "bar_styling_secondary",
+									"type" 	=> "select",
+									"std" 	=> "",
+									"subtype" => array(
+									__('Rounded Big Bars',  'avia_framework' ) =>'',
+									__('Minimal Bars',  'avia_framework' ) =>'av-small-bar')),
+							
+							
+							array(
+									"name" 	=> __("Show Progress Bar percentage?", 'avia_framework' ),
+									"desc" 	=> __("Chose if you want to show the % of the progress bar", 'avia_framework' ),
+									"id" 	=> "show_percentage",
+									"type" 	=> "select",
+									"std" 	=> "",
+									"required" => array('bar_styling_secondary','equals','av-small-bar'),
+									"subtype" => array(
+									__('Hide',  'avia_framework' ) 	=>'',
+									__('Show',  'avia_framework' )	=>'av-show-bar-percentage')),		
+							
+							
+							array(
+									"name" 	=> __("Progress Bar Height?", 'avia_framework' ),
+									"desc" 	=> __("Set the height of the progress bar", 'avia_framework' ),
+									"id" 	=> "bar_height",
+									"type" 	=> "select",
+									"std" 	=> "10",
+									"required" => array('bar_styling_secondary','equals','av-small-bar'),
+									"subtype" => AviaHtmlHelper::number_array(1,50,1, array(), 'px')),
+	
+							
+								
+							
 							
 							);
 			}
@@ -176,12 +212,21 @@ if ( !class_exists( 'avia_sc_progressbar' ) )
 			{
 				extract(shortcode_atts(array(	'position'		=>	'left', 
 												'bar_styling'	=>	'av-striped-bar', 
+												'bar_styling_secondary' => '',
+												'show_percentage'	=> false,
+												'bar_height'		=> false,
 												'bar_animation'	=>	'av-animated-bar' ), $atts, $this->config['shortcode']));
 
 				$bars = ShortcodeHelper::shortcode2array($content);
-				$extraClass = $bar_styling." ".$bar_animation;
+				$extraClass = $bar_styling." ".$bar_animation." ".$bar_styling_secondary;
 				$output		= "";
-
+				$bar_style  = "";
+				
+				if($bar_height && $bar_styling_secondary)
+				{
+					$bar_style = "style='height:{$bar_height}px;'";
+				}
+				
 				if(!empty($bars))
 				{
 					$output .= "<div class='avia-progress-bar-container avia_animate_when_almost_visible ".$meta['el_class']." {$extraClass}'>";
@@ -202,8 +247,14 @@ if ( !class_exists( 'avia_sc_progressbar' ) )
 								$output .="<div class='progressbar-title'>".$bar['attr']['title']."</div>";
 								$output .="</div>";
 							}
+							
+							if($bar_styling_secondary != "" && $show_percentage)
+							{ 
+								$output .="<div class='progressbar-percent' data-timer='2200'><span class='av-bar-counter __av-single-number' data-number='".$bar['attr']['progress']."'>0</span>%</div>";
+							}
+							
 
-							$output .= 		"<div class='progress'><div class='bar-outer'><div class='bar' style='width: ".$bar['attr']['progress']."%' data-progress='".$bar['attr']['progress']."'></div></div></div>";
+							$output .= 		"<div class='progress' {$bar_style}><div class='bar-outer'><div class='bar' style='width: ".$bar['attr']['progress']."%' data-progress='".$bar['attr']['progress']."'></div></div></div>";
 							$output .= "</div>";
 						}
 

@@ -20,6 +20,7 @@ if ( !class_exists( 'avia_sc_promobox' ) )
 				$this->config['target']			= 'avia-target-insert';
 				$this->config['shortcode'] 		= 'av_promobox';
 				$this->config['tooltip'] 	    = __('Creates a notification box with call to action button', 'avia_framework' );
+				$this->config['preview'] 		= "xlarge";
 			}
 
 			/**

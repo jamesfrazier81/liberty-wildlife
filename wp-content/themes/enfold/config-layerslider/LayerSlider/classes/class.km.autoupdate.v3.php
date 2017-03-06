@@ -63,7 +63,7 @@ class KM_UpdatesV3 {
 		}
 
 		// Bug fix in v5.3.0: WPLANG is not always defined
-		if(!defined('WPLANG')) { define('WPLANG', ''); }
+		if( ! defined('WPLANG')) { define('WPLANG', ''); }
 
 		// Build config
 		$this->config = array_merge($config, array(
@@ -92,7 +92,7 @@ class KM_UpdatesV3 {
 
 		$this->_check_updates();
 
-		if(!isset($transient)) {
+		if( empty($transient) || ! is_object($transient) ) {
 			$transient = new stdClass;
 		}
 
@@ -142,15 +142,88 @@ class KM_UpdatesV3 {
 
 
 
+	/**
+	 * Check and handle activation before downloading the update file.
+	 *
+	 * @since 6.0.0
+	 * @access public
+	 * @param bool $reply Whether to bail without returning the package. Default false.
+	 * @param string $package The package file name.
+	 * @param WP_Upgrader $this The WP_Upgrader instance.
+	 * @return mixed $result void or WP_error on failure
+	 */
+	public function pre_download_filter($reply, $package, $updater) {
+
+		$skin = $updater->skin;
+
+		// Filter out 3rd party items
+		if( ( isset( $skin->plugin ) && $skin->plugin === $this->config['base'] ) ||
+			( isset( $skin->plugin_info ) && $skin->plugin_info['Name'] === $this->config['name'] ) ) {
+
+				// Check validity
+				if( $GLOBALS['lsAutoUpdateBox'] && ! get_option( $this->config['authKey'], false ) ) {
+					return new WP_Error('ls_update_error', __('License activation is required to receive updates. Please read our <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">online documentation</a> to learn more.', 'LayerSlider'));
+				}
+		}
+
+		return $reply;
+	}
+
+
+
+	/**
+	 * Provide an update message in the Plugins list row.
+	 *
+	 * @since 6.1.5
+	 * @access public
+	 * @return string The update message
+	 */
+	public function update_message() {
+
+		// Provide license activation warning on non-activated sites
+		if( ! get_option( $this->config['authKey'], false ) ) {
+			printf(__(' License activation is required in order to receive updates for LayerSlider. %sPurchase a license%s or %sread the documentation%s to learn more. %sGot LayerSlider in a theme?%s', 'installer'),
+							'<a href="http://codecanyon.net/cart/add_items?ref=kreatura&amp;item_ids=1362246" target="_blank">', '</a>', '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">', '</a>', '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation-bundles" target="_blank">', '</a>');
+		}
+	}
+
+
+
+	/**
+	 *  In case of receiving a "Not activated" flag, make sure to display
+	 *	the "Canceled activation" notification to let users know about
+	 *	potential issues if their site is still in an activated state.
+	 *
+	 *	This usually happens due to remote deactivation via our online tools,
+	 *	or because users ask us to reset their purchase code on their behalf.
+	 *	Alternatively, the purhcase code might no longer be valid due to a
+	 *	refund, sale reversal, or any other undisclosed reason by Envato.
+	 *
+	 * @since 6.1.5
+	 * @access public
+	 */
+	public function check_activation_state() {
+
+		if( get_option( $this->config['authKey'], false ) ) {
+
+			update_option( $this->config['authKey'], 0 );
+			update_option( $this->config['codeKey'], '' );
+			update_option( 'ls-show-canceled_activation_notice', 1);
+		}
+	}
+
+
+
 
 	/**
 	 * Check for update info.
 	 *
 	 * @since 4.6.3
 	 * @access protected
+	 * @param boolean $forceCheck Ignore the update interval and force refreshing update info
 	 * @return void
 	 */
-	protected function _check_updates() {
+	protected function _check_updates( $forceCheck = false ) {
 
 		// Get data
 		if(empty($this->data)) {
@@ -165,8 +238,7 @@ class KM_UpdatesV3 {
 		}
 
 		// Check for updates
-		if($this->data->checked < time() - self::TIMEOUT) {
-
+		if( $forceCheck || $this->data->checked < time() - self::TIMEOUT) {
 			$response = $this->sendApiRequest($this->config['repoUrl'].'updates/');
 
 			if(!empty($response) && $newData = maybe_unserialize($response)) {
@@ -178,9 +250,16 @@ class KM_UpdatesV3 {
 
 
 			// Store version number of the latest release
-			// to notify unauthorized sites owners
-			if(!empty($this->data->_latest_version)) {
+			// to notify unauthorized site owners
+			if( ! empty( $this->data->_latest_version ) ) {
 				update_option('ls-latest-version', $this->data->_latest_version);
+			}
+
+
+			// Check activation state on client side in
+			// case of receiving a "Not Activated" flag
+			if( ! empty( $this->data->_not_activated ) ) {
+				$this->check_activation_state();
 			}
 		}
 
@@ -198,15 +277,18 @@ class KM_UpdatesV3 {
 	 * @param string $url API URL to be called
 	 * @return string API response
 	 */
-	protected function sendApiRequest($url) {
+	public function sendApiRequest($url) {
 
 		if(empty($url)) { return false; }
 
 		// Build request
 		$request = wp_remote_post($url, array(
+			'method' => 'POST',
+			'timeout' => 60,
 			'user-agent' => 'WordPress/'.$GLOBALS['wp_version'].'; '.get_bloginfo('url'),
 			'body' => array(
 				'slug' => $this->config['slug'],
+				'base' => $this->config['base'],
 				'version' => $this->config['version'],
 				'channel' => $this->config['channel'],
 				'license' => $this->config['license'],
@@ -239,7 +321,7 @@ class KM_UpdatesV3 {
 		// ERR: Unexpected error
 		if(empty($json)) {
 			die(json_encode(array(
-				'message' => 'An unexpected error occurred. Please try again later.',
+				'message' => 'An unexpected error occurred. Please try again later. If this error persist, it\'s most likely a web server configuration issue. Please contact your web host and ask them to allow external connection to the following domain: repository.kreaturamedia.com. If you need further assistance in resolving this issue, please email us from our CodeCanyon profile page.',
 				'errCode' => 'ERR_UNEXPECTED_ERROR')
 			));
 		}
@@ -277,7 +359,7 @@ class KM_UpdatesV3 {
 		// Only update release channel?
 		if(get_option($this->config['authKey'], false)) {
 			if( strpos($_POST['purchase_code'], '●') === 0 || $this->config['license'] == $_POST['purchase_code']) {
-				die(json_encode(array('status' => __('Your settings were successfully saved.', 'LayerSlider'))));
+				die(json_encode(array('message' => __('Your settings were successfully saved.', 'LayerSlider'))));
 			}
 		}
 
@@ -293,11 +375,25 @@ class KM_UpdatesV3 {
 
 		// Successful authorization
 		} else {
+			$json->code = base64_encode($_POST['purchase_code']);
 			update_option($this->config['authKey'], 1);
 			update_option($this->config['codeKey'], $_POST['purchase_code']);
+
+
+			// v6.1.5: Make sure to empty the stored update data from cache,
+			// so we can avoid issues caused by outdated and potentially
+			// unreliable information like special flags set by the update server.
+			//
+			// Force checking updates to immediately replace the missing update info
+			// with fresh data. Suppressing error reporting to make sure that nothing
+			// can break the JSON output, as user feedback is crucial here.
+			delete_option($this->config['option']);
+			@$this->_check_updates( true );
+
 		}
 
-		die($response);
+
+		die(json_encode($json));
 	}
 
 

@@ -453,7 +453,9 @@ line-height: 88px;
 	border-color: transparent;
 
 }
-#top .av_header_glassy.av_header_transparency #menu-item-shop.cart_dropdown {
+#top .av_header_glassy.av_header_transparency #menu-item-shop.cart_dropdown,
+#top .av_header_with_border.av_header_transparency #menu-item-shop.cart_dropdown
+{
 border-color: rgba(255, 255, 255, 0.25);
 }
 

@@ -85,15 +85,20 @@ if ( !class_exists( 'avia_sc_grid_row' ) )
 					$text_area = ShortcodeHelper::create_shortcode_by_array($name, '[av_cell_one_half first][/av_cell_one_half] [av_cell_one_half][/av_cell_one_half]', $args);
 				
 				}
+				
+				$title_id = !empty($args['id']) ? ": ".ucfirst($args['id']) : "";
+				$hidden_el_active = !empty($args['av_element_hidden_in_editor']) ? "av-layout-element-closed" : "";
+				
+				
 
-
-				$output  = "<div class='avia_layout_row avia_layout_section avia_pop_class avia-no-visual-updates ".$name." av_drag' ".$dataString.">";
+				$output  = "<div class='avia_layout_row {$hidden_el_active} avia_layout_section avia_pop_class avia-no-visual-updates ".$name." av_drag' ".$dataString.">";
 				$output .= "    <a class='avia-add-cell avia-add'  href='#add-cell' title='".__('Add Cell','avia_framework' )."'>".__('Add Cell','avia_framework' )."</a>";
     				$output .= "    <a class='avia-set-cell-size avia-add'  href='#set-size' title='".__('Set Cell Size','avia_framework' )."'>".__('Set Cell Size','avia_framework' )."</a>";
 
 				$output .= "    <div class='avia_sorthandle menu-item-handle'>";
-				$output .= "        <span class='avia-element-title'>".$this->config['name']."</span>";
+				$output .= "        <span class='avia-element-title'>".$this->config['name']."<span class='avia-element-title-id'>".$title_id."</span></span>";
 				$output .= "        <a class='avia-delete'  href='#delete' title='".__('Delete Row','avia_framework' )."'>x</a>";
+				$output .= "        <a class='avia-toggle-visibility'  href='#toggle' title='".__('Show/Hide Section','avia_framework' )."'></a>";
 
 				if(!empty($this->config['popup_editor']))
     			{
@@ -104,7 +109,12 @@ if ( !class_exists( 'avia_sc_grid_row' ) )
     								$output .= "    <div class='avia_inner_shortcode avia_connect_sort av_drop' data-dragdrop-level='".$this->config['drop-level']."'>";
 				$output .= "<textarea data-name='text-shortcode' cols='20' rows='4'>".$text_area."</textarea>";
 				$output .= $final_content;
-				$output .= "</div></div>";
+				
+				$output .= "</div>";
+				
+				$output .= "<a class='avia-layout-element-hidden' href='#'>".__('Grid Row content hidden. Click here to show it','avia_framework')."</a>";
+				
+				$output .= "</div>";
 
 				return $output;
 			}
@@ -191,6 +201,10 @@ if ( !class_exists( 'avia_sc_grid_row' ) )
 				            "id" 	=> "id",
 				            "type" 	=> "input",
 				            "std" => ""),
+				            
+				    array(	"id" 	=> "av_element_hidden_in_editor",
+				            "type" 	=> "hidden",
+				            "std" => "0"),
 				    
                 );
 			}
@@ -222,8 +236,10 @@ if ( !class_exists( 'avia_sc_grid_row' ) )
 				
 				$params['class'] = "av-layout-grid-container entry-content-wrapper {$color} {$mobile} {$border}".$meta['el_class'];
 				$params['open_structure'] = false; 
-				$params['id'] = !empty($id) ? $id : "av-layout-grid-".avia_sc_grid_row::$count;
+				$params['id'] = !empty($id) ? AviaHelper::save_string($id,'-') : "av-layout-grid-".avia_sc_grid_row::$count;
 				$params['custom_markup'] = $meta['custom_markup'];
+				
+				
 				
 				if($min_height_percent != "")
 					$params['class'] .= " av-cell-min-height av-cell-min-height-" .$min_height_percent;

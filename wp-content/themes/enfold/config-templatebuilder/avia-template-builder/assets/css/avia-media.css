@@ -94,6 +94,7 @@ div .avia-video-element .avia_inner_shortcode{
 margin: 6px;
 border: 1px solid #666;
 overflow: hidden;
+background: transparent !important;
 }
 
 div .avia-video-element .avia_inner_shortcode .avia-element-label{display:block;}
