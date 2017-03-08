@@ -48,6 +48,14 @@ html, body {
             }
         }
     }
+
+    .image-overlay {
+        display: none !important;
+
+        .image-overlay-inside {
+            display: none !important;
+        }
+    }
 }
 
 @media screen and (max-width: $media-mobile) {

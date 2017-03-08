@@ -1,95 +1,183 @@
 #top #wrap_all #main {
-	/* Fullscreen slider with logo
-	.avia-fullscreen-slider {
-		.avia-slideshow .caption_fullwidth .caption_container {
-			max-width: 100%;
-			width: 100%;
+    	/* Fullscreen slider with logo
+    	.avia-fullscreen-slider {
+    		.avia-slideshow .caption_fullwidth .caption_container {
+    			max-width: 100%;
+    			width: 100%;
+    
+    			.slideshow_caption {
+    				padding: 20px 40px;
+    
+    				.slideshow_align_caption {
+    					vertical-align: top;
+    
+    					p {
+    						text-align: center;
+    						
+    						img {
+    							max-width: 250px;
+    						}
+    					}
+    				}
+    			}
+    		}
+    	} */
 
-			.slideshow_caption {
-				padding: 20px 40px;
+    #home-1-3 {
+        .av_one_third {
+            .av-special-heading {
+                h2 {
+                    color: white;
+                }
+            }
 
-				.slideshow_align_caption {
-					vertical-align: top;
+            .av_textblock_section {
+                p {
+                    color: white;
+                }
+            }
+        }
 
-					p {
-						text-align: center;
-						
-						img {
-							max-width: 250px;
-						}
-					}
-				}
-			}
-		}
-	} */
+        .av_two_third {
+            .avia-image-container-inner {
+                max-width: 150px;
+            }
 
-	#home-1-3 {
-		.av_one_third {
-			.av-special-heading {
-				h2 {
-					color: white;
-				}
-			}
+            .av-special-heading {
+                h4 {
+                    font-size: 2rem;
+                    color: white;
+                }
+            }
+        }
+    }
 
-			.av_textblock_section {
-				p {
-					color: white;
-				}
-			}
-		}
+    #home-3-3 {
+        .av_one_third {
+            // Top image
+            .avia-image-container {
+                margin: 0;
 
-		.av_two_third {
-			.avia-image-container-inner {
-				max-width: 150px;
-			}
+                .avia-image-container-inner {
+                    width: 100%;
+                    max-height: 500px;
+                    overflow: hidden;
 
-			.av-special-heading {
-				h4 {
-					font-size: 2rem;
-					color: white;
-				}
-			}
-		}
-	}
+                    img {
+                        width: 100%;
+                        height: auto;
+                    }
+                }
+            }
 
-	#home-3-3 {
-		.av_one_third {
-			// Top image
-			.avia-image-container {
-				margin: 0;
+            // Content wrapper
+            .flex_column {
+                padding: 30px;
 
-				.avia-image-container-inner {
-					width: 100%;
-					max-height: 500px;
-					overflow: hidden;
+                .av-special-heading {
+                    .av-subheading p {
+                        color: $color-gray-dark;
+                    }
 
-					img {
-						width: 100%;
-						height: auto;
-					}
-				}
-			}
-			
-			// Content wrapper
-			.flex_column {
-				padding: 30px;
+                    h3 {
+                        color: $color-orange;
+                    }
+                }
 
-				.av-special-heading {
-					.av-subheading p {
-						color: $color-gray-dark;
-					}
+                .av_textblock_section {
+                    p {
+                        color: $color-gray-dark;
+                    }
+                }
+            }
+        }
+    }
 
-					h3 {
-						color: $color-orange;
-					}
-				}
+    #home-events {
 
-				.av_textblock_section {
-					p {
-						color: $color-gray-dark;
-					}
-				}
-			}			
-		}
-	}
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding: 0;
+
+            .flex_column {
+                padding: 30px;
+            }
+
+            .av-upcoming-events {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                // Single event
+                .av-upcoming-event-entry {
+                    flex: 1;
+                    padding: 0 30px 30px 30px;
+                    margin: 0;
+                    text-align: center;
+
+                    .av-upcoming-event-image {
+                        display: none;
+                    }
+
+                    .av-upcoming-event-data {
+                        width: 100%;
+                        margin: 0;
+
+                        .av-upcoming-event-title {
+                            font-size: 2rem;
+                            font-weight: $font-light;
+                            line-height: 2.25rem;
+                            color: $color-orange;
+
+                            &:before {
+                                display: block;
+                                text-align: center;
+                                content: '\f073';
+                                font-family: $font-awesome;
+                                font-size: 4rem;
+                                height: 6rem;
+                                line-height: 5rem;
+                                color: $color-orange;
+                            }
+                        }
+
+                        .av-upcoming-event-meta {
+                            font-size: 1rem;
+                            color: $color-gray-dark;
+
+                            .av-upcoming-event-venue {
+                                &:before {
+                                    display: inline-block;
+                                    width: 15px;
+                                    height: 15px;
+                                    content: '\f041';
+                                    font-family: $font-awesome;
+                                    color: $color-orange;
+                                    margin-right: 7px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $media-tablet) {
+    .responsive #top #wrap_all #main {
+        #home-events {
+            .container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+
+                .av-upcoming-events {
+                    flex-direction: column;
+                }
+            }
+        }
+    }
 }

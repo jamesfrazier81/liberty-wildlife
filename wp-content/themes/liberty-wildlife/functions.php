@@ -87,6 +87,7 @@ function avia_register_meta_boxes($boxes) {
 		foreach($boxes as $key => $box)	{
 			$boxes[$key]['page'][] = 'team';
 			$boxes[$key]['page'][] = 'publication';
+			$boxes[$key]['page'][] = 'events';
 		}
 	}
 	return $boxes;

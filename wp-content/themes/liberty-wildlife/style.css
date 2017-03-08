@@ -50,6 +50,11 @@ html, body {
     #top #wrap_all #main p a:hover {
       text-decoration: underline; }
 
+#top #wrap_all #main .image-overlay {
+  display: none !important; }
+  #top #wrap_all #main .image-overlay .image-overlay-inside {
+    display: none !important; }
+
 @media screen and (max-width: 480px) {
   html, body {
     font-size: 14px; } }
@@ -67,6 +72,33 @@ html, body {
       font-weight: 700; }
       #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry .slide-entry-excerpt .read-more-link a .more-link-arrow {
         display: none; }
+
+#top #wrap_all #main .togglecontainer .single_toggle .toggler {
+  border-color: #da5834;
+  color: #da5834;
+  font-weight: 700; }
+  #top #wrap_all #main .togglecontainer .single_toggle .toggler .toggle_icon {
+    border-color: #da5834; }
+    #top #wrap_all #main .togglecontainer .single_toggle .toggler .toggle_icon span {
+      border-color: #da5834; }
+  #top #wrap_all #main .togglecontainer .single_toggle .toggler.activeTitle {
+    background-color: #da5834;
+    color: white; }
+    #top #wrap_all #main .togglecontainer .single_toggle .toggler.activeTitle .toggle_icon {
+      border-color: white; }
+      #top #wrap_all #main .togglecontainer .single_toggle .toggler.activeTitle .toggle_icon span {
+        border-color: white; }
+
+#top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap {
+  border-color: #da5834; }
+  #top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap .toggle_content {
+    border-color: #da5834;
+    background-color: #da5834;
+    color: white;
+    padding-top: 0;
+    margin: 0; }
+    #top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap .toggle_content p {
+      color: white; }
 
 @media screen and (max-width: 767px) {
   .responsive #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry {
@@ -296,28 +328,28 @@ html, body {
 
 #top #wrap_all #main {
   /* Fullscreen slider with logo
-	.avia-fullscreen-slider {
-		.avia-slideshow .caption_fullwidth .caption_container {
-			max-width: 100%;
-			width: 100%;
-
-			.slideshow_caption {
-				padding: 20px 40px;
-
-				.slideshow_align_caption {
-					vertical-align: top;
-
-					p {
-						text-align: center;
-						
-						img {
-							max-width: 250px;
-						}
-					}
-				}
-			}
-		}
-	} */ }
+    	.avia-fullscreen-slider {
+    		.avia-slideshow .caption_fullwidth .caption_container {
+    			max-width: 100%;
+    			width: 100%;
+    
+    			.slideshow_caption {
+    				padding: 20px 40px;
+    
+    				.slideshow_align_caption {
+    					vertical-align: top;
+    
+    					p {
+    						text-align: center;
+    						
+    						img {
+    							max-width: 250px;
+    						}
+    					}
+    				}
+    			}
+    		}
+    	} */ }
   #top #wrap_all #main #home-1-3 .av_one_third .av-special-heading h2 {
     color: white; }
   #top #wrap_all #main #home-1-3 .av_one_third .av_textblock_section p {
@@ -344,3 +376,57 @@ html, body {
       color: #da5834; }
     #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av_textblock_section p {
       color: #333333; }
+  #top #wrap_all #main #home-events .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0; }
+    #top #wrap_all #main #home-events .container .flex_column {
+      padding: 30px; }
+    #top #wrap_all #main #home-events .container .av-upcoming-events {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center; }
+      #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry {
+        flex: 1;
+        padding: 0 30px 30px 30px;
+        margin: 0;
+        text-align: center; }
+        #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-image {
+          display: none; }
+        #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data {
+          width: 100%;
+          margin: 0; }
+          #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-title {
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 2.25rem;
+            color: #da5834; }
+            #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-title:before {
+              display: block;
+              text-align: center;
+              content: '\f073';
+              font-family: FontAwesome;
+              font-size: 4rem;
+              height: 6rem;
+              line-height: 5rem;
+              color: #da5834; }
+          #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-meta {
+            font-size: 1rem;
+            color: #333333; }
+            #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-meta .av-upcoming-event-venue:before {
+              display: inline-block;
+              width: 15px;
+              height: 15px;
+              content: '\f041';
+              font-family: FontAwesome;
+              color: #da5834;
+              margin-right: 7px; }
+
+@media screen and (max-width: 767px) {
+  .responsive #top #wrap_all #main #home-events .container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0; }
+    .responsive #top #wrap_all #main #home-events .container .av-upcoming-events {
+      flex-direction: column; } }

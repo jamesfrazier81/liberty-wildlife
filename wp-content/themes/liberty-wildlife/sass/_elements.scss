@@ -7,6 +7,7 @@
 
             .slide-entry {
                 margin-bottom: 30px;
+
                 .entry-content-header {
                     .blog-categories {
                         display: none;
@@ -25,6 +26,54 @@
                         .more-link-arrow {
                             display: none;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    // Accordion
+    .togglecontainer {
+        .single_toggle {
+            .toggler {
+                border-color: $color-orange;
+                color: $color-orange;
+                font-weight: $font-bold;
+
+                .toggle_icon {
+                    border-color: $color-orange;
+
+                    span {
+                        border-color: $color-orange;
+                    }
+                }
+
+                &.activeTitle {
+                    background-color: $color-orange;
+                    color: white;
+
+                    .toggle_icon {
+                        border-color: white;
+
+                        span {
+                            border-color: white;
+                        }
+                    }
+                }
+            }
+
+            .toggle_wrap {
+                border-color: $color-orange;
+
+                .toggle_content {
+                    border-color: $color-orange;
+                    background-color: $color-orange;
+                    color: white;
+                    padding-top: 0;
+                    margin: 0;
+
+                    p {
+                        color: white;
                     }
                 }
             }
