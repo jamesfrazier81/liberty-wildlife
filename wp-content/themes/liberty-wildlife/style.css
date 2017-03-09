@@ -15,6 +15,12 @@ html, body {
   font-size: 16px;
   font-weight: 300; }
 
+#top #wrap_all #main .av-special-heading {
+  margin-top: 25px; }
+
+#top #wrap_all #main .av-special-heading-h1 {
+  margin-top: 0; }
+
 #top #wrap_all #main h1 {
   font-size: 2.75rem;
   font-weight: 100;
@@ -50,6 +56,11 @@ html, body {
     #top #wrap_all #main p a:hover {
       text-decoration: underline; }
 
+#top #wrap_all #main ul li a {
+  color: #da5834;
+  font-weight: 700;
+  text-decoration: none; }
+
 #top #wrap_all #main .image-overlay {
   display: none !important; }
   #top #wrap_all #main .image-overlay .image-overlay-inside {
@@ -57,7 +68,21 @@ html, body {
 
 @media screen and (max-width: 480px) {
   html, body {
-    font-size: 14px; } }
+    font-size: 14px; }
+  .responsive #top #wrap_all #main h1 {
+    font-size: 2rem;
+    line-height: 2.75rem; }
+  .responsive #top #wrap_all #main h2 {
+    font-size: 1.75rem; } }
+
+#top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_align_caption {
+  padding: 0; }
+  #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_align_caption .avia-caption-title {
+    font-family: "Acme", sans-serif;
+    font-size: 3rem;
+    color: white;
+    margin: 0 0 -7px 0;
+    text-transform: uppercase; }
 
 #top #wrap_all #main .avia-content-slider .slide-entry-wrap {
   margin: 0; }
@@ -100,7 +125,33 @@ html, body {
     #top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap .toggle_content p {
       color: white; }
 
+#top #wrap_all #main .avia-button-wrap .avia-button {
+  background-color: #da5834;
+  border-color: #bd5032;
+  border-radius: 0;
+  font-weight: bold; }
+
+#top #wrap_all #main .hr-default {
+  margin: 10px 0; }
+
 @media screen and (max-width: 767px) {
+  .responsive #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_inner_caption {
+    padding: 0; }
+    .responsive #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_inner_caption .avia-caption-title {
+      font-size: 2rem !important;
+      line-height: 2.2rem; }
+  .responsive #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry {
+    width: 100%;
+    margin: 0 0 30px 0; }
+    .responsive #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry .slide-image img {
+      width: 100%; } }
+
+@media screen and (max-width: 480px) {
+  .responsive #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_inner_caption {
+    padding: 0; }
+    .responsive #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_inner_caption .avia-caption-title {
+      font-size: 1.25rem !important;
+      line-height: 1.9rem; }
   .responsive #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry {
     width: 100%;
     margin: 0 0 30px 0; }
@@ -221,8 +272,10 @@ html, body {
   position: absolute;
   top: 70px;
   width: 100%; }
-  #top #wrap_all #main .main_color .template-page.av-content-small {
-    border-color: #da5834; }
+  #top #wrap_all #main .main_color {
+    border: none; }
+    #top #wrap_all #main .main_color .template-page.av-content-small {
+      border-color: #da5834; }
   #top #wrap_all #main #section-black, #top #wrap_all #main #section-orange {
     background-color: #333333; }
     #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h6, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h6 {
@@ -233,14 +286,6 @@ html, body {
       color: white; }
   #top #wrap_all #main #section-orange {
     background-color: #da5834; }
-  #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_align_caption {
-    padding: 0; }
-    #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow .caption_fullwidth .slideshow_caption .slideshow_align_caption .avia-caption-title {
-      font-family: "Acme", sans-serif;
-      font-size: 3rem;
-      color: white;
-      margin: 0 0 -7px 0;
-      text-transform: uppercase; }
   #top #wrap_all #main #inner-3-5 .av_two_fifth {
     background-color: #da5834;
     padding: 30px; }
@@ -252,6 +297,12 @@ html, body {
 @media screen and (max-width: 989px) {
   .responsive #top #wrap_all #main {
     top: 0; } }
+
+@media screen and (max-width: 480px) {
+  .responsive #top #wrap_all #main .main_color {
+    border: none; }
+    .responsive #top #wrap_all #main .main_color .template-page {
+      padding: 25px 0; } }
 
 #top #wrap_all #main .sidebar {
   border-color: #da5834; }

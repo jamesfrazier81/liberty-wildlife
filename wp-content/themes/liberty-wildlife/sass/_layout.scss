@@ -5,6 +5,8 @@
 
 	// Standard inner layout
 	.main_color {
+		border: none;
+		
 		.template-page.av-content-small {
 			border-color: $color-orange;
 		}
@@ -36,23 +38,6 @@
 		background-color: $color-orange;
 	}
 
-	// Fullwidth sliders
-	.avia-fullwidth-slider {
-		.avia-slideshow .caption_fullwidth {
-			.slideshow_caption .slideshow_align_caption {
-				padding: 0;
-
-				.avia-caption-title {
-					font-family: $font-acme;
-					font-size: 3rem;
-					color: white;
-					margin: 0 0 -7px 0;
-					text-transform: uppercase;
-				}
-			}
-		}
-	}
-
 	// 3/5, 2/5
 	#inner-3-5 {
 		.av_two_fifth {
@@ -79,5 +64,18 @@
 @media screen and (max-width: $media-navswitch) {
 	.responsive #top #wrap_all #main {
 		top: 0;
+	}
+}
+
+@media screen and (max-width: $media-mobile) {
+	.responsive #top #wrap_all #main {
+		// Standard inner layout
+		.main_color {
+			border: none;
+			
+			.template-page {
+				padding: 25px 0;
+			}
+		}
 	}
 }

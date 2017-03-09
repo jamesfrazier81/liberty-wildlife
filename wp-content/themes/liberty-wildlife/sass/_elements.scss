@@ -1,4 +1,21 @@
 #top #wrap_all #main {
+    // Fullwidth sliders
+    .avia-fullwidth-slider {
+        .avia-slideshow .caption_fullwidth {
+            .slideshow_caption .slideshow_align_caption {
+                padding: 0;
+
+                .avia-caption-title {
+                    font-family: $font-acme;
+                    font-size: 3rem;
+                    color: white;
+                    margin: 0 0 -7px 0;
+                    text-transform: uppercase;
+                }
+            }
+        }
+    }
+
     // Avia Content Slider (archives)
     // Remove meta info from Team archive
     .avia-content-slider {
@@ -79,10 +96,70 @@
             }
         }
     }
+
+    // Buttons
+    .avia-button-wrap {
+        .avia-button {
+            background-color: $color-orange;
+            border-color: $color-orange-dark;
+            border-radius: 0;
+            font-weight: bold;
+        }
+    }
+
+    // Spacer
+    .hr-default {
+        margin: 10px 0;
+    }
 }
 
 @media screen and (max-width: $media-tablet) {
     .responsive #top #wrap_all #main {
+        // Fullwidth sliders
+        .avia-fullwidth-slider {
+            .avia-slideshow .caption_fullwidth {
+                .slideshow_caption .slideshow_inner_caption {
+                    padding: 0;
+
+                    .avia-caption-title {
+                        font-size: 2rem !important;
+                        line-height: 2.2rem;
+                    }
+                }
+            }
+        }
+
+        .avia-content-slider {
+            .slide-entry-wrap .slide-entry {
+                width: 100%;
+                margin: 0 0 30px 0;
+
+                .slide-image {
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $media-mobile) {
+    .responsive #top #wrap_all #main {
+        // Fullwidth sliders
+        .avia-fullwidth-slider {
+            .avia-slideshow .caption_fullwidth {
+                .slideshow_caption .slideshow_inner_caption {
+                    padding: 0;
+
+                    .avia-caption-title {
+                        font-size: 1.25rem !important;
+                        line-height: 1.9rem;
+                    }
+                }
+            }
+        }
+
         .avia-content-slider {
             .slide-entry-wrap .slide-entry {
                 width: 100%;
