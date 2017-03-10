@@ -1,39 +1,21 @@
 #top #wrap_all #main {
-    	/* Fullscreen slider with logo
-    	.avia-fullscreen-slider {
-    		.avia-slideshow .caption_fullwidth .caption_container {
-    			max-width: 100%;
-    			width: 100%;
-    
-    			.slideshow_caption {
-    				padding: 20px 40px;
-    
-    				.slideshow_align_caption {
-    					vertical-align: top;
-    
-    					p {
-    						text-align: center;
-    						
-    						img {
-    							max-width: 250px;
-    						}
-    					}
-    				}
-    			}
-    		}
-    	} */
-
     #home-1-3 {
         .av_one_third {
-            .av-special-heading {
-                h2 {
-                    color: white;
-                }
-            }
+            .flex_column {
+                margin: 0;
 
-            .av_textblock_section {
-                p {
-                    color: white;
+                .av-special-heading {
+                    margin: 0;
+
+                    h2 {
+                        color: white;
+                    }
+                }
+
+                .av_textblock_section {
+                    p {
+                        color: white;
+                    }
                 }
             }
         }
@@ -94,7 +76,6 @@
     }
 
     #home-events {
-
         .container {
             width: 100%;
             max-width: 100%;

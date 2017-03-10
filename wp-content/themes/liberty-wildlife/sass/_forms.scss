@@ -1,0 +1,12 @@
+#top #wrap_all #main {
+	// Enfold form element
+	.avia_ajax_form {
+		.form_element {
+			label {
+				abbr.required {
+					color: red;
+				}
+			}
+		}
+	}
+}

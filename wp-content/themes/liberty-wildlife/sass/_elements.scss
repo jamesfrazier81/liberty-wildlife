@@ -14,6 +14,30 @@
                 }
             }
         }
+
+        .avia-slideshow-arrows {
+            display: none;
+        }
+
+        .avia-slideshow-dots {
+            a {
+                width: 10px;
+                height: 10px;
+                color: white;
+                background-color: white;
+                padding: 0;
+                margin-right: 5px;
+
+                &:last-child {
+                    margin: 0;
+                }
+
+                &.active {
+                    color: $color-orange;
+                    background-color: $color-orange;
+                }
+            }
+        }
     }
 
     // Avia Content Slider (archives)
@@ -156,6 +180,12 @@
                         font-size: 1.25rem !important;
                         line-height: 1.9rem;
                     }
+                }
+            }
+
+            .avia-slideshow-dots {
+                a {
+                    bottom: 20px;
                 }
             }
         }

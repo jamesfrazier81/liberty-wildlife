@@ -7,61 +7,67 @@ html, body {
 #top #wrap_all #main {
     .av-special-heading {
         margin-top: 25px;
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 100;
+            line-height: 3.25rem;
+            color: $color-gray-dark;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: $font-light;
+            text-transform: none;
+            line-height: 2.75rem;
+            color: $color-gray-dark;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: $font-light;
+            line-height: 2.25rem;
+            color: $color-orange;
+        }
+
+        h4 {
+            font-family: $font-shadows;
+            font-size: 1.25rem;
+            font-weight: $font-normal;
+            line-height: 2.25rem;
+            color: $color-gray-dark;
+        }
     }
 
     .av-special-heading-h1 {
         margin-top: 0;
     }
 
-    h1 {
-        font-size: 2.75rem;
-        font-weight: 100;
-        line-height: 3.25rem;
-        color: $color-gray-dark;
-    }
+    .av_textblock_section {
+        p {
+            color: $color-gray-dark;
 
-    h2 {
-        font-size: 2rem;
-        font-weight: $font-light;
-        text-transform: none;
-        line-height: 2.75rem;
-        color: $color-gray-dark;
-    }
+            a {
+                color: $color-orange;
+                font-weight: $font-bold;
+                text-decoration: none;
 
-    h3 {
-        font-size: 1.5rem;
-        font-weight: $font-light;
-        line-height: 2.25rem;
-        color: $color-orange;
-    }
-
-    h4 {
-        font-family: $font-shadows;
-        font-size: 1.25rem;
-        font-weight: $font-normal;
-        line-height: 2.25rem;
-        color: $color-gray-dark;
-    }
-
-    p {
-        color: $color-gray-dark;
-
-        a {
-            color: $color-orange;
-            font-weight: $font-bold;
-            text-decoration: none;
-
-            &:hover {
-                text-decoration: underline;
+                &:hover {
+                    text-decoration: underline;
+                }
             }
         }
-    }
 
-    ul li {
-        a {
-            color: $color-orange;
-            font-weight: $font-bold;
-            text-decoration: none;
+        ul {
+            margin: 0.85em 0;
+
+            li {
+                a {
+                    color: $color-orange;
+                    font-weight: $font-bold;
+                    text-decoration: none;
+                }
+            }
         }
     }
 
