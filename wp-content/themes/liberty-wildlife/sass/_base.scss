@@ -8,11 +8,16 @@ html, body {
     .av-special-heading {
         margin-top: 25px;
 
+        .av-subheading p {
+            color: $color-gray-dark;
+        }
+
         h1 {
             font-size: 2.75rem;
             font-weight: 100;
             line-height: 3.25rem;
             color: $color-gray-dark;
+            text-transform: none;
         }
 
         h2 {

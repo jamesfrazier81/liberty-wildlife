@@ -105,6 +105,27 @@
             display: none;
         }
     }
+
+    #mobile-advanced {
+        background-color: $color-gray-dark;
+
+        li {
+            a {
+                font-weight: $font-bold;
+                color: white;
+
+                &:before {
+                    color: $color-orange;
+                }
+            }
+
+            .sub-menu {
+                li a {
+                    background-color: #292929;
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: $media-navswitch) {

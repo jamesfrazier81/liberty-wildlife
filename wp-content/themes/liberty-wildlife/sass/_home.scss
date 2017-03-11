@@ -57,6 +57,8 @@
                 padding: 30px;
 
                 .av-special-heading {
+                    margin-top: 0;
+                    
                     .av-subheading p {
                         color: $color-gray-dark;
                     }
@@ -76,70 +78,55 @@
     }
 
     #home-events {
+        // background-image: url(/wp-content/uploads/2017/03/repeater-subtle-white-feathers.png);
+
+        // background-image: url(/wp-content/uploads/2017/03/repeater-congruent-pentagon.png);
+        // background-image: url(/wp-content/uploads/2017/03/repeater-lodyas.png);
+        // background-image: url(/wp-content/uploads/2017/03/repeater-lodyas.png);
+
+        // background: radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255, 255, 255, 0.1) 15%, transparent 20%) 8px 9px;
+        // background-color: #282828;
+        // background-size: 16px 16px;
+        // background-repeat: repeat;
+
         .container {
             width: 100%;
             max-width: 100%;
             padding: 0;
 
-            .flex_column {
-                padding: 30px;
-            }
-
-            .av-upcoming-events {
-                width: 100%;
+            .entry-content-wrapper {
                 display: flex;
-                align-items: center;
-                justify-content: center;
+                flex-wrap: wrap;
 
-                // Single event
-                .av-upcoming-event-entry {
-                    flex: 1;
-                    padding: 0 30px 30px 30px;
+                .av_one_full {
+                    width: 100%;
+                    padding: 30px;
+                }
+
+                .av_one_third {
+                    width: 33.3%;
+                    padding: 40px;
                     margin: 0;
-                    text-align: center;
 
-                    .av-upcoming-event-image {
-                        display: none;
+                    background-color: $color-gray-dark;
+                    border-left: 1px solid white;
+                    border-bottom: 1px solid white;
+
+                    .av_font_icon {
+                        .av-icon-char {
+                            color: $color-orange;
+                        }
                     }
 
-                    .av-upcoming-event-data {
-                        width: 100%;
-                        margin: 0;
-
-                        .av-upcoming-event-title {
-                            font-size: 2rem;
-                            font-weight: $font-light;
-                            line-height: 2.25rem;
-                            color: $color-orange;
-
-                            &:before {
-                                display: block;
-                                text-align: center;
-                                content: '\f073';
-                                font-family: $font-awesome;
-                                font-size: 4rem;
-                                height: 6rem;
-                                line-height: 5rem;
-                                color: $color-orange;
-                            }
+                    .av-special-heading {
+                        .av-subheading p {
+                            color: white;
+                            font-weight: $font-normal;
                         }
+                    }
 
-                        .av-upcoming-event-meta {
-                            font-size: 1rem;
-                            color: $color-gray-dark;
-
-                            .av-upcoming-event-venue {
-                                &:before {
-                                    display: inline-block;
-                                    width: 15px;
-                                    height: 15px;
-                                    content: '\f041';
-                                    font-family: $font-awesome;
-                                    color: $color-orange;
-                                    margin-right: 7px;
-                                }
-                            }
-                        }
+                    &:first-child {
+                        border-left: none;
                     }
                 }
             }
@@ -155,8 +142,36 @@
                 max-width: 100%;
                 padding: 0;
 
-                .av-upcoming-events {
-                    flex-direction: column;
+                .template-page {
+                    margin: 0;
+
+                    // .av-upcoming-events {
+                    //     flex-direction: column;
+                    // }
+
+                    .entry-content-wrapper {
+                        flex-direction: column;
+                        flex-wrap: no-wrap;
+
+                        .av_one_third {
+                            width: 100%;
+                            border-left: none;
+                            border-right: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: $media-mobile) {
+    .responsive #top #wrap_all #main {
+        #home-events {
+            .container {
+                .template-page {
+                    margin: 0;
+                    padding: 0;
                 }
             }
         }

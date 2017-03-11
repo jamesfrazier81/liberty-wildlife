@@ -1,0 +1,29 @@
+// The Events Plugin styling (uninstalled for now)
+
+#top #wrap_all #main {
+    #tribe-events-content .tribe_events {
+        // Right side
+        .av-single-event-content {
+
+        	// Title
+            .tribe-events-single-event-title {
+                font-size: 2.75rem;
+                font-weight: 100;
+                line-height: 3.25rem;
+                color: $color-gray-dark;
+            }
+
+            // Content
+            .tribe-events-single-event-description {
+				ul {
+					margin: 0.85em 0 0.85em 3rem;
+
+
+					li {
+						margin: 0;
+					}
+				}
+            }
+        }
+    }
+}

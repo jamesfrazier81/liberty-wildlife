@@ -17,11 +17,14 @@ html, body {
 
 #top #wrap_all #main .av-special-heading {
   margin-top: 25px; }
+  #top #wrap_all #main .av-special-heading .av-subheading p {
+    color: #333333; }
   #top #wrap_all #main .av-special-heading h1 {
     font-size: 2.75rem;
     font-weight: 100;
     line-height: 3.25rem;
-    color: #333333; }
+    color: #333333;
+    text-transform: none; }
   #top #wrap_all #main .av-special-heading h2 {
     font-size: 2rem;
     font-weight: 300;
@@ -243,6 +246,16 @@ html, body {
 #top #wrap_all #main .av-section-bottom-logo {
   display: none; }
 
+#top #wrap_all #mobile-advanced {
+  background-color: #333333; }
+  #top #wrap_all #mobile-advanced li a {
+    font-weight: 700;
+    color: white; }
+    #top #wrap_all #mobile-advanced li a:before {
+      color: #da5834; }
+  #top #wrap_all #mobile-advanced li .sub-menu li a {
+    background-color: #292929; }
+
 @media screen and (max-width: 989px) {
   #top #wrap_all #header {
     position: relative; }
@@ -331,6 +344,17 @@ html, body {
     background-color: #da5834; }
     #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item a, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item a {
       color: white; }
+
+#top #wrap_all #main #tribe-events-content .tribe_events .av-single-event-content .tribe-events-single-event-title {
+  font-size: 2.75rem;
+  font-weight: 100;
+  line-height: 3.25rem;
+  color: #333333; }
+
+#top #wrap_all #main #tribe-events-content .tribe_events .av-single-event-content .tribe-events-single-event-description ul {
+  margin: 0.85em 0 0.85em 3rem; }
+  #top #wrap_all #main #tribe-events-content .tribe_events .av-single-event-content .tribe-events-single-event-description ul li {
+    margin: 0; }
 
 #top #wrap_all #main #footer {
   padding: 0; }
@@ -421,10 +445,12 @@ html, body {
 
 #top #wrap_all #main #home-3-3 .av_one_third .flex_column {
   padding: 30px; }
-  #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading .av-subheading p {
-    color: #333333; }
-  #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading h3 {
-    color: #da5834; }
+  #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading {
+    margin-top: 0; }
+    #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading .av-subheading p {
+      color: #333333; }
+    #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading h3 {
+      color: #da5834; }
   #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av_textblock_section p {
     color: #333333; }
 
@@ -432,56 +458,46 @@ html, body {
   width: 100%;
   max-width: 100%;
   padding: 0; }
-  #top #wrap_all #main #home-events .container .flex_column {
-    padding: 30px; }
-  #top #wrap_all #main #home-events .container .av-upcoming-events {
-    width: 100%;
+  #top #wrap_all #main #home-events .container .entry-content-wrapper {
     display: flex;
-    align-items: center;
-    justify-content: center; }
-    #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry {
-      flex: 1;
-      padding: 0 30px 30px 30px;
+    flex-wrap: wrap; }
+    #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_full {
+      width: 100%;
+      padding: 30px; }
+    #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_third {
+      width: 33.3%;
+      padding: 40px;
       margin: 0;
-      text-align: center; }
-      #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-image {
-        display: none; }
-      #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data {
-        width: 100%;
-        margin: 0; }
-        #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-title {
-          font-size: 2rem;
-          font-weight: 300;
-          line-height: 2.25rem;
-          color: #da5834; }
-          #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-title:before {
-            display: block;
-            text-align: center;
-            content: '\f073';
-            font-family: FontAwesome;
-            font-size: 4rem;
-            height: 6rem;
-            line-height: 5rem;
-            color: #da5834; }
-        #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-meta {
-          font-size: 1rem;
-          color: #333333; }
-          #top #wrap_all #main #home-events .container .av-upcoming-events .av-upcoming-event-entry .av-upcoming-event-data .av-upcoming-event-meta .av-upcoming-event-venue:before {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            content: '\f041';
-            font-family: FontAwesome;
-            color: #da5834;
-            margin-right: 7px; }
+      background-color: #333333;
+      border-left: 1px solid white;
+      border-bottom: 1px solid white; }
+      #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_third .av_font_icon .av-icon-char {
+        color: #da5834; }
+      #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_third .av-special-heading .av-subheading p {
+        color: white;
+        font-weight: 400; }
+      #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_third:first-child {
+        border-left: none; }
 
 @media screen and (max-width: 767px) {
   .responsive #top #wrap_all #main #home-events .container {
     width: 100%;
     max-width: 100%;
     padding: 0; }
-    .responsive #top #wrap_all #main #home-events .container .av-upcoming-events {
-      flex-direction: column; } }
+    .responsive #top #wrap_all #main #home-events .container .template-page {
+      margin: 0; }
+      .responsive #top #wrap_all #main #home-events .container .template-page .entry-content-wrapper {
+        flex-direction: column;
+        flex-wrap: no-wrap; }
+        .responsive #top #wrap_all #main #home-events .container .template-page .entry-content-wrapper .av_one_third {
+          width: 100%;
+          border-left: none;
+          border-right: none; } }
+
+@media screen and (max-width: 480px) {
+  .responsive #top #wrap_all #main #home-events .container .template-page {
+    margin: 0;
+    padding: 0; } }
 
 #top #wrap_all #main .avia_ajax_form .form_element label abbr.required {
   color: red; }
