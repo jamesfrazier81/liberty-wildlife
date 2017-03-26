@@ -1,6 +1,8 @@
 #top #wrap_all #main {
     #home-1-3 {
         .av_one_third {
+            background-color: $color-orange;
+
             .flex_column {
                 margin: 0;
 
@@ -21,6 +23,8 @@
         }
 
         .av_two_third {
+            background-color: $color-gray-dark;
+            
             .avia-image-container-inner {
                 max-width: 150px;
             }

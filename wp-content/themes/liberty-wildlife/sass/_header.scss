@@ -4,7 +4,7 @@
     }
 
     #header_main_alternate {
-        background-color: rgba($color-orange, 0.95);
+        background-color: rgba($color-orange, 1);
         box-shadow: 0 0 10px rgba(black, 0.5);
 
         .container {
@@ -35,7 +35,7 @@
 
                     li {
                         a {
-                            background-color: rgba($color-orange, 0.95);
+                            background-color: rgba($color-orange, 1);
                             height: auto;
                             padding: 10px;
                             line-height: 18px;
@@ -44,7 +44,7 @@
                             border-top: 1px dashed rgba(white, 0.25);
 
                             &:hover {
-                                background-color: rgba($color-orange-dark, 0.95);
+                                background-color: rgba($color-orange-dark, 1);
                             }
                         }
 
@@ -59,13 +59,13 @@
                 a {
                     height: 70px;
                     color: white;
-                    font-size: 1em;
+                    font-size: 0.85em;
                     font-weight: $font-normal;
                     line-height: 70px;
                     padding: 0;
 
                     &:hover {
-                        background-color: rgba($color-gray-dark, 0.15);
+                        background-color: rgba($color-orange-dark, 1);
                     }
 
                     .avia-menu-fx {
@@ -74,12 +74,7 @@
                     }
                 }
 
-                &:nth-child(3) {
-                    flex: 0.75;
-                }
-
                 &:nth-child(5) {
-                    flex: 1;
                     position: relative;
 
                     .avia-bullet {
@@ -141,7 +136,7 @@
                 width: 100%;
                 border: none;
                 display: block;
-                background-color: rgba($color-orange, 0.95);
+                background-color: rgba($color-orange, 1);
                 box-shadow: 0 0 10px rgba(black, 0.5);
 
                 .container {

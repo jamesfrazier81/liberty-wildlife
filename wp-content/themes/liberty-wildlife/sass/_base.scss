@@ -1,6 +1,6 @@
 html, body {
     font-family: $font-main;
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 300;
 }
 
@@ -87,7 +87,7 @@ html, body {
 
 @media screen and (max-width: $media-mobile) {
     html, body {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .responsive #top #wrap_all #main {

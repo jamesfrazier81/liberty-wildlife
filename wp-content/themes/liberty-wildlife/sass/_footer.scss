@@ -102,6 +102,32 @@
             }
         }
     }
+
+    #socket {
+        .container {
+            .copyright {
+                font-size: 0.85em;
+            }
+
+            // Social media icons
+            .social_bookmarks {
+                margin: 0;
+
+                li {
+                    top: 0;
+                    margin-right: 10px;
+
+                    &:last-child {
+                        margin: 0;
+                    }
+
+                    a {
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: $media-tablet) {
