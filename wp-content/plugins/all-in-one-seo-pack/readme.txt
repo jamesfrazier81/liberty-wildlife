@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mrtor
 Tags: seo, all in one seo, google, twitter, page, image seo, social, search engine optimization, sitemap, WordPress SEO, meta, meta description, xml sitemap, google sitemap, sitemaps, robots meta, yahoo, bing, news sitemaps, multisite, canonical, nofollow, noindex, keywords, description, webmaster tools, google webmaster tools, google analytics
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 2.3.12
+Stable tag: 2.3.12.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,7 +30,6 @@ First created in 2007, see why AIOSEO is one of the all time most downloaded plu
 * Built-in API so other plugins/themes can access and extend functionality
 * ONLY free plugin to provide SEO Integration for e-Commerce sites, including WooCommerce
 * Nonce Security built into All in One SEO Pack
-* Support for CMS-style WordPress installations
 * Automatically optimizes your **titles** for Google and other search engines
 * Generates **META tags automatically**
 * Avoids the typical duplicate content found on WordPress blogs

@@ -485,7 +485,7 @@ if(defined('ICL_SITEPRESS_VERSION') && defined('ICL_LANGUAGE_CODE'))
 		function avia_change_wpml_home_link($url, $lang)
 		{
 		    global $sitepress;
-		    if(is_home() || is_front_page()) $url = $sitepress->language_url($lang['language_code']);
+		    if(is_front_page()) $url = $sitepress->language_url($lang['language_code']);
 		    return $url;
 		}
 	}
@@ -569,7 +569,7 @@ if(defined('ICL_SITEPRESS_VERSION') && defined('ICL_LANGUAGE_CODE'))
 		            {
 		                $currentlang = (ICL_LANGUAGE_CODE == $lang['language_code']) ? 'avia_current_lang' : '';
 		
-		                if(is_home() || is_front_page()) $lang['url'] = $sitepress->language_url($lang['language_code']);
+		                if(is_front_page()) $lang['url'] = $sitepress->language_url($lang['language_code']);
 		
 		                $items .= "<li class='av-language-switch-item language_".$lang['language_code']." $currentlang'><a href='".$lang['url']."'>";
 		                $items .= "	<span class='language_flag'><img title='".$lang['native_name']."' src='".$lang['country_flag_url']."' /></span>";

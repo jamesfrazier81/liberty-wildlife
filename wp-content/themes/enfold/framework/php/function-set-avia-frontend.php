@@ -872,8 +872,17 @@ if(!function_exists('avia_pagination'))
 
 	function avia_post_pagination_link($link)
 	{
-		$url =  preg_replace('!">$!','',_wp_link_page($link));
-		$url =  preg_replace('!^<a href="!','',$url);
+		global $post;
+		
+		//the _wp_link_page uses get_permalink() which might be changed by a query. we need to get the original post id temporarily
+		$temp_post = $post;
+		// $post = get_post(avia_get_the_id()); 
+		
+		$url =  preg_replace( '!">$!','',_wp_link_page($link) );
+		$url =  preg_replace( '!^<a href="!','',$url );
+		
+		$post = $temp_post;
+		
 		return $url;
 	}
 }
@@ -1394,4 +1403,21 @@ if(!function_exists('avia_header_class_filter'))
 		return $default;
 	}
 }
+
+
+if(!function_exists('avia_theme_version_higher_than'))
+{
+	function avia_theme_version_higher_than( $check_for_version = "")
+	{	
+		$theme = wp_get_theme( 'enfold' );
+		$theme_version = $theme->get( 'Version' );
+		
+		if (version_compare($theme_version, $check_for_version , '>=')) {
+			return true;
+		}
+		
+		return false;
+	}
+}
+
 

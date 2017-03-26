@@ -150,25 +150,36 @@ class AIOWPSecurity_User_Login
         $this->increment_failed_logins($username);
         if ( $aio_wp_security->configs->get_value('aiowps_enable_login_lockdown') == '1' )
         {
-            // Too many failed logins from user's IP?
-            $login_attempts_permitted = absint($aio_wp_security->configs->get_value('aiowps_max_login_attempts'));
-            $too_many_failed_logins = $login_attempts_permitted <= $this->get_login_fail_count();
-            // Is an invalid username or email the reason for login error?
-            $invalid_username = ($user->get_error_code() === 'invalid_username' || $user->get_error_code() == 'invalid_email');
-            // Should an invalid username be immediately locked?
-            $invalid_username_lockdown = $aio_wp_security->configs->get_value('aiowps_enable_invalid_username_lockdown') == '1';
-            $lock_invalid_username = $invalid_username && $invalid_username_lockdown;
-            // Should an invalid username be blocked as per blacklist?
-            $instant_lockout_users_list = $aio_wp_security->configs->get_value('aiowps_instantly_lockout_specific_usernames');
-            if ( !is_array($instant_lockout_users_list) ) {
-                $instant_lockout_users_list = array();
+            $is_whitelisted = false;
+            //check if lockdown whitelist enabled
+            if ( $aio_wp_security->configs->get_value('aiowps_lockdown_enable_whitelisting') == '1' ){
+                $ip = AIOWPSecurity_Utility_IP::get_user_ip_address(); //Get the IP address of user
+                $whitelisted_ips = $aio_wp_security->configs->get_value('aiowps_lockdown_allowed_ip_addresses');
+                $is_whitelisted = AIOWPSecurity_Utility_IP::is_ip_whitelisted($ip, $whitelisted_ips);
             }
-            $username_blacklisted = $invalid_username && in_array($username, $instant_lockout_users_list);
-            if ( $too_many_failed_logins || $lock_invalid_username || $username_blacklisted )
-            {
-                $this->lock_the_user($username, 'login_fail');
+            
+            if($is_whitelisted === false){
+                // Too many failed logins from user's IP?
+                $login_attempts_permitted = absint($aio_wp_security->configs->get_value('aiowps_max_login_attempts'));
+                $too_many_failed_logins = $login_attempts_permitted <= $this->get_login_fail_count();
+                // Is an invalid username or email the reason for login error?
+                $invalid_username = ($user->get_error_code() === 'invalid_username' || $user->get_error_code() == 'invalid_email');
+                // Should an invalid username be immediately locked?
+                $invalid_username_lockdown = $aio_wp_security->configs->get_value('aiowps_enable_invalid_username_lockdown') == '1';
+                $lock_invalid_username = $invalid_username && $invalid_username_lockdown;
+                // Should an invalid username be blocked as per blacklist?
+                $instant_lockout_users_list = $aio_wp_security->configs->get_value('aiowps_instantly_lockout_specific_usernames');
+                if ( !is_array($instant_lockout_users_list) ) {
+                    $instant_lockout_users_list = array();
+                }
+                $username_blacklisted = $invalid_username && in_array($username, $instant_lockout_users_list);
+                if ( $too_many_failed_logins || $lock_invalid_username || $username_blacklisted )
+                {
+                    $this->lock_the_user($username, 'login_fail');
+                }
             }
         }
+        
         if ( $aio_wp_security->configs->get_value('aiowps_set_generic_login_msg') == '1' )
         {
             // Return generic error message if configured
@@ -188,7 +199,7 @@ class AIOWPSecurity_User_Login
         $ip = AIOWPSecurity_Utility_IP::get_user_ip_address(); //Get the IP address of user
         $ip_range = AIOWPSecurity_Utility_IP::get_sanitized_ip_range($ip); //Get the IP range of the current user
         if(empty($ip_range)) return false;
-        $now = date_i18n( 'Y-m-d H:i:s' );
+        $now = current_time( 'mysql' );
         $locked_user = $wpdb->get_row("SELECT * FROM $login_lockdown_table " .
                                         "WHERE release_date > '".$now."' AND " .
                                         "failed_login_ip LIKE '" . esc_sql($ip_range) . "%'", ARRAY_A);
@@ -236,7 +247,7 @@ class AIOWPSecurity_User_Login
         }
         $ip_range_str = esc_sql($ip_range).'.*';
         
-        $lock_time = date_i18n( 'Y-m-d H:i:s' );
+        $lock_time = current_time( 'mysql' );
         $lock_minutes = $lockout_time_length;
         $newtimestamp = strtotime($lock_time.' + '.$lock_minutes.' minute');
         $release_time = date('Y-m-d H:i:s', $newtimestamp);
@@ -278,7 +289,7 @@ class AIOWPSecurity_User_Login
             $user_id = 0;
         }
         $ip_range_str = esc_sql($ip_range).'.*';
-        $now = date_i18n( 'Y-m-d H:i:s' );
+        $now = current_time( 'mysql' );
         $data = array('user_id' => $user_id, 'user_login' => $username, 'failed_login_date' => $now, 'login_attempt_ip' => $ip_range_str);
         $format = array('%d', '%s', '%s', '%s');
         $result = $wpdb->insert($login_fails_table, $data, $format);
@@ -402,7 +413,7 @@ class AIOWPSecurity_User_Login
             {
                 $current_user = wp_get_current_user();
                 $user_id = $current_user->ID;
-                $current_time = date_i18n( 'Y-m-d H:i:s' );
+                $current_time = current_time( 'mysql' );
                 $login_time = $this->get_wp_user_last_login_time($user_id);
                 $diff = strtotime($current_time) - strtotime($login_time);
                 $logout_time_interval_value = $aio_wp_security->configs->get_value('aiowps_logout_time_period');
@@ -442,7 +453,7 @@ class AIOWPSecurity_User_Login
                 return;
             }
         }
-        $login_date_time = date_i18n( 'Y-m-d H:i:s' );
+        $login_date_time = current_time( 'mysql' );
         update_user_meta($user->ID, 'last_login_time', $login_date_time); //store last login time in meta table
         $curr_ip_address = AIOWPSecurity_Utility_IP::get_user_ip_address();
         $insert = "INSERT INTO " . $login_activity_table . " (user_id, user_login, login_date, login_ip) " .
@@ -472,7 +483,7 @@ class AIOWPSecurity_User_Login
         //Clean up transients table
         $this->update_user_online_transient($user_id, $ip_addr);
         $login_activity_table = AIOWPSEC_TBL_USER_LOGIN_ACTIVITY;
-        $logout_date_time = date_i18n( 'Y-m-d H:i:s' );
+        $logout_date_time = current_time( 'mysql' );
         $data = array('logout_date' => $logout_date_time);
         $where = array('user_id' => $user_id,
                         'login_ip' => $ip_addr,

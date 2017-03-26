@@ -215,7 +215,6 @@ if ( !class_exists( 'avia_sc_hr' ) )
 			    
 			    'class' 	=> 'default', 
 			    'height' 	=> '50', 
-			    'position'	=>'center', 
 			    'shadow'	=>'no-shadow',
 			    'position'	=>'center', 
 			    'custom_border'	=>'thin', 

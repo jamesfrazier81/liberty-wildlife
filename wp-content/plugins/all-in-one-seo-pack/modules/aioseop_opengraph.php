@@ -1308,7 +1308,10 @@ END;
 			}
 			if ( ! defined( 'DOING_AJAX' ) ) {
 				add_action( 'aioseop_modules_wp_head', Array( $this, 'add_meta' ), 5 );
-				add_action( 'amp_post_template_head', Array( $this, 'add_meta' ), 12 ); // Add social meta to AMP plugin.
+
+				if ( true === apply_filters( 'aioseop_enable_amp_social_meta', true ) ) {
+					add_action( 'amp_post_template_head', Array( $this,	'add_meta' ), 12 ); // Add social meta to AMP plugin.
+				}
 			}
 		}
 

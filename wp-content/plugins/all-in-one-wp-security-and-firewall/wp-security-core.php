@@ -7,8 +7,8 @@ if ( !defined('ABSPATH') ) {
 if (!class_exists('AIO_WP_Security')){
 
 class AIO_WP_Security{
-    var $version = '4.2.5';
-    var $db_version = '1.8';
+    var $version = '4.2.6';
+    var $db_version = '1.9';
     var $plugin_url;
     var $plugin_path;
     var $configs;

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Enfold v3.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-08 15:54+0100\n"
-"PO-Revision-Date: 2016-06-08 15:56+0100\n"
+"PO-Revision-Date: 2017-02-23 07:13+0100\n"
 "Last-Translator: Kriesi <support@kriesi.at>\n"
 "Language-Team: \n"
 "Language: da_DK\n"
@@ -11,11 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -2911,9 +2911,9 @@ msgstr ""
 #: config-layerslider/LayerSlider_old/views/slider_list.php:253
 #: config-templatebuilder/avia-shortcodes/postslider.php:319
 #: config-templatebuilder/avia-shortcodes/slideshow_feature_image.php:561
-#: framework/php/function-set-avia-frontend.php:1065
-#: includes/loop-index.php:55 includes/loop-index.php:56
-#: includes/loop-page.php:27 includes/loop-portfolio-single.php:27
+#: framework/php/function-set-avia-frontend.php:1065 includes/loop-index.php:55
+#: includes/loop-index.php:56 includes/loop-page.php:27
+#: includes/loop-portfolio-single.php:27
 msgid "Read more"
 msgstr "Læs mere"
 
@@ -14423,8 +14423,7 @@ msgid "The Envato Marketplace \"item ID\" is a required parameter."
 msgstr ""
 
 # @ avia_framework
-#: framework/php/class-breadcrumb.php:26
-#: framework/php/class-breadcrumb.php:186
+#: framework/php/class-breadcrumb.php:26 framework/php/class-breadcrumb.php:186
 msgid "You are here:"
 msgstr "Du er her:"
 
@@ -18080,7 +18079,7 @@ msgstr ""
 # @ avia_framework
 #: includes/helper-conditional-megamenu.php:111
 msgid "if"
-msgstr ""
+msgstr "hvis"
 
 # @ avia_framework
 #: includes/helper-conditional-megamenu.php:124
@@ -18099,15 +18098,15 @@ msgstr "Vælg en side"
 
 #: includes/helper-social-media.php:149
 msgid "Share on Google+"
-msgstr ""
+msgstr "Del på Google+"
 
 #: includes/helper-social-media.php:155
 msgid "Share by Mail"
-msgstr ""
+msgstr "Del via E-mail"
 
 #: includes/helper-social-media.php:231
 msgid "Share on"
-msgstr ""
+msgstr "Del på"
 
 # @ avia_framework
 #: includes/loop-about-author.php:13
@@ -18117,7 +18116,7 @@ msgstr "Om"
 # @ avia_framework
 #: includes/loop-about-author.php:19
 msgid "This author has yet to write their bio."
-msgstr ""
+msgstr "Denne forfatter har endnu ikke udfyldt nogen detaljer."
 
 # @ default
 #: includes/loop-about-author.php:20
@@ -18130,13 +18129,13 @@ msgstr ""
 # @ default
 #: includes/loop-about-author.php:24
 msgid "Edit the profile description here."
-msgstr ""
+msgstr "Rediger profil beskrivelsen her."
 
 # @ avia_framework
 #: includes/loop-author.php:128 includes/loop-index.php:226
 #: includes/loop-search.php:51
 msgid "Comments Disabled"
-msgstr ""
+msgstr "Kommentarer deaktiveret"
 
 # @ avia_framework
 #: includes/loop-author.php:136 includes/loop-index.php:234
@@ -18146,7 +18145,7 @@ msgstr "i"
 
 #: includes/loop-comments.php:34
 msgid "says:"
-msgstr ""
+msgstr "siger:"
 
 # @ avia_framework
 #: includes/loop-comments.php:35
@@ -18168,7 +18167,7 @@ msgstr "Din kommentar afventer godkendelse."
 #: includes/loop-index.php:257 includes/loop-portfolio-single.php:33
 #: template-builder.php:49
 msgid "Pages:"
-msgstr ""
+msgstr "Sider:"
 
 # @ avia_framework
 #: includes/loop-index.php:271 includes/loop-portfolio-single.php:44
@@ -18201,7 +18200,7 @@ msgstr "Prøv med et søgeord, der er et synonym for dit første søgeord. "
 # @ avia_framework
 #: includes/related-posts.php:97
 msgid "You might also like"
-msgstr ""
+msgstr "Du ville måske også kunne lide"
 
 # @ avia_framework
 #: index.php:12 single.php:11
@@ -18217,26 +18216,27 @@ msgstr "Ny søgning"
 #: search.php:32
 msgid "If you are not happy with the results below please do another search"
 msgstr ""
+"Hvis du ikke er tilfreds med resultaterne nedenfor, kan du lave en ny søgning"
 
 # @ avia_framework
 #: template-archives.php:53
 msgid "The 20 latest Blog Posts"
-msgstr ""
+msgstr "De 20 nyeste blogindlæg"
 
 # @ woothemes
 #: template-archives.php:63
 msgid "No Blog Posts found"
-msgstr ""
+msgstr "Ingen indlæg fundet"
 
 # @ avia_framework
 #: template-archives.php:92
 msgid "The 8 latest Portfolio Entries"
-msgstr ""
+msgstr "De 8 seneste portefølje indlæg"
 
 # @ avia_framework
 #: template-archives.php:162
 msgid "Available Pages"
-msgstr ""
+msgstr "Tilgængelige sider"
 
 # @ avia_framework
 #: template-archives.php:176
@@ -18245,7 +18245,7 @@ msgstr "Arkiv efter emne:"
 
 #: template-archives.php:186
 msgid "Monthly"
-msgstr ""
+msgstr "Månedlig"
 
 # @ avia_framework
 #: template-archives.php:191

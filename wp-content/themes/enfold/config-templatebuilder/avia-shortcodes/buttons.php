@@ -258,7 +258,7 @@ if ( !class_exists( 'avia_sc_button' ) )
 			                                 'font' =>'',
 			                                 'icon_hover' => '',
 			                                 ), $atts, $this->config['shortcode']);
-			
+											 
 				$display_char 	= av_icon($atts['icon'], $atts['font']);
 				$extraClass 	= $atts['icon_hover'] ? "av-icon-on-hover" : "";
 				

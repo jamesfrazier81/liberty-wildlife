@@ -48,12 +48,29 @@ if ( !class_exists( 'avia_sc_events_countdown' ) )
 				
 			}
 			
-			function fetch_upcoming()
+			function fetch_upcoming($offset = 0)
 			{
-				$query 		= array('paged'=> false, 'posts_per_page' => 1, 'eventDisplay' => 'list');
+				$query 		= array('paged'=> false, 'posts_per_page' => 1, 'eventDisplay' => 'list', 'offset'=> $offset);
 				$upcoming 	= Tribe__Events__Query::getEvents( $query, true);
 				
 				return $upcoming;
+			}
+			
+			function already_started($next)
+			{
+				if(empty( $next->posts[0]->EventStartDate) ) return true;
+				
+				$today = date("Y-m-d H:i:s");
+				$start = $next->posts[0]->EventStartDate;
+				
+				if($today > $start)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
 			}
 		
 		
@@ -182,10 +199,22 @@ if ( !class_exists( 'avia_sc_events_countdown' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				$find_post = true;
+				$offset = 0;
 				
-				$next = $this->fetch_upcoming();
+				while($find_post)
+				{
+					$next = $this->fetch_upcoming($offset);
+					$offset ++;
+					
+					if(empty( $next->posts[0] ) || $this->already_started($next) )
+					{
+						$find_post = false;
+					}
+				}
 				
-				if(empty( $next->posts[0] ) || empty( $next->posts[0]->EventStartDate)) return;
+				
+				if(empty( $next->posts[0] ) || empty( $next->posts[0]->EventStartDate) ) return;
 				
 				$events_date = explode(" ", $next->posts[0]->EventStartDate );
 				

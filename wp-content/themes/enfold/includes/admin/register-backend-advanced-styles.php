@@ -315,6 +315,27 @@ $advanced['top_bar'] = array(
 
 
 
+$scale 	= array(__('Default','avia_framework') => '' , __('Small','avia_framework') =>'0.6');
+
+$advanced['main_menu_icon_style'] = array(
+	"id"			=> "main_menu_icon_style", //needs to match array key
+	"name"			=> __("Main Menu Icon",'avia_framework'),
+	"group" 		=> __("Main Menu (Icon)",'avia_framework'),
+	"description"	=> __("Change the styling for your main menu links once they are displayed in the page overlay",'avia_framework'),
+	"selector"		=> array( 
+		"#header .av-hamburger" => array("size"=>"-ms-transform: scale(%size%); transform: scale(%size%); transform-origin: right;"),
+		".header_color .av-hamburger-inner, .header_color .av-hamburger-inner::before, .header_color .av-hamburger-inner::after" => array("color"=>"background-color: %color%")
+	
+	),
+	"sections"		=> false,
+	"hover"			=> false,
+	"edit"			=> array(	
+		'color' 	=> array('type' => 'colorpicker', 'name'=> __("Icon Color",'avia_framework')), 
+		'size' 		=> array('type' => 'select', 'name'=> __("Icon Size",'avia_framework'), 'options' => $scale),
+							)
+);
+
+
 
 $advanced['main_menu_icon'] = array(
 	"id"			=> "main_menu_icon", //needs to match array key

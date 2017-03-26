@@ -2735,24 +2735,12 @@ opacity: 0.3; filter:alpha(opacity=30);
 }
 
 
-#top .container .av-masonry-col-flexible .av-masonry-entry{
-width: 49.80%;
-}
-
-#top .container .av-masonry-col-flexible .av-masonry-entry.av-landscape-img{
-width: 100%;
-}
-
-
-
-
-
-
-
 
 @media only screen and (min-width: 1800px){
- .responsive.html_stretched .av-masonry-col-flexible .av-masonry-entry{width:16.6%;}
- .responsive.html_stretched .av-masonry-col-flexible .av-masonry-entry.av-landscape-img{width:33.2%;}
+ .responsive.html_stretched .av-masonry-col-flexible .av-masonry-entry,
+ .responsive.html_av-framed-box .av-masonry-col-flexible .av-masonry-entry{width:16.6%;}
+ .responsive.html_stretched .av-masonry-col-flexible .av-masonry-entry.av-landscape-img,
+ .responsive.html_av-framed-box .av-masonry-col-flexible .av-masonry-entry.av-landscape-img{width:33.2%;}
 }
 
 @media only screen and (min-width: 989px) and (max-width: 1340px) {
@@ -3556,6 +3544,160 @@ transition:			all 1.7s cubic-bezier(0.230, 1.000, 0.320, 1.000);
 {
 	.responsive .avia-gallery-thumb img{padding:3px;}
 }
+
+
+
+
+
+
+/* ======================================================================================================================================================
+Horizontal Gallery
+====================================================================================================================================================== */
+
+.av-horizontal-gallery{
+	clear:both;
+	position: relative;
+	z-index: 1;
+	overflow: hidden;
+}
+
+
+.av-horizontal-gallery-inner{
+	position: relative;
+	white-space:nowrap;
+}
+
+.av-horizontal-gallery-slider{
+	left:0;
+	position: absolute;
+	height:100%;
+	width:100%;
+	-webkit-transition: left 0.4s ease-in-out;
+	transition: 		left 0.4s ease-in-out;
+}
+
+.av-horizontal-gallery-wrap{
+	height:100%;
+	top:0;
+	display: inline-block;
+	position: relative;
+	z-index: 1;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: 		all 0.4s ease-in-out;
+	-webkit-user-select: none;       
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor: pointer;
+	vertical-align: top;
+ }
+
+.av-horizontal-gallery-wrap:after{
+	height:100%;
+	width:100%;
+	position: absolute;
+	content:"";
+	top: 0;
+	left:0;
+	z-index: 5;
+}
+
+.av-horizontal-gallery-enlarge-effect.av-horizontal-gallery{
+	padding:60px 0;
+}
+
+
+.av-horizontal-gallery-enlarge-effect .av-horizontal-gallery-wrap.av-active-gal-item{
+	z-index: 2;
+	-webkit-transform: 	scale(1.3);
+	-ms-transform: 		scale(1.3);
+	transform: 			scale(1.3);
+}
+
+.av-horizontal-gallery-wrap:first-child{
+	transform-origin: 0% 50%;
+}
+
+.av-horizontal-gallery-wrap:last-child{
+	transform-origin: 100% 50%;
+}
+
+
+.av-horizontal-gallery-wrap.av-active-gal-item:after{
+	display: none;
+}
+
+.av-horizontal-gallery-link{ 
+	position: absolute;
+	opacity: 0;
+	bottom:10px;
+	right:10px;
+	-webkit-transition: opacity 0.4s ease-in-out;
+	transition: 		opacity 0.4s ease-in-out;
+	z-index: 100;
+}
+
+.av-horizontal-gallery-wrap:hover .av-horizontal-gallery-link{ 
+	opacity: 1;
+}
+
+.av-horizontal-gallery-img{
+	height: 100%;
+    width: auto;
+    display: block
+}
+
+.av-horizontal-gallery-large-gap .av-horizontal-gallery-wrap{
+	margin-right: 15px;
+}
+
+.av-horizontal-gallery-1px-gap .av-horizontal-gallery-wrap{
+	margin-right: 1px;
+}
+
+#top .av-horizontal-gallery-link {
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    display: block;
+    line-height: 24px;
+    width: 24px;
+    text-align: center;
+    border-radius: 3px;
+    text-decoration: none;
+    -webkit-transition: all 0.2s ease-in-out;
+	transition: 		all 0.2s ease-in-out;
+}
+
+#top .av-horizontal-gallery-link:hover{
+    -webkit-transform: 	scale(1.3);
+	-ms-transform: 		scale(1.3);
+	transform: 			scale(1.3);
+}
+
+.av-horizontal-gallery .avia-slideshow-controls a{opacity: 0;}
+.av-horizontal-gallery:hover .avia-slideshow-controls a{opacity: 1;}
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+	@media only screen and (max-width: 767px) {
+		.responsive #top .avia-slideshow-controls a{display:none;}
+		.responsive .av-horizontal-gallery-inner{position: static; min-height:180px;}
+		.responsive .av-horizontal-gallery-enlarge-effect .av-horizontal-gallery-wrap.av-active-gal-item{
+		-webkit-transform: 	scale(1);
+		-ms-transform: 		scale(1);
+		transform: 			scale(1);
+		}	
+		
+		.responsive .av-horizontal-gallery-wrap{ max-width: 85vw; margin:0; overflow: hidden;}
+		.responsive .av-horizontal-gallery-img{ height: auto; width: 100%; 
+			-webkit-transform: 	translate(0, -50%); 
+			-ms-transform: 		translate(0, -50%);
+			transform: 			translate(0, -50%);
+			top:50%;
+			position: relative;
+		}
+		
+		.responsive .av-horizontal-gallery-fullwidth .av-horizontal-gallery-wrap{ max-width: 100vw;}
+	}
 
 
 /* ======================================================================================================================================================
@@ -4514,7 +4656,9 @@ SUBMENU
 ====================================================================================================================================================== */
 
 #top .sticky_placeholder	{ height:51px; position: relative; clear:both; }
-#top .av-submenu-container	{ height:52px; position: absolute; width:100%; border-bottom-style: solid; border-bottom-width: 1px; -webkit-perspective: 1000px; -webkit-backface-visibility: hidden; font-size: 13px; line-height: 1.65em;}
+#top .av-submenu-container	{ min-height:52px; position: relative; width:100%; border-bottom-style: solid; border-bottom-width: 1px; -webkit-perspective: 1000px; -webkit-backface-visibility: hidden; font-size: 13px; line-height: 1.65em;}
+#top .av-submenu-container.av-sticky-submenu{position: absolute;}
+
 #top .av-submenu-container .container{padding:0 !important;}
 #top .av-subnav-menu	  { margin:0; }
 #top .av-subnav-menu   li {position: relative; display: block; margin:0;}
@@ -4561,10 +4705,12 @@ position: relative;
 }
 
 
+
+
 @media only screen and (max-width: 767px)
 {
-	.responsive #top .sticky_placeholder{height:0px;}
-	.responsive #top .av-submenu-container{top: auto !important; position: relative !important; height:auto; }
+	.responsive #top .sticky_placeholder{max-height:0px; }
+	.responsive #top .av-submenu-container{top: auto !important; position: relative !important; height:auto; min-height:0; margin-bottom: -1px;}
 	
 	.responsive #top .av-menu-mobile-active {text-align: center; }
 	.responsive #top .av-menu-mobile-active .mobile_menu_toggle{display: inline-block;}

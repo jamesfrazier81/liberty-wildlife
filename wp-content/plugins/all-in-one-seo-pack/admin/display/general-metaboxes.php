@@ -74,13 +74,18 @@ class aiosp_metaboxes {
 								<?php
 
 								if ( $aiosp_trans->percent_translated < 100 ) {
+									if ( ! empty ( $aiosp_trans->native_name ) ) {
+										$maybe_native_name = $aiosp_trans->native_name;
+									} else {
+										$maybe_native_name = $aiosp_trans->name;
+									}
 
 									/* translators: %1$s expands to the number of languages All in One SEO Pack has been translated into. $2%s to the percentage translated of the current language, $3%s to the language name, %4$s and %5$s to anchor tags with link to translation page at translate.wordpress.org  */
 									printf( __(
 										'All in One SEO Pack has been translated into %1$s languages, but currently the %3$s translation is only %2$s percent complete. %4$s Click here %5$s to help get it to 100 percent.', 'all-in-one-seo-pack' ),
 										$aiosp_trans->translated_count,
 										$aiosp_trans->percent_translated,
-										$aiosp_trans->name,
+										$maybe_native_name,
 										"<a href=\"$aiosp_trans->translation_url\" target=\"_BLANK\">",
 										'</a>' );
 								}

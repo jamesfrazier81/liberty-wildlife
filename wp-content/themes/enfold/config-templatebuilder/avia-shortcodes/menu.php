@@ -161,7 +161,7 @@ if ( !class_exists( 'avia_sc_submenu' ) )
 				    
 				    array(	
 						"name" 	=> __("Sticky Submenu", 'avia_framework' ),
-						"desc" 	=> __("If checked the menu will stick at the top of the page once it touches it", 'avia_framework' ) ,
+						"desc" 	=> __("If checked the menu will stick at the top of the page once it touches it.", 'avia_framework' ),
 						"id" 	=> "sticky",
 						"std" 	=> "true",
 						"type" 	=> "checkbox"),

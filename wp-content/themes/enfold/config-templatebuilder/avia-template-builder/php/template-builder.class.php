@@ -210,7 +210,7 @@ if ( !class_exists( 'AviaBuilder' ) ) {
 			echo $output;
 			
 			//output preview css paths
-			echo $this->load_preview_css( $output );
+			if(is_admin()) echo $this->load_preview_css( $output );
 		}
 		
 	

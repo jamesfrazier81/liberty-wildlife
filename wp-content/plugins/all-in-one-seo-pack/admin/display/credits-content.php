@@ -5,12 +5,12 @@
 <h3 class="wp-people-group"><?php _e( 'Project Leaders', 'all-in-one-seo-pack' ); ?></h3>
 <ul class="wp-people-group " id="wp-people-group-project-leaders">
 	<li class="wp-person" id="wp-person-michaeltorbert">
-		<a class="web" href="https://profiles.wordpress.org/hallsofmontezuma" target="_blank"><img alt="" class="gravatar" src="https://s.gravatar.com/avatar/f41419cf5cfdbb071a8d591ac9976bf3?s=60">
+		<a class="web" href="https://twitter.com/michaeltorbert" target="_blank"><img alt="" class="gravatar" src="https://s.gravatar.com/avatar/f41419cf5cfdbb071a8d591ac9976bf3?s=60">
 			Michael Torbert</a>
 		<span class="title"><?php _e( 'Project Lead', 'all-in-one-seo-pack' ); ?></span>
 	</li>
 	<li class="wp-person" id="wp-person-stevemortiboy">
-		<a class="web" target="_blank" href="https://profiles.wordpress.org/wpsmort"><img alt="" class="gravatar" src="https://www.gravatar.com/avatar/40e33d813c16a63500675d851b0cbf3a?s=60">
+		<a class="web" target="_blank" href="https://twitter.com/wpsmort"><img alt="" class="gravatar" src="https://www.gravatar.com/avatar/40e33d813c16a63500675d851b0cbf3a?s=60">
 			Steve Mortiboy</a>
 		<span class="title"><?php _e( 'Project Manager', 'all-in-one-seo-pack' ); ?></span>
 	</li>

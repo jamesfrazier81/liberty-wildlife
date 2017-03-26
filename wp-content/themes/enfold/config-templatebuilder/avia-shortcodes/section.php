@@ -820,6 +820,7 @@ if(!function_exists('avia_new_section'))
 	    {
 	    	$cm		 = avia_section_close_markup();
 	    	$output .= "</div></div>{$cm}</div>".avia_sc_section::$add_to_closing.avia_sc_section::$close_overlay."</div>";
+	    	avia_sc_section::$close_overlay = "";
 	    	
 		}
 	    //start new

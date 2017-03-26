@@ -97,7 +97,7 @@ if ( !class_exists( 'avia_sc_featureimage_slider' ))
 
 				array(
 		                    "name"  => __("Slider Width/Height Ratio", 'avia_framework' ),
-		                    "desc"  => __("The slider will always stretch the full available width. Here you can enter the coresponding height (eg: 4:3, 16:9) or a fixed height in px (eg: 300px)", 'avia_framework' ),
+		                    "desc"  => __("The slider will always stretch the full available width. Here you can enter the corresponding height (eg: 4:3, 16:9) or a fixed height in px (eg: 300px)", 'avia_framework' ),
 		                    "id"    => "slider_size",
 		                    "type" 	=> "input",
 							"std" 	=> "16:9",
