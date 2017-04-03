@@ -122,12 +122,14 @@
 		}
 	}
 
-	td.slide-link {
+	td.ls-slide-link {
 
 		.inner {
 			width: 340px;
 
 			.row-helper {
+				position: relative;
+
 
 				input {
 					width: 100%;
@@ -135,8 +137,14 @@
 
 				select {
 					font-size: 12px;
-					width: 200px;
+					width: 49%;
 					vertical-align: text-bottom !important;
+					float: left;
+				}
+
+				select:last-child {
+					width: 140px;
+					float: right;
 				}
 
 				input, select {
@@ -144,8 +152,11 @@
 				}
 
 				span {
-					float: left;
-					margin-top: 3px; /* vertical-align hack */
+					position: absolute;
+					top: 0;
+					right: 10px;
+					font-size: 12px;
+					margin-top: 4px; /* vertical-align hack */
 				}
 			}
 		}
@@ -1078,6 +1089,7 @@ select.sublayerprop.connect-hover {
 			left: 0;
 			right: 0;
 			z-index: 2;
+			background-position: center center;
 		}
 	}
 }

@@ -199,7 +199,7 @@
 		<table id="ls-transition-selector-table">
 			<tr>
 				<td class="ls-padding"></td>
-				<td>
+				<td class="ls-opening-transition">
 					<div>
 						<div class="ls-tpreview-wrapper" id="ls-tpreview-in">
 							<div class="ls-preview-layer"></div>
@@ -208,7 +208,7 @@
 					</div>
 				</td>
 				<td class="ls-padding ls-only-with-text-layers"></td>
-				<td class="ls-only-with-text-layers">
+				<td class="ls-opening-transition ls-only-with-text-layers">
 					<div>
 						<div class="ls-tpreview-wrapper" id="ls-tpreview-textin">
 							<span class="ls-preview-layer_t ls-preview-layer_t4">t</span>
@@ -272,7 +272,12 @@
 			</tr>
 		</table>
 
-
+		<div id="ls-transition-warning">
+			<div class="ls-notification-info">
+				<i class="dashicons dashicons-info"></i>
+				<?php _e('Layers require an opening transition in order to become visible during the slideshow. Enable either <mark>Opening Transition</mark> or <mark>Opening Text Transition</mark> to make this layer visible again.', 'LayerSlider') ?>
+			</div>
+		</div>
 
 		<div id="ls-layer-transitions">
 
@@ -1526,10 +1531,12 @@
 	</div>
 	<div class="ls-sublayer-page ls-sublayer-link">
 		<h3 class="subheader"><?php _e('Linking', 'LayerSlider') ?></h3>
-		<div class="ls-slide-link">
-			<?php lsGetInput($lsDefaults['layers']['linkURL'], null, array('placeholder' => $lsDefaults['layers']['linkURL']['name'] )) ?>
-			<br> <?php lsGetSelect($lsDefaults['layers']['linkTarget'], null) ?>
-			<span> <?php _e('or', 'LayerSlider') ?> <a href="#"><?php _e('use post URL', 'LayerSlider') ?></a></span>
+		<div class="ls-slide-link clearfix">
+			<div>
+				<?php lsGetInput($lsDefaults['layers']['linkURL'], null, array('placeholder' => $lsDefaults['layers']['linkURL']['name'] )) ?>
+				<span><a href="#"><?php _e('use post URL', 'LayerSlider') ?></a></span>
+			</div>
+			<?php lsGetSelect($lsDefaults['layers']['linkTarget'], null) ?>
 		</div>
 
 		<h3 class="subheader"><?php _e('Common Attributes', 'LayerSlider') ?></h3>
@@ -1849,9 +1856,23 @@
 								</tr>
 								<tr>
 									<td>
-										<a href="https://developer.mozilla.org/en/docs/Web/CSS/filter#Functions" target="_blank">
-											<?php echo $lsDefaults['layers']['filter']['name'] ?>
-										</a>
+										<div class="ls-premium">
+											<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+											<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/blend-mode" target="_blank">
+												<?php echo $lsDefaults['layers']['blendMode']['name'] ?>
+											</a>
+										</div>
+									</td>
+									<td><?php lsGetSelect($lsDefaults['layers']['blendMode'], null, array('class' => 'auto')) ?></td>
+								</tr>
+								<tr>
+									<td>
+										<div class="ls-premium">
+											<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+											<a href="https://developer.mozilla.org/en/docs/Web/CSS/filter#Functions" target="_blank">
+												<?php echo $lsDefaults['layers']['filter']['name'] ?>
+											</a>
+										</div>
 									</td>
 									<td><?php lsGetInput($lsDefaults['layers']['filter'], null, array('class' => 'auto')) ?></td>
 								</tr>

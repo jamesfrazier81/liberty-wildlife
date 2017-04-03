@@ -519,7 +519,7 @@ display:block;
 position: relative;
 }
 
-.products .product h3, .products .product h4, .products .product h5, .products .product h6 {
+.products .product h3, .products .product h4, .products .product h5, .products .product h6, h2.woocommerce-loop-product__title {
 padding-top:5px;
 font-size: 1em;
 line-height: 1.3em;
@@ -2500,6 +2500,10 @@ margin:0;
 
 .woocommerce-MyAccount-navigation-link a:hover{
 	text-decoration: none;
+}
+
+.av-parallax-inner.av-parallax-woo {
+    background-size: cover;
 }
 
 

@@ -85,7 +85,7 @@ class LS_Sliders {
 				'data' => true
 			);
 
-			// User data
+			// Merge user data with defaults
 			foreach($defaults as $key => $val) {
 				if(!isset($args[$key])) { $args[$key] = $val; }
 			}
@@ -96,6 +96,26 @@ class LS_Sliders {
 					$args[$key] = esc_sql($val);
 				}
 			}
+
+			// Due to the nature of dynamically built queries we can't
+			// use prepared statements or $wpdb::prepare(). By keeping
+			// this function backwards compatible, we have even less
+			// options to completely eliminate potential issues caused
+			// by unhandled data.
+
+			// In addition of using esc_sql(), we're performing some
+			// further tests trying to filter out user data that might
+			// not be handled properly prior to this function call.
+			$columns = array('id', 'author', 'name', 'slug', 'data', 'date_c', 'date_m', 'flag_hidden', 'flag_deleted', 'schedule_start', 'schedule_end');
+
+			$args['orderby'] 	= in_array($args['orderby'], $columns) ? $args['orderby'] : 'date_c';
+			$args['order'] 		= ($args['order'] === 'DESC') ? 'DESC' : 'ASC';
+			$args['limit'] 		= (int)  $args['limit'];
+			$args['page'] 		= (int)  $args['page'];
+			$args['data'] 		= (bool) $args['data'];
+
+
+
 
 			// Exclude
 			if(!empty($args['exclude'])) {
@@ -126,8 +146,13 @@ class LS_Sliders {
 			// Build the query
 			global $wpdb;
 			$table = $wpdb->prefix.LS_DB_TABLE;
-			$sliders = $wpdb->get_results("SELECT SQL_CALC_FOUND_ROWS {$args['columns']} FROM $table $where
-									ORDER BY {$args['orderby']} {$args['order']} LIMIT {$args['limit']}", ARRAY_A);
+			$sliders = $wpdb->get_results("
+				SELECT SQL_CALC_FOUND_ROWS {$args['columns']}
+				FROM $table
+				$where
+				ORDER BY `{$args['orderby']}` {$args['order']}
+				LIMIT {$args['limit']}
+			", ARRAY_A);
 
 			// Set counter
 			$found = $wpdb->get_col("SELECT FOUND_ROWS()");

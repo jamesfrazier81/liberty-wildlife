@@ -2972,6 +2972,7 @@ $.fn.avia_hor_gallery= function(options)
 			
 			all_elements_width 	= 0,
 			currentIndex		= false,
+			initial				= container.data('av-initial'),
 			
 			set_up = function( init )
 			{
@@ -3003,8 +3004,13 @@ $.fn.avia_hor_gallery= function(options)
 				//scroll the tabs if there is not enough room to display them all
 				var current 	= slide_element.find(options.slide_content).eq(index),
 					viewport	= slide_container.width(),
-					outerWidth	= current.outerWidth( true ),
+					modifier	= container.data('av-enlarge') > 1  && currentIndex == index ? container.data('av-enlarge') : 1,
+					outerWidth	= current.outerWidth( true ) * modifier,
+					margin_right= parseInt( current.css('margin-right') , 10 ) / 2,
 					left_pos	= viewport < all_elements_width ? (current.position().left * - 1) - (outerWidth / 2) + (viewport / 2): 0;
+				
+				//center properly
+				left_pos = left_pos + margin_right;
 				
 				//out of bounce right side
 				if(left_pos + all_elements_width < viewport) left_pos = (all_elements_width - viewport - parseInt(current.css('margin-right'),10) ) * -1;
@@ -3022,9 +3028,24 @@ $.fn.avia_hor_gallery= function(options)
 			};
 
 			
-		// activate behavior
-		set_up( 'init' );
-		win.on('debouncedresize', set_up);
+		 $.avia_utilities.preload({container: container , global_callback:  function()
+		 {
+			 // activate behavior
+			set_up( 'init' );
+			win.on('debouncedresize', set_up);
+			if(initial) change_active(initial - 1);
+			
+			setTimeout(function(){
+				container.addClass('av-horizontal-gallery-animated');
+			},10); 
+		
+		  }});
+			
+		
+		
+		
+		
+		
 		
 		//swipe on mobile
 		slide_element.avia_swipe_trigger({prev:options.prev, next:options.next});

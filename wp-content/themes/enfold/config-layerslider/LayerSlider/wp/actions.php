@@ -352,6 +352,10 @@ function ls_save_advanced_settings() {
 
 
 function ls_save_screen_options() {
+
+	// Security check
+	check_admin_referer('ls-save-screen-options');
+
 	$_POST['options'] = !empty($_POST['options']) ? $_POST['options'] : array();
 	update_option('ls-screen-options', $_POST['options']);
 	die();
@@ -627,15 +631,22 @@ function ls_import_online() {
 	include LS_ROOT_PATH.'/classes/class.ls.importutil.php';
 	$import = new LS_ImportUtil( $downloadPath);
 	$id = $import->lastImportId;
+	$sliderCount = (int)$import->sliderCount;
 
 	// Remove package
 	unlink( $downloadPath );
+
+	$url = admin_url('admin.php?page=layerslider&action=edit&id='.$id);
+
+	if( $sliderCount > 1 ) {
+		$url = admin_url('admin.php?page=layerslider&message=importSuccess&sliderCount='.$sliderCount);
+	}
 
 	// Success
 	die(json_encode(array(
 		'success' => !! $id,
 		'slider_id' => $id,
-		'url' => admin_url('admin.php?page=layerslider&action=edit&id='.$id)
+		'url' => $url
 	)));
 }
 
@@ -674,7 +685,16 @@ function ls_import_sliders() {
 	include LS_ROOT_PATH.'/classes/class.ls.importutil.php';
 	$import = new LS_ImportUtil($_FILES['import_file']['tmp_name'], $_FILES['import_file']['name']);
 
-	header('Location: '.menu_page_url('layerslider', 0));
+
+	// One slider, redirect to editor
+	if( ! empty($import->lastImportId) && (int)$import->sliderCount === 1 ) {
+		wp_redirect( admin_url('admin.php?page=layerslider&action=edit&id='.$import->lastImportId) );
+
+	// Multiple sliders, redirect to slider list
+	} else {
+		wp_redirect( admin_url('admin.php?page=layerslider&message=importSuccess&sliderCount='.$import->sliderCount) );
+	}
+
 	die();
 }
 
@@ -977,6 +997,7 @@ function ls_do_erase_plugin_data() {
 		'ls-last-update-notification',
 		'ls-show-support-notice',
 		'ls-show-canceled_activation_notice',
+		'layerslider_cancellation_update_info',
 		'layerslider-release-channel',
 		'layerslider-authorized-site',
 		'layerslider-purchase-code',
@@ -1108,3 +1129,60 @@ function ls_do_erase_plugin_data() {
 // 		}
 // 	}
 // }
+
+
+function layerslider_convert_urls($arr) {
+
+	// Global BG
+	if(!empty($arr['properties']['backgroundimage']) && strpos($arr['properties']['backgroundimage'], 'http://') !== false) {
+		$arr['properties']['backgroundimage'] = parse_url($arr['properties']['backgroundimage'], PHP_URL_PATH);
+	}
+
+	// YourLogo img
+	if(!empty($arr['properties']['yourlogo']) && strpos($arr['properties']['yourlogo'], 'http://') !== false) {
+		$arr['properties']['yourlogo'] = parse_url($arr['properties']['yourlogo'], PHP_URL_PATH);
+	}
+
+	if(!empty($arr['layers'])) {
+		foreach($arr['layers'] as $key => $slide) {
+
+			// Layer BG
+			if(strpos($slide['properties']['background'], 'http://') !== false) {
+				$arr['layers'][$key]['properties']['background'] = parse_url($slide['properties']['background'], PHP_URL_PATH);
+			}
+
+			// Layer Thumb
+			if(strpos($slide['properties']['thumbnail'], 'http://') !== false) {
+				$arr['layers'][$key]['properties']['thumbnail'] = parse_url($slide['properties']['thumbnail'], PHP_URL_PATH);
+			}
+
+			// Image sublayers
+			if(!empty($slide['sublayers'])) {
+				foreach($slide['sublayers'] as $subkey => $layer) {
+					if($layer['media'] == 'img' && strpos($layer['image'], 'http://') !== false) {
+						$arr['layers'][$key]['sublayers'][$subkey]['image'] = parse_url($layer['image'], PHP_URL_PATH);
+					}
+				}
+			}
+		}
+	}
+
+	return $arr;
+}
+
+
+function layerslider_register_wpml_strings($sliderID, $data) {
+
+	if(!empty($data['layers']) && is_array($data['layers'])) {
+		foreach($data['layers'] as $slideIndex => $slide) {
+
+			if(!empty($slide['sublayers']) && is_array($slide['sublayers'])) {
+				foreach($slide['sublayers'] as $layerIndex => $layer) {
+					if($layer['type'] != 'img') {
+						icl_register_string('LayerSlider WP', '<'.$layer['type'].':'.substr(sha1($layer['html']), 0, 10).'> layer on slide #'.($slideIndex+1).' in slider #'.$sliderID.'', $layer['html']);
+					}
+				}
+			}
+		}
+	}
+}

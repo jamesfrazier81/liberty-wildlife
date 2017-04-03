@@ -327,7 +327,13 @@ if(!empty($slider['slides']) && is_array($slider['slides'])) {
 				}
 			}
 
-			$lsMarkup[] = '<a href="'.$slide['props']['linkUrl'].'"'.$target.' class="ls-link"></a>';
+
+			$linkClass = 'ls-link';
+			if( empty( $slide['props']['linkType'] ) || $slide['props']['linkType'] === 'over' ) {
+				$linkClass .= ' ls-link-on-top';
+			}
+
+			$lsMarkup[] = '<a href="'.$slide['props']['linkUrl'].'"'.$target.' class="'.$linkClass.'"></a>';
 		}
 
 		// End of slide

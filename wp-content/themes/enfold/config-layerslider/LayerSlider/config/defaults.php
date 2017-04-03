@@ -230,6 +230,27 @@ $lsDefaults = array(
 		),
 
 
+		// == COMPATIBILITY ==
+
+		'responsiveness' => array(
+			'value' => true,
+			'keys' => 'responsive',
+			'props' => array(
+				'meta' => true,
+				'output' => true
+			)
+		),
+		'fullWidth' => array(
+			'value' => false,
+			'keys' => 'forceresponsive',
+			'props' => array(
+				'meta' => true,
+				'output' => true
+			)
+		),
+
+		// == END OF COMPATIBILITY ==
+
 		'slideBGSize' => array(
 			'value' => 'cover',
 			'name' => __('Background size', 'LayerSlider'),
@@ -419,7 +440,7 @@ $lsDefaults = array(
 
 		'playByScroll' => array(
 			'value' => false,
-			'name' => __('Enable', 'LayerSlider'),
+			'name' => __('Play By Scroll', 'LayerSlider'),
 			'keys' => 'playByScroll',
 			'desc' => __('Play the slider by scrolling the web page. <a href="https://layerslider.kreaturamedia.com/sliders/play-by-scroll/" target="_blank">Click here</a> to see a live example.', 'LayerSlider'),
 			'premium' => true
@@ -428,7 +449,7 @@ $lsDefaults = array(
 
 		'playByScrollSpeed' => array(
 			'value' => 1,
-			'name' => __('Speed', 'LayerSlider'),
+			'name' => __('Play By Scroll Speed', 'LayerSlider'),
 			'keys' => 'playByScrollSpeed',
 			'desc' => __('Play By Scroll speed multiplier.', 'LayerSlider'),
 			'premium' => true
@@ -540,6 +561,14 @@ $lsDefaults = array(
 			'desc' => __('Global background image of the slider. Slides with non-transparent backgrounds will cover it. This image will not scale in responsive mode.', 'LayerSlider')
 		),
 
+		'globalBGImageId' => array(
+			'value' => '',
+			'keys' => array('backgroundimageId', 'globalBGImageId'),
+			'props' => array(
+				'meta' => true
+			)
+		),
+
 		// Global background image repeat
 		'globalBGRepeat' => array(
 			'value' => 'no-repeat',
@@ -576,7 +605,7 @@ $lsDefaults = array(
 
 		// Global background image size
 		'globalBGSize' => array(
-			'value' => 'auto',
+			'value' => 'cover',
 			'name' => __('Background size', 'LayerSlider'),
 			'keys' => 'globalBGSize',
 			'desc' => __('Global background size of the slider. You can set the size in pixels, percentages, or constants: auto | cover | contain ', 'LayerSlider'),
@@ -1113,6 +1142,7 @@ $lsDefaults = array(
 
 		'transitionOrigami' => array(
 			'value' => false,
+			'name' => __('Origami', 'LayerSlider'),
 			'keys' => 'transitionorigami',
 			'premium' => true
 		),
@@ -1190,7 +1220,20 @@ $lsDefaults = array(
 			'props' => array(
 				'meta' => true
 			)
+		),
 
+
+		'linkType' => array(
+			'value' => 'over',
+			'keys' => array('layer_link_type', 'linkType'),
+			'tooltip' => __('Choose whether the slide link should be on top or underneath your layers. The later option makes the link clickable only at empty spaces where the slide background is visible, and enables you to link both slides and layers independently from each other.', 'LayerSlider'),
+			'options' => array(
+				'over' => __('On top of layers', 'LayerSlider'),
+				'under' => __('Underneath layers', 'LayerSlider'),
+			),
+			'props' => array(
+				'meta' => true
+			)
 		),
 
 		'ID' => array(
@@ -2958,7 +3001,7 @@ $lsDefaults = array(
 			'name' => __('Opacity', 'LayerSlider'),
 			'keys' => 'loopopacity',
 			'tooltip' => __('Fades the layer. You can use values between 1 and 0 to set the layer fully opaque or transparent respectively. For example, the value 0.5 will make the layer semi-transparent.', 'LayerSlider'),
-			'attrs' => array( 'min' => 0, 'max' => 1, 'step' => 0.01 )
+			'attrs' => array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
 		),
 
 		'loopRotate' => array(
@@ -3221,7 +3264,7 @@ $lsDefaults = array(
 			'name' => __('Opacity', 'LayerSlider'),
 			'keys' => 'hoveropacity',
 			'tooltip' => __('Fades the layer. You can use values between 1 and 0 to set the layer fully opaque or transparent respectively. For example, the value 0.5 will make the layer semi-transparent.', 'LayerSlider'),
-			'attrs' => array( 'min' => 0, 'max' => 1, 'step' => 0.01 )
+			'attrs' => array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
 		),
 
 		'hoverRotate' => array(
@@ -3904,14 +3947,20 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys' => 'scaleX',
-			'tooltip' => __('The layer horizontal scale where this layer animates toward when entering into the slider canvas.', 'LayerSlider')
+			'tooltip' => __('The layer horizontal scale where this layer animates toward when entering into the slider canvas.', 'LayerSlider'),
+			'attrs' => array(
+				'step' => '0.1'
+			)
 		),
 
 		'scaleY' => array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys' => 'scaleY',
-			'tooltip' => __('The layer vertical scale where this layer animates toward when entering into the slider canvas.', 'LayerSlider')
+			'tooltip' => __('The layer vertical scale where this layer animates toward when entering into the slider canvas.', 'LayerSlider'),
+			'attrs' => array(
+				'step' => '0.1'
+			)
 		),
 
 		'skewX' => array(
@@ -3948,6 +3997,32 @@ $lsDefaults = array(
 				'type' => 'number',
 				'min' => 1,
 				'placeholder' => 'auto'
+			)
+		),
+
+		'blendMode' => array(
+			'value' => 'normal',
+			'name' => __('Blend mode', 'LayerSlider'),
+			'keys' => 'mix-blend-mode',
+			'tooltip' => __('Choose how layers and the slide background should blend into each other. Blend modes are an easy way to add eye-catching effects and is one of the most frequently used features in graphic and print design.', 'LayerSlider'),
+			'premium' => true,
+			'options' => array(
+				'normal' => 'Normal',
+				'multiply' => 'Multiply',
+				'screen' => 'Screen',
+				'overlay' => 'Overlay',
+				'darken' => 'Darken',
+				'lighten' => 'Lighten',
+				'color-dodge' => 'Color-dodge',
+				'color-burn' => 'Color-burn',
+				'hard-light' => 'Hard-light',
+				'soft-light' => 'Soft-light',
+				'difference' => 'Difference',
+				'exclusion' => 'Exclusion',
+				'hue' => 'Hue',
+				'saturation' => 'Saturation',
+				'color' => 'Color',
+				'luminosity' => 'Luminosity'
 			)
 		),
 

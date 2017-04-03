@@ -296,6 +296,8 @@ class LS_Shortcode {
 				include LS_ROOT_PATH.'/helpers/phpQuery.php';
 			}
 
+			$GLOBALS['lsPremiumNotice'] = array();
+
 			include LS_ROOT_PATH.'/config/defaults.php';
 			include LS_ROOT_PATH.'/includes/slider_markup_setup.php';
 			include LS_ROOT_PATH.'/includes/slider_markup_html.php';
@@ -305,7 +307,7 @@ class LS_Shortcode {
 			if( ! empty( $GLOBALS['lsPremiumNotice'] ) ) {
 				array_unshift($lsContainer, self::generateErrorMarkup(
 					__('Premium features is available for preview purposes only.', 'LayerSlider'),
-					__("We've detected that you're using premium features in this slider, but you have not yet activated your copy of LayerSlider. Premium features in your sliders will not be available for your visitors without activation. ", 'LayerSlider').'<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">'.__('Click here to learn more', 'LayerSlider').'</a>.',
+					__("We've detected that you're using premium features in this slider, but you have not yet activated your copy of LayerSlider. Premium features in your sliders will not be available for your visitors without activation. ", 'LayerSlider').'<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">'.__('Click here to learn more', 'LayerSlider').'</a>. Detected features: ' . implode(', ', $GLOBALS['lsPremiumNotice']),
 					'dashicons-star-filled', 'info'
 				));
 			}

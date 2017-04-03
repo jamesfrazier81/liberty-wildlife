@@ -13,17 +13,21 @@
 
 class LS_ImportUtil {
 
+	// Counts the number of sliders imported.
+	public $sliderCount = 0;
+
+
+	// Database ID of the lastly imported slider.
 	public $lastImportId;
 
-	/**
-	 * The managed ZipArchieve instance.
-	 */
+
+	// The managed ZipArchieve instance.
 	private $zip;
 
-	/**
-	 * Target folders
-	 */
+
+	// Target folders
 	private $uploadsDir, $targetDir, $targetURL, $tmpDir;
+
 
 	// Imported images
 	private $imported = array();
@@ -106,6 +110,9 @@ class LS_ImportUtil {
 
 				// Import sliders
 				foreach($parsed as $item) {
+
+					// Increment the slider counter
+					$this->sliderCount++;
 
 					// Fix for export issue in v4.6.4
 					if(is_string($item)) { $item = json_decode($item, true); }
@@ -232,6 +239,9 @@ class LS_ImportUtil {
 
 	public function addSlider($file) {
 
+		// Increment the slider counter
+		$this->sliderCount++;
+
 		// Get slider data and title
 		$data = json_decode(file_get_contents($file), true);
 		$title = $data['properties']['title'];
@@ -315,8 +325,8 @@ class LS_ImportUtil {
 
 			// If no font-weight is specified, default to regular 400
 			// since Google Fonts do exactly this as well.
-			if( mb_substr(trim($font['param']), -1) !== ':' ) {
-				$font['param'] .= ':400';
+			if( strpos(trim($font['param']), ':') === false ) {
+				$font['param'] .= ':regular';
 			}
 
 			list($family, $weights) = explode(':', $font['param']);
@@ -336,8 +346,8 @@ class LS_ImportUtil {
 
 				// If no font-weight is specified, default to regular 400
 				// since Google Fonts do exactly this as well.
-				if( mb_substr(trim($fontNames[ $family ]['param']), -1) !== ':' ) {
-					$fontNames[ $family ]['param'] .= ':400';
+				if( strpos(trim($fontNames[ $family ]['param']), ':') === false ) {
+					$fontNames[ $family ]['param'] .= ':regular';
 				}
 
 				list($family, $weights) = explode(':', $fontNames[ $family ]['param']);

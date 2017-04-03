@@ -221,6 +221,10 @@
 	color: #fd9148 !important;
 }
 
+.table-holder .ls-premium a.dashicons {
+	left: -5px;
+}
+
 .ls-settings-sidebar {
 
 	width: 230px;
@@ -394,7 +398,6 @@
 		letter-spacing: 0.5px;
 		font-weight: 400 !important;
 		color: #333;
-		font-family: 'Open Sans' !important;
 
 		&:first-child {
 

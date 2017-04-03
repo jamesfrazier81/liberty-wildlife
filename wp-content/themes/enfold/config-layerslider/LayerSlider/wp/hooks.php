@@ -85,21 +85,28 @@ function ls_parse_defaults($defaults = array(), $raw = array()) {
 	$permission = current_user_can('publish_posts');
 	$ret = array();
 
+
 	foreach($defaults as $key => $default) {
+
+		$phpKey = is_string($default['keys']) ? $default['keys'] : $default['keys'][0];
+		$jsKey  = is_string($default['keys']) ? $default['keys'] : $default['keys'][1];
+		$retKey = isset($default['props']['meta']) ? 'props' : 'attrs';
 
 		// Check premium features
 		$isPremium = false;
 		if( ! empty( $default['premium'] ) && ! $activated ) {
 			if( ! $permission ) {
+
+				if( ! empty( $raw['styles'][$phpKey] ) ) {
+					unset( $ret['props']['styles'][$jsKey] );
+				}
+
 				continue;
 			}
-			// var_dump($default);
+
 			$isPremium = true;
 		}
 
-		$phpKey = is_string($default['keys']) ? $default['keys'] : $default['keys'][0];
-		$jsKey  = is_string($default['keys']) ? $default['keys'] : $default['keys'][1];
-		$retKey = isset($default['props']['meta']) ? 'props' : 'attrs';
 
 		if( isset($default['props']['forceoutput']) ) {
 			if( ! isset($raw[$phpKey]) ) {
@@ -135,11 +142,19 @@ function ls_parse_defaults($defaults = array(), $raw = array()) {
 			}
 		}
 
-		if( ! $activated && empty($GLOBALS['lsPremiumNotice']) ) {
-			if( $isPremium && isset($ret[$retKey][$jsKey]) ) {
-				$GLOBALS['lsPremiumNotice'] = true;
+
+		$premiumStyle = false;
+		if( $isPremium && ! empty( $raw['styles'][$phpKey] ) ) {
+			if( (string)$default['value'] !== (string)$raw['styles'][$jsKey] ) {
+				$premiumStyle = true;
 			}
 		}
+
+		if( ! $activated && $isPremium && ( isset($ret[$retKey][$jsKey]) || ! empty( $premiumStyle ) ) ) {
+			$feature = ! empty( $default['name'] ) ? $default['name'] : $jsKey;
+			$GLOBALS['lsPremiumNotice'][ sanitize_title($feature) ] = $feature;
+		}
+
 	}
 
 	return $ret;

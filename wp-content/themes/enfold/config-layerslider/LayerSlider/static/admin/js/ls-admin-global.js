@@ -335,7 +335,7 @@ jQuery(function($) {
 		saveSettings : function(form, reload) {
 
 			var options = {};
-			$(form).find('input').each(function() {
+			$(form).find('input:not([type="hidden"])').each(function() {
 				if( $(this).is(':checkbox')) {
 					options[$(this).attr('name')] = $(this).prop('checked');
 				} else {
@@ -343,8 +343,16 @@ jQuery(function($) {
 				}
 			});
 
+			var data = $.param({
+				action : 'ls_save_screen_options',
+				_wpnonce: jQuery('input[name="_wpnonce"]', form).val(),
+				_wp_http_referer: jQuery('input[name="_wp_http_referer"]', form).val(),
+				options : options,
+
+			});
+
 			// Save settings
-			$.post(ajaxurl, $.param({ action : 'ls_save_screen_options', options : options }), function() {
+			$.post(ajaxurl, data, function() {
 				if(typeof reload != "undefined" && reload === true) {
 					document.location.href = 'admin.php?page=layerslider';
 				}

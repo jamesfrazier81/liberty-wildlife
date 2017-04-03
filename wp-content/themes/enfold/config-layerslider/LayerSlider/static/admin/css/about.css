@@ -1,7 +1,8 @@
 .ls-about-img {
   position: absolute;
   height: 65px !important;
-  top: 10px; }
+  top: 10px;
+  border: 0 !important; }
 
 .ls-start-button {
   border: none !important;

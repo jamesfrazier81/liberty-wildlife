@@ -842,6 +842,7 @@ div.ls-bulk-actions {
 			top: 160%;
 			left: -50%;
 			font-size: 18px;
+			text-align: center;
 		}
 	}
 }
@@ -1478,11 +1479,11 @@ ul.ls-font-list {
 	padding: 0;
 
 	.ls-notice {
-		margin: 5px 0;
+		margin: 10px 10px 20px 10px;
 		text-align: center;
 		font: {
 			family: $fontHelvetica;
-			size: 14px;
+			size: 16px;
 		}
 	}
 

@@ -79,17 +79,17 @@
 	}
 
 	.ls-background-videos {
-		z-index: 31;
+		z-index: 1;
 	}
 
 	.ls-bg-video-overlay {
-		z-index: 32;
+		z-index: 21;
 		background-repeat: repeat;
 		background-position: center center;
 	}
 
 	.ls-slide-backgrounds {
-		z-index: 33;
+		z-index: 2;
 	}
 
 	.ls-layers {
@@ -261,6 +261,10 @@
 
 		.ls-link {
 			display: none;
+		}
+
+		.ls-link-on-top {
+			z-index: 999999 !important;
 		}
 
 		.ls-link, .ls-wrapper > a > * {
@@ -661,7 +665,7 @@
 		position: absolute;
 		left: 0;
 		top: 0;
-		z-index: 34;
+		z-index: 3;
 	}
 
 	.ls-slide-transition-wrapper,
@@ -988,6 +992,12 @@
 		font-size: 0;
 	}
 
+	html .ls-container video,
+	body .ls-container video,
+	#ls-global .ls-container video {
+		max-width: none !important;
+	}
+
 	/* direction: ltr */
 
 	html .ls-container,
@@ -1077,21 +1087,45 @@
 /* Device Responsiveness */
 
 @media screen and (max-width: 767px) {
-	.ls-container .ls-layers .ls-hide-on-phone {
+	.ls-container .ls-layers > .ls-hide-on-phone,
+	.ls-container .ls-background-videos .ls-hide-on-phone video,
+	.ls-container .ls-background-videos .ls-hide-on-phone audio,
+	.ls-container .ls-background-videos .ls-hide-on-phone iframe {
 		display: none !important;
 	}
 }
 
 @media screen and (min-width: 768px) and (max-width: 1024px) {
-	.ls-container .ls-layers .ls-hide-on-tablet {
+	.ls-container .ls-layers > .ls-hide-on-tablet,
+	.ls-container .ls-background-videos .ls-hide-on-tablet video,
+	.ls-container .ls-background-videos .ls-hide-on-tablet audio,
+	.ls-container .ls-background-videos .ls-hide-on-tablet iframe {
 		display: none !important;
 	}
 }
 
 @media screen and (min-width: 1025px) {
-	.ls-container .ls-layers .ls-hide-on-desktop {
+	.ls-container .ls-layers > .ls-hide-on-desktop,
+	.ls-container .ls-background-videos .ls-hide-on-desktop video,
+	.ls-container .ls-background-videos .ls-hide-on-desktop audio,
+	.ls-container .ls-background-videos .ls-hide-on-desktop iframe {
 		display: none !important;
 	}
+}
+
+.ls-container .ls-background-videos .ls-vpcontainer {
+	z-index: 10;
+}
+
+.ls-container .ls-background-videos .ls-videopreview {
+	background-size: cover !important;
+}
+
+.ls-container .ls-background-videos video,
+.ls-container .ls-background-videos audio,
+.ls-container .ls-background-videos iframe {
+	position: relative;
+	z-index: 20;
 }
 
 

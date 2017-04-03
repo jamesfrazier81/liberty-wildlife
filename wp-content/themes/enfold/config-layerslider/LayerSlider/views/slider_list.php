@@ -123,6 +123,8 @@
 
 	$lsStoreHasUpdate = ( ! empty($lsStoreData['last_updated']) && $lsStoreLastViewed <  $lsStoreData['last_updated'] );
 
+	$importSliderCount = ! empty( $_GET['sliderCount'] ) ? (int)$_GET['sliderCount'] : 0;
+
 	// Notification messages
 	$notifications = array(
 
@@ -147,7 +149,8 @@
 
 		'importSelectError' => __('Choose a file to import sliders.', 'LayerSlider'),
 		'importFailed' => __('The import file seems to be invalid or corrupted.', 'LayerSlider'),
-		'importSuccess' => __('Your slider has been imported.', 'LayerSlider'),
+		'importSuccess' => sprintf( _n( '%s slider has been successfully imported.', '%s sliders has been successfully imported.', $importSliderCount, 'LayerSlider' ), $importSliderCount ),
+
 		'permissionError' => __('Your account does not have the necessary permission you have chosen, and your settings have not been saved in order to prevent locking yourself out of the plugin.', 'LayerSlider'),
 		'permissionSuccess' => __('Permission changes has been updated.', 'LayerSlider'),
 		'googleFontsUpdated' => __('Your Google Fonts library has been updated.', 'LayerSlider'),
@@ -162,10 +165,11 @@
 <div id="ls-screen-options" class="metabox-prefs hidden">
 	<div id="screen-options-wrap" class="hidden">
 		<form id="ls-screen-options-form" method="post" novalidate>
+			<?php wp_nonce_field('ls-save-screen-options'); ?>
 			<h5><?php _e('Show on screen', 'LayerSlider') ?></h5>
 			<label><input type="checkbox" name="showTooltips"<?php echo $lsScreenOptions['showTooltips'] == 'true' ? ' checked="checked"' : ''?>> <?php _e('Tooltips', 'LayerSlider') ?></label><br><br>
 
-			<?php _e('Show me', 'LayerSlider') ?> <input type="number" name="numberOfSliders" min="8" step="4" value="<?php echo $lsScreenOptions['numberOfSliders'] ?>"> <?php _e('sliders per page', 'LayerSlider') ?>
+			<?php _e('Show me', 'LayerSlider') ?> <input type="number" name="numberOfSliders" min="8" step="4" value="<?php echo (int) $lsScreenOptions['numberOfSliders'] ?>"> <?php _e('sliders per page', 'LayerSlider') ?>
 			<button class="button"><?php _e('Apply', 'LayerSlider') ?></button>
 		</form>
 	</div>
@@ -191,7 +195,7 @@
 
 	<!-- Error messages -->
 	<?php if(isset($_GET['message'])) : ?>
-	<div class="ls-notification <?php echo isset($_GET['error']) ? 'error' : 'updated' ?>">
+	<div class="ls-notification large <?php echo isset($_GET['error']) ? 'error' : 'updated' ?>">
 		<div><?php echo $notifications[ $_GET['message'] ] ?></div>
 	</div>
 	<?php endif; ?>
@@ -461,8 +465,8 @@
 					</div>
 				</div>
 				<?php endforeach; ?>
+				<?php endif ?>
 			</div>
-			<?php endif ?>
 			<?php endif ?>
 
 
@@ -762,7 +766,7 @@
 						</li>
 						<?php endforeach ?>
 						<?php else : ?>
-						<li class="ls-notice"><?php _e("You haven't added any Google font to your library yet.", "LayerSlider") ?></li>
+						<li class="ls-notice"><?php _e("You haven't added any Google Font to your collection yet.", "LayerSlider") ?></li>
 						<?php endif ?>
 					</ul>
 				</div>
@@ -832,6 +836,11 @@
 								<a href="#" class="dashicons dashicons-dismiss" title="<?php _e('Remove character set', 'LayerSlider') ?>"></a>
 								<input type="hidden" name="scripts[]" value="latin">
 							</li>
+							<li>
+								<span>Latin Extended</span>
+								<a href="#" class="dashicons dashicons-dismiss" title="<?php _e('Remove character set', 'LayerSlider') ?>"></a>
+								<input type="hidden" name="scripts[]" value="latin-ext">
+							</li>
 							<?php endif ?>
 						</ul>
 						<div><?php _e('Use character sets:', 'LayerSlider') ?></div>
@@ -875,7 +884,7 @@
 						<td><input type="checkbox" name="concatenate_output" <?php echo get_option('ls_concatenate_output', false) ? 'checked="checked"' : '' ?>></td>
 						<td class="desc"><?php _e("Concatenating the plugin's output could solve issues caused by custom filters your theme might use.", "LayerSlider") ?></td>
 					</tr>
-					<tr>
+					<tr id="ls_use_custom_jquery">
 						<td><?php _e('Use Google CDN version of jQuery', 'LayerSlider') ?></td>
 						<td><input type="checkbox" name="use_custom_jquery" <?php echo get_option('ls_use_custom_jquery', false) ? 'checked="checked"' : '' ?>></td>
 						<td class="desc"><?php _e('This option will likely solve "Old jQuery" issues, but can easily have other side effects. Use it only when it is necessary.', 'LayerSlider') ?></td>

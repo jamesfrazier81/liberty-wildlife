@@ -209,6 +209,7 @@ class KM_UpdatesV3 {
 			update_option( $this->config['authKey'], 0 );
 			update_option( $this->config['codeKey'], '' );
 			update_option( 'ls-show-canceled_activation_notice', 1);
+			update_option('layerslider_cancellation_update_info', $this->data);
 		}
 	}
 
@@ -390,6 +391,9 @@ class KM_UpdatesV3 {
 			delete_option($this->config['option']);
 			@$this->_check_updates( true );
 
+			// v6.2.0: Automatically hide the "Canceled activation" notice when
+			// re-activating the plugin to make things easier and more convenient.
+			update_option('ls-show-canceled_activation_notice', 0);
 		}
 
 

@@ -31,6 +31,11 @@
 		$lsScreenOptions['useKeyboardShortcuts'] = 'true';
 	}
 
+	// Deafults: keyboard shortcuts
+	if( ! isset($lsScreenOptions['useNotifyOSD'])) {
+		$lsScreenOptions['useNotifyOSD'] = 'true';
+	}
+
 	// Get phpQuery
 	if( ! defined('LS_phpQuery') ) {
 		libxml_use_internal_errors(true);
@@ -71,12 +76,16 @@
 <div id="ls-screen-options" class="metabox-prefs hidden">
 	<div id="screen-options-wrap" class="hidden">
 		<form id="ls-screen-options-form" method="post">
+			<?php wp_nonce_field('ls-save-screen-options'); ?>
 			<h5><?php _e('Use features', 'LayerSlider') ?></h5>
 			<label>
 				<input type="checkbox" name="showTooltips"<?php echo $lsScreenOptions['showTooltips'] == 'true' ? ' checked="checked"' : ''?>> Tooltips
 			</label>
 			<label>
 				<input type="checkbox" name="useKeyboardShortcuts"<?php echo $lsScreenOptions['useKeyboardShortcuts'] == 'true' ? ' checked="checked"' : ''?>> Keyboard shortcuts
+			</label>
+			<label>
+				<input type="checkbox" name="useNotifyOSD"<?php echo $lsScreenOptions['useNotifyOSD'] == 'true' ? ' checked="checked"' : ''?>> On Screen Notifications
 			</label>
 		</form>
 	</div>
@@ -320,6 +329,11 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 		<!-- Version number -->
 		<?php include LS_ROOT_PATH . '/templates/tmpl-beta-feedback.php'; ?>
 
+		<div class="ls-notify-osd saved">
+			<i class="dashicons dashicons-yes"></i>
+			<?php _e('Slider saved successfully', 'LayerSlider') ?>
+		</div>
+
 		<!-- Main menu bar -->
 		<div id="ls-main-nav-bar">
 			<a href="#" class="settings <?php echo $settingsTabClass ?>">
@@ -401,10 +415,10 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
 					sliderWillLoad
-					<figure><span>|</span> <?php _e('Fires before parsing user settings and rendering the UI.', 'LayerSlider') ?></figure>
+					<figure><span>|</span> <?php _e('Fires before parsing user data and rendering the UI.', 'LayerSlider') ?></figure>
 				</h3>
 				<div>
-					<textarea name="sliderWillLoad" cols="20" rows="5" class="ls-codemirror">function( event, slider ) {
+					<textarea name="sliderWillLoad" cols="20" rows="5" class="ls-codemirror">function( event ) {
 
 }</textarea>
 				</div>

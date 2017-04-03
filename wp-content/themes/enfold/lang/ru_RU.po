@@ -18969,17 +18969,17 @@ msgstr "Выбрать страницу"
 # @ avia_framework
 #: includes/helper-social-media.php:149
 msgid "Share on Google+"
-msgstr ""
+msgstr "С помощью Google+"
 
 # @ avia_framework
 #: includes/helper-social-media.php:155
 msgid "Share by Mail"
-msgstr ""
+msgstr "С помощью e-Mail"
 
 # @ avia_framework
 #: includes/helper-social-media.php:231
 msgid "Share on"
-msgstr ""
+msgstr "С помощью"
 
 # @ avia_framework
 #: includes/loop-about-author.php:13

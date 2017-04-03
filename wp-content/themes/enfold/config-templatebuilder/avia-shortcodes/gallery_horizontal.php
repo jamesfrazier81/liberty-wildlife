@@ -1,6 +1,6 @@
 <?php
-return; //beta version to be tested
 
+return; //beta element to be tested
 
 if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 {
@@ -100,6 +100,14 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 						__('Enlarge Image',  'avia_framework' ) =>'enlarge',
 					)),  
 	                
+	                array(
+                    "name" 	=> __("Initial Active Image", 'avia_framework' ),
+                    "desc" 	=> __("Enter the Number of the image that should be open initially.", 'avia_framework' ),
+                    "id" 	=> "initial",
+                    "std" 	=> "",
+                    "type" 	=> "input"),
+	                
+	                
 	                array(	
 						"name" 	=> __("Gallery control styling?",'avia_framework' ),
 						"desc" 	=> __("Here you can select if and how to display the slideshow controls",'avia_framework' ),
@@ -174,6 +182,7 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 				'ids'    	 		=> '',
 				'active'    		=> 'enlarge',
 				'control_layout'	=> 'av-control-default',
+				'initial'			=> 'initial'
 				
 				), $atts, $this->config['shortcode']));
 					
@@ -197,6 +206,12 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 					$padding 	= "style='padding: {$padding}% 0px;' data-av-enlarge='{$enlarge_by}' ";
 				}
 				
+				if(!empty($initial))
+				{
+					$initial = "data-av-initial='{$initial}' ";
+				}
+				
+				
 				if(!empty($attachments) && is_array($attachments))
 				{
 					self::$hor_gallery++;
@@ -206,7 +221,7 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
                     	array('context' => 'image','echo'=>false, 'custom_markup'=>$meta['custom_markup'])
                     );
                     
-					$output .= "<div class='av-horizontal-gallery av-horizontal-gallery-{$gap}-gap av-horizontal-gallery-{$active}-effect av-horizontal-gallery-".self::$hor_gallery." ".$meta['el_class']." {$control_layout}' {$markup} {$padding}>";
+					$output .= "<div class='av-horizontal-gallery av-horizontal-gallery-{$gap}-gap av-horizontal-gallery-{$active}-effect av-horizontal-gallery-".self::$hor_gallery." ".$meta['el_class']." {$control_layout}' {$markup} {$padding} {$initial}>";
 					
 					$output .= $this->slide_navigation_arrows();
 

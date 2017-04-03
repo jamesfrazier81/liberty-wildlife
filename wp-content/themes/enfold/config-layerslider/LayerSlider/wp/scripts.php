@@ -30,7 +30,7 @@ function layerslider_enqueue_content_res() {
 	}
 
 	// Register LayerSlider resources
-	wp_register_script('greensock', LS_ROOT_URL.'/static/layerslider/js/greensock.js', false, '1.19.0', $footer );
+	wp_register_script('layerslider-greensock', LS_ROOT_URL.'/static/layerslider/js/greensock.js', false, '1.19.0', $footer );
 	wp_register_script('layerslider', LS_ROOT_URL.'/static/layerslider/js/layerslider.kreaturamedia.jquery.js', array('jquery'), LS_PLUGIN_VERSION, $footer );
 	wp_register_script('layerslider-transitions', LS_ROOT_URL.'/static/layerslider/js/layerslider.transitions.js', false, LS_PLUGIN_VERSION, $footer );
 	wp_enqueue_style('layerslider', LS_ROOT_URL.'/static/layerslider/css/layerslider.css', false, LS_PLUGIN_VERSION );
@@ -48,7 +48,7 @@ function layerslider_enqueue_content_res() {
 	}
 
 	// Print LS_Meta object
-	wp_localize_script('layerslider', 'LS_Meta', $LS_Meta);
+	wp_localize_script('layerslider-greensock', 'LS_Meta', $LS_Meta);
 
 	// User resources
 	$uploads = wp_upload_dir();
@@ -61,7 +61,7 @@ function layerslider_enqueue_content_res() {
 	}
 
 	if( ! $footer) {
-		wp_enqueue_script('greensock');
+		wp_enqueue_script('layerslider-greensock');
 		wp_enqueue_script('layerslider');
 		wp_enqueue_script('layerslider-transitions');
 		wp_enqueue_script('ls-user-transitions');
@@ -77,7 +77,7 @@ function layerslider_footer_scripts() {
 	if( ! $condsc || ! empty( $GLOBALS['lsSliderInit'] ) ) {
 
 		// Enqueue scripts
-		wp_print_scripts('greensock');
+		wp_print_scripts('layerslider-greensock');
 		wp_print_scripts('layerslider');
 		wp_print_scripts('layerslider-transitions');
 
@@ -140,7 +140,7 @@ function layerslider_enqueue_admin_res() {
 		}
 
 		// Global scripts & stylesheets
-		wp_enqueue_script('greensock', LS_ROOT_URL.'/static/layerslider/js/greensock.js', false, '1.18.0' );
+		wp_enqueue_script('layerslider-greensock', LS_ROOT_URL.'/static/layerslider/js/greensock.js', false, '1.18.0' );
 		wp_enqueue_script('kreaturamedia-ui', LS_ROOT_URL.'/static/admin/js/km-ui.js', array('jquery'), LS_PLUGIN_VERSION );
 		wp_enqueue_script('ls-admin-global', LS_ROOT_URL.'/static/admin/js/ls-admin-global.js', array('jquery'), LS_PLUGIN_VERSION );
 		wp_enqueue_style('layerslider-admin', LS_ROOT_URL.'/static/admin/css/admin.css', false, LS_PLUGIN_VERSION );

@@ -415,8 +415,7 @@ body #ls-layers table.noborder td {
 }
 
 .ls-layer-preview-wrapper,
-.ls-real-time-preview,
-#ls-static-preview {
+.ls-real-time-preview {
 	position: absolute !important;
 	left: 0;
 	top: 0;
@@ -424,19 +423,8 @@ body #ls-layers table.noborder td {
 	width: 100%;
 }
 
-#ls-static-preview {
-	z-index: auto !important;
-	transform-origin: 0 0;
-	pointer-events: none;
-	overflow: hidden;
-}
-
-#ls-static-preview * {
-	pointer-events: auto;
-}
-
-#ls-static-preview > * {
-	opacity: 0.4;
+.ls-static-layer {
+	opacity: 0.4 !important;
 }
 
 /* move embed videos/iframes with mouse on preview */
@@ -1237,6 +1225,16 @@ a.saving {
 	-webkit-box-shadow: inset 0 1px 0 #e8ab7c,0 1px 0 rgba(0,0,0,.15) !important;
 	box-shadow: inset 0 1px 0 #e8ab7c,0 1px 0 rgba(0,0,0,.15) !important;
 	text-shadow: none !important;
+}
+
+.button.failed,
+.ls-publish.failed .button {
+	background: #e14d43 !important;
+	border-color: #d02c21 #ba281e #ba281e !important;
+	color: #fff !important;
+	-webkit-box-shadow: 0 1px 0 #ba281e !important;
+	box-shadow: 0 1px 0 #ba281e !important;
+	text-shadow: 0 -1px 1px #ba281e, 1px 0 1px #ba281e, 0 1px 1px #ba281e, -1px 0 1px #ba281e !important;
 }
 
 .ls-publish.saved .button,

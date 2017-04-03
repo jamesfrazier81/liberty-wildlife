@@ -62,12 +62,12 @@ function layerslider_activation_routine( ) {
 		update_option('ls-installed', 1);
 
 		// Set pre-defined Google Fonts
-		update_option('ls-google-fonts', array(
-			array( 'param' => 'Lato:100,300,regular,700,900', 'admin' => false ),
-			array( 'param' => 'Open+Sans:300', 'admin' => false ),
-			array( 'param' => 'Indie+Flower:regular', 'admin' => false ),
-			array( 'param' => 'Oswald:300,regular,700', 'admin' => false )
-		));
+		// update_option('ls-google-fonts', array(
+		// 	array( 'param' => 'Lato:100,300,regular,700,900', 'admin' => false ),
+		// 	array( 'param' => 'Open+Sans:300', 'admin' => false ),
+		// 	array( 'param' => 'Indie+Flower:regular', 'admin' => false ),
+		// 	array( 'param' => 'Oswald:300,regular,700', 'admin' => false )
+		// ));
 
 		// Call "installed" hook
 		if(has_action('layerslider_installed')) {

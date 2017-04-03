@@ -96,7 +96,30 @@ $debugCondition = $authorized && $isAdmin;
 					<th colspan="4"><?php _e('Site Setup & Plugin Settings', 'LayerSlider') ?></th>
 				</thead>
 				<tbody>
-					<?php $test = defined('WP_DEBUG') &&  WP_DEBUG; ?>
+
+
+					<?php
+
+						if( $authorized ) :
+						$test = strpos(LS_ROOT_FILE, '/wp-content/plugins/LayerSlider/');
+
+					?>
+					<tr>
+						<td><?php _e('Install Location', 'LayerSlider') ?></td>
+						<td><span class="dashicons <?php echo ! empty($test) ? 'dashicons-yes' : 'dashicons-info' ?>"></span></td>
+						<td><?php echo ! empty( $test ) ? _e('OK', 'LayerSlider') : _e('Non-standard', 'LayerSlider') ?></td>
+						<td>
+							<?php if( ! $test ) : ?>
+							<span>
+								<?php echo __("Using LayerSlider from a non-standard install location or having a different directory name could lead issues in receiving and installing updates. Commonly, you see this issue when you're using a theme-included version of LayerSlider. To fix this, please first search for an option to disable/unload the bundled version in your theme, then re-install a fresh copy downloaded from CodeCanyon. Your sliders and settings are stored in the database, re-installing the plugin will not harm them.", 'LayerSlider') ?>
+							</span>
+							<?php endif ?>
+						</td>
+					</tr>
+					<?php endif ?>
+
+
+					<?php $test =  defined('WP_DEBUG') &&  WP_DEBUG; ?>
 					<tr class="<?php echo ! empty($test) ? '' : 'ls-info' ?>">
 						<td><?php _e('WP Debug Mode:', 'LayerSlider') ?></td>
 						<td><span class="dashicons <?php echo ! empty($test) ? 'dashicons-yes' : 'dashicons-info' ?>"></span></td>
@@ -308,6 +331,26 @@ $debugCondition = $authorized && $isAdmin;
 			</table>
 		</div>
 	</div>
+
+	<?php if( $isAdmin && ! empty( $_GET['updateinfo']) ) : ?>
+	<div class="ls-box">
+		<div class="header">
+			<h2><?php _e('Update info', 'LayerSlider') ?></h2>
+		</div>
+		<div class="inner">
+			<pre><?php var_dump( get_option('layerslider_update_info') ) ?></pre>
+		</div>
+	</div>
+
+	<div class="ls-box">
+		<div class="header">
+			<h2><?php _e('Update info after cancellation', 'LayerSlider') ?></h2>
+		</div>
+		<div class="inner">
+			<pre><?php var_dump( get_option('layerslider_cancellation_update_info') ) ?></pre>
+		</div>
+	</div>
+	<?php endif ?>
 
 	<script type="text/html" id="ls-phpinfo">
 		<?php phpinfo(); ?>

@@ -101,6 +101,10 @@ function avia_include_layerslider()
 
 		    $GLOBALS['lsPluginPath'] 	= get_template_directory_uri() . '/config-layerslider/LayerSlider/';
 		    $GLOBALS['lsAutoUpdateBox'] = false;
+			if (!defined('LS_ROOT_URL'))
+			{
+				define('LS_ROOT_URL', get_template_directory_uri() . '/config-layerslider/LayerSlider' );
+			}
 		    
 		    // Activate the plugin if necessary
 		    if(get_option("{$themeNice}_layerslider_activated", '0') == '0') {

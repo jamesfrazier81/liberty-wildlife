@@ -238,8 +238,16 @@ if ( !class_exists( 'avia_product_slider' ) )
 							while ( have_posts() ) : the_post();
 							if($loop_counter == 1 && $type == 'slider') echo '<ul class="products slide-entry-wrap">';
 
-								woocommerce_get_template_part( 'content', 'product' );
 
+								if(function_exists('wc_get_template_part'))
+								{
+									wc_get_template_part( 'content', 'product'  );
+								}
+								else
+								{
+									woocommerce_get_template_part( 'content', 'product' );
+								}
+								
 							$loop_counter ++;
 							$post_loop_count ++;
 

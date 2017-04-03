@@ -3565,6 +3565,7 @@ Horizontal Gallery
 .av-horizontal-gallery-inner{
 	position: relative;
 	white-space:nowrap;
+	opacity: 0;
 }
 
 .av-horizontal-gallery-slider{
@@ -3572,8 +3573,6 @@ Horizontal Gallery
 	position: absolute;
 	height:100%;
 	width:100%;
-	-webkit-transition: left 0.4s ease-in-out;
-	transition: 		left 0.4s ease-in-out;
 }
 
 .av-horizontal-gallery-wrap{
@@ -3582,15 +3581,29 @@ Horizontal Gallery
 	display: inline-block;
 	position: relative;
 	z-index: 1;
-	-webkit-transition: all 0.4s ease-in-out;
-	transition: 		all 0.4s ease-in-out;
 	-webkit-user-select: none;       
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 	cursor: pointer;
 	vertical-align: top;
- }
+}
+
+.av-horizontal-gallery-animated .av-horizontal-gallery-inner{
+	-webkit-transition: opacity 0.4s ease-in-out;
+	transition: 		opacity 0.4s ease-in-out;	
+	opacity: 1;
+}
+
+.av-horizontal-gallery-animated .av-horizontal-gallery-slider{
+	-webkit-transition: left 0.4s ease-in-out;
+	transition: 		left 0.4s ease-in-out;	
+}
+
+.av-horizontal-gallery-animated .av-horizontal-gallery-wrap{
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: 		all 0.4s ease-in-out;  
+}
 
 .av-horizontal-gallery-wrap:after{
 	height:100%;

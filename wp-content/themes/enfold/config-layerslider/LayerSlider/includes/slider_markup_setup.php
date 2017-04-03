@@ -36,6 +36,23 @@ if(isset($slides['properties']['autoPauseSlideshow'])) {
 	}
 }
 
+if( ! empty( $slides['properties']['props']['globalBGImageId'] ) ) {
+	$tempSrc = wp_get_attachment_image_src( $slides['properties']['props']['globalBGImageId'], 'full' );
+	$slides['properties']['attrs']['globalBGImage'] = $tempSrc[0];
+}
+
+// Old and without type
+if( empty($slides['properties']['attrs']['sliderVersion']) && empty($slides['properties']['attrs']['type']) ) {
+
+	if( !empty($slides['properties']['props']['forceresponsive']) ) {
+		$slides['properties']['attrs']['type'] = 'fullwidth';
+	} elseif( empty($slides['properties']['props']['responsive']) ) {
+		$slides['properties']['attrs']['type'] = 'fixedsize';
+	} else {
+		$slides['properties']['attrs']['type'] = 'responsive';
+	}
+}
+
 // Slides and layers
 if(isset($slides['layers']) && is_array($slides['layers'])) {
 	foreach($slides['layers'] as $slidekey => $slide) {

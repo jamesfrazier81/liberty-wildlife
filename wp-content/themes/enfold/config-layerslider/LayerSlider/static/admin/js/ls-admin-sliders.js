@@ -700,6 +700,20 @@ jQuery(function($) {
 	});
 
 
+	// Google CDN version warning
+	$('#ls_use_custom_jquery').on('click', '.ls-checkbox', function(e) {
+		if( $(this).hasClass('off') ) {
+			if( ! confirm('Do not enable this option unless you\'re  experiencing issues with jQuery on your site. This option can easily cause unexpected issues when used incorrectly. Do you want to proceed?') ) {
+				e.preventDefault();
+				return false;
+
+			}
+
+			alert('Do not forget to disable this option later on if it does not help, or if you experience unexpected issues. This includes your entire site, not just LayerSlider.');
+		}
+	});
+
+
 	// News filters
 	$('.ls-news .filters li').click(function() {
 

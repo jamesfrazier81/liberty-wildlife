@@ -48,10 +48,11 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 					<?php if( count($demoSliders) ) : ?>
 					<li class="uppercase" data-group="bundled"><?php _e('Bundled', 'LayerSlider') ?></li>
 					<?php endif; ?>
+					<li class="uppercase" data-group="packs"><?php _e('SLIDER PACKS', 'LayerSlider') ?></li>
 					<li class="uppercase separator" data-group="new"><?php _e('New', 'LayerSlider') ?></li>
 
-					<li data-group="fullwidth"><?php _e('Full-width', 'LayerSlider') ?></li>
-					<li data-group="fullsize"><?php _e('Full-size', 'LayerSlider') ?></li>
+					<li data-group="fullwidth"><?php _e('Full Width', 'LayerSlider') ?></li>
+					<li data-group="fullsize"><?php _e('Full Size', 'LayerSlider') ?></li>
 
 					<li data-group="landing"><?php _e('Landing Page', 'LayerSlider') ?></li>
 					<li data-group="parallax"><?php _e('Parallax', 'LayerSlider') ?></li>
@@ -60,6 +61,7 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 					<li data-group="kenburns"><?php _e('Ken Burns', 'LayerSlider') ?></li>
 					<li data-group="playbyscroll"><?php _e('Play By Scroll', 'LayerSlider') ?></li>
 					<li data-group="filter"><?php _e('Filter Transition', 'LayerSlider') ?></li>
+					<li data-group="blendmode"><?php _e('Blend Modes', 'LayerSlider') ?></li>
 					<li data-group="carousel"><?php _e('Carousel', 'LayerSlider') ?></li>
 					<li data-group="media"><?php _e('Media', 'LayerSlider') ?></li>
 

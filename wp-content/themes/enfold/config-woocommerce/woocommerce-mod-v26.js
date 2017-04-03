@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
 				number.remove();
 	
 			setTimeout(function(){
-				if(newNum.next('.plus').length === 0) {
+				if(newNum.next('.plus').length == 0) {
 					var minus = jQuery('<input type="button" value="-" class="minus">').insertBefore(newNum),
 							plus    = jQuery('<input type="button" value="+" class="plus">').insertAfter(newNum);
 		
@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 	$( document ).on( 'updated_cart_totals', avia_apply_quant_btn );
 
 	setTimeout(first_load_amount, 10);
-	$('body').on( 'added_to_cart', update_cart_dropdown);
+	$('body').bind('added_to_cart', update_cart_dropdown);
 		
 	// small fix for the hover menu for woocommerce sort buttons since it does no seem to work on mobile devices. 
 	// even if no event is actually bound the css dropdown works. if the binding is removed dropdown does no longer work.
@@ -72,13 +72,12 @@ function update_cart_dropdown(event)
 		product 		= jQuery.extend({name:"Product", price:"", image:""}, avia_clicked_product),
 		counter			= 0;
 		
-			//	trigger changed in WC 3.0.0 - must check for event explecit
-		if( (empty.length > 0) && ( 'undefined' !== typeof event ) )
+		if(!empty.length)
 		{
 			the_html.addClass('html_visible_cart');
 		}
 		
-		if(typeof event !== 'undefined')
+		if(typeof event != 'undefined')
 		{
 			var header		 =  jQuery('.html_header_sticky #header_main .cart_dropdown_first, .html_header_sidebar #header_main .cart_dropdown_first'),
 				oldTemplates = jQuery('.added_to_cart_notification').trigger('avia_hide'),
@@ -86,7 +85,7 @@ function update_cart_dropdown(event)
 			
 			if(!header.length) header = 'body';			
 			
-			template.on('mouseenter avia_hide', function()
+			template.bind('mouseenter avia_hide', function()
 			{
 				template.animate({opacity:0, top: parseInt(template.css('top'), 10) + 15 }, function()
 				{
@@ -98,18 +97,15 @@ function update_cart_dropdown(event)
 			setTimeout(function(){ template.trigger('avia_hide'); }, 2500);
 		}
 		
-			//	with WC 3.0.0 DOM is not ready - wrong calculation of counter (last element missing)
-		setTimeout(function(){
-						menu_cart.find('.cart_list li .quantity').each(function(){
-							counter += parseInt(jQuery(this).text(),10);
-						});
-
-						if( (cart_counter.length > 0) && (counter > 0) )
-						{
-							cart_counter.removeClass('av-active-counter');
-							setTimeout(function(){ cart_counter.addClass('av-active-counter').text(counter); }, 10); 
-						}
-					}, 300 );
+		menu_cart.find('.cart_list li .quantity').each(function(){
+			counter += parseInt(jQuery(this).text(),10);
+		});
+		
+		if(cart_counter.length && counter > 0)
+		{
+			cart_counter.removeClass('av-active-counter');
+			setTimeout(function(){ cart_counter.addClass('av-active-counter').text(counter); }, 10); 
+		}
 }
 
 
@@ -125,11 +121,11 @@ function track_ajax_add_to_cart()
 			product.price	 = productContainer.find('.price .amount').last().text();
 			
 			//lower than woocommerce 3.0.0
-			if(product.name === "") product.name	 = productContainer.find('.inner_product_header h3').text();
+			if(product.name == "") product.name	 = productContainer.find('.inner_product_header h3').text();
 			
 			
 			/*fallbacks*/
-			if(productContainer.length === 0)
+			if(productContainer.length == 0)
 			{
 				productContainer = jQuery(this);
 				product.name	 = productContainer.find('.av-cart-update-title').text();
@@ -178,7 +174,7 @@ function first_load_amount()
 		check();
 		
 		//display the cart for a short moment on page load if a product was added but no notice was delivered (eg template builder page)
-		if (jQuery('.av-display-cart-on-load').length && jQuery('.woocommerce-message').length === 0)
+		if (jQuery('.av-display-cart-on-load').length && jQuery('.woocommerce-message').length == 0)
 		{
 			var dropdown = jQuery('.cart_dropdown');
 			setTimeout( function(){dropdown.trigger('mouseenter'); }, 500);
@@ -209,9 +205,9 @@ function product_add_to_cart_click()
 		}
 		
 		//e.preventDefault();
-	});
+	})
 	
-	jbody.on( 'added_to_cart', function()
+	jbody.bind('added_to_cart', function()
 	{
 		jQuery('.adding-to-cart-loading').removeClass('adding-to-cart-loading').addClass('added-to-cart-check');
 		
@@ -259,6 +255,8 @@ function cart_dropdown_improvement()
 	function(){ subelement.stop().animate({opacity:0}, function(){ subelement.css({display:'none'}); }); }
 	);
 }
+
+
 
 
 

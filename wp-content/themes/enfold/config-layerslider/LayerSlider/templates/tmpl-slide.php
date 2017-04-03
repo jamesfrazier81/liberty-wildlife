@@ -91,17 +91,16 @@
 				</td>
 			</tr>
 			<tr class="ls-advanced ls-hidden">
-				<td class="slide-link">
+				<td class="ls-slide-link">
 					<h3 class="subheader"><?php _e('Slide Linking', 'LayerSlider') ?></h3>
 					<div class="inner">
 						<div class="row-helper">
 							<?php lsGetInput($lsDefaults['slides']['linkUrl'], null, array('class' => 'slideprop', 'placeholder' => $lsDefaults['slides']['linkUrl']['name'] )) ?>
+							<span><a href="#"><?php _e('use post URL', 'LayerSlider') ?></a></span>
 						</div>
 						<div class="row-helper">
-							<span class="indent">
-								<?php _e('or', 'LayerSlider') ?> <a href="#"><?php _e('use post URL', 'LayerSlider') ?></a>
-							</span>
 							<?php lsGetSelect($lsDefaults['slides']['linkTarget'], null, array('class' => 'slideprop')) ?>
+							<?php lsGetSelect($lsDefaults['slides']['linkType'], null, array('class' => 'slideprop')) ?>
 						</div>
 					</div>
 				</td>
@@ -325,8 +324,9 @@
 	<div class="ls-preview-td">
 		<div class="ls-preview-wrapper ls-preview-size" data-dragover="<?php _e('Drop image(s) here', 'LayerSlider') ?>">
 			<div class="ls-preview ls-preview-size">
-				<div id="ls-static-preview" class="ls-preview-transform"></div>
-				<div id="ls-preview-layers" class="draggable ls-layer ls-preview-transform"></div>
+				<div id="ls-preview-layers" class="draggable ls-layer ls-preview-transform">
+					<div id="ls-static-preview" class="disabled"></div>
+				</div>
 			</div>
 			<div class="ls-real-time-preview ls-preview-size"></div>
 		</div>
