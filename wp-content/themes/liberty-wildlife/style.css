@@ -36,7 +36,7 @@ html, body {
     font-size: 1.5rem;
     font-weight: 300;
     line-height: 2.25rem;
-    color: #df7d60; }
+    color: #da5834; }
   #top #wrap_all #main .av-special-heading h4 {
     font-family: "Shadows Into Light", cursive;
     font-size: 1.25rem;
@@ -50,7 +50,7 @@ html, body {
 #top #wrap_all #main .av_textblock_section p {
   color: #333333; }
   #top #wrap_all #main .av_textblock_section p a {
-    color: #df7d60;
+    color: #da5834;
     font-weight: 700;
     text-decoration: none; }
     #top #wrap_all #main .av_textblock_section p a:hover {
@@ -59,7 +59,7 @@ html, body {
 #top #wrap_all #main .av_textblock_section ul {
   margin: 0.85em 0; }
   #top #wrap_all #main .av_textblock_section ul li a {
-    color: #df7d60;
+    color: #da5834;
     font-weight: 700;
     text-decoration: none; }
 
@@ -99,8 +99,8 @@ html, body {
   #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow-dots a:last-child {
     margin: 0; }
   #top #wrap_all #main .avia-fullwidth-slider .avia-slideshow-dots a.active {
-    color: #df7d60;
-    background-color: #df7d60; }
+    color: #da5834;
+    background-color: #da5834; }
 
 #top #wrap_all #main .avia-content-slider .slide-entry-wrap {
   margin: 0; }
@@ -111,21 +111,21 @@ html, body {
     #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry .slide-meta {
       display: none; }
     #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry .slide-entry-excerpt .read-more-link a {
-      color: #df7d60;
+      color: #da5834;
       font-weight: 700; }
       #top #wrap_all #main .avia-content-slider .slide-entry-wrap .slide-entry .slide-entry-excerpt .read-more-link a .more-link-arrow {
         display: none; }
 
 #top #wrap_all #main .togglecontainer .single_toggle .toggler {
-  border-color: #df7d60;
-  color: #df7d60;
+  border-color: #da5834;
+  color: #da5834;
   font-weight: 700; }
   #top #wrap_all #main .togglecontainer .single_toggle .toggler .toggle_icon {
-    border-color: #df7d60; }
+    border-color: #da5834; }
     #top #wrap_all #main .togglecontainer .single_toggle .toggler .toggle_icon span {
-      border-color: #df7d60; }
+      border-color: #da5834; }
   #top #wrap_all #main .togglecontainer .single_toggle .toggler.activeTitle {
-    background-color: #df7d60;
+    background-color: #da5834;
     color: white; }
     #top #wrap_all #main .togglecontainer .single_toggle .toggler.activeTitle .toggle_icon {
       border-color: white; }
@@ -133,10 +133,10 @@ html, body {
         border-color: white; }
 
 #top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap {
-  border-color: #df7d60; }
+  border-color: #da5834; }
   #top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap .toggle_content {
-    border-color: #df7d60;
-    background-color: #df7d60;
+    border-color: #da5834;
+    background-color: #da5834;
     color: white;
     padding-top: 0;
     margin: 0; }
@@ -144,7 +144,7 @@ html, body {
       color: white; }
 
 #top #wrap_all #main .avia-button-wrap .avia-button {
-  background-color: #df7d60;
+  background-color: #da5834;
   border-color: #bd5032;
   border-radius: 0;
   font-weight: bold; }
@@ -182,7 +182,7 @@ html, body {
   position: fixed; }
 
 #top #wrap_all #header_main_alternate {
-  background-color: #df7d60;
+  background-color: #da5834;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
   #top #wrap_all #header_main_alternate .container {
     width: 100%;
@@ -203,7 +203,7 @@ html, body {
         width: 100%;
         z-index: 999; }
         #top #wrap_all #header_main_alternate #avia-menu li .sub-menu li a {
-          background-color: #df7d60;
+          background-color: #da5834;
           height: auto;
           padding: 10px;
           line-height: 18px;
@@ -226,8 +226,8 @@ html, body {
         #top #wrap_all #header_main_alternate #avia-menu li a:hover {
           background-color: #bd5032; }
         #top #wrap_all #header_main_alternate #avia-menu li a .avia-menu-fx {
-          background-color: #df7d60;
-          border-color: #df7d60; }
+          background-color: #da5834;
+          border-color: #da5834; }
       #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5) {
         position: relative; }
         #top #wrap_all #header_main_alternate #avia-menu li:nth-child(5) .avia-bullet {
@@ -250,7 +250,7 @@ html, body {
     font-weight: 700;
     color: white; }
     #top #wrap_all #mobile-advanced li a:before {
-      color: #df7d60; }
+      color: #da5834; }
   #top #wrap_all #mobile-advanced li .sub-menu li a {
     background-color: #292929; }
 
@@ -262,7 +262,7 @@ html, body {
     width: 100%;
     border: none;
     display: block;
-    background-color: #df7d60;
+    background-color: #da5834;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
     #top #wrap_all #main .av-section-bottom-logo .container {
       max-width: 95%;
@@ -302,7 +302,7 @@ html, body {
   #top #wrap_all #main .main_color {
     border: none; }
     #top #wrap_all #main .main_color .template-page.av-content-small {
-      border-color: #df7d60; }
+      border-color: #da5834; }
   #top #wrap_all #main #section-black, #top #wrap_all #main #section-orange {
     background-color: #333333; }
     #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-black .container .template-page .flex_column .av-special-heading h6, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h1, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h2, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h3, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h4, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h5, #top #wrap_all #main #section-orange .container .template-page .flex_column .av-special-heading h6 {
@@ -312,9 +312,9 @@ html, body {
     #top #wrap_all #main #section-black .container .template-page .flex_column .av_textblock_section p, #top #wrap_all #main #section-orange .container .template-page .flex_column .av_textblock_section p {
       color: white; }
   #top #wrap_all #main #section-orange {
-    background-color: #df7d60; }
+    background-color: #da5834; }
   #top #wrap_all #main #inner-3-5 .av_two_fifth {
-    background-color: #df7d60;
+    background-color: #da5834;
     padding: 30px; }
     #top #wrap_all #main #inner-3-5 .av_two_fifth .av-special-heading .av-special-heading-tag {
       color: white; }
@@ -332,15 +332,17 @@ html, body {
       padding: 25px 0; } }
 
 #top #wrap_all #main .sidebar {
-  border-color: #df7d60; }
-  #top #wrap_all #main .sidebar .widget .nested_nav li a, #top #wrap_all #main .sidebar .widget #menu-team-members li a, #top #wrap_all #main .sidebar .widget .textwidget ul li a {
+  border-color: #da5834; }
+  #top #wrap_all #main .sidebar .widget .nested_nav li a, #top #wrap_all #main .sidebar .widget #menu-team-members li a, #top #wrap_all #main .sidebar .widget .textwidget ul li a, #top #wrap_all #main .sidebar .widget ul li a {
+    font-family: "Open Sans", sans-serif;
     font-weight: 700;
-    color: #df7d60; }
-    #top #wrap_all #main .sidebar .widget .nested_nav li a:hover, #top #wrap_all #main .sidebar .widget #menu-team-members li a:hover, #top #wrap_all #main .sidebar .widget .textwidget ul li a:hover {
+    font-style: normal;
+    color: #da5834; }
+    #top #wrap_all #main .sidebar .widget .nested_nav li a:hover, #top #wrap_all #main .sidebar .widget #menu-team-members li a:hover, #top #wrap_all #main .sidebar .widget .textwidget ul li a:hover, #top #wrap_all #main .sidebar .widget ul li a:hover {
       text-decoration: underline; }
-  #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item {
-    background-color: #df7d60; }
-    #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item a, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item a {
+  #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item, #top #wrap_all #main .sidebar .widget ul li.current_page_item, #top #wrap_all #main .sidebar .widget ul li.current-menu-item {
+    background-color: #da5834; }
+    #top #wrap_all #main .sidebar .widget .nested_nav li.current_page_item a, #top #wrap_all #main .sidebar .widget .nested_nav li.current-menu-item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current_page_item a, #top #wrap_all #main .sidebar .widget #menu-team-members li.current-menu-item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current_page_item a, #top #wrap_all #main .sidebar .widget .textwidget ul li.current-menu-item a, #top #wrap_all #main .sidebar .widget ul li.current_page_item a, #top #wrap_all #main .sidebar .widget ul li.current-menu-item a {
       color: white; }
 
 #top #wrap_all #main #tribe-events-content .tribe_events .av-single-event-content .tribe-events-single-event-title {
@@ -386,7 +388,7 @@ html, body {
         #top #wrap_all #main #footer .container .flex_column:nth-child(1) .textwidget p {
           color: white; }
           #top #wrap_all #main #footer .container .flex_column:nth-child(1) .textwidget p .btn-donate {
-            background-color: #df7d60;
+            background-color: #da5834;
             color: white; }
       #top #wrap_all #main #footer .container .flex_column:nth-child(2) {
         background-color: #c5b8a6; }
@@ -402,14 +404,14 @@ html, body {
           #top #wrap_all #main #footer .container .flex_column:nth-child(2) .textwidget small {
             line-height: 0.25rem; }
       #top #wrap_all #main #footer .container .flex_column:nth-child(3) {
-        background-color: #df7d60; }
+        background-color: #da5834; }
         #top #wrap_all #main #footer .container .flex_column:nth-child(3) .widgettitle {
           color: white; }
         #top #wrap_all #main #footer .container .flex_column:nth-child(3) .textwidget p {
           color: white; }
           #top #wrap_all #main #footer .container .flex_column:nth-child(3) .textwidget p .btn-map {
             background-color: white;
-            color: #df7d60; }
+            color: #da5834; }
 
 #top #wrap_all #main #socket .container .copyright {
   font-size: 0.85em; }
@@ -429,7 +431,7 @@ html, body {
     flex-direction: column; } }
 
 #top #wrap_all #main #home-1-3 .av_one_third {
-  background-color: #df7d60; }
+  background-color: #da5834; }
   #top #wrap_all #main #home-1-3 .av_one_third .flex_column {
     margin: 0; }
     #top #wrap_all #main #home-1-3 .av_one_third .flex_column .av-special-heading {
@@ -464,7 +466,7 @@ html, body {
     #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading .av-subheading p {
       color: #333333; }
     #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av-special-heading h3 {
-      color: #df7d60; }
+      color: #da5834; }
   #top #wrap_all #main #home-3-3 .av_one_third .flex_column .av_textblock_section p {
     color: #333333; }
 
@@ -486,7 +488,7 @@ html, body {
       border-left: 1px solid white;
       border-bottom: 1px solid white; }
       #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_third .av_font_icon .av-icon-char {
-        color: #df7d60; }
+        color: #da5834; }
       #top #wrap_all #main #home-events .container .entry-content-wrapper .av_one_third .av-special-heading .av-subheading p {
         color: white;
         font-weight: 400; }
