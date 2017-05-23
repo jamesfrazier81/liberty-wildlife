@@ -71,11 +71,15 @@ class PostTypeRepository
 			$post_types[$type->name]->np_enabled = ( array_key_exists($type->name, $this->enabled_post_types) ) ? true : false;
 			$post_types[$type->name]->replace_menu = $this->postTypeSetting($type->name, 'replace_menu');
 			$post_types[$type->name]->hide_default = $this->postTypeSetting($type->name, 'hide_default');
+			$post_types[$type->name]->disable_sorting = $this->postTypeSetting($type->name, 'disable_sorting');
 			$post_types[$type->name]->disable_nesting = $this->postTypeSetting($type->name, 'disable_nesting');
 			$post_types[$type->name]->custom_fields_enabled = $this->postTypeSetting($type->name, 'custom_fields_enabled');
 			$post_types[$type->name]->standard_fields_enabled = $this->postTypeSetting($type->name, 'standard_fields_enabled');
 			$post_types[$type->name]->custom_fields = $this->configuredFields($type->name, 'custom_fields');
 			$post_types[$type->name]->standard_fields = $this->configuredFields($type->name, 'standard_fields');
+			$post_types[$type->name]->page_assignment = $this->configuredFields($type->name, 'post_type_page_assignment');
+			$post_types[$type->name]->page_assignment_id = $this->configuredFields($type->name, 'post_type_page_assignment_page_id');
+			$post_types[$type->name]->page_assignment_title = $this->configuredFields($type->name, 'post_type_page_assignment_page_title');
 		}
 		return $post_types;
 	}
@@ -249,6 +253,21 @@ class PostTypeRepository
 	}
 
 	/**
+	* All Posts Link
+	* @since 1.7.0
+	* @param string post_type
+	* @return string
+	*/
+	public function allPostsLink($post_type)
+	{
+		$pt_object = $this->getSinglePostType(esc_attr($post_type));
+		if ( $pt_object->replace_menu ){
+			return esc_url( admin_url('admin.php?page=nestedpages-' . $post_type) );
+		}
+		return esc_url( admin_url('edit.php?post_type=' . esc_attr($post_type)) );
+	}
+
+	/**
 	* Edit Post Link
 	* @since 1.2.1
 	* @param string post_type
@@ -314,7 +333,7 @@ class PostTypeRepository
 	*/
 	public function getSubmenuText($post_type)
 	{
-		return ( $post_type->hierarchical ) ? __('Nested View', 'nestedpages') : __('Sort View', 'nestedpages');
+		return ( $post_type->hierarchical ) ? __('Nested View', 'wp-nested-pages') : __('Sort View', 'wp-nested-pages');
 	}
 
 	/**
@@ -344,12 +363,25 @@ class PostTypeRepository
 	private function fieldsArray($results)
 	{
 		$fields = array();
-		$exclude = array('_wp_page_template', '_edit_lock', '_edit_last', '_wp_trash_meta_status', '_wp_trash_meta_time', 'layout', 'position', 'rule', 'hide_on_screen', 'np_link_target', 'np_nav_title', 'np_title_attribute', 'np_nav_status', 'nested_pages_status', 'np_nav_css_classes');
+		$exclude = array('_wp_page_template', '_edit_lock', '_edit_last', '_wp_trash_meta_status', '_wp_trash_meta_time', 'layout', 'position', 'rule', 'hide_on_screen', '_np_link_target', '_np_nav_title', '_np_title_attribute', '_np_nav_status', '_nested_pages_status', '_np_nav_css_classes');
 		foreach ( $results as $field ){
 			if ( !in_array($field->meta_key, $exclude) ) 
 				array_push($fields, $field->meta_key);
 		}
 		return $fields;
+	}
+
+	/**
+	* Get an array of assigned page IDs for all post types
+	*/
+	public function getAssignedPages()
+	{
+		$post_types = $this->getPostTypesObject();
+		$array = array();
+		foreach($post_types as $type => $options){
+			if ( isset($options->page_assignment) && $options->page_assignment == 'true' && isset($options->page_assignment_id) && $options->page_assignment_id !== '' ) $array[$options->page_assignment_id] = $type;
+		}
+		return $array;
 	}
 
 }

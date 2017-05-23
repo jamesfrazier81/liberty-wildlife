@@ -125,6 +125,48 @@ $avia_config['shop_overview_excerpt'] = false;		// display excerpt
 
 if(!$avia_config['shop_overview_column']) $avia_config['shop_overview_column'] = 3;
 
+/**
+ * Setup product gallery support depending on user settings and available WooCommerce galleries
+ */
+if( ! function_exists( 'avia_woocommerce_product_gallery_support_setup' ) )
+{
+	if ( did_action( 'woocommerce_init' ) )
+	{
+		avia_woocommerce_product_gallery_support_setup();
+	}
+	else
+	{
+		add_action( 'woocommerce_init', 'avia_woocommerce_product_gallery_support_setup', 10);
+	}
+	
+	function avia_woocommerce_product_gallery_support_setup() 
+	{
+		if( ! avia_woocommerce_version_check( '3.0.0' ) )
+		{
+			return;
+		}
+		
+		$options = avia_get_option();
+		
+		//	Fallback, if options have not been saved
+		if( empty( $options['product_gallery'] ) )
+		{
+			$options['product_gallery'] = '';
+		}
+		
+		if( 'wc_30_gallery' == $options['product_gallery'] )
+		{
+			add_theme_support( 'wc-product-gallery-zoom' );
+				//	uncomment the following line if you want default WooCommerce lightbox - else Enfold lightbox will be used
+//			add_theme_support( 'wc-product-gallery-lightbox' );
+			add_theme_support( 'wc-product-gallery-slider' );
+			add_theme_support( 'avia-wc-30-product-gallery-feature' );
+		}
+		
+		return;
+	}
+}
+
 
 ######################################################################
 # Create the correct template html structure
@@ -1097,11 +1139,28 @@ function avia_woocommerce_display_output_upsells()
 #
 add_action( 'woocommerce_before_single_product_summary', 'avia_add_image_div', 2);
 add_action( 'woocommerce_before_single_product_summary',  'avia_close_image_div', 20);
+
 if(!function_exists('avia_add_image_div'))
 {
 	function avia_add_image_div()
 	{
-		echo "<div class='single-product-main-image alpha'>";
+		$nolightbox = '';
+		$icon = '';
+		
+		if( avia_woocommerce_version_check( '3.0.0' ) )
+		{
+			if( current_theme_supports( 'wc-product-gallery-lightbox' ) )
+			{
+				$nolightbox = 'noLightbox';
+			}
+			else if( current_theme_supports( 'avia-wc-30-product-gallery-feature' ) )
+			{
+				$nolightbox = 'noHover';
+				$icon = '<div class="avia-wc-30-product-gallery-lightbox" '.av_icon_string('search').' ></div>';
+			}
+		}
+		
+		echo '<div class="' . $nolightbox . ' single-product-main-image alpha">' . $icon;
 	}
 }
 
@@ -1142,7 +1201,6 @@ if(avia_woocommerce_version_check('3.0.0')) // in woocommerce 3.0.0
 {
 	add_action('woocommerce_product_thumbnails', 'avia_product_gallery_thumbnail_opener', 19);
 	add_action('woocommerce_product_thumbnails',  'avia_close_div', 21);
-
 }
 
 if(!function_exists('avia_product_gallery_thumbnail_opener'))
@@ -1362,7 +1420,6 @@ if(!function_exists('avia_woocommerce_remove_hooks'))
 			remove_action( 'woocommerce_grouped_add_to_cart', 'woocommerce_grouped_add_to_cart', 30 );
 			remove_action( 'woocommerce_variable_add_to_cart', 'woocommerce_variable_add_to_cart', 30 );
 			remove_action( 'woocommerce_external_add_to_cart', 'woocommerce_external_add_to_cart', 30 );
-
 			remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 			remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
 			remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );
@@ -1386,16 +1443,40 @@ if(!function_exists('avia_woocommerce_echo_password'))
 	}
 }
 
+if( ! function_exists( 'avia_woocommerce_product_gallery_support' ) )
+{
+	if ( did_action( 'woocommerce_init' ) )
+	{
+		avia_woocommerce_product_gallery_support();
+	}
+	else
+	{
+		add_action( 'woocommerce_init', 'avia_woocommerce_product_gallery_support', 50 );
+	}
+	
+	function avia_woocommerce_product_gallery_support() 
+	{
+		if( avia_woocommerce_version_check( '3.0.0' ) && current_theme_supports( 'avia-wc-30-product-gallery-feature' ) ) 
+		{
+			remove_action( 'woocommerce_product_thumbnails', 'avia_product_gallery_thumbnail_opener', 19 );
+			remove_action( 'woocommerce_product_thumbnails', 'avia_close_div', 21 );
+		} 
+		else 
+		{
+			add_filter( 'woocommerce_single_product_image_html','avia_woocommerce_post_thumbnail_description', 10, 2 );
+			add_filter( 'woocommerce_single_product_image_thumbnail_html','avia_woocommerce_gallery_thumbnail_description', 10, 4 );
+		}
+	}
+}
 
-
-
+/*
+	todo: check if this filter is deprecated. seems no longer in use
+*/
 if(!function_exists('avia_woocommerce_post_thumbnail_description'))
 {
-	add_filter('woocommerce_single_product_image_html','avia_woocommerce_post_thumbnail_description', 10, 2);
 	function avia_woocommerce_post_thumbnail_description($img, $post_id)
 	{
 		global $post, $woocommerce, $product;
-
 		if(has_post_thumbnail())
 		{
 			$image_title = esc_attr(get_post_field('post_content', get_post_thumbnail_id()));
@@ -1418,20 +1499,42 @@ if(!function_exists('avia_woocommerce_post_thumbnail_description'))
 	}
 }
 
+
+/*
+	single page big image and thumbnails are using the same filter now. therefore we need to make sure that the images get the correct size by storing once the 
+	woocommerce_product_thumbnails action has been called
+*/
+
+add_action('woocommerce_product_thumbnails', 'avia_woocommerce_set_single_page_image_size');
+
+if(!function_exists('avia_woocommerce_set_single_page_image_size'))
+{
+	function avia_woocommerce_set_single_page_image_size()
+	{
+		global $avia_config;
+		
+		if(!isset($avia_config['avwc-single-page-size']))
+		{
+			$avia_config['avwc-single-page-size'] = "shop_thumbnail";
+		}
+	}
+}
+
+
 if(!function_exists('avia_woocommerce_gallery_thumbnail_description'))
 {
-	add_filter('woocommerce_single_product_image_thumbnail_html','avia_woocommerce_gallery_thumbnail_description', 10, 4);
-	
 	function avia_woocommerce_gallery_thumbnail_description($img, $attachment_id, $post_id = "", $image_class = "" )
 	{
-	
+			global $avia_config;
+		
+			$image_size = isset($avia_config['avwc-single-page-size']) ? $avia_config['avwc-single-page-size'] : 'shop_single';
+		
 			$image_link = wp_get_attachment_url( $attachment_id );
 
 			if(!$image_link) return $img;
 
-			$image = wp_get_attachment_image( $attachment_id, apply_filters( 'single_product_small_thumbnail_size', 'shop_thumbnail' ) );
+			$image = wp_get_attachment_image( $attachment_id, apply_filters( 'single_product_small_thumbnail_size', $image_size ) );
 			$image_title = esc_attr(get_post_field('post_content', $attachment_id));
-
 			$img = sprintf( '<a href="%s" class="%s" title="%s"  rel="prettyPhoto[product-gallery]">%s</a>', $image_link, $image_class, $image_title, $image );
 
 		return $img;
@@ -1749,9 +1852,3 @@ function avia_woocommerce_set_pages()
 		}
 	}		
 }
-
-
-
-
-
-

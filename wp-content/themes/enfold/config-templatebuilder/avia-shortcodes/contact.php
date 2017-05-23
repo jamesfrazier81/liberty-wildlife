@@ -109,7 +109,7 @@ if ( !class_exists( 'avia_sc_contact' ) )
 										"name" 	=> __("Form Element Options", 'avia_framework' ) ,
 										"desc" 	=> __("Enter any number of options that the visitor can choose from. Separate these Options with a comma.", 'avia_framework' ) ."<br/><small>".
 												   __("Example: Option 1, Option 2, Option 3", 'avia_framework' )."</small>"."<br/><small>".
-												   __("Note: If you want to use a coma in the option text you can escape it with \,", 'avia_framework' )."</small>" ,
+												   __("Note: If you want to use a comma in the option text you have to write 2 comma.", 'avia_framework' )."</small>" ,
 
 										"id" 	=> "options",
 										"required" => array('type','equals','select'),

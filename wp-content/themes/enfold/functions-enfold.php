@@ -1099,7 +1099,7 @@ if(!function_exists('avia_header_html_custom_height'))
 			
 			$html =  "";
 			$html .= "\n<style type='text/css' media='screen'>\n";
-			$html .= " #top #header_main > .container, #top #header_main > .container .main_menu ul:first-child > li > a,";
+			$html .= " #top #header_main > .container, #top #header_main > .container .main_menu  .av-main-nav > li > a,";
 			$html .= " #top #header_main #menu-item-shop .cart_dropdown_link{ height:{$size}px; line-height: {$size}px; }\n";
 			$html .= " .html_top_nav_header .av-logo-container{ height:{$size}px;  }\n";
 			$html .= " .html_header_top.html_header_sticky #top #wrap_all #main{ padding-top:".((int)$size + $bottom_bar + $top_bar - $modifier)."px; } \n";
@@ -1591,6 +1591,12 @@ if(!function_exists('avia_generate_stylesheet'))
 	        $stylesheet_flag = update_option( 'avia_stylesheet_exists'.$safe_name, 'true' );
 			$dynamic_id = update_option( 'avia_stylesheet_dynamic_version'.$safe_name, uniqid() );
 	    }
+	    else
+	    {
+		    $dir_flag = update_option( 'avia_stylesheet_dir_writable'.$safe_name, 'false' );
+	        $stylesheet_flag = update_option( 'avia_stylesheet_exists'.$safe_name, 'false' );
+			$dynamic_id = delete_option( 'avia_stylesheet_dynamic_version'.$safe_name);
+	    }
 	}
 }
 
@@ -1797,6 +1803,40 @@ if (!class_exists('avia_mailchimp_widget'))
 	register_widget( 'avia_mailchimp_widget' );
 }
 
+/**
+ * WP core hack see https://core.trac.wordpress.org/ticket/15551
+ * 
+ * Paging does not work on single custom post type pages - always a redirect to page 1 by WP
+ * 
+ * 
+ * @since 4.0.6
+ */
+if( ! function_exists( 'avia_wp_cpt_request_redirect_fix' ) )
+{
+	function avia_wp_cpt_request_redirect_fix( $request ) 
+	{
+		$args = array(
+					'public'	=>	true,
+					'_builtin'	=>	false
+				);
+
+		$cpts = get_post_types( $args, 'names', 'and' ); 
+
+		if (	isset( $request->query_vars['post_type'] ) &&
+				in_array( $request->query_vars['post_type'], $cpts ) &&
+				true === $request->is_singular &&
+				- 1 == $request->current_post &&
+				true === $request->is_paged 
+			) 
+		{
+			add_filter( 'redirect_canonical', '__return_false' );
+		}
+
+		return $request;
+	}
+
+	add_action( 'parse_query', 'avia_wp_cpt_request_redirect_fix' );
+}
 
 
 

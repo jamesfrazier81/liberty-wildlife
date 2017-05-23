@@ -363,7 +363,10 @@ if ( !class_exists( 'avia_product_slider' ) )
 						$rel = $product->is_purchasable() ? "rel='nofollow'" : "";
 					}
 					
-					$image = get_the_post_thumbnail($product->id, 'square', array('class'=>"av-catalogue-image av-cart-update-image av-catalogue-image-{$show_images}"));
+					$product_id = method_exists( $product , 'get_id' ) ? $product->get_id() : $product->id;
+					$product_type = method_exists( $product , 'get_type' ) ? $product->get_type() : $product->product_type;
+					
+					$image = get_the_post_thumbnail( $product_id, 'square', array('class'=>"av-catalogue-image av-cart-update-image av-catalogue-image-{$show_images}"));
 					
 					$text .= $image;
 					$text .= "<div class='av-catalogue-item-inner'>";
@@ -379,10 +382,10 @@ if ( !class_exists( 'avia_product_slider' ) )
 						sprintf( '<a %s href="%s" data-product_id="%s" data-product_sku="%s" class="av-catalogue-item %s product_type_%s">%s</a>',
 							$rel,
 							esc_url( $cart_url ),
-							esc_attr( $product->id ),
+							esc_attr( $product_id ),
 							esc_attr( $product->get_sku() ),
 							$ajax_class,
-							esc_attr( $product->product_type ),
+							esc_attr( $product_type ),
 							$text
 						),
 					$product );

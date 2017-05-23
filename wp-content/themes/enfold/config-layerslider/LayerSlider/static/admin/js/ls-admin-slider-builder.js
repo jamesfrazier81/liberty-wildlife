@@ -573,7 +573,7 @@ var LS_UndoManager = {
 
 		if( $input.closest('.ls-sublayer-pages').length ) {
 			cmd = 'layer.general';
-			name = 'Layer settings';
+			name = LS_l10n.SBUndoLayer;
 			index = LS_activeLayerIndexSet[0];
 
 			if($input.hasClass('sublayerprop')) { cmd = 'layer.transition'; }
@@ -581,7 +581,7 @@ var LS_UndoManager = {
 
 		} else if( $input.closest('.ls-slide-options').length ) {
 			cmd = 'slide.general';
-			name = 'Slide settings';
+			name = LS_l10n.SBUndoSlide;
 			index = LS_activeSlideIndex;
 
 		} else {
@@ -656,7 +656,7 @@ var LayerSlider = {
 		// Get default data objects for slides and layers
 		var newSlideData = jQuery.extend(true, {}, LS_DataSource.getDefaultSlideData()),
 			newLayerData = jQuery.extend(true, {}, LS_DataSource.getDefaultLayerData());
-			newLayerData.subtitle = 'Layer #1';
+			newLayerData.subtitle = LS_l10n.SBLayerTitle.replace('%d', '1');
 
 		// Add new slide data to data source
 		window.lsSliderData.layers.push({
@@ -666,7 +666,8 @@ var LayerSlider = {
 
 		// Add new slide tab
 		var newIndex 	= window.lsSliderData.layers.length + 1,
-			tab 		= jQuery('<a href="#"><span>Slide #'+newIndex+'</span><img src="'+(pluginPath+'admin/img/blank.gif')+'"><span class="dashicons dashicons-dismiss"></span>').insertBefore('#ls-add-layer');
+			title 		= LS_l10n.SBSlideTitle.replace('%d', newIndex),
+			tab 		= jQuery('<a href="#"><span>'+title+'</span><img src="'+(pluginPath+'admin/img/blank.gif')+'"><span class="dashicons dashicons-dismiss"></span>').insertBefore('#ls-add-layer');
 
 		// Name new slide properly
 		LayerSlider.reindexSlides();
@@ -682,7 +683,7 @@ var LayerSlider = {
 
 	removeSlide: function(el) {
 
-		if(confirm('Are you sure you want to remove this slide?')) {
+		if(confirm(LS_l10n.SBRemoveSlide)) {
 
 			// Get tab and menu item index
 			var index = LS_activeSlideIndex;
@@ -767,6 +768,11 @@ var LayerSlider = {
 
 
 	renameSlide: function(el) {
+
+		if( document.location.href.indexOf('ls-revisions') !== -1 ) {
+			return;
+		}
+
 		var $el = jQuery(el);
 		var name = jQuery('span:first-child', el).text();
 
@@ -820,7 +826,7 @@ var LayerSlider = {
 		if(!!newSlideData.properties.title) {
 			newSlideData.properties.title += ' copy';
 		} else {
-			newSlideData.properties.title = 'Slide #'+(LS_activeSlideIndex+1)+' copy';
+			newSlideData.properties.title = LS_l10n.SBSlideCopyTitle.replace('%d', LS_activeSlideIndex+1);
 		}
 
 		// Duplicate slide by using jQuery.extend()
@@ -930,6 +936,11 @@ var LayerSlider = {
 				LayerSlider.autoFitPreview(target);
 			}
 		});
+
+
+		jQuery('#collapse-menu').click(function() {
+			LayerSlider.autoFitPreview(target);
+		});
 	},
 
 
@@ -942,7 +953,9 @@ var LayerSlider = {
 				height 		= parseInt(sliderProps.height) || 720,
 				// 905(px) is the minimum width to keep the slider settings table organized
 				smallestRatio = 916 / width > 0.5 ? 916 / width : 0.5,
-				ratio = ( jQuery('#ls-main-nav-bar').outerWidth() - 32 ) / width;
+				padding = (document.location.href.indexOf('ls-revisions') !== -1) ? 0 : 32,
+				ratio = ( jQuery('.wrap').eq(0).outerWidth() - padding ) / width;
+
 
 			if( ratio < smallestRatio ){
 				ratio = smallestRatio;
@@ -1031,7 +1044,7 @@ var LayerSlider = {
 		if( ! addProperties.histroyEvent) {
 			LS_UndoManager.add(
 				'slide.layers',
-				updateInfo.length > 1 ? 'New layers' : 'New layer',
+				updateInfo.length > 1 ? LS_l10n.SBUndoNewLayers : LS_l10n.SBUndoNewLayer,
 				updateInfo
 			);
 		}
@@ -1256,7 +1269,7 @@ var LayerSlider = {
 		// Require confirmation from user
 		// if it's not a history event.
 		if( removeProperties.requireConfirmation ) {
-			if( !confirm('Are you sure you want to remove this layer?') ) {
+			if( !confirm( LS_l10n.SBRemoveLayer ) ) {
 				return false;
 			}
 		}
@@ -1278,7 +1291,6 @@ var LayerSlider = {
 		// Don't use .revert() on a LS_activeLayerIndexSet reference, as it will
 		// change the original set as well.
 		while(c--) {
-			// console.log(c);
 			layerIndex 	= layerIndexSet[c];
 			$layer 		= $layers.eq(layerIndex);
 			layerData 	= jQuery.extend(true, {}, LS_activeSlideData.sublayers[layerIndex]);
@@ -1319,7 +1331,7 @@ var LayerSlider = {
 		// Maintain undoManager only if
 		// it wasn't a history action
 		if( !removeProperties.histroyEvent && updateInfo.length) {
-			LS_UndoManager.add('slide.layers', 'Remove layer(s)', updateInfo);
+			LS_UndoManager.add('slide.layers', LS_l10n.SBUndoRemoveLayer, updateInfo);
 		}
 	},
 
@@ -1331,7 +1343,7 @@ var LayerSlider = {
 		var layerData = LS_activeSlideData.sublayers[layerIndex];
 
 		// Maintain history
-		LS_UndoManager.add('layer.general', 'Hide layer', {
+		LS_UndoManager.add('layer.general', LS_l10n.SBUndoHideLayer, {
 			itemIndex: layerIndex,
 			undo: { skip: !!layerData.skip },
 			redo: { skip: !layerData.skip }
@@ -1355,7 +1367,7 @@ var LayerSlider = {
 			$previewItem = LayerSlider.previewItemAtIndex(layerIndex);
 
 		// Maintain history
-		LS_UndoManager.add('layer.general', 'Lock layer', {
+		LS_UndoManager.add('layer.general', LS_l10n.SBUndoLockLayer, {
 			itemIndex: layerIndex,
 			undo: { locked: !!layerData.locked },
 			redo: { locked: !layerData.locked }
@@ -1542,7 +1554,7 @@ var LayerSlider = {
 			for( var s = 0; s < slideCount; s++) {
 				slideName 	= sliderData.layers[s].properties.title;
 				slideName 	= slideName ? ' ('+slideName+')' : '';
-				markup += '<option value="'+(s+1)+'">Until the end of Slide #'+(s+1)+''+slideName+'</option>';
+				markup += '<option value="'+(s+1)+'">'+LS_l10n.SBStaticUntil.replace('%d', (s+1))+' '+slideName+'</option>';
 			}
 
 			// Append select options
@@ -1622,8 +1634,8 @@ var LayerSlider = {
 		// Build clipboard data
 		clipboardData = {
 			layers: clipboardData,
-			sliderID: LS_sliderID,
-			slideIndex: LS_activeSlideIndex,
+			sliderID: copyProperties.sliderID || LS_sliderID,
+			slideIndex: copyProperties.slideIndex || LS_activeSlideIndex,
 			layerIndexSet: layerIndexSet
 		};
 
@@ -1640,13 +1652,18 @@ var LayerSlider = {
 			clipboardData 	= localStorage.getObject('ls-layer-clipboard'),
 			addIndexSet;
 
+		if( ! clipboardData ) {
+			alert(LS_l10n.SBPasteLayerError);
+			return;
+		}
+
 		layerDataSet 		= layerDataSet 	|| clipboardData.layers;
 		layerIndexSet 		= layerIndexSet || clipboardData.layerIndexSet;
 
 		// Warn users when there's nothing on the clipboard
 		// and halt execution.
 		if( ! layerDataSet ) {
-			alert('There\'s nothing to paste. Copy a layer first!');
+			alert(LS_l10n.SBPasteLayerError);
 			return;
 		}
 
@@ -1672,7 +1689,12 @@ var LayerSlider = {
 
 		// Copy pasted layer to make a new reference
 		// and update settings like position and name
-		if(!isDataProvided) { this.copyLayer(true, layerDataSet, layerIndexSet); }
+		if( ! isDataProvided) {
+			this.copyLayer(true, layerDataSet, layerIndexSet, {
+				sliderID: clipboardData.sliderID,
+				slideIndex: clipboardData.slideIndex
+			});
+		}
 	},
 
 
@@ -1692,7 +1714,9 @@ var LayerSlider = {
 		jQuery(el).attr('class', 'active').siblings().removeAttr('class');
 
 		// Store selection
-		layerData.media = section;
+		if( section ) {
+			layerData.media = section;
+		}
 
 		// Show the corresponding sections
 		sections.hide().removeClass('ls-hidden');
@@ -1760,7 +1784,10 @@ var LayerSlider = {
 		jQuery(el).addClass('active');
 
 		// Store selection
-		layerData.type = element;
+		if( element ) {
+			layerData.type = element;
+		}
+
 	},
 
 
@@ -1822,7 +1849,7 @@ var LayerSlider = {
 
 		// Validate clipboard data
 		if( ! clipboard || jQuery.isEmptyObject(clipboard.data) || clipboard.timestamp < timestamp - 60 * 60 * 3 ) {
-			alert('There is nothing to paste!');
+			alert(LS_l10n.SBPasteError);
 			return false;
 		}
 
@@ -1861,7 +1888,7 @@ var LayerSlider = {
 		});
 
 		// Add UndoManager action
-		LS_UndoManager.add('layer.general', 'Paste layer settings', {
+		LS_UndoManager.add('layer.general', LS_l10n.SBUndoPasteSettings, {
 			itemIndex: LS_activeLayerIndexSet[0],
 			undo: undoObj,
 			redo: redoObj
@@ -2374,6 +2401,10 @@ var LayerSlider = {
 
 		if( layerData.locked ) { item.addClass('disabled'); }
 		if( layerData.hasTransforms ) { item.addClass('transformed'); }
+		if( document.location.href.indexOf('ls-revisions') !== -1 ) {
+			item.addClass('disabled');
+		}
+
 
 		// Apply style settings and attributes
 		item.attr( jQuery.extend({}, innerAttrs, outerAttrs) ).attr({
@@ -2593,7 +2624,7 @@ var LayerSlider = {
 
 			// Media Library params
 			var frame = wp.media({
-				title : 'Pick an image to use it in LayerSlider WP',
+				title : LS_l10n.SBMediaLibraryImage,
 				multiple : multiple,
 				library : { type : type },
 				button : { text : 'Insert' }
@@ -2619,7 +2650,7 @@ var LayerSlider = {
 					LS_GUI.updateImagePicker( jQuery(uploadInput),  previewImg);
 
 					// Add action to UndoManager
-					LS_UndoManager.add('slide.general', 'Slide image', {
+					LS_UndoManager.add('slide.general', LS_l10n.SBUndoSlideImage, {
 						itemIndex: LS_activeSlideIndex,
 						undo: {
 							background: LS_activeSlideData.properties.background,
@@ -2653,7 +2684,7 @@ var LayerSlider = {
 
 						// Add a layer
 						newLayerData = jQuery.extend(true, {}, LS_DataSource.getDefaultLayerData());
-						newLayerData.subtitle = 'Layer #1';
+						newLayerData.subtitle = LS_l10n.SBLayerTitle.replace('%d', '1');
 
 						// Add new layer
 						window.lsSliderData.layers.push({
@@ -2663,7 +2694,8 @@ var LayerSlider = {
 
 						// Add new slide tab
 						var newIndex 	= window.lsSliderData.layers.length + 1,
-							tab 		= jQuery('<a href="#"><span>Slide #'+newIndex+'</span><img src="'+previewImg+'" ><span class="dashicons dashicons-dismiss"></span>').insertBefore('#ls-add-layer');
+							title 		= LS_l10n.SBSlideTitle.replace('%d', newIndex),
+							tab 		= jQuery('<a href="#"><span>'+title+'</span><img src="'+previewImg+'" ><span class="dashicons dashicons-dismiss"></span>').insertBefore('#ls-add-layer');
 					}
 
 
@@ -2694,7 +2726,7 @@ var LayerSlider = {
 					LS_GUI.updateImagePicker( jQuery(uploadInput),  previewImg);
 
 					// Add action to UndoManager
-					LS_UndoManager.add('layer.general', 'Layer image', {
+					LS_UndoManager.add('layer.general', LS_l10n.SBUndoLayerImage, {
 						itemIndex: LS_activeLayerIndexSet[0],
 						undo: {
 							image: LS_activeLayerDataSet[0].image,
@@ -2741,7 +2773,7 @@ var LayerSlider = {
 
 					// Maintain UndoManager
 					if(updateInfo.length) {
-						LS_UndoManager.add('slide.layers', 'New layer(s)', updateInfo);
+						LS_UndoManager.add('slide.layers', LS_l10n.SBUndoNewLayers, updateInfo);
 					}
 
 
@@ -2754,7 +2786,7 @@ var LayerSlider = {
 					LS_GUI.updateImagePicker( jQuery(uploadInput),  previewImg);
 
 					// Add action to UndoManager
-					LS_UndoManager.add('layer.general', 'Video poster', {
+					LS_UndoManager.add('layer.general', LS_l10n.SBUndoVideoPoster, {
 						itemIndex: LS_activeLayerIndexSet[0],
 						undo: {
 							poster: LS_activeLayerDataSet[0].poster,
@@ -2944,12 +2976,12 @@ var LayerSlider = {
 				processData: false,
 				contentType: false,
 				error: function(jqXHR, textStatus, errorThrown) {
-					alert('Upload error:' + errorThrown);
+					alert( LS_l10n.SBUploadErrorMessage.replace('%s', errorThrown) );
 				},
 				success: function(resp) {
 
 					if(!resp || !resp.success) {
-						alert('Upload error');
+						alert(LS_l10n.SBUploadError);
 						return;
 					}
 
@@ -2985,7 +3017,7 @@ var LayerSlider = {
 				var oldIndex = LayerSlider.dragIndex;
 				var index = jQuery('.moving').removeClass('moving').index();
 
-				LS_UndoManager.add('layer.order', 'Sort layers', {
+				LS_UndoManager.add('layer.order', LS_l10n.SBUndoSortLayers, {
 					itemIndex: null,
 					undo: { from: index, to: oldIndex },
 					redo: { from: oldIndex, to: index }
@@ -3109,7 +3141,7 @@ var LayerSlider = {
 				});
 
 				// Add changes to undoManager
-				LS_UndoManager.add('layer.style', 'Layer position', updateInfo.reverse());
+				LS_UndoManager.add('layer.style', LS_l10n.SBUndoLayerPosition, updateInfo.reverse());
 			}
 		});
 	},
@@ -3228,8 +3260,8 @@ var LayerSlider = {
 
 	listPreviewItems: function(e) {
 
-		// Bail out if preview is active
-		if( LayerSlider.isSlidePreviewActive || LayerSlider.isLayerPreviewActive ) {
+		// Bail out if preview is active or when using Revisions
+		if( LayerSlider.isSlidePreviewActive || LayerSlider.isLayerPreviewActive || document.location.href.indexOf('ls-revisions') !== -1 ) {
 			return;
 		}
 
@@ -3401,9 +3433,11 @@ var LayerSlider = {
 
 		// Reindex default layers' title
 		jQuery('#ls-layers .ls-sublayers > li').each(function(index) {
-			var layerTitle = jQuery(this).find('.ls-sublayer-title').val();
-			if( layerTitle.indexOf('Layer #') != -1 && layerTitle.indexOf('copy') == -1) {
-				jQuery(this).find('.ls-sublayer-title').val('Layer #' + (layerCount-index));
+			var layerTitle 	= jQuery(this).find('.ls-sublayer-title').val(),
+				pattern 	= LS_l10n.SBLayerTitle.substring(0, LS_l10n.SBLayerTitle.length-2);
+
+			if( layerTitle.indexOf(pattern) != -1 && layerTitle.indexOf('copy') == -1) {
+				jQuery(this).find('.ls-sublayer-title').val( LS_l10n.SBLayerTitle.replace('%d', (layerCount-index) ) );
 			}
 		});
 	},
@@ -3430,6 +3464,37 @@ var LayerSlider = {
 					'data-help-transition': false
 				}).html('<span>'+title+'</span><span class="dashicons dashicons-dismiss"></span>');
 		});
+	},
+
+
+	rebuildSlides: function() {
+
+		// Remove tabs
+		jQuery('#ls-layer-tabs a:not(.unsortable)').remove();
+
+		jQuery.each(window.lsSliderData.layers, function(slideKey, slideData) {
+
+			var title 	= slideData.properties.title || LS_l10n.SBSlideTitle.replace('%d', slideKey+1),
+				src 	= slideData.properties.backgroundThumb || pluginPath+'admin/img/blank.gif';
+
+
+			if( title.indexOf('copy') === -1 && title.indexOf('Slide #') !== -1 ) {
+				title = 'Slide #' + (slideKey + 1);
+			}
+
+			$tab = jQuery('<a></a>').insertBefore('#ls-layer-tabs .unsortable:first');
+
+			$tab.attr({
+				'href': '#',
+				'data-help': "<div style='background-image: url("+src+");'></div>",
+				'data-help-class': 'ls-slide-preview-tooltip popover-light',
+				'data-help-delay': 1,
+				'data-help-transition': false
+			}).html('<span>'+title+'</span><span class="dashicons dashicons-dismiss"></span>');
+		});
+
+
+		jQuery('#ls-layer-tabs a').eq( LS_activeSlideIndex ).addClass('active');
 	},
 
 	checkMediaAutoPlay: function( $textarea, prop, val ) {
@@ -3649,6 +3714,7 @@ var LayerSlider = {
 			globalBGSize: sliderProps.globalBGSize,
 			parallaxScrollReverse: sliderProps.parallaxScrollReverse,
 			playByScroll: sliderProps.playByScroll ? true : false,
+			playByScrollStart: sliderProps.playByScrollStart ? true : false,
 			playByScrollSpeed: sliderProps.playByScrollSpeed || 1,
 			navButtons: false,
 			navStartStop: false,
@@ -3663,7 +3729,7 @@ var LayerSlider = {
 
 		}).on( 'slideTimelineDidCreate', function(){
 			jQuery( '.ls-slidebar-slider' ).attr({
-				'data-help': 'Drag me :)',
+				'data-help': LS_l10n.SBDragMe,
 				'data-km-ui-popover-once': 'true',
 				'data-km-ui-popover-theme': 'red',
 				'data-km-ui-popover-autoclose': 3,
@@ -3686,8 +3752,13 @@ var LayerSlider = {
 			layersliders.find('.ls-container').layerSlider( 'destroy', true );
 			layersliders.hide();
 
+
+
 			// Rewrote the Preview button text
-			jQuery('#ls-layers .ls-preview-button').text('Slide').removeClass('playing');
+			var btnText = document.location.href.indexOf('ls-revisions') !== -1 ? LS_l10n.SBPreviewSlide : LS_l10n.slideNoun;
+			jQuery('#ls-layers .ls-preview-button').text( btnText ).removeClass('playing');
+
+
 			LayerSlider.generatePreview();
 			LayerSlider.showPreviewSelection();
 			LayerSlider.updatePreviewSelection();
@@ -3718,7 +3789,7 @@ var LayerSlider = {
 
 		// Change preview state
 		this.isLayerPreviewActive = true;
-		jQuery(button).addClass('playing').text('Stop');
+		jQuery(button).addClass('playing').text( LS_l10n.stop );
 
 		// Hide other layers
 		LayerSlider.hidePreviewSelection();
@@ -3804,7 +3875,7 @@ var LayerSlider = {
 			// Change preview state
 			this.isLayerPreviewActive = false;
 			LayerSlider.showPreviewSelection();
-			jQuery('.ls-layer-preview-button').removeClass('playing').text('Layer');
+			jQuery('.ls-layer-preview-button').removeClass('playing').text( LS_l10n.layer );
 
 			jQuery.each(LS_activeLayerDataSet, function(index, item) {
 				item.skip = false;
@@ -4049,13 +4120,13 @@ var LayerSlider = {
 		if(check) {
 
 			jQuery( '#ls-transitions-list section:eq('+index+')' ).find('.tr-item').addClass('added');
-			checkbox.attr('class', 'on').text('Deselect all');
+			checkbox.attr('class', 'on').text( LS_l10n.deselectAll );
 			LS_activeSlideData.properties[ type ] = 'all';
 
 		} else {
 
 			jQuery( '#ls-transitions-list section:eq('+index+')' ).find('.tr-item').removeClass('added');
-			checkbox.attr('class', 'off').text('Select all');
+			checkbox.attr('class', 'off').text( LS_l10n.selectAll);
 			LS_activeSlideData.properties[ type ] = '';
 		}
 	},
@@ -4080,7 +4151,7 @@ var LayerSlider = {
 		} else {
 
 			// Check the checkbox
-			jQuery('#ls-transition-window header i:last').attr('class', 'off').text('Select all');
+			jQuery('#ls-transition-window header i:last').attr('class', 'off').text( LS_l10n.selectAll );
 		}
 
 		// Gather checked selected transitions
@@ -4106,7 +4177,7 @@ var LayerSlider = {
 		var sliderData = jQuery.extend(true, {}, window.lsSliderData);
 
 		// Temporary disable submit button
-		jQuery('.ls-publish').addClass('saving').find('button').text('Saving ...').attr('disabled', true);
+		jQuery('.ls-publish').addClass('saving').find('button').text( LS_l10n.saving ).attr('disabled', true);
 
 		// Serialize slider settings to prevent jQuery form converting form data
 		sliderData.properties = JSON.stringify(sliderData.properties);
@@ -4156,9 +4227,9 @@ var LayerSlider = {
 				sliderData: sliderData
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-				jQuery('.ls-publish').removeClass('saving').addClass('failed').find('button').text('ERROR');
+				jQuery('.ls-publish').removeClass('saving').addClass('failed').find('button').text( LS_l10n.error );
 				setTimeout(function() {
-					alert('It seems there is a server issue that prevented LayerSlider from saving your work. Please check LayerSlider -> System Status for potential errors, try to temporarily disable themes/plugins to rule out incompatibility issues or contact your hosting provider to resolve server configuration problems. Your HTTP server thrown the following error: \n\r\n\r' + errorThrown);
+					alert( LS_l10n.SBSaveError.replace('%s', errorThrown ) );
 				}, 100);
 			},
 			success: function(jqXHR, textStatus) {
@@ -4168,7 +4239,7 @@ var LayerSlider = {
 				LS_editorIsDirty = false;
 
 				// Button feedback
-				jQuery('.ls-publish').removeClass('saving').addClass('saved').find('button').text('Saved');
+				jQuery('.ls-publish').removeClass('saving').addClass('saved').find('button').text( LS_l10n.saved );
 
 				// Display on screen notification when save
 				// was initiated by a keyboard shortcut.
@@ -4179,7 +4250,7 @@ var LayerSlider = {
 			complete: function(data) {
 
 				setTimeout(function() {
-					jQuery('.ls-publish').removeClass('saved failed').find('button').text('Save changes').attr('disabled', false);
+					jQuery('.ls-publish').removeClass('saved failed').find('button').text( LS_l10n.save ).attr('disabled', false);
 					jQuery('.ls-notify-osd').removeClass('visible');
 				}, 2000);
 			}
@@ -4292,7 +4363,7 @@ var LS_PostOptions = {
 
 		if(data.length === 0) {
 			preview.append( jQuery('<li>')
-				.append( jQuery('<h4>', { 'text' : 'No posts were found with the current filters.' }) )
+				.append( jQuery('<h4>', { 'text' : LS_l10n.SBPostFilterWarning }) )
 			);
 
 		} else {
@@ -4713,7 +4784,7 @@ var LS_DataSource = {
 		// Make sure to always override the layer title in the stored copy
 		// to avoid name collisions and weird behaviors.
 		var layerCount 	= LS_activeSlideData.sublayers ? LS_activeSlideData.sublayers.length : 0,
-			layerName 	= 'Layer #' + (layerCount+1);
+			layerName 	= LS_l10n.SBLayerTitle.replace('%d', layerCount+1);
 
 		LS_defaultLayerData.subtitle = layerName;
 
@@ -4868,7 +4939,7 @@ jQuery(document).ready(function() {
 	jQuery( window ).on('beforeunload', function(e) {
 
 		if( LS_editorIsDirty ) {
-			var dialogText = 'You have unsaved changes on this page. Do you want to leave and discard the changes made since your last save?';
+			var dialogText = LS_l10n.SBUnsavedChanges;
 			e.returnValue = dialogText;
 			return dialogText;
 		}
@@ -4924,7 +4995,7 @@ jQuery(document).ready(function() {
 
 		onSelect: function(formattedDate, date, inst) {
 			inst.$el.prev().fadeOut(200);
-			inst.$el.trigger('keyup');
+			inst.$el.trigger('input');
 		}
 
 	}).on('input', function() {
@@ -4941,7 +5012,7 @@ jQuery(document).ready(function() {
 					if( ! data.errorCount && data.dateStr != '' ) {
 						$this.prev().fadeIn(200).removeClass('error').children('span').text( data.dateStr );
 					} else {
-						$this.prev().fadeIn(200).addClass('error').children('span').text( 'Invalid format' );
+						$this.prev().fadeIn(200).addClass('error').children('span').text( LS_l10n.SBInvalidFormat );
 					}
 				});
 			}
@@ -5038,7 +5109,7 @@ jQuery(document).ready(function() {
 
 		} else if($parent.hasClass('ls-slide-image')) {
 
-			LS_UndoManager.add('slide.general', 'Remove slide image', {
+			LS_UndoManager.add('slide.general', LS_l10n.SBUndoRemoveSlideImage, {
 				itemIndex: LS_activeSlideIndex,
 				undo: {
 					background: LS_activeSlideData.properties.background,
@@ -5064,7 +5135,7 @@ jQuery(document).ready(function() {
 
 		} else if($parent.hasClass('ls-layer-image')) {
 
-			LS_UndoManager.add('layer.general', 'Remove layer image', {
+			LS_UndoManager.add('layer.general', LS_l10n.SBUndoRemoveLayerImage, {
 				itemIndex: LS_activeLayerIndexSet[0],
 				undo: {
 					image: LS_activeLayerDataSet[0].image,
@@ -5088,7 +5159,7 @@ jQuery(document).ready(function() {
 
 		} else if($parent.hasClass('ls-media-image')) {
 
-			LS_UndoManager.add('layer.general', 'Remove video poster', {
+			LS_UndoManager.add('layer.general', LS_l10n.SBUndoRemoveVideoPoster, {
 				itemIndex: LS_activeLayerIndexSet[0],
 				undo: {
 					poster: LS_activeLayerDataSet[0].poster,
@@ -5328,7 +5399,7 @@ jQuery(document).ready(function() {
 	jQuery('#ls-layers').on('click', '.ls-url-prompt', function(e){
 		e.preventDefault();
 
-		var url = prompt('Enter an image URL');
+		var url = prompt( LS_l10n.SBEnterImageURL );
 		if( ! url ) { return false; }
 
 		var $el 	= jQuery(this),
@@ -5359,7 +5430,7 @@ jQuery(document).ready(function() {
 			LS_activeLayerDataSet[0].posterThumb = url;
 		}
 
-		jQuery('img', $target).attr('src', url);
+		LS_GUI.updateImagePicker( $target, url );
 		LayerSlider.generatePreview();
 	});
 
@@ -5436,7 +5507,7 @@ jQuery(document).ready(function() {
 	}).on('click', '#ls-transition-window header i:not(:last)', function(e) {
 
 		// Confirmation
-		if( ! confirm('Are you sure you want to apply the currently selected transitions and effects on the other slides?') ) {
+		if( ! confirm( LS_l10n.SBTransitionApplyOthers ) ) {
 			return false;
 		}
 
@@ -5519,7 +5590,7 @@ jQuery(document).ready(function() {
 
 		if( !$item.hasClass('active') ) {
 
-			LS_UndoManager.add('layer.general', 'Layer media', {
+			LS_UndoManager.add('layer.general', LS_l10n.SBUndoLayerMedia, {
 				itemIndex: LS_activeLayerIndexSet,
 				undo: { media: LS_activeLayerDataSet[0].media },
 				redo: { media: $item.data('section') }
@@ -5534,7 +5605,7 @@ jQuery(document).ready(function() {
 		e.preventDefault();
 		var $item = jQuery(this);
 
-		LS_UndoManager.add('layer.general', 'Layer type', {
+		LS_UndoManager.add('layer.general', LS_l10n.SBUndoLayerType, {
 			itemIndex: LS_activeLayerIndexSet,
 			undo: { type: LS_activeLayerDataSet[0].type },
 			redo: { type: $item.data('element') }
@@ -5806,7 +5877,7 @@ jQuery(document).ready(function() {
 					if( $parent.hasClass('ls-slide-image') ) {
 
 						// Add action to UndoManager
-						LS_UndoManager.add('slide.general', 'Slide image', {
+						LS_UndoManager.add('slide.general', LS_l10n.SBUndoSlideImage, {
 							itemIndex: LS_activeSlideIndex,
 							undo: {
 								background: LS_activeSlideData.properties.background,
@@ -5836,7 +5907,7 @@ jQuery(document).ready(function() {
 					} else if( $parent.hasClass('ls-layer-image') ) {
 
 						// Add action to UndoManager
-						LS_UndoManager.add('layer.general', 'Layer image', {
+						LS_UndoManager.add('layer.general', LS_l10n.SBUndoLayerImage, {
 							itemIndex: LS_activeLayerIndexSet[0],
 							undo: {
 								image: LS_activeLayerDataSet[0].image,
@@ -5860,7 +5931,7 @@ jQuery(document).ready(function() {
 					} else if( $parent.hasClass('ls-media-image') ) {
 
 						// Add action to UndoManager
-						LS_UndoManager.add('layer.general', 'Video poster', {
+						LS_UndoManager.add('layer.general', LS_l10n.SBUndoVideoPoster, {
 							itemIndex: LS_activeLayerIndexSet[0],
 							undo: {
 								poster: LS_activeLayerDataSet[0].poster,
@@ -6030,7 +6101,7 @@ jQuery(document).ready(function() {
 
 		// Maintain history
 		LayerSlider.updatePreviewSelection();
-		LS_UndoManager.add('layer.style', 'Align layer(s)', updateInfo);
+		LS_UndoManager.add('layer.style', LS_l10n.SBUndoAlignLayer, updateInfo);
 
 	}).on('click', '.ls-editor-layouts button', function(e) {
 		e.preventDefault();
@@ -6064,6 +6135,10 @@ jQuery(document).ready(function() {
 			return;
 		}
 
+		if( document.location.href.indexOf('ls-revisions') !== -1 ) {
+			return;
+		}
+
 		// Save slider when pressing Ctrl/Cmd + S
 		if( (e.metaKey || e.ctrlKey) && e.which == 83 ) {
 			if( ! e.altKey ) {
@@ -6075,7 +6150,7 @@ jQuery(document).ready(function() {
 
 		// Disable keyboard shortcuts while the
 		// main builder interface is not visible.
-		if( ! slidesItem.hasClass('active') ) {
+		if( ! slidesItem.length || ! slidesItem.hasClass('active') ) {
 			return true;
 		}
 
@@ -6261,7 +6336,7 @@ jQuery(document).ready(function() {
 
 				clearTimeout(keyTimeout);
 				keyTimeout = setTimeout(function() {
-					LS_UndoManager.add('layer.style', 'Layer position', updateInfo.reverse());
+					LS_UndoManager.add('layer.style', LS_l10n.SBUndoLayerPosition, updateInfo.reverse());
 					oldX = {}; oldY = {};
 				}, 1000);
 
@@ -6351,9 +6426,9 @@ jQuery(document).ready(function() {
 		var trs = jQuery('#ls-transitions-list section.active').find('.tr-item');
 
 		if(trs.filter('.added').length == trs.length) {
-			jQuery('#ls-transition-window header i:last').attr('class', 'on').text('Deselect all');
+			jQuery('#ls-transition-window header i:last').attr('class', 'on').text( LS_l10n.deselectAll );
 		} else {
-			jQuery('#ls-transition-window header i:last').attr('class', 'off').text('Select all');
+			jQuery('#ls-transition-window header i:last').attr('class', 'off').text( LS_l10n.selectAll );
 		}
 	});
 
@@ -6513,7 +6588,7 @@ jQuery(document).ready(function() {
 			updateInfo.push(undoObj);
 		});
 
-		LS_UndoManager.add('layer.style', 'Layer resize', updateInfo);
+		LS_UndoManager.add('layer.style', LS_l10n.SBUndoLayerResize, updateInfo);
 		LayerSlider.updatePreviewSelection();
 
 	}).addClass('ui-selected-helper').appendTo( LS_previewHolder );
@@ -7071,6 +7146,8 @@ var prepTemplateForRelease = function() {
 	// Global BG & YourLogo
 	if( sliderProps.backgroundimage ) { sliderProps.backgroundimage = LS_Utils.parse_url( sliderProps.backgroundimage, 'PHP_URL_PATH'); }
 	if( sliderProps.yourlogo ) { sliderProps.yourlogo = LS_Utils.parse_url( sliderProps.yourlogo, 'PHP_URL_PATH'); }
+	if( sliderProps.preview ) { sliderProps.preview = LS_Utils.parse_url( sliderProps.preview, 'PHP_URL_PATH'); }
+	if( sliderData.meta && sliderData.meta.preview ) { sliderData.meta.preview = LS_Utils.parse_url( sliderData.meta.preview, 'PHP_URL_PATH'); }
 
 
 	// Slides

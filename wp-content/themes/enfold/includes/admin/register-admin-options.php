@@ -135,6 +135,18 @@ $avia_elements[] =	array(
 
 $avia_elements[] =	array(
 					"slug"	=> "shop",
+					"name" 	=> __("Product gallery", 'avia_framework'),
+					"desc" 	=> __("You can choose the appearance of your product gallery here", 'avia_framework'),
+					"id" 	=> "product_gallery",
+					"type" 	=> "select",
+					"std" 	=> "",
+					"no_first"=>true,
+					"subtype" => array( __('Default enfold product gallery', 'avia_framework') =>'',
+										__('WooCommerce 3.0 product gallery', 'avia_framework') =>'wc_30_gallery',
+										));
+
+$avia_elements[] =	array(
+					"slug"	=> "shop",
 					"name" 	=> __("Main Shop Page Banner", 'avia_framework'),
 					"desc" 	=> __("You can choose to display a parallax banner with description on the shop page", 'avia_framework'),
 					"id" 	=> "shop_banner",

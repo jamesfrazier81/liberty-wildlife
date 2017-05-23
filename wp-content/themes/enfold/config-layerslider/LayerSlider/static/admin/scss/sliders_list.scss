@@ -110,6 +110,7 @@
 
 	select {
 		height: 26px;
+		max-width: 150px;
 		font-size: 13px !important;
 		margin: 0 1px;
 
@@ -706,10 +707,10 @@
 
 			li {
 				position: relative;
-				top: 17px;
+				top: 8px;
 				height: 24px;
 				margin: -1px 0 0 0;
-				padding: 5px 0 0 0;
+				padding: 3px 0 0 0;
 				border-top: 1px solid rgba(255, 255, 255, 0.05);
 				border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 				line-height: 24px;
@@ -751,7 +752,6 @@
 
 div.ls-bulk-actions {
 	float: left;
-	width: 260px;
 	height: 30px;
 	margin-top: 3px;
 
@@ -835,7 +835,7 @@ div.ls-bulk-actions {
 		overflow: visible !important;
 
 		&:after {
-			content: 'Importing, please wait...';
+			content: attr(data-l10n-importing);
 			position: absolute;
 			width: 200%;
 			height: 50px;
@@ -1079,6 +1079,7 @@ div.ls-bulk-actions {
 	.inner {
 		padding: 20px;
 		text-align: center;
+		font-size: 13px;
 	}
 
 	i {
@@ -1361,13 +1362,29 @@ div.ls-bulk-actions {
 	}
 }
 
+.ls-product-tips {
+
+	text-align: justify;
+
+	.button {
+		position: absolute;
+		bottom: 10px;
+		left: 10px;
+		height: 30px;
+	}
+}
+
 .ls-product-support {
 
 	a.button {
 		position: absolute;
 		left: 10px;
-		bottom: 11px;
+		bottom: 10px;
 		box-shadow: none;
+	}
+
+	a.button-normal {
+		height: 30px;
 	}
 
 	a.button-small {
@@ -1599,6 +1616,7 @@ ul.ls-font-list {
 	}
 
 	.inner p {
+		max-width: 900px;
 		margin: 20px auto 30px auto;
 		text-align: center;
 	}
@@ -1732,10 +1750,6 @@ ul.ls-font-list {
 	}
 }
 
-.ls-debug-account-button {
-	margin-left: 15px !important;
-}
-
 #ls-erase-modal-window {
 
 	i.ls-notice {
@@ -1824,7 +1838,7 @@ ul.ls-font-list {
 			position: absolute;
 			right: 100px;
 			top: 10px;
-			width: 180px;
+			width: 250px;
 			text-align: center;
 			font-weight: normal;
 			font-size: 12px;

@@ -37,7 +37,7 @@
 		<a href="#" class="dashicons dashicons-no-alt"></a>
 	</h3>
 	<div class="inner desc">
-		<?php _e("If so, please consider recommending it to your friends on your favorite social network!", "LayerSlider"); ?>
+		<?php _e('If so, please consider recommending it to your friends on your favorite social network!', 'LayerSlider'); ?>
 	</div>
 	<div class="inner">
 		<a href="https://www.facebook.com/sharer/sharer.php?u=https://layerslider.kreaturamedia.com" target="_blank">

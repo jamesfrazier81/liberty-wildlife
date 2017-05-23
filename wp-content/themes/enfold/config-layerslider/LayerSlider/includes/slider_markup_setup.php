@@ -53,6 +53,12 @@ if( empty($slides['properties']['attrs']['sliderVersion']) && empty($slides['pro
 	}
 }
 
+
+// Override firstSlide if it is specified in embed params
+if( ! empty( $embed['firstslide'] ) ) {
+	$slides['properties']['attrs']['firstSlide'] = '[firstSlide]';
+}
+
 // Slides and layers
 if(isset($slides['layers']) && is_array($slides['layers'])) {
 	foreach($slides['layers'] as $slidekey => $slide) {

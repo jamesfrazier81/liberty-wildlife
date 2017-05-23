@@ -11,7 +11,7 @@
 	<?php $sliderName = !empty($sProps['title']) ? htmlspecialchars(stripslashes($sProps['title'])) : ''; ?>
 	<input type="text" name="title" value="<?php echo $sliderName ?>" id="title" autocomplete="off" placeholder="<?php _e('Type your slider name here', 'LayerSlider') ?>">
 	<div class="ls-slider-slug">
-		<?php _e('Slider slug', 'LayerSlider') ?>:<input type="text" name="slug" value="<?php echo !empty($sProps['slug']) ? $sProps['slug'] : '' ?>" autocomplete="off" placeholder="<?php _e('e.g. homepageslider', 'LayerSlider') ?>" data-help="Set a custom slider identifier to use in shortcodes instead of the database ID. Needs to be unique, and can contain only alphanumeric characters. This setting is optional.">
+		<?php _e('Slider slug', 'LayerSlider') ?>:<input type="text" name="slug" value="<?php echo !empty($sProps['slug']) ? $sProps['slug'] : '' ?>" autocomplete="off" placeholder="<?php _e('e.g. homepageslider', 'LayerSlider') ?>" data-help="<?php _e('Set a custom slider identifier to use in shortcodes instead of the database ID. Needs to be unique, and can contain only alphanumeric characters. This setting is optional.', 'LayerSlider') ?>">
 	</div>
 </div>
 
@@ -25,17 +25,50 @@
 	</h3>
 	<div class="inner">
 		<ul class="ls-settings-sidebar">
-			<li data-deeplink="publish"><i class="dashicons dashicons-calendar-alt"></i><?php _e('Publish', 'LayerSlider') ?></li>
-			<li data-deeplink="layout" class="active"><i class="dashicons dashicons-editor-distractionfree"></i><?php _e('Layout', 'LayerSlider') ?></li>
-			<li data-deeplink="mobile"><i class="dashicons dashicons-smartphone"></i><?php _e('Mobile', 'LayerSlider') ?></li>
-			<li data-deeplink="slideshow"><i class="dashicons dashicons-editor-video"></i><?php _e('Slideshow', 'LayerSlider') ?></li>
-			<li data-deeplink="appearance"><i class="dashicons dashicons-admin-appearance"></i><?php _e('Appearance', 'LayerSlider') ?></li>
-			<li data-deeplink="navigation"><i class="dashicons dashicons-image-flip-horizontal"></i><?php _e('Navigation Area', 'LayerSlider') ?></li>
-			<li data-deeplink="thumbnav"><i class="dashicons dashicons-screenoptions"></i><?php _e('Thumbnail Navigation', 'LayerSlider') ?></li>
-			<li data-deeplink="videos"><i class="dashicons dashicons-video-alt3"></i><?php _e('Videos', 'LayerSlider') ?></li>
-			<li data-deeplink="yourlogo"><i class="dashicons dashicons-admin-post"></i><?php _e('YourLogo', 'LayerSlider') ?></li>
-			<li data-deeplink="transition"><i class="dashicons dashicons-admin-settings"></i><?php _e('Default Options', 'LayerSlider') ?></li>
-			<li data-deeplink="misc"><i class="dashicons dashicons-admin-generic"></i><?php _e('Misc', 'LayerSlider') ?></li>
+			<li data-deeplink="publish">
+				<i class="dashicons dashicons-calendar-alt"></i>
+				<strong><?php _e('Publish', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="layout" class="active">
+				<i class="dashicons dashicons-editor-distractionfree"></i>
+				<strong><?php _e('Layout', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="mobile">
+				<i class="dashicons dashicons-smartphone"></i>
+				<strong><?php _e('Mobile', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="slideshow">
+				<i class="dashicons dashicons-editor-video"></i>
+				<strong><?php _e('Slideshow', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="appearance">
+				<i class="dashicons dashicons-admin-appearance"></i>
+				<strong><?php _e('Appearance', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="navigation">
+				<i class="dashicons dashicons-image-flip-horizontal"></i>
+				<strong><?php _e('Navigation Area', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="thumbnav">
+				<i class="dashicons dashicons-screenoptions"></i>
+				<strong><?php _e('Thumbnail Navigation', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="videos">
+				<i class="dashicons dashicons-video-alt3"></i>
+				<strong><?php _e('Videos', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="yourlogo">
+				<i class="dashicons dashicons-admin-post"></i>
+				<strong><?php _e('YourLogo', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="transition">
+				<i class="dashicons dashicons-admin-settings"></i>
+				<strong><?php _e('Default Options', 'LayerSlider') ?></strong>
+			</li>
+			<li data-deeplink="misc">
+				<i class="dashicons dashicons-admin-generic"></i>
+				<strong><?php _e('Misc', 'LayerSlider') ?></strong>
+			</li>
 		</ul>
 		<div class="ls-settings-contents">
 			<input type="hidden" name="sliderVersion" value="<?php echo LS_PLUGIN_VERSION ?>">
@@ -120,7 +153,7 @@
 					<tr class="ls-advanced ls-hidden">
 						<td style="vertical-align: top; padding-top: 10px;">
 							<div>
-								<i class="dashicons dashicons-flag" data-help="Advanced option"></i>
+								<i class="dashicons dashicons-flag" data-help="<?php _e('Advanced option', 'LayerSlider') ?>"></i>
 								<?php echo $sDefs['insertMethod']['name'] ?>
 							</div>
 						</td>
@@ -172,6 +205,7 @@
 					<tr><th colspan="3"><?php _e('Play By Scroll', 'LayerSlider') ?></th></tr>
 					<?php
 					lsOptionRow('checkbox', $sDefs['playByScroll'], $sProps );
+					lsOptionRow('checkbox', $sDefs['playByScrollStart'], $sProps );
 					lsOptionRow('input', $sDefs['playByScrollSpeed'], $sProps );
 					?>
 					<tr><th colspan="3"><?php _e('Cycles', 'LayerSlider') ?></th></tr>
@@ -227,7 +261,7 @@
 							<?php $bgImageId = !empty($sProps['backgroundimageId']) ? $sProps['backgroundimageId'] : null; ?>
 							<input type="hidden" name="backgroundimageId" value="<?php echo !empty($sProps['backgroundimageId']) ? $sProps['backgroundimageId'] : '' ?>">
 							<input type="hidden" name="backgroundimage" value="<?php echo !empty($sProps['backgroundimage']) ? $sProps['backgroundimage'] : '' ?>">
-							<div class="ls-image ls-global-background ls-upload">
+							<div class="ls-image ls-global-background ls-upload" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>">
 								<div><img src="<?php echo apply_filters('ls_get_thumbnail', $bgImageId, $bgImage) ?>" alt=""></div>
 								<a href="#" class="dashicons dashicons-dismiss"></a>
 							</div>
@@ -307,7 +341,7 @@
 							<?php $sProps['yourlogoId'] = !empty($sProps['yourlogoId']) ? $sProps['yourlogoId'] : null; ?>
 							<input type="hidden" name="yourlogoId" value="<?php echo !empty($sProps['yourlogoId']) ? $sProps['yourlogoId'] : '' ?>">
 							<input type="hidden" name="yourlogo" value="<?php echo !empty($sProps['yourlogo']) ? $sProps['yourlogo'] : '' ?>">
-							<div class="ls-image ls-upload ls-yourlogo-upload not-set">
+							<div class="ls-image ls-upload ls-yourlogo-upload not-set" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>">
 								<div><img src="<?php echo apply_filters('ls_get_thumbnail', $sProps['yourlogoId'], $sProps['yourlogo']) ?>" alt=""></div>
 								<a href="#" class="dashicons dashicons-dismiss"></a>
 							</div>
@@ -360,7 +394,7 @@
 							<?php $previewId = !empty($slider['meta']['previewId']) ? $slider['meta']['previewId'] : null; ?>
 							<input type="hidden" name="previewId" value="<?php echo !empty($slider['meta']['previewId']) ? $slider['meta']['previewId'] : '' ?>">
 							<input type="hidden" name="preview" value="<?php echo !empty($slider['meta']['preview']) ? $slider['meta']['preview'] : '' ?>">
-							<div class="ls-image ls-slider-preview ls-upload">
+							<div class="ls-image ls-slider-preview ls-upload" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>">
 								<div><img src="<?php echo apply_filters('ls_get_thumbnail', $previewId, $preview) ?>" alt=""></div>
 								<a href="#" class="dashicons dashicons-dismiss"></a>
 							</div>

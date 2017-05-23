@@ -120,8 +120,13 @@ if(!empty($slider['slides']) && is_array($slider['slides'])) {
 		// Add slide thumbnail
 		if(!isset($slides['properties']['attrs']['thumbnailNavigation']) || $slides['properties']['attrs']['thumbnailNavigation'] != 'disabled') {
 			if(!empty($slide['props']['thumbnail'])) {
-				$src = !empty($slide['props']['thumbnailId']) ? apply_filters('ls_get_image', $slide['props']['thumbnailId'], $slide['props']['thumbnail']) : $slide['props']['thumbnail'];
-				$lsMarkup[] = '<img src="'.$src.'" class="ls-tn" alt="Slide thumbnail" />';
+
+				$lsTN = '';
+				if( ! empty($slide['props']['thumbnailId']) ) {
+					$lsTN = wp_get_attachment_image($slide['props']['thumbnailId'], 'full', false, array('class' => 'ls-tn'));
+				}
+
+				$lsMarkup[] = ! empty( $lsTN ) ? $lsTN : '<img src="'.$slide['props']['thumbnail'].'" class="ls-tn" alt="Slide thumbnail" />';
 			}
 		}
 
@@ -229,6 +234,7 @@ if(!empty($slider['slides']) && is_array($slider['slides'])) {
 
 				// HTML attributes
 				$layerAttributes['class'] = 'ls-l';
+
 				if(!empty($layer['props']['id'])) { $innerAttributes['id'] = $layer['props']['id']; }
 				if(!empty($layer['props']['class'])) { $innerAttributes['class'] .= ' '.$layer['props']['class']; }
 				if(!empty($layer['props']['url'])) {
@@ -289,8 +295,9 @@ if(!empty($slider['slides']) && is_array($slider['slides'])) {
 					foreach( $layer['props']['outerAttributes'] as $key => $val ) {
 						if( $key === 'class' ) {
 							$el->addClass( $val );
+						} else {
+							$el->attr( $key, $val );
 						}
-						$el->attr( $key, $val );
 					}
 				}
 
@@ -298,8 +305,9 @@ if(!empty($slider['slides']) && is_array($slider['slides'])) {
 					foreach( $layer['props']['innerAttributes'] as $key => $val ) {
 						if( $key === 'class' ) {
 							$inner->addClass( $val );
+						} else {
+							$inner->attr( $key, $val );
 						}
-						$inner->attr( $key, $val );
 					}
 				}
 

@@ -226,6 +226,12 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 		}
 
 
+		// v6.3.0: Improve compatibility with *really* old sliders
+		if( ! empty( $slideVal['sublayers'] ) && is_array( $slideVal['sublayers'] ) ) {
+			$slideVal['sublayers'] = array_values( $slideVal['sublayers'] );
+		}
+
+
 		$slider['layers'][$slideKey] = $slideVal;
 
 		if(!empty($slideVal['sublayers']) && is_array($slideVal['sublayers'])) {
@@ -356,7 +362,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 				<i class="dashicons dashicons-editor-help"></i>
 				<?php _e('Documentation', 'LayerSlider') ?>
 			</a>
-			<span class="right help"><?php _e('Need help? Try these: ', 'LayerSlider') ?></span>
+			<span class="right help"><?php _e('Need help? Try these:', 'LayerSlider') ?></span>
 			<a href="#" class="clear unselectable"></a>
 		</div>
 
@@ -381,7 +387,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 				<?php
 					foreach($slider['layers'] as $key => $layer) :
 					$active = empty($key) ? 'active' : '';
-					$name = !empty($layer['properties']['title']) ? $layer['properties']['title'] : 'Slide #'.($key+1);
+					$name = !empty($layer['properties']['title']) ? $layer['properties']['title'] : sprintf(__('Slide #%d', 'LayerSlider'), ($key+1));
 					$bgImage = !empty($layer['properties']['background']) ? $layer['properties']['background'] : null;
 					$bgImageId = !empty($layer['properties']['backgroundId']) ? $layer['properties']['backgroundId'] : null;
 					$image = apply_filters('ls_get_image', $bgImageId, $bgImage, true);
@@ -406,7 +412,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 
 			<div class="ls-notification-info">
 				<i class="dashicons dashicons-info"> </i>
-				<?php _e('Please read our <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#layerslider-api" target="_blank">online documentation</a> before start using the API. LayerSlider 6 introduced an entirely new API model with different events and methods.', 'LayerSlider') ?>
+				<?php echo sprintf(__('Please read our %sonline documentation%s before start using the API. LayerSlider 6 introduced an entirely new API model with different events and methods.', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#layerslider-api" target="_blank">', '</a>') ?>
 			</div>
 
 
@@ -560,7 +566,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
 					slideTimelineDidCreate
-					<figure><span>|</span> <?php _e("Fires when the current slide's animation timeline (e.g. your layers) becomes accessible for interfacing.", 'LayerSlider') ?></figure>
+					<figure><span>|</span> <?php _e('Fires when the current slide’s animation timeline (e.g. your layers) becomes accessible for interfacing.', 'LayerSlider') ?></figure>
 				</h3>
 				<div>
 					<textarea name="slideTimelineDidCreate" cols="20" rows="5" class="ls-codemirror">function( event, slider ) {
@@ -573,7 +579,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
 					slideTimelineDidUpdate
-					<figure><span>|</span> <?php _e("Fires rapidly (at each frame) throughout the entire slide while playing, including reverse playback.", 'LayerSlider') ?></figure>
+					<figure><span>|</span> <?php _e('Fires rapidly (at each frame) throughout the entire slide while playing, including reverse playback.', 'LayerSlider') ?></figure>
 				</h3>
 				<div>
 					<textarea name="slideTimelineDidUpdate" cols="20" rows="5" class="ls-codemirror">function( event, timeline ) {
@@ -586,7 +592,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
 					slideTimelineDidStart
-					<figure><span>|</span> <?php _e("Fires when the current slide's animation timeline (e.g. your layers) has started playing.", 'LayerSlider') ?></figure>
+					<figure><span>|</span> <?php _e('Fires when the current slide’s animation timeline (e.g. your layers) has started playing.', 'LayerSlider') ?></figure>
 				</h3>
 				<div>
 					<textarea name="slideTimelineDidStart" cols="20" rows="5" class="ls-codemirror">function( event, slider ) {
@@ -598,7 +604,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
 					slideTimelineDidComplete
-					<figure><span>|</span> <?php _e("Fires when the current slide's animation timeline (e.g. layer transitions) has completed.", 'LayerSlider') ?></figure>
+					<figure><span>|</span> <?php _e('Fires when the current slide’s animation timeline (e.g. layer transitions) has completed.', 'LayerSlider') ?></figure>
 				</h3>
 				<div>
 					<textarea name="slideTimelineDidComplete" cols="20" rows="5" class="ls-codemirror">function( event, slider ) {
@@ -648,7 +654,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			</div>
 
 
-			<div class="ls-callback-separator">Old API Events</div>
+			<div class="ls-callback-separator"><?php _e('Old API Events', 'LayerSlider') ?></div>
 			<div class="ls-notification-info">
 				<i class="dashicons dashicons-info"> </i>
 				<?php _e('The events below were used in version 5 and earlier. These events are no longer in use, they cannot be edited. They are shown only to offer you a way of viewing and porting them to the new API.', 'LayerSlider') ?>
@@ -687,7 +693,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
 					cbPause
-					<figure><span>|</span> <?php _e('Fireing when the slideshow is temporary on hold (e.g.: "Pause on hover" feature).', 'LayerSlider') ?></figure>
+					<figure><span>|</span> <?php _e('Fireing when the slideshow is temporary on hold (e.g.: “Pause on hover” feature).', 'LayerSlider') ?></figure>
 				</h3>
 				<div>
 					<textarea readonly name="cbpause" cols="20" rows="5" class="ls-codemirror"><?php echo $slider['properties']['cbpause'] ?></textarea>
@@ -740,6 +746,13 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 	<div class="ls-publish">
 		<button type="submit" class="button button-primary button-hero"><?php _e('Save changes', 'LayerSlider') ?></button>
 		<div class="ls-save-shortcode">
+
+			<?php
+				$revisions = LS_Revisions::count( $id );
+				if( $revisions > 1 ) : ?>
+				<p class="revisions"><span><i class="dashicons dashicons-backup"></i><?php echo sprintf(__('Revisions Available:', 'LayerSlider'), $revisions) ?></span><br><a href="<?php echo admin_url('admin.php?page=ls-revisions&id='.$id) ?>"><?php echo sprintf(__('Browse %d Revisions', 'LayerSlider'), $revisions) ?></a></p>
+			<?php endif ?>
+
 			<p><span><?php _e('Use shortcode:', 'LayerSlider') ?></span><br><span>[layerslider id="<?php echo !empty($slider['properties']['slug']) ? $slider['properties']['slug'] : $id ?>"]</span></p>
 			<p><span><?php _e('Use PHP function:', 'LayerSlider') ?></span><br><span>&lt;?php layerslider(<?php echo !empty($slider['properties']['slug']) ? "'{$slider['properties']['slug']}'" : $id ?>) ?&gt;</span></p>
 		</div>

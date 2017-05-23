@@ -11,8 +11,11 @@ class AIOSEOPAdminMenus {
 	 * Constructor to add the actions.
 	 */
 	function __construct() {
-		add_action( 'admin_menu', array( $this, 'add_pro_submenu' ), 11 );
-
+		if( current_user_can( 'manage_options' ) || current_user_can( 'aiosp_manage_seo') ){
+			add_action( 'admin_menu', array( $this, 'add_pro_submenu' ), 11 );
+		}else{
+			return;
+		}
 	}
 
 	/**

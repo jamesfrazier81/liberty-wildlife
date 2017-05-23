@@ -149,6 +149,7 @@ if ( !class_exists( 'avia_sc_button' ) )
 														
 												__('Colored Buttons', 'avia_framework' ) => array(
 												__('Theme Color', 'avia_framework' )=>'theme-color',
+												__('Theme Color Highlight', 'avia_framework' )=>'theme-color-highlight',
 												__('Theme Color Subtle', 'avia_framework' )=>'theme-color-subtle',
 												__('Blue', 'avia_framework' )=>'blue',
 												__('Red',  'avia_framework' )=>'red',

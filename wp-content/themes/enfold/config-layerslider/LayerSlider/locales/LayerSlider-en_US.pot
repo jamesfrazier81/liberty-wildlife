@@ -1,38 +1,42 @@
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: LayerSlider WP 6.2.1\n"
-"POT-Creation-Date: 2017-03-27 20:52+0200\n"
-"PO-Revision-Date: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: LayerSlider WP 6.4.0\n"
+"POT-Creation-Date: 2017-05-02 17:35+0200\n"
+"PO-Revision-Date: 2017-04-23 19:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.12\n"
-"X-Poedit-KeywordsList: _e;__\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: ..\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: layerslider.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: static\n"
 
-#: classes/class.km.autoupdate.v3.php:165
-msgid ""
-"License activation is required to receive updates. Please read our <a href="
-"\"https://support.kreaturamedia.com/docs/layersliderwp/documentation."
-"html#activation\" target=\"_blank\">online documentation</a> to learn more."
-msgstr ""
-
-#: classes/class.km.autoupdate.v3.php:185
+#: classes/class.km.autoupdate.v3.php:166
 #, php-format
 msgid ""
-" License activation is required in order to receive updates for LayerSlider. "
+"License activation is required to receive updates. Please read our %sonline "
+"documentation%s to learn more."
+msgstr ""
+
+#: classes/class.km.autoupdate.v3.php:189
+#, php-format
+msgid ""
+"License activation is required in order to receive updates for LayerSlider. "
 "%sPurchase a license%s or %sread the documentation%s to learn more. %sGot "
 "LayerSlider in a theme?%s"
 msgstr ""
 
-#: classes/class.km.autoupdate.v3.php:363
+#: classes/class.km.autoupdate.v3.php:367
 msgid "Your settings were successfully saved."
 msgstr ""
 
@@ -56,12 +60,12 @@ msgid ""
 "<ul>\n"
 "\t<li>Scheduled sliders will only be visible to your visitors between the "
 "time period you set here.</li>\n"
-"\t<li>We're using international date and time format to avoid ambiguity.</"
+"\t<li>We’re using international date and time format to avoid ambiguity.</"
 "li>\n"
-"\t<li>You can also use relative formats described <a href=\"http://php.net/"
-"manual/en/datetime.formats.relative.php\" target=\"_blank\">here</a>. For "
-"example: <br> <i>tomorrow noon</i>, <i>monday 9am</i> or <i>+1 month</i></"
-"li>\n"
+"\t<li>You can also use relative formats described <a href=\\\"http://php.net/"
+"manual/en/datetime.formats.relative.php\\\" target=\\\"_blank\\\">here</a>. "
+"For example: <br> <i>tomorrow noon</i>, <i>monday 9am</i> or <i>+1 month</"
+"i></li>\n"
 "\t<li>Clear the text field above and left it empty if you want to cancel the "
 "schedule.</li>\n"
 "</ul>\n"
@@ -70,8 +74,8 @@ msgid ""
 "<ul>\n"
 "\t<li>You will still need to set the slider status as published,</li>\n"
 "\t<li>and insert the slider to the target page with one of the methods "
-"described in the <a href=\"https://support.kreaturamedia.com/docs/"
-"layersliderwp/documentation.html#publish-shortcode\" target=\"_blank"
+"described in the <a href=\\\"https://support.kreaturamedia.com/docs/"
+"layersliderwp/documentation.html#publish-shortcode\\\" target=\\\"_blank\\"
 "\">documentation</a>.</li>\n"
 "</ul>"
 msgstr ""
@@ -132,7 +136,7 @@ msgstr ""
 msgid "Select the sizing behavior of your full size sliders (e.g. hero scene)."
 msgstr ""
 
-#: config/defaults.php:156 config/defaults.php:3793
+#: config/defaults.php:156 config/defaults.php:3813
 msgid "Normal"
 msgstr ""
 
@@ -171,8 +175,8 @@ msgstr ""
 #: config/defaults.php:184
 msgid ""
 "If enabled, the slider will always have the same width as the viewport, even "
-"if a theme uses a boxed layout, unless you choose the \"Fit to parent height"
-"\" full size mode."
+"if a theme uses a boxed layout, unless you choose the “Fit to parent height” "
+"full size mode."
 msgstr ""
 
 #: config/defaults.php:190
@@ -221,7 +225,7 @@ msgstr ""
 msgid "Y Axis"
 msgstr ""
 
-#: config/defaults.php:256 config/defaults.php:609
+#: config/defaults.php:256 config/defaults.php:618
 msgid "Background size"
 msgstr ""
 
@@ -231,23 +235,23 @@ msgid ""
 "explicitly override it on a per slide basis."
 msgstr ""
 
-#: config/defaults.php:260 config/defaults.php:1061
+#: config/defaults.php:260 config/defaults.php:1070
 msgid "Auto"
 msgstr ""
 
-#: config/defaults.php:261 config/defaults.php:1062 config/defaults.php:1605
+#: config/defaults.php:261 config/defaults.php:1071 config/defaults.php:1621
 msgid "Cover"
 msgstr ""
 
-#: config/defaults.php:262 config/defaults.php:1063 config/defaults.php:1604
+#: config/defaults.php:262 config/defaults.php:1072 config/defaults.php:1620
 msgid "Contain"
 msgstr ""
 
-#: config/defaults.php:263 config/defaults.php:1064
+#: config/defaults.php:263 config/defaults.php:1073
 msgid "Stretch"
 msgstr ""
 
-#: config/defaults.php:269 config/defaults.php:601
+#: config/defaults.php:269 config/defaults.php:610
 msgid "Background position"
 msgstr ""
 
@@ -257,39 +261,39 @@ msgid ""
 "explicitly override it on a per slide basis."
 msgstr ""
 
-#: config/defaults.php:273 config/defaults.php:1075
+#: config/defaults.php:273 config/defaults.php:1084
 msgid "left top"
 msgstr ""
 
-#: config/defaults.php:274 config/defaults.php:1076
+#: config/defaults.php:274 config/defaults.php:1085
 msgid "left center"
 msgstr ""
 
-#: config/defaults.php:275 config/defaults.php:1077
+#: config/defaults.php:275 config/defaults.php:1086
 msgid "left bottom"
 msgstr ""
 
-#: config/defaults.php:276 config/defaults.php:1078
+#: config/defaults.php:276 config/defaults.php:1087
 msgid "center top"
 msgstr ""
 
-#: config/defaults.php:277 config/defaults.php:1079
+#: config/defaults.php:277 config/defaults.php:1088
 msgid "center center"
 msgstr ""
 
-#: config/defaults.php:278 config/defaults.php:1080
+#: config/defaults.php:278 config/defaults.php:1089
 msgid "center bottom"
 msgstr ""
 
-#: config/defaults.php:279 config/defaults.php:1081
+#: config/defaults.php:279 config/defaults.php:1090
 msgid "right top"
 msgstr ""
 
-#: config/defaults.php:280 config/defaults.php:1082
+#: config/defaults.php:280 config/defaults.php:1091
 msgid "right center"
 msgstr ""
 
-#: config/defaults.php:281 config/defaults.php:1083
+#: config/defaults.php:281 config/defaults.php:1092
 msgid "right bottom"
 msgstr ""
 
@@ -419,7 +423,7 @@ msgstr ""
 msgid "Do nothing"
 msgstr ""
 
-#: config/defaults.php:409 config/defaults.php:791
+#: config/defaults.php:409 config/defaults.php:800
 msgid "Pause slideshow"
 msgstr ""
 
@@ -443,7 +447,7 @@ msgstr ""
 #: config/defaults.php:421
 msgid ""
 "The slider will start with the specified slide. You can also use the value "
-"\"random\"."
+"“random”."
 msgstr ""
 
 #: config/defaults.php:428
@@ -462,16 +466,16 @@ msgstr ""
 msgid "Gesture-based navigation when swiping on touch-enabled devices."
 msgstr ""
 
-#: config/defaults.php:443 templates/tmpl-import-templates.php:62
-#: templates/tmpl-slider-settings.php:172
+#: config/defaults.php:443 templates/tmpl-import-templates.php:57
+#: templates/tmpl-slider-settings.php:205
 msgid "Play By Scroll"
 msgstr ""
 
 #: config/defaults.php:445
+#, php-format
 msgid ""
-"Play the slider by scrolling the web page. <a href=\"https://layerslider."
-"kreaturamedia.com/sliders/play-by-scroll/\" target=\"_blank\">Click here</a> "
-"to see a live example."
+"Play the slider by scrolling the web page. %sClick here%s to see a live "
+"example."
 msgstr ""
 
 #: config/defaults.php:452
@@ -482,358 +486,368 @@ msgstr ""
 msgid "Play By Scroll speed multiplier."
 msgstr ""
 
-#: config/defaults.php:462 templates/tmpl-slider-settings.php:177
+#: config/defaults.php:461
+msgid "Start immediately"
+msgstr ""
+
+#: config/defaults.php:463
+msgid ""
+"Instead of freezing the slider until visitors start scrolling, the slider "
+"will automatically start playback and will only pause at the first keyframe."
+msgstr ""
+
+#: config/defaults.php:471 templates/tmpl-slider-settings.php:211
 msgid "Cycles"
 msgstr ""
 
-#: config/defaults.php:464
+#: config/defaults.php:473
 msgid "Number of cycles if slideshow is enabled."
 msgstr ""
 
-#: config/defaults.php:476
+#: config/defaults.php:485
 msgid "Force number of cycles"
 msgstr ""
 
-#: config/defaults.php:479
+#: config/defaults.php:488
 msgid ""
 "The slider will always stop at the given number of cycles, even if the "
 "slideshow restarts."
 msgstr ""
 
-#: config/defaults.php:485
+#: config/defaults.php:494
 msgid "Shuffle mode"
 msgstr ""
 
-#: config/defaults.php:487
+#: config/defaults.php:496
 msgid ""
 "Slideshow will proceed in random order. This feature does not work with "
 "looping."
 msgstr ""
 
-#: config/defaults.php:494
+#: config/defaults.php:503
 msgid "Two way slideshow"
 msgstr ""
 
-#: config/defaults.php:497
+#: config/defaults.php:506
 msgid "Slideshow can go backwards if someone switches to a previous slide."
 msgstr ""
 
-#: config/defaults.php:502
+#: config/defaults.php:511
 msgid "Forced animation duration"
 msgstr ""
 
-#: config/defaults.php:505
+#: config/defaults.php:514
 msgid ""
 "The animation speed in milliseconds when the slider forces remaining layers "
 "out of scene before swapping slides."
 msgstr ""
 
-#: config/defaults.php:518 templates/tmpl-slider-settings.php:193
+#: config/defaults.php:527 templates/tmpl-slider-settings.php:227
 msgid "Skin"
 msgstr ""
 
-#: config/defaults.php:520
+#: config/defaults.php:529
 msgid ""
-"The skin used for this slider. The 'noskin' skin is a border- and buttonless "
+"The skin used for this slider. The “noskin” skin is a border- and buttonless "
 "skin. Your custom skins will appear in the list when you create their "
 "folders."
 msgstr ""
 
-#: config/defaults.php:526
+#: config/defaults.php:535
 msgid "Initial fade duration"
 msgstr ""
 
-#: config/defaults.php:529
+#: config/defaults.php:538
 msgid ""
 "Change the duration of the initial fade animation when the page loads. Enter "
 "0 to disable fading."
 msgstr ""
 
-#: config/defaults.php:539
+#: config/defaults.php:548
 msgid "Slider CSS"
 msgstr ""
 
-#: config/defaults.php:541
+#: config/defaults.php:550
 msgid ""
 "You can enter custom CSS to change some style properties on the slider "
 "wrapper element. More complex CSS should be applied with the Custom Styles "
 "Editor."
 msgstr ""
 
-#: config/defaults.php:551
+#: config/defaults.php:560
 msgid "Background color"
 msgstr ""
 
-#: config/defaults.php:553
+#: config/defaults.php:562
 msgid ""
 "Global background color of the slider. Slides with non-transparent "
 "background will cover this one. You can use all CSS methods such as HEX or "
 "RGB(A) values."
 msgstr ""
 
-#: config/defaults.php:559 templates/tmpl-slider-settings.php:224
+#: config/defaults.php:568 templates/tmpl-slider-settings.php:258
 msgid "Background image"
 msgstr ""
 
-#: config/defaults.php:561
+#: config/defaults.php:570
 msgid ""
 "Global background image of the slider. Slides with non-transparent "
 "backgrounds will cover it. This image will not scale in responsive mode."
 msgstr ""
 
-#: config/defaults.php:575
+#: config/defaults.php:584
 msgid "Background repeat"
 msgstr ""
 
-#: config/defaults.php:577
+#: config/defaults.php:586
 msgid "Global background image repeat."
 msgstr ""
 
-#: config/defaults.php:579
+#: config/defaults.php:588
 msgid "No-repeat"
 msgstr ""
 
-#: config/defaults.php:580
+#: config/defaults.php:589
 msgid "Repeat"
 msgstr ""
 
-#: config/defaults.php:581
+#: config/defaults.php:590
 msgid "Repeat-x"
 msgstr ""
 
-#: config/defaults.php:582
+#: config/defaults.php:591
 msgid "Repeat-y"
 msgstr ""
 
-#: config/defaults.php:589
+#: config/defaults.php:598
 msgid "Background behavior"
 msgstr ""
 
-#: config/defaults.php:591
+#: config/defaults.php:600
 msgid "Choose between a scrollable or fixed global background image."
 msgstr ""
 
-#: config/defaults.php:593 config/defaults.php:1345 config/defaults.php:3430
+#: config/defaults.php:602 config/defaults.php:1361 config/defaults.php:3450
 msgid "Scroll"
 msgstr ""
 
-#: config/defaults.php:594
+#: config/defaults.php:603
 msgid "Fixed"
 msgstr ""
 
-#: config/defaults.php:603
+#: config/defaults.php:612
 msgid ""
 "Global background image position of the slider. The first value is the "
 "horizontal position and the second value is the vertical."
 msgstr ""
 
-#: config/defaults.php:611
+#: config/defaults.php:620
 msgid ""
 "Global background size of the slider. You can set the size in pixels, "
 "percentages, or constants: auto | cover | contain "
 msgstr ""
 
-#: config/defaults.php:637
+#: config/defaults.php:646
 msgid "Show Prev & Next buttons"
 msgstr ""
 
-#: config/defaults.php:639
+#: config/defaults.php:648
 msgid "Disabling this option will hide the Prev and Next buttons."
 msgstr ""
 
-#: config/defaults.php:646
+#: config/defaults.php:655
 msgid "Show Prev & Next buttons on hover"
 msgstr ""
 
-#: config/defaults.php:648
+#: config/defaults.php:657
 msgid ""
 "Show the buttons only when someone moves the mouse cursor over the slider. "
 "This option depends on the previous setting."
 msgstr ""
 
-#: config/defaults.php:654
+#: config/defaults.php:663
 msgid "Show Start & Stop buttons"
 msgstr ""
 
-#: config/defaults.php:656
+#: config/defaults.php:665
 msgid "Disabling this option will hide the Start & Stop buttons."
 msgstr ""
 
-#: config/defaults.php:662
+#: config/defaults.php:671
 msgid "Show slide navigation buttons"
 msgstr ""
 
-#: config/defaults.php:664
+#: config/defaults.php:673
 msgid "Disabling this option will hide slide navigation buttons or thumbnails."
 msgstr ""
 
-#: config/defaults.php:671
+#: config/defaults.php:680
 msgid "Slide navigation on hover"
 msgstr ""
 
-#: config/defaults.php:673
+#: config/defaults.php:682
 msgid ""
 "Slide navigation buttons (including thumbnails) will be shown on mouse hover "
 "only."
 msgstr ""
 
-#: config/defaults.php:679
+#: config/defaults.php:688
 msgid "Show bar timer"
 msgstr ""
 
-#: config/defaults.php:681
+#: config/defaults.php:690
 msgid "Show the bar timer to indicate slideshow progression."
 msgstr ""
 
-#: config/defaults.php:688
+#: config/defaults.php:697
 msgid "Show circle timer"
 msgstr ""
 
-#: config/defaults.php:690
+#: config/defaults.php:699
 msgid "Use circle timer to indicate slideshow progression."
 msgstr ""
 
-#: config/defaults.php:695
+#: config/defaults.php:704
 msgid "Show slidebar timer"
 msgstr ""
 
-#: config/defaults.php:697
+#: config/defaults.php:706
 msgid ""
 "You can grab the slidebar timer playhead and seek the whole slide real-time "
 "like a movie."
 msgstr ""
 
-#: config/defaults.php:709
+#: config/defaults.php:718
 msgid "Thumbnail navigation"
 msgstr ""
 
-#: config/defaults.php:711
+#: config/defaults.php:720
 msgid "Use thumbnail navigation instead of slide bullet buttons."
 msgstr ""
 
-#: config/defaults.php:713 config/defaults.php:1297 config/defaults.php:1576
-#: views/system_status.php:126 views/system_status.php:179
-#: views/system_status.php:265 views/system_status.php:276
-#: views/system_status.php:287 views/system_status.php:298
+#: config/defaults.php:722 config/defaults.php:1313 config/defaults.php:1592
+#: views/system_status.php:119 views/system_status.php:172
+#: views/system_status.php:258 views/system_status.php:269
+#: views/system_status.php:280 views/system_status.php:291
 msgid "Disabled"
 msgstr ""
 
-#: config/defaults.php:714
+#: config/defaults.php:723
 msgid "Hover"
 msgstr ""
 
-#: config/defaults.php:715
+#: config/defaults.php:724
 msgid "Always"
 msgstr ""
 
-#: config/defaults.php:722
+#: config/defaults.php:731
 msgid "Thumbnail container width"
 msgstr ""
 
-#: config/defaults.php:724
+#: config/defaults.php:733
 msgid "The width of the thumbnail area relative to the slider size."
 msgstr ""
 
-#: config/defaults.php:730
+#: config/defaults.php:739
 msgid "Thumbnail width"
 msgstr ""
 
-#: config/defaults.php:732
+#: config/defaults.php:741
 msgid "The width of thumbnails in the navigation area."
 msgstr ""
 
-#: config/defaults.php:741
+#: config/defaults.php:750
 msgid "Thumbnail height"
 msgstr ""
 
-#: config/defaults.php:743
+#: config/defaults.php:752
 msgid "The height of thumbnails in the navigation area."
 msgstr ""
 
-#: config/defaults.php:753
+#: config/defaults.php:762
 msgid "Active thumbnail opacity"
 msgstr ""
 
-#: config/defaults.php:755
-msgid "Opacity in percentage of the active slide's thumbnail."
+#: config/defaults.php:764
+msgid "Opacity in percentage of the active slide’s thumbnail."
 msgstr ""
 
-#: config/defaults.php:765
+#: config/defaults.php:774
 msgid "Inactive thumbnail opacity"
 msgstr ""
 
-#: config/defaults.php:767
+#: config/defaults.php:776
 msgid "Opacity in percentage of inactive slide thumbnails."
 msgstr ""
 
-#: config/defaults.php:781
+#: config/defaults.php:790
 msgid "Automatically play videos"
 msgstr ""
 
-#: config/defaults.php:783
+#: config/defaults.php:792
 msgid "Videos will be automatically started on the active slide."
 msgstr ""
 
-#: config/defaults.php:793
+#: config/defaults.php:802
 msgid ""
 "The slideshow can temporally be paused while videos are playing. You can "
 "choose to permanently stop the pause until manual restarting."
 msgstr ""
 
-#: config/defaults.php:795
+#: config/defaults.php:804
 msgid "While playing"
 msgstr ""
 
-#: config/defaults.php:796
+#: config/defaults.php:805
 msgid "Permanently"
 msgstr ""
 
-#: config/defaults.php:797
+#: config/defaults.php:806
 msgid "No action"
 msgstr ""
 
-#: config/defaults.php:811
+#: config/defaults.php:820
 msgid "Youtube preview"
 msgstr ""
 
-#: config/defaults.php:813
+#: config/defaults.php:822
 msgid ""
 "The automatically fetched preview image quaility for YouTube videos when you "
 "do not set your own. Please note, some videos do not have HD previews, and "
 "you may need to choose a lower quaility."
 msgstr ""
 
-#: config/defaults.php:815
+#: config/defaults.php:824
 msgid "Maximum quality"
 msgstr ""
 
-#: config/defaults.php:816
+#: config/defaults.php:825
 msgid "High quality"
 msgstr ""
 
-#: config/defaults.php:817
+#: config/defaults.php:826
 msgid "Medium quality"
 msgstr ""
 
-#: config/defaults.php:818
+#: config/defaults.php:827
 msgid "Default quality"
 msgstr ""
 
-#: config/defaults.php:832
+#: config/defaults.php:841
 msgid "Use relative URLs"
 msgstr ""
 
-#: config/defaults.php:834
+#: config/defaults.php:843
 msgid ""
 "Use relative URLs for local images. This setting could be important when "
 "moving your WP installation."
 msgstr ""
 
-#: config/defaults.php:842
+#: config/defaults.php:851
 msgid "Allow restarting slides on resize"
 msgstr ""
 
-#: config/defaults.php:844
+#: config/defaults.php:853
 msgid ""
 "Certain transformation and transition options cannot be updated on the fly "
 "when the browser size or device orientation changes. By enabling this "
@@ -841,11 +855,11 @@ msgid ""
 "restart the itself to preserve its appearance."
 msgstr ""
 
-#: config/defaults.php:850
+#: config/defaults.php:859
 msgid "Use srcset attribute"
 msgstr ""
 
-#: config/defaults.php:852
+#: config/defaults.php:861
 msgid ""
 "The srcset attribute allows loading dynamically scaled images based on "
 "screen resolution. It can save bandwidth and allow using retina-ready images "
@@ -853,146 +867,146 @@ msgid ""
 "blurry images."
 msgstr ""
 
-#: config/defaults.php:863 templates/tmpl-slider-settings.php:36
+#: config/defaults.php:872 templates/tmpl-slider-settings.php:62
 msgid "YourLogo"
 msgstr ""
 
-#: config/defaults.php:865
+#: config/defaults.php:874
 msgid ""
 "A fixed image layer can be shown above the slider that remains still "
 "throughout the whole slider. Can be used to display logos or watermarks."
 msgstr ""
 
-#: config/defaults.php:872
+#: config/defaults.php:881
 msgid "YourLogo style"
 msgstr ""
 
-#: config/defaults.php:874
+#: config/defaults.php:883
 msgid "CSS properties to control the image placement and appearance."
 msgstr ""
 
-#: config/defaults.php:881
+#: config/defaults.php:890
 msgid "YourLogo link"
 msgstr ""
 
-#: config/defaults.php:883
+#: config/defaults.php:892
 msgid "Enter a URL to link the YourLogo image."
 msgstr ""
 
-#: config/defaults.php:890
+#: config/defaults.php:899
 msgid "Link target"
 msgstr ""
 
-#: config/defaults.php:894 config/defaults.php:1214 config/defaults.php:3585
+#: config/defaults.php:903 config/defaults.php:1223 config/defaults.php:3605
 msgid "Open on the same page"
 msgstr ""
 
-#: config/defaults.php:895 config/defaults.php:1215 config/defaults.php:3586
+#: config/defaults.php:904 config/defaults.php:1224 config/defaults.php:3606
 msgid "Open on new page"
 msgstr ""
 
-#: config/defaults.php:896 config/defaults.php:1216 config/defaults.php:3587
+#: config/defaults.php:905 config/defaults.php:1225 config/defaults.php:3607
 msgid "Open in parent frame"
 msgstr ""
 
-#: config/defaults.php:897 config/defaults.php:1217 config/defaults.php:3588
+#: config/defaults.php:906 config/defaults.php:1226 config/defaults.php:3608
 msgid "Open in main frame"
 msgstr ""
 
-#: config/defaults.php:914
+#: config/defaults.php:923
 msgid "Date Created"
 msgstr ""
 
-#: config/defaults.php:915
+#: config/defaults.php:924
 msgid "Last Modified"
 msgstr ""
 
-#: config/defaults.php:916
+#: config/defaults.php:925
 msgid "Post ID"
 msgstr ""
 
-#: config/defaults.php:917
+#: config/defaults.php:926
 msgid "Post Title"
 msgstr ""
 
-#: config/defaults.php:918
+#: config/defaults.php:927
 msgid "Number of Comments"
 msgstr ""
 
-#: config/defaults.php:919 templates/tmpl-2d-transition.php:39
+#: config/defaults.php:928 templates/tmpl-2d-transition.php:39
 #: templates/tmpl-2d-transition.php:111 templates/tmpl-3d-transition.php:39
 #: views/transition_builder.php:191 views/transition_builder.php:492
 #: views/transition_builder.php:564
 msgid "Random"
 msgstr ""
 
-#: config/defaults.php:930
+#: config/defaults.php:939
 msgid "Ascending"
 msgstr ""
 
-#: config/defaults.php:931
+#: config/defaults.php:940
 msgid "Descending"
 msgstr ""
 
-#: config/defaults.php:1042
+#: config/defaults.php:1051
 msgid "Set a slide image"
 msgstr ""
 
-#: config/defaults.php:1044
+#: config/defaults.php:1053
 msgid ""
 "The slide image/background. Click on the image to open the WordPress Media "
 "Library to choose or upload an image."
 msgstr ""
 
-#: config/defaults.php:1056
+#: config/defaults.php:1065
 msgid "Size"
 msgstr ""
 
-#: config/defaults.php:1058
+#: config/defaults.php:1067
 msgid ""
 "The size of the slide background image. Leave this option on inherit if you "
 "want to set it globally from Slider Settings."
 msgstr ""
 
-#: config/defaults.php:1060 config/defaults.php:1074 config/defaults.php:1574
+#: config/defaults.php:1069 config/defaults.php:1083 config/defaults.php:1590
 msgid "Inherit"
 msgstr ""
 
-#: config/defaults.php:1070
+#: config/defaults.php:1079
 msgid "Position"
 msgstr ""
 
-#: config/defaults.php:1072
+#: config/defaults.php:1081
 msgid ""
 "The position of the slide background image. Leave this option on inherit if "
 "you want to set it globally from Slider Settings."
 msgstr ""
 
-#: config/defaults.php:1089 config/defaults.php:1869 config/defaults.php:2249
-#: config/defaults.php:3364 config/defaults.php:3868
+#: config/defaults.php:1098 config/defaults.php:1885 config/defaults.php:2265
+#: config/defaults.php:3384 config/defaults.php:3902
 msgid "Color"
 msgstr ""
 
-#: config/defaults.php:1091
+#: config/defaults.php:1100
 msgid ""
 "The slide background color. You can use color names, hexadecimal, RGB or "
 "RGBA values."
 msgstr ""
 
-#: config/defaults.php:1096
+#: config/defaults.php:1105
 msgid "Set a slide thumbnail"
 msgstr ""
 
-#: config/defaults.php:1098
+#: config/defaults.php:1107
 msgid ""
 "The thumbnail image of this slide. Click on the image to open the WordPress "
 "Media Library to choose or upload an image. If you leave this field empty, "
 "the slide image will be used."
 msgstr ""
 
-#: config/defaults.php:1112 config/defaults.php:1152 config/defaults.php:1719
-#: config/defaults.php:2007 config/defaults.php:2412 config/defaults.php:2698
-#: config/defaults.php:2952 config/defaults.php:3233
+#: config/defaults.php:1121 config/defaults.php:1161 config/defaults.php:1735
+#: config/defaults.php:2023 config/defaults.php:2428 config/defaults.php:2714
+#: config/defaults.php:2968 config/defaults.php:3249
 #: templates/tmpl-2d-transition.php:55 templates/tmpl-3d-transition.php:69
 #: templates/tmpl-3d-transition.php:126 templates/tmpl-3d-transition.php:205
 #: views/transition_builder.php:225 views/transition_builder.php:295
@@ -1000,34 +1014,34 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: config/defaults.php:1114
+#: config/defaults.php:1123
 msgid ""
 "Here you can set the time interval between slide changes, this slide will "
 "stay visible for the time specified here. This value is in millisecs, so the "
-"value 1000 means 1 second. Please don't use 0 or very low values."
-msgstr ""
-
-#: config/defaults.php:1145
-msgid "Origami"
+"value 1000 means 1 second. Please don’t use 0 or very low values."
 msgstr ""
 
 #: config/defaults.php:1154
+msgid "Origami"
+msgstr ""
+
+#: config/defaults.php:1163
 msgid ""
-"We've made our pre-defined slide transitions with special care to fit in "
+"We’ve made our pre-defined slide transitions with special care to fit in "
 "most use cases. However, if you would like to increase or decrease the speed "
 "of these transitions, you can override their timing here by providing your "
 "own transition length in milliseconds. (1 second = 1000 milliseconds)"
 msgstr ""
 
-#: config/defaults.php:1159
+#: config/defaults.php:1168
 msgid "custom duration"
 msgstr ""
 
-#: config/defaults.php:1166
+#: config/defaults.php:1175
 msgid "Time Shift"
 msgstr ""
 
-#: config/defaults.php:1168
+#: config/defaults.php:1177
 msgid ""
 "You can shift the starting point of the slide animation timeline, so layers "
 "can animate in an earlier time after a slide change. This value is in "
@@ -1035,23 +1049,23 @@ msgid ""
 "value."
 msgstr ""
 
-#: config/defaults.php:1176 config/defaults.php:3547
+#: config/defaults.php:1185 config/defaults.php:3567
 msgid "Enter URL"
 msgstr ""
 
-#: config/defaults.php:1178
+#: config/defaults.php:1187
 msgid "If you want to link the whole slide, enter the URL of your link here."
 msgstr ""
 
-#: config/defaults.php:1211
+#: config/defaults.php:1220
 msgid "Link Target"
 msgstr ""
 
-#: config/defaults.php:1218 config/defaults.php:3589
+#: config/defaults.php:1227 config/defaults.php:3609
 msgid "Scroll to element (Enter selector)"
 msgstr ""
 
-#: config/defaults.php:1229
+#: config/defaults.php:1238
 msgid ""
 "Choose whether the slide link should be on top or underneath your layers. "
 "The later option makes the link clickable only at empty spaces where the "
@@ -1059,118 +1073,130 @@ msgid ""
 "independently from each other."
 msgstr ""
 
-#: config/defaults.php:1231
+#: config/defaults.php:1240
 msgid "On top of layers"
 msgstr ""
 
-#: config/defaults.php:1232
+#: config/defaults.php:1241
 msgid "Underneath layers"
 msgstr ""
 
-#: config/defaults.php:1241
+#: config/defaults.php:1250
 msgid "#ID"
 msgstr ""
 
-#: config/defaults.php:1243
+#: config/defaults.php:1252
 msgid ""
 "You can apply an ID attribute on the HTML element of this slide to work with "
 "it in your custom CSS or Javascript code."
 msgstr ""
 
-#: config/defaults.php:1251
+#: config/defaults.php:1260
 msgid "Deeplink"
 msgstr ""
 
-#: config/defaults.php:1253
+#: config/defaults.php:1262
 msgid ""
 "You can specify a slide alias name which you can use in your URLs with a "
 "hash mark, so LayerSlider will start with the correspondig slide."
 msgstr ""
 
-#: config/defaults.php:1275 config/defaults.php:2232
+#: config/defaults.php:1267
+msgid "Global Hover"
+msgstr ""
+
+#: config/defaults.php:1269
+msgid ""
+"By turning this option on, all layers will trigger their Hover Transitions "
+"at the same time when you hover over the slider with your mouse cursor. It’s "
+"useful to create spectacular effects that involve multiple layer transitions "
+"and activate on hovering over the slider instead of individual layers."
+msgstr ""
+
+#: config/defaults.php:1291 config/defaults.php:2248
 msgid "Hidden"
 msgstr ""
 
-#: config/defaults.php:1277 templates/tmpl-slide.php:129
+#: config/defaults.php:1293 templates/tmpl-slide.php:134
 msgid ""
-"If you don't want to use this slide in your front-page, but you want to keep "
+"If you don’t want to use this slide in your front-page, but you want to keep "
 "it, you can hide it with this switch."
 msgstr ""
 
-#: config/defaults.php:1286
+#: config/defaults.php:1302
 msgid "Overflow layers"
 msgstr ""
 
-#: config/defaults.php:1288
+#: config/defaults.php:1304
 msgid ""
 "By default the slider clips the layers outside of its bounds. Enable this "
 "option to allow overflowing content."
 msgstr ""
 
-#: config/defaults.php:1294
+#: config/defaults.php:1310
 msgid "Zoom"
 msgstr ""
 
-#: config/defaults.php:1298
+#: config/defaults.php:1314
 msgid "Zoom In"
 msgstr ""
 
-#: config/defaults.php:1299
+#: config/defaults.php:1315
 msgid "Zoom Out"
 msgstr ""
 
-#: config/defaults.php:1305 config/defaults.php:1758 config/defaults.php:2084
-#: config/defaults.php:2470 config/defaults.php:2759 config/defaults.php:3009
-#: config/defaults.php:3272 config/defaults.php:3927
+#: config/defaults.php:1321 config/defaults.php:1774 config/defaults.php:2100
+#: config/defaults.php:2486 config/defaults.php:2775 config/defaults.php:3025
+#: config/defaults.php:3292 config/defaults.php:3961
 msgid "Rotate"
 msgstr ""
 
-#: config/defaults.php:1307
+#: config/defaults.php:1323
 msgid ""
 "The amount of rotation (if any) in degrees used in the Ken Burns effect. "
 "Negative values are allowed for counterclockwise rotation."
 msgstr ""
 
-#: config/defaults.php:1313 templates/tmpl-2d-transition.php:128
+#: config/defaults.php:1329 templates/tmpl-2d-transition.php:128
 #: views/transition_builder.php:581
 msgid "Scale"
 msgstr ""
 
-#: config/defaults.php:1315
+#: config/defaults.php:1331
 msgid ""
 "Increase or decrease the size of the slide background image in the Ken Burns "
 "effect. The default value is 1, the value 2 will double the image, while 0.5 "
 "results half the size. Negative values will flip the image."
 msgstr ""
 
-#: config/defaults.php:1329 config/defaults.php:3412
+#: config/defaults.php:1345 config/defaults.php:3432
 #: templates/tmpl-2d-transition.php:96 views/transition_builder.php:549
 msgid "Type"
 msgstr ""
 
-#: config/defaults.php:1331
+#: config/defaults.php:1347
 msgid ""
 "The default value for parallax layers on this slide, which they will "
 "inherit, unless you set it otherwise on the affected layers."
 msgstr ""
 
-#: config/defaults.php:1333 config/defaults.php:3417
+#: config/defaults.php:1349 config/defaults.php:3437
 #: templates/tmpl-transition-gallery.php:10
 #: templates/tmpl-transition-window.php:13
 msgid "2D"
 msgstr ""
 
-#: config/defaults.php:1334 config/defaults.php:3418
+#: config/defaults.php:1350 config/defaults.php:3438
 #: templates/tmpl-transition-gallery.php:11
 #: templates/tmpl-transition-window.php:14
 msgid "3D"
 msgstr ""
 
-#: config/defaults.php:1340 config/defaults.php:3424
+#: config/defaults.php:1356 config/defaults.php:3444
 msgid "Event"
 msgstr ""
 
-#: config/defaults.php:1342
+#: config/defaults.php:1358
 msgid ""
 "You can trigger the parallax effect by either scrolling the page, or by "
 "moving your mouse cursor / tilting your mobile device. This is the default "
@@ -1178,44 +1204,44 @@ msgid ""
 "otherwise directly on them."
 msgstr ""
 
-#: config/defaults.php:1344 config/defaults.php:3429
+#: config/defaults.php:1360 config/defaults.php:3449
 msgid "Cursor or Tilt"
 msgstr ""
 
-#: config/defaults.php:1351 config/defaults.php:3436
+#: config/defaults.php:1367 config/defaults.php:3456
 msgid "Axes"
 msgstr ""
 
-#: config/defaults.php:1353
+#: config/defaults.php:1369
 msgid ""
 "Choose on which axes parallax layers should move. This is the default value "
 "on this slide, which parallax layers will inherit, unless you set it "
 "otherwise directly on them."
 msgstr ""
 
-#: config/defaults.php:1355 config/defaults.php:3441
+#: config/defaults.php:1371 config/defaults.php:3461
 msgid "None"
 msgstr ""
 
-#: config/defaults.php:1356
+#: config/defaults.php:1372
 msgid "Both axes"
 msgstr ""
 
-#: config/defaults.php:1357 config/defaults.php:3443
+#: config/defaults.php:1373 config/defaults.php:3463
 msgid "Horizontal only"
 msgstr ""
 
-#: config/defaults.php:1358 config/defaults.php:3444
+#: config/defaults.php:1374 config/defaults.php:3464
 msgid "Vertical only"
 msgstr ""
 
-#: config/defaults.php:1365 config/defaults.php:1835 config/defaults.php:2161
-#: config/defaults.php:2570 config/defaults.php:2859 config/defaults.php:3086
-#: config/defaults.php:3350 config/defaults.php:3451
+#: config/defaults.php:1381 config/defaults.php:1851 config/defaults.php:2177
+#: config/defaults.php:2586 config/defaults.php:2875 config/defaults.php:3102
+#: config/defaults.php:3370 config/defaults.php:3471
 msgid "Transform Origin"
 msgstr ""
 
-#: config/defaults.php:1367 config/defaults.php:3352 config/defaults.php:3452
+#: config/defaults.php:1383 config/defaults.php:3372 config/defaults.php:3472
 msgid ""
 "Sets a point on canvas from which transformations are calculated. For "
 "example, a layer may rotate around its center axis or a completely custom "
@@ -1224,22 +1250,22 @@ msgid ""
 "use the following constants: top, right, bottom, left, center."
 msgstr ""
 
-#: config/defaults.php:1372
+#: config/defaults.php:1388
 msgid "Move duration"
 msgstr ""
 
-#: config/defaults.php:1374
+#: config/defaults.php:1390
 msgid ""
 "Controls the speed of animating layers when you move your mouse cursor or "
 "tilt your mobile device. This is the default value on this slide, which "
 "parallax layers will inherit, unless you set it otherwise directly on them."
 msgstr ""
 
-#: config/defaults.php:1384
+#: config/defaults.php:1400
 msgid "Leave duration"
 msgstr ""
 
-#: config/defaults.php:1386
+#: config/defaults.php:1402
 msgid ""
 "Controls how quickly your layers revert to their original position when you "
 "move your mouse cursor outside of a parallax slider. This value is in "
@@ -1248,11 +1274,11 @@ msgid ""
 "directly on them."
 msgstr ""
 
-#: config/defaults.php:1396 config/defaults.php:3499
+#: config/defaults.php:1412 config/defaults.php:3519
 msgid "Distance"
 msgstr ""
 
-#: config/defaults.php:1398
+#: config/defaults.php:1414
 msgid ""
 "Increase or decrease the amount of layer movement when moving your mouse "
 "cursor or tilting on a mobile device. This is the default value on this "
@@ -1260,11 +1286,11 @@ msgid ""
 "directly on them."
 msgstr ""
 
-#: config/defaults.php:1408 config/defaults.php:3487
+#: config/defaults.php:1424 config/defaults.php:3507
 msgid "Rotation"
 msgstr ""
 
-#: config/defaults.php:1410
+#: config/defaults.php:1426
 msgid ""
 "Increase or decrease the amount of layer rotation in the 3D space when "
 "moving your mouse cursor or tilting on a mobile device. This is the default "
@@ -1272,53 +1298,53 @@ msgid ""
 "otherwise directly on them."
 msgstr ""
 
-#: config/defaults.php:1419 config/defaults.php:1932 config/defaults.php:2223
-#: config/defaults.php:2581 config/defaults.php:2871 config/defaults.php:3145
-#: config/defaults.php:3378 config/defaults.php:3511
+#: config/defaults.php:1435 config/defaults.php:1948 config/defaults.php:2239
+#: config/defaults.php:2597 config/defaults.php:2887 config/defaults.php:3161
+#: config/defaults.php:3398 config/defaults.php:3531
 msgid "Perspective"
 msgstr ""
 
-#: config/defaults.php:1421
+#: config/defaults.php:1437
 msgid ""
 "Changes the perspective of layers in the 3D space. This is the default value "
 "on this slide, which parallax layers will inherit, unless you set it "
 "otherwise directly on them."
 msgstr ""
 
-#: config/defaults.php:1571
+#: config/defaults.php:1587
 msgid "Autoplay"
 msgstr ""
 
-#: config/defaults.php:1575 templates/tmpl-3d-transition.php:62
-#: templates/tmpl-3d-transition.php:198 views/system_status.php:126
-#: views/system_status.php:179 views/system_status.php:265
-#: views/system_status.php:276 views/system_status.php:287
-#: views/system_status.php:298 views/transition_builder.php:218
+#: config/defaults.php:1591 templates/tmpl-3d-transition.php:62
+#: templates/tmpl-3d-transition.php:198 views/system_status.php:119
+#: views/system_status.php:172 views/system_status.php:258
+#: views/system_status.php:269 views/system_status.php:280
+#: views/system_status.php:291 views/transition_builder.php:218
 #: views/transition_builder.php:376
 msgid "Enabled"
 msgstr ""
 
-#: config/defaults.php:1582
+#: config/defaults.php:1598
 msgid "Show Info"
 msgstr ""
 
-#: config/defaults.php:1588
+#: config/defaults.php:1604
 msgid "Controls"
 msgstr ""
 
-#: config/defaults.php:1601
+#: config/defaults.php:1617
 msgid "Fill mode"
 msgstr ""
 
-#: config/defaults.php:1612
+#: config/defaults.php:1628
 msgid "Volume"
 msgstr ""
 
-#: config/defaults.php:1624
+#: config/defaults.php:1640
 msgid "Use this video as slide background"
 msgstr ""
 
-#: config/defaults.php:1626
+#: config/defaults.php:1642
 msgid ""
 "Forces this layer to act like the slide background by covering the whole "
 "slider and ignoring some transitions. Please make sure to provide your own "
@@ -1326,63 +1352,63 @@ msgid ""
 "on page load."
 msgstr ""
 
-#: config/defaults.php:1631
+#: config/defaults.php:1647
 msgid "Choose an overlay image:"
 msgstr ""
 
-#: config/defaults.php:1633
+#: config/defaults.php:1649
 msgid ""
 "Cover your videos with an overlay image to have dotted or striped effects on "
 "them."
 msgstr ""
 
-#: config/defaults.php:1658 config/defaults.php:1946 config/defaults.php:2348
-#: config/defaults.php:2634 config/defaults.php:2894 config/defaults.php:3199
+#: config/defaults.php:1674 config/defaults.php:1962 config/defaults.php:2364
+#: config/defaults.php:2650 config/defaults.php:2910 config/defaults.php:3215
 msgid "OffsetX"
 msgstr ""
 
-#: config/defaults.php:1660
+#: config/defaults.php:1676
 msgid ""
 "Shifts the layer starting position from its original on the horizontal axis "
 "with the given number of pixels. Use negative values for the opposite "
 "direction. Percentage values are relative to the width of this layer. The "
-"values 'left' or 'right' position the layer out the staging area, so it "
+"values “left” or “right” position the layer out the staging area, so it "
 "enters the scene from either side when animating to its destination location."
 msgstr ""
 
-#: config/defaults.php:1687 config/defaults.php:1975 config/defaults.php:2380
-#: config/defaults.php:2666 config/defaults.php:2923 config/defaults.php:3216
+#: config/defaults.php:1703 config/defaults.php:1991 config/defaults.php:2396
+#: config/defaults.php:2682 config/defaults.php:2939 config/defaults.php:3232
 msgid "OffsetY"
 msgstr ""
 
-#: config/defaults.php:1689
+#: config/defaults.php:1705
 msgid ""
 "Shifts the layer starting position from its original on the vertical axis "
 "with the given number of pixels. Use negative values for the opposite "
 "direction. Percentage values are relative to the height of this layer. The "
-"values 'top' or 'bottom' position the layer out the staging area, so it "
+"values “top” or “bottom” position the layer out the staging area, so it "
 "enters the scene from either vertical side when animating to its destination "
 "location."
 msgstr ""
 
-#: config/defaults.php:1721
+#: config/defaults.php:1737
 msgid ""
 "The length of the transition in milliseconds when the layer enters the "
 "scene. A second equals to 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:1730 config/defaults.php:2020 config/defaults.php:2960
+#: config/defaults.php:1746 config/defaults.php:2036 config/defaults.php:2976
 msgid "Start at"
 msgstr ""
 
-#: config/defaults.php:1732
+#: config/defaults.php:1748
 msgid ""
 "Delays the transition with the given amount of milliseconds before the layer "
 "enters the scene. A second equals to 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:1741 config/defaults.php:2066 config/defaults.php:2420
-#: config/defaults.php:2706 config/defaults.php:2994 config/defaults.php:3249
+#: config/defaults.php:1757 config/defaults.php:2082 config/defaults.php:2436
+#: config/defaults.php:2722 config/defaults.php:3010 config/defaults.php:3265
 #: templates/tmpl-2d-transition.php:57 templates/tmpl-3d-transition.php:71
 #: templates/tmpl-3d-transition.php:128 templates/tmpl-3d-transition.php:207
 #: views/transition_builder.php:227 views/transition_builder.php:297
@@ -1390,7 +1416,7 @@ msgstr ""
 msgid "Easing"
 msgstr ""
 
-#: config/defaults.php:1743 config/defaults.php:2068
+#: config/defaults.php:1759 config/defaults.php:2084
 #: templates/tmpl-2d-transition.php:59 templates/tmpl-3d-transition.php:73
 #: templates/tmpl-3d-transition.php:130 templates/tmpl-3d-transition.php:209
 #: views/transition_builder.php:230 views/transition_builder.php:299
@@ -1401,25 +1427,25 @@ msgid ""
 "select field to open easings.net for more information and real-time examples."
 msgstr ""
 
-#: config/defaults.php:1748 config/defaults.php:2073 config/defaults.php:2427
-#: config/defaults.php:2714 templates/tmpl-2d-transition.php:100
+#: config/defaults.php:1764 config/defaults.php:2089 config/defaults.php:2443
+#: config/defaults.php:2730 templates/tmpl-2d-transition.php:100
 #: views/transition_builder.php:553
 msgid "Fade"
 msgstr ""
 
-#: config/defaults.php:1750 config/defaults.php:2075
+#: config/defaults.php:1766 config/defaults.php:2091
 msgid "Fade the layer during the transition."
 msgstr ""
 
-#: config/defaults.php:1760 config/defaults.php:2086 config/defaults.php:3011
+#: config/defaults.php:1776 config/defaults.php:2102 config/defaults.php:3027
 msgid ""
 "Rotates the layer by the given number of degrees. Negative values are "
 "allowed for counterclockwise rotation."
 msgstr ""
 
-#: config/defaults.php:1769 config/defaults.php:2095 config/defaults.php:2484
-#: config/defaults.php:2773 config/defaults.php:3020 config/defaults.php:3283
-#: config/defaults.php:3934 templates/tmpl-2d-transition.php:120
+#: config/defaults.php:1785 config/defaults.php:2111 config/defaults.php:2500
+#: config/defaults.php:2789 config/defaults.php:3036 config/defaults.php:3303
+#: config/defaults.php:3968 templates/tmpl-2d-transition.php:120
 #: templates/tmpl-3d-transition.php:109 templates/tmpl-3d-transition.php:175
 #: templates/tmpl-3d-transition.php:185 templates/tmpl-3d-transition.php:245
 #: views/transition_builder.php:278 views/transition_builder.php:359
@@ -1427,16 +1453,16 @@ msgstr ""
 msgid "RotateX"
 msgstr ""
 
-#: config/defaults.php:1771 config/defaults.php:2097 config/defaults.php:3022
-#: config/defaults.php:3285
+#: config/defaults.php:1787 config/defaults.php:2113 config/defaults.php:3038
+#: config/defaults.php:3305
 msgid ""
 "Rotates the layer along the X (horizontal) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction."
 msgstr ""
 
-#: config/defaults.php:1780 config/defaults.php:2106 config/defaults.php:2498
-#: config/defaults.php:2787 config/defaults.php:3031 config/defaults.php:3294
-#: config/defaults.php:3941 templates/tmpl-2d-transition.php:122
+#: config/defaults.php:1796 config/defaults.php:2122 config/defaults.php:2514
+#: config/defaults.php:2803 config/defaults.php:3047 config/defaults.php:3314
+#: config/defaults.php:3975 templates/tmpl-2d-transition.php:122
 #: templates/tmpl-3d-transition.php:110 templates/tmpl-3d-transition.php:186
 #: templates/tmpl-3d-transition.php:246 views/transition_builder.php:279
 #: views/transition_builder.php:360 views/transition_builder.php:437
@@ -1444,66 +1470,66 @@ msgstr ""
 msgid "RotateY"
 msgstr ""
 
-#: config/defaults.php:1782 config/defaults.php:2108 config/defaults.php:3033
-#: config/defaults.php:3296
+#: config/defaults.php:1798 config/defaults.php:2124 config/defaults.php:3049
+#: config/defaults.php:3316
 msgid ""
 "Rotates the layer along the Y (vertical) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction."
 msgstr ""
 
-#: config/defaults.php:1791 config/defaults.php:2117 config/defaults.php:2540
-#: config/defaults.php:2829 config/defaults.php:3042 config/defaults.php:3305
-#: config/defaults.php:3968
+#: config/defaults.php:1807 config/defaults.php:2133 config/defaults.php:2556
+#: config/defaults.php:2845 config/defaults.php:3058 config/defaults.php:3325
+#: config/defaults.php:4002
 msgid "SkewX"
 msgstr ""
 
-#: config/defaults.php:1793
+#: config/defaults.php:1809
 msgid ""
 "Skews the layer along the X (horizontal) by the given number of degrees. "
 "Negative values are allowed for reverse direction."
 msgstr ""
 
-#: config/defaults.php:1802 config/defaults.php:2128 config/defaults.php:2554
-#: config/defaults.php:2843 config/defaults.php:3053 config/defaults.php:3316
-#: config/defaults.php:3975
+#: config/defaults.php:1818 config/defaults.php:2144 config/defaults.php:2570
+#: config/defaults.php:2859 config/defaults.php:3069 config/defaults.php:3336
+#: config/defaults.php:4009
 msgid "SkewY"
 msgstr ""
 
-#: config/defaults.php:1804
+#: config/defaults.php:1820
 msgid ""
 "Skews the layer along the Y (vertical) by the given number of degrees. "
 "Negative values are allowed for reverse direction."
 msgstr ""
 
-#: config/defaults.php:1813 config/defaults.php:2139 config/defaults.php:2512
-#: config/defaults.php:2801 config/defaults.php:3064 config/defaults.php:3327
-#: config/defaults.php:3948
+#: config/defaults.php:1829 config/defaults.php:2155 config/defaults.php:2528
+#: config/defaults.php:2817 config/defaults.php:3080 config/defaults.php:3347
+#: config/defaults.php:3982
 msgid "ScaleX"
 msgstr ""
 
-#: config/defaults.php:1815 config/defaults.php:2141 config/defaults.php:3066
-#: config/defaults.php:3077 config/defaults.php:3329
+#: config/defaults.php:1831 config/defaults.php:2157 config/defaults.php:3082
+#: config/defaults.php:3093 config/defaults.php:3349
 msgid ""
 "Scales the layer along the X (horizontal) axis by the specified vector. Use "
 "the value 1 for the original size. The value 2 will double, while 0.5 "
 "shrinks the layer compared to its original size."
 msgstr ""
 
-#: config/defaults.php:1824 config/defaults.php:2150 config/defaults.php:2526
-#: config/defaults.php:2815 config/defaults.php:3075 config/defaults.php:3338
-#: config/defaults.php:3958
+#: config/defaults.php:1840 config/defaults.php:2166 config/defaults.php:2542
+#: config/defaults.php:2831 config/defaults.php:3091 config/defaults.php:3358
+#: config/defaults.php:3992
 msgid "ScaleY"
 msgstr ""
 
-#: config/defaults.php:1826 config/defaults.php:2152 config/defaults.php:3340
+#: config/defaults.php:1842 config/defaults.php:2168 config/defaults.php:3360
 msgid ""
 "Scales the layer along the Y (vertical) axis by the specified vector. Use "
 "the value 1 for the original size. The value 2 will double, while 0.5 "
 "shrinks the layer compared to its original size."
 msgstr ""
 
-#: config/defaults.php:1837 config/defaults.php:2163 config/defaults.php:2571
-#: config/defaults.php:2860 config/defaults.php:3088
+#: config/defaults.php:1853 config/defaults.php:2179 config/defaults.php:2587
+#: config/defaults.php:2876 config/defaults.php:3104
 msgid ""
 "Sets a point on canvas from which transformations are calculated. For "
 "example, a layer may rotate around its center axis or a completely custom "
@@ -1513,326 +1539,326 @@ msgid ""
 "slidermiddle, slidertop, sliderright, sliderbottom, sliderleft."
 msgstr ""
 
-#: config/defaults.php:1842 config/defaults.php:2168 config/defaults.php:3093
+#: config/defaults.php:1858 config/defaults.php:2184 config/defaults.php:3109
 msgid "Mask"
 msgstr ""
 
-#: config/defaults.php:1844 config/defaults.php:2170 config/defaults.php:3095
+#: config/defaults.php:1860 config/defaults.php:2186 config/defaults.php:3111
 msgid ""
 "Clips (cuts off) the sides of the layer by the given amount specified in "
 "pixels or percentages. The 4 value in order: top, right, bottom and the left "
 "side of the layer."
 msgstr ""
 
-#: config/defaults.php:1862 config/defaults.php:2242 config/defaults.php:3357
-#: config/defaults.php:3878
+#: config/defaults.php:1878 config/defaults.php:2258 config/defaults.php:3377
+#: config/defaults.php:3912
 msgid "Background"
 msgstr ""
 
-#: config/defaults.php:1864 config/defaults.php:3880
+#: config/defaults.php:1880 config/defaults.php:3914
 msgid ""
 "The background color of your layer. You can use color names, hexadecimal, "
-"RGB or RGBA values as well as the 'transparent' keyword. Example: #FFF"
+"RGB or RGBA values as well as the “transparent” keyword. Example: #FFF"
 msgstr ""
 
-#: config/defaults.php:1871 config/defaults.php:3870
+#: config/defaults.php:1887 config/defaults.php:3904
 msgid ""
 "The color of your text. You can use color names, hexadecimal, RGB or RGBA "
 "values. Example: #333"
 msgstr ""
 
-#: config/defaults.php:1876 config/defaults.php:2256
+#: config/defaults.php:1892 config/defaults.php:2272
 msgid "Rounded Corners"
 msgstr ""
 
-#: config/defaults.php:1878
+#: config/defaults.php:1894
 msgid ""
 "If you want rounded corners, you can set its radius here in pixels. Example: "
 "5px"
 msgstr ""
 
-#: config/defaults.php:1883 config/defaults.php:2263 config/defaults.php:3620
+#: config/defaults.php:1899 config/defaults.php:2279 config/defaults.php:3640
 msgid "Width"
 msgstr ""
 
-#: config/defaults.php:1885
+#: config/defaults.php:1901
 msgid ""
 "The initial width of this layer from which it will be animated to its proper "
 "size during the transition."
 msgstr ""
 
-#: config/defaults.php:1890 config/defaults.php:2270 config/defaults.php:3630
+#: config/defaults.php:1906 config/defaults.php:2286 config/defaults.php:3650
 msgid "Height"
 msgstr ""
 
-#: config/defaults.php:1892
+#: config/defaults.php:1908
 msgid ""
 "The initial height of this layer from which it will be animated to its "
 "proper size during the transition."
 msgstr ""
 
-#: config/defaults.php:1897 config/defaults.php:2188 config/defaults.php:3152
-#: config/defaults.php:4031
+#: config/defaults.php:1913 config/defaults.php:2204 config/defaults.php:3168
+#: config/defaults.php:4065
 msgid "Filter"
 msgstr ""
 
-#: config/defaults.php:1899 config/defaults.php:2190 config/defaults.php:3154
-#: config/defaults.php:4033
+#: config/defaults.php:1915 config/defaults.php:2206 config/defaults.php:3170
+#: config/defaults.php:4067
 msgid ""
 "Filters provide effects like blurring or color shifting your layers. Click "
 "into the text field to see a selection of filters you can use. Although "
 "clicking on the pre-defined options will reset the text field, you can apply "
 "multiple filters simply by providing a space separated list of all the "
-"filters you would like to use. Click on the \"Filter\" link for more "
+"filters you would like to use. Click on the “Filter” link for more "
 "information."
 msgstr ""
 
-#: config/defaults.php:1934 config/defaults.php:2225 config/defaults.php:2583
-#: config/defaults.php:2873 config/defaults.php:3147
+#: config/defaults.php:1950 config/defaults.php:2241 config/defaults.php:2599
+#: config/defaults.php:2889 config/defaults.php:3163
 msgid "Changes the perspective of this layer in the 3D space."
 msgstr ""
 
-#: config/defaults.php:1948
+#: config/defaults.php:1964
 msgid ""
 "Shifts the layer from its original position on the horizontal axis with the "
 "given number of pixels. Use negative values for the opposite direction. "
-"Percentage values are relative to the width of this layer. The values 'left' "
-"or 'right' animate the layer out the staging area, so it can leave the scene "
+"Percentage values are relative to the width of this layer. The values “left” "
+"or “right” animate the layer out the staging area, so it can leave the scene "
 "on either side."
 msgstr ""
 
-#: config/defaults.php:1977
+#: config/defaults.php:1993
 msgid ""
 "Shifts the layer from its original position on the vertical axis with the "
 "given number of pixels. Use negative values for the opposite direction. "
-"Percentage values are relative to the height of this layer. The values 'top' "
-"or 'bottom' animate the layer out the staging area, so it can leave the "
+"Percentage values are relative to the height of this layer. The values “top” "
+"or “bottom” animate the layer out the staging area, so it can leave the "
 "scene on either vertical side."
 msgstr ""
 
-#: config/defaults.php:2009
+#: config/defaults.php:2025
 msgid ""
 "The length of the transition in milliseconds when the layer leaves the "
 "slide. A second equals to 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:2022 config/defaults.php:2435 config/defaults.php:2722
-#: config/defaults.php:2962
+#: config/defaults.php:2038 config/defaults.php:2451 config/defaults.php:2738
+#: config/defaults.php:2978
 msgid ""
 "You can set the starting time of this transition. Use one of the pre-defined "
 "options to use relative timing, which can be shifted with custom operations."
 msgstr ""
 
-#: config/defaults.php:2032
+#: config/defaults.php:2048
 msgid "Slide change starts (ignoring modifier)"
 msgstr ""
 
-#: config/defaults.php:2033 config/defaults.php:2446 config/defaults.php:2732
-#: config/defaults.php:2972
+#: config/defaults.php:2049 config/defaults.php:2462 config/defaults.php:2748
+#: config/defaults.php:2988
 msgid "Opening Transition completes"
 msgstr ""
 
-#: config/defaults.php:2034 config/defaults.php:2733 config/defaults.php:2973
+#: config/defaults.php:2050 config/defaults.php:2749 config/defaults.php:2989
 msgid "Opening Text Transition starts"
 msgstr ""
 
-#: config/defaults.php:2035 config/defaults.php:2734 config/defaults.php:2974
+#: config/defaults.php:2051 config/defaults.php:2750 config/defaults.php:2990
 msgid "Opening Text Transition completes"
 msgstr ""
 
-#: config/defaults.php:2036 config/defaults.php:2735 config/defaults.php:2975
+#: config/defaults.php:2052 config/defaults.php:2751 config/defaults.php:2991
 msgid "Opening and Opening Text Transition complete"
 msgstr ""
 
-#: config/defaults.php:2037 config/defaults.php:2447 config/defaults.php:2736
+#: config/defaults.php:2053 config/defaults.php:2463 config/defaults.php:2752
 msgid "Loop starts"
 msgstr ""
 
-#: config/defaults.php:2038 config/defaults.php:2448 config/defaults.php:2737
+#: config/defaults.php:2054 config/defaults.php:2464 config/defaults.php:2753
 msgid "Loop completes"
 msgstr ""
 
-#: config/defaults.php:2039 config/defaults.php:2449 config/defaults.php:2738
+#: config/defaults.php:2055 config/defaults.php:2465 config/defaults.php:2754
 msgid "Opening and Loop Transitions complete"
 msgstr ""
 
-#: config/defaults.php:2040 config/defaults.php:2739
+#: config/defaults.php:2056 config/defaults.php:2755
 msgid "Opening Text and Loop Transitions complete"
 msgstr ""
 
-#: config/defaults.php:2041 config/defaults.php:2740
+#: config/defaults.php:2057 config/defaults.php:2756
 msgid "Opening, Opening Text and Loop Transitions complete"
 msgstr ""
 
-#: config/defaults.php:2042
+#: config/defaults.php:2058
 msgid "Ending Text Transition starts"
 msgstr ""
 
-#: config/defaults.php:2043
+#: config/defaults.php:2059
 msgid "Ending Text Transition completes"
 msgstr ""
 
-#: config/defaults.php:2044
+#: config/defaults.php:2060
 msgid "Ending Text and Loop Transitions complete"
 msgstr ""
 
-#: config/defaults.php:2119 config/defaults.php:3044 config/defaults.php:3307
+#: config/defaults.php:2135 config/defaults.php:3060 config/defaults.php:3327
 msgid ""
 "Skews the layer along the X (horizontal) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction."
 msgstr ""
 
-#: config/defaults.php:2130 config/defaults.php:3055 config/defaults.php:3318
+#: config/defaults.php:2146 config/defaults.php:3071 config/defaults.php:3338
 msgid ""
 "Skews the layer along the Y (vertical) axis by the given number of degrees. "
 "Negative values are allowed for reverse direction."
 msgstr ""
 
-#: config/defaults.php:2234
+#: config/defaults.php:2250
 msgid ""
-"If you don't want to use this layer, but you want to keep it, you can hide "
+"If you don’t want to use this layer, but you want to keep it, you can hide "
 "it with this switch."
 msgstr ""
 
-#: config/defaults.php:2244
+#: config/defaults.php:2260
 msgid ""
 "Animates the background toward the color you specify here when the layer "
 "leaves the slider canvas."
 msgstr ""
 
-#: config/defaults.php:2251
+#: config/defaults.php:2267
 msgid ""
 "Animates the text color toward the color you specify here when the layer "
 "leaves the slider canvas."
 msgstr ""
 
-#: config/defaults.php:2258
+#: config/defaults.php:2274
 msgid ""
 "Animates rounded corners toward the value you specify here when the layer "
 "leaves the slider canvas."
 msgstr ""
 
-#: config/defaults.php:2265
+#: config/defaults.php:2281
 msgid ""
 "Animates the layer width toward the value you specify here when the layer "
 "leaves the slider canvas."
 msgstr ""
 
-#: config/defaults.php:2272
+#: config/defaults.php:2288
 msgid ""
 "Animates the layer height toward the value you specify here when the layer "
 "leaves the slider canvas."
 msgstr ""
 
-#: config/defaults.php:2313 config/defaults.php:2599
+#: config/defaults.php:2329 config/defaults.php:2615
 msgid "Animate"
 msgstr ""
 
-#: config/defaults.php:2315 config/defaults.php:2601
+#: config/defaults.php:2331 config/defaults.php:2617
 msgid "Select how your text should be split and animated."
 msgstr ""
 
-#: config/defaults.php:2317 config/defaults.php:2603
+#: config/defaults.php:2333 config/defaults.php:2619
 msgid "by lines ascending"
 msgstr ""
 
-#: config/defaults.php:2318 config/defaults.php:2604
+#: config/defaults.php:2334 config/defaults.php:2620
 msgid "by lines descending"
 msgstr ""
 
-#: config/defaults.php:2319 config/defaults.php:2605
+#: config/defaults.php:2335 config/defaults.php:2621
 msgid "by lines random"
 msgstr ""
 
-#: config/defaults.php:2320 config/defaults.php:2606
+#: config/defaults.php:2336 config/defaults.php:2622
 msgid "by lines center to edge"
 msgstr ""
 
-#: config/defaults.php:2321 config/defaults.php:2607
+#: config/defaults.php:2337 config/defaults.php:2623
 msgid "by lines edge to center"
 msgstr ""
 
-#: config/defaults.php:2322 config/defaults.php:2608
+#: config/defaults.php:2338 config/defaults.php:2624
 msgid "by words ascending"
 msgstr ""
 
-#: config/defaults.php:2323 config/defaults.php:2609
+#: config/defaults.php:2339 config/defaults.php:2625
 msgid "by words descending"
 msgstr ""
 
-#: config/defaults.php:2324 config/defaults.php:2610
+#: config/defaults.php:2340 config/defaults.php:2626
 msgid "by words random"
 msgstr ""
 
-#: config/defaults.php:2325 config/defaults.php:2611
+#: config/defaults.php:2341 config/defaults.php:2627
 msgid "by words center to edge"
 msgstr ""
 
-#: config/defaults.php:2326 config/defaults.php:2612
+#: config/defaults.php:2342 config/defaults.php:2628
 msgid "by words edge to center"
 msgstr ""
 
-#: config/defaults.php:2327 config/defaults.php:2613
+#: config/defaults.php:2343 config/defaults.php:2629
 msgid "by chars ascending"
 msgstr ""
 
-#: config/defaults.php:2328 config/defaults.php:2614
+#: config/defaults.php:2344 config/defaults.php:2630
 msgid "by chars descending"
 msgstr ""
 
-#: config/defaults.php:2329 config/defaults.php:2615
+#: config/defaults.php:2345 config/defaults.php:2631
 msgid "by chars random"
 msgstr ""
 
-#: config/defaults.php:2330 config/defaults.php:2616
+#: config/defaults.php:2346 config/defaults.php:2632
 msgid "by chars center to edge"
 msgstr ""
 
-#: config/defaults.php:2331 config/defaults.php:2617
+#: config/defaults.php:2347 config/defaults.php:2633
 msgid "by chars edge to center"
 msgstr ""
 
-#: config/defaults.php:2340
+#: config/defaults.php:2356
 msgid "Shift In"
 msgstr ""
 
-#: config/defaults.php:2341 config/defaults.php:2627
+#: config/defaults.php:2357 config/defaults.php:2643
 msgid ""
 "Delays the transition of each text nodes relative to each other. A second "
 "equals to 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:2349
+#: config/defaults.php:2365
 msgid ""
 "Shifts the starting position of text nodes from their original on the "
 "horizontal axis with the given number of pixels. Use negative values for the "
 "opposite direction. Percentage values are relative to the width of this "
-"layer. The values 'left' or 'right' position text nodes out the staging "
+"layer. The values “left” or “right” position text nodes out the staging "
 "area, so they enter the scene from either side when animating to their "
 "destination location. By listing multiple values separated with a | "
 "character, the slider will use different transition variations on each text "
 "node by cycling between the provided values."
 msgstr ""
 
-#: config/defaults.php:2381
+#: config/defaults.php:2397
 msgid ""
 "Shifts the starting position of text nodes from their original on the "
 "vertical axis with the given number of pixels. Use negative values for the "
 "opposite direction. Percentage values are relative to the width of this "
-"layer. The values 'top' or 'bottom' position text nodes out the staging "
+"layer. The values “top” or “bottom” position text nodes out the staging "
 "area, so they enter the scene from either vertical side when animating to "
 "their destination location. By listing multiple values separated with a | "
 "character, the slider will use different transition variations on each text "
 "node by cycling between the provided values."
 msgstr ""
 
-#: config/defaults.php:2413 config/defaults.php:2699
+#: config/defaults.php:2429 config/defaults.php:2715
 msgid ""
 "The transition length in milliseconds of the individual text fragments. A "
 "second equals to 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:2421 config/defaults.php:2707
+#: config/defaults.php:2437 config/defaults.php:2723
 msgid ""
 "The timing function of the animation. With this function you can manipulate "
 "the movement of animated text fragments. Please click on the link next to "
@@ -1840,19 +1866,19 @@ msgid ""
 "examples."
 msgstr ""
 
-#: config/defaults.php:2428 config/defaults.php:2715
+#: config/defaults.php:2444 config/defaults.php:2731
 msgid "Fade the text fragments during their transition."
 msgstr ""
 
-#: config/defaults.php:2434 config/defaults.php:2721
+#: config/defaults.php:2450 config/defaults.php:2737
 msgid "StartAt"
 msgstr ""
 
-#: config/defaults.php:2445 config/defaults.php:2971
+#: config/defaults.php:2461 config/defaults.php:2987
 msgid "Opening Transition starts"
 msgstr ""
 
-#: config/defaults.php:2471 config/defaults.php:2760
+#: config/defaults.php:2487 config/defaults.php:2776
 msgid ""
 "Rotates text fragments clockwise by the given number of degrees. Negative "
 "values are allowed for counterclockwise rotation. By listing multiple values "
@@ -1860,7 +1886,7 @@ msgid ""
 "variations on each text node by cycling between the provided values."
 msgstr ""
 
-#: config/defaults.php:2485 config/defaults.php:2774
+#: config/defaults.php:2501 config/defaults.php:2790
 msgid ""
 "Rotates text fragments along the X (horizontal) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction. By listing "
@@ -1869,7 +1895,7 @@ msgid ""
 "values."
 msgstr ""
 
-#: config/defaults.php:2499 config/defaults.php:2788
+#: config/defaults.php:2515 config/defaults.php:2804
 msgid ""
 "Rotates text fragments along the Y (vertical) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction. By listing "
@@ -1878,7 +1904,7 @@ msgid ""
 "values."
 msgstr ""
 
-#: config/defaults.php:2514 config/defaults.php:2803
+#: config/defaults.php:2530 config/defaults.php:2819
 msgid ""
 "Scales text fragments along the X (horizontal) axis by the specified vector. "
 "Use the value 1 for the original size. The value 2 will double, while 0.5 "
@@ -1888,7 +1914,7 @@ msgid ""
 "values."
 msgstr ""
 
-#: config/defaults.php:2528 config/defaults.php:2817
+#: config/defaults.php:2544 config/defaults.php:2833
 msgid ""
 "Scales text fragments along the Y (vertical) axis by the specified vector. "
 "Use the value 1 for the original size. The value 2 will double, while 0.5 "
@@ -1898,7 +1924,7 @@ msgid ""
 "values."
 msgstr ""
 
-#: config/defaults.php:2541 config/defaults.php:2830
+#: config/defaults.php:2557 config/defaults.php:2846
 msgid ""
 "Skews text fragments along the X (horizontal) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction. By listing "
@@ -1907,7 +1933,7 @@ msgid ""
 "values."
 msgstr ""
 
-#: config/defaults.php:2555 config/defaults.php:2844
+#: config/defaults.php:2571 config/defaults.php:2860
 msgid ""
 "Skews text fragments along the Y (vertical) axis by the given number of "
 "degrees. Negative values are allowed for reverse direction. By listing "
@@ -1916,467 +1942,463 @@ msgid ""
 "values."
 msgstr ""
 
-#: config/defaults.php:2626
+#: config/defaults.php:2642
 msgid "Shift Out"
 msgstr ""
 
-#: config/defaults.php:2635
+#: config/defaults.php:2651
 msgid ""
 "Shifts the ending position of text nodes from their original on the "
 "horizontal axis with the given number of pixels. Use negative values for the "
 "opposite direction. Percentage values are relative to the width of this "
-"layer. The values 'left' or 'right' position text nodes out the staging "
+"layer. The values “left” or “right” position text nodes out the staging "
 "area, so they leave the scene from either side when animating to their "
 "destination location. By listing multiple values separated with a | "
 "character, the slider will use different transition variations on each text "
 "node by cycling between the provided values."
 msgstr ""
 
-#: config/defaults.php:2667
+#: config/defaults.php:2683
 msgid ""
 "Shifts the ending position of text nodes from their original on the vertical "
 "axis with the given number of pixels. Use negative values for the opposite "
 "direction. Percentage values are relative to the width of this layer. The "
-"values 'top' or 'bottom' position text nodes out the staging area, so they "
+"values “top” or “bottom” position text nodes out the staging area, so they "
 "leave the scene from either vertical side when animating to their "
 "destination location. By listing multiple values separated with a | "
 "character, the slider will use different transition variations on each text "
 "node by cycling between the provided values."
 msgstr ""
 
-#: config/defaults.php:2896
+#: config/defaults.php:2912
 msgid ""
 "Shifts the layer starting position from its original on the horizontal axis "
 "with the given number of pixels. Use negative values for the opposite "
 "direction. Percentage values are relative to the width of this layer. The "
-"values 'left' or 'right' position the layer out the staging area, so it can "
+"values “left” or “right” position the layer out the staging area, so it can "
 "leave and re-enter the scene from either side during the transition."
 msgstr ""
 
-#: config/defaults.php:2925
+#: config/defaults.php:2941
 msgid ""
 "Shifts the layer starting position from its original on the vertical axis "
 "with the given number of pixels. Use negative values for the opposite "
 "direction. Percentage values are relative to the height of this layer. The "
-"values 'top' or 'bottom' position the layer out the staging area, so it can "
+"values “top” or “bottom” position the layer out the staging area, so it can "
 "leave and re-enter the scene from either vertical side during the transition."
 msgstr ""
 
-#: config/defaults.php:2954 config/defaults.php:3235
+#: config/defaults.php:2970 config/defaults.php:3251
 msgid ""
 "The length of the transition in milliseconds. A second is equal to 1000 "
 "milliseconds."
 msgstr ""
 
-#: config/defaults.php:2996 config/defaults.php:3251
-#, fuzzy
+#: config/defaults.php:3012 config/defaults.php:3267
 msgid ""
-"The timing function of the animation to manipualte the layer's movement. "
+"The timing function of the animation to manipualte the layer’s movement. "
 "Click on the link next to this field to open easings.net for examples and "
 "more information"
 msgstr ""
-"The timing function of the animation. With this function you can manipualte "
-"the movement of the animated object. Please click on the link next to this "
-"select field to open easings.net for more information and real-time examples."
 
-#: config/defaults.php:3001 config/defaults.php:3264 config/defaults.php:3837
+#: config/defaults.php:3017 config/defaults.php:3280 config/defaults.php:3871
 msgid "Opacity"
 msgstr ""
 
-#: config/defaults.php:3003 config/defaults.php:3266 config/defaults.php:3839
+#: config/defaults.php:3019 config/defaults.php:3282 config/defaults.php:3873
 msgid ""
 "Fades the layer. You can use values between 1 and 0 to set the layer fully "
 "opaque or transparent respectively. For example, the value 0.5 will make the "
 "layer semi-transparent."
 msgstr ""
 
-#: config/defaults.php:3113
+#: config/defaults.php:3129
 msgid "Count"
 msgstr ""
 
-#: config/defaults.php:3115
+#: config/defaults.php:3131
 msgid ""
 "The number of times repeating the Loop transition. The count includes the "
 "reverse part of the transitions when you use the Yoyo feature. Use the value "
 "-1 to repeat infinitely or zero to disable looping."
 msgstr ""
 
-#: config/defaults.php:3130
+#: config/defaults.php:3146
 msgid "Wait"
 msgstr ""
 
-#: config/defaults.php:3132
+#: config/defaults.php:3148
 msgid ""
 "Waiting time between repeats in milliseconds. A second is 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:3138
+#: config/defaults.php:3154
 msgid "Yoyo"
 msgstr ""
 
-#: config/defaults.php:3140
+#: config/defaults.php:3156
 msgid ""
 "Enable this option to allow reverse transition, so you can loop back and "
 "forth seamlessly."
 msgstr ""
 
-#: config/defaults.php:3201
+#: config/defaults.php:3217
 msgid ""
 "Moves the layer horizontally by the given number of pixels. Use negative "
 "values for the opposite direction. Percentage values are relative to the "
 "width of this layer. "
 msgstr ""
 
-#: config/defaults.php:3218
+#: config/defaults.php:3234
 msgid ""
 "Moves the layer vertically by the given number of pixels. Use negative "
 "values for the opposite direction. Percentage values are relative to the "
 "width of this layer. "
 msgstr ""
 
-#: config/defaults.php:3241
+#: config/defaults.php:3257
 msgid "Reverse<br>duration"
 msgstr ""
 
-#: config/defaults.php:3243
+#: config/defaults.php:3259
 msgid ""
 "The duration of the reverse transition in milliseconds. A second is equal to "
 "1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:3256
+#: config/defaults.php:3272
 msgid "Reverse<br>easing"
 msgstr ""
 
-#: config/defaults.php:3258
+#: config/defaults.php:3274
 msgid ""
-"The timing function of the reverse animation to manipualte the layer's "
+"The timing function of the reverse animation to manipualte the layer’s "
 "movement. Click on the link next to this field to open easings.net for "
 "examples and more information"
 msgstr ""
 
-#: config/defaults.php:3274
+#: config/defaults.php:3294
 msgid ""
 "Rotates the layer clockwise by the given number of degrees. Negative values "
 "are allowed for counterclockwise rotation."
 msgstr ""
 
-#: config/defaults.php:3359
+#: config/defaults.php:3379
 msgid ""
 "The background color of this layer. You can use color names, hexadecimal, "
-"RGB or RGBA values as well as the 'transparent' keyword. Example: #FFF"
+"RGB or RGBA values as well as the “transparent” keyword. Example: #FFF"
 msgstr ""
 
-#: config/defaults.php:3366
+#: config/defaults.php:3386
 msgid ""
 "The text color of this text. You can use color names, hexadecimal, RGB or "
 "RGBA values. Example: #333"
 msgstr ""
 
-#: config/defaults.php:3371 config/defaults.php:3888
+#: config/defaults.php:3391 config/defaults.php:3922
 msgid "Rounded corners"
 msgstr ""
 
-#: config/defaults.php:3373
+#: config/defaults.php:3393
 msgid ""
 "If you want rounded corners, you can set here its radius in pixels. Example: "
 "5px"
 msgstr ""
 
-#: config/defaults.php:3380 config/defaults.php:3512
+#: config/defaults.php:3400 config/defaults.php:3532
 msgid "Changes the perspective of layers in the 3D space."
 msgstr ""
 
-#: config/defaults.php:3385
+#: config/defaults.php:3405
 msgid "Always on top"
 msgstr ""
 
-#: config/defaults.php:3387
+#: config/defaults.php:3407
 msgid "Show this layer above every other layer while hovering."
 msgstr ""
 
-#: config/defaults.php:3402
+#: config/defaults.php:3422
 msgid "Parallax Level"
 msgstr ""
 
-#: config/defaults.php:3403
+#: config/defaults.php:3423
 msgid ""
 "Set the intensity of the parallax effect. Use negative values to shift "
 "layers in the opposite direction."
 msgstr ""
 
-#: config/defaults.php:3413
+#: config/defaults.php:3433
 msgid "Choose if you want 2D or 3D parallax layers."
 msgstr ""
 
-#: config/defaults.php:3416 config/defaults.php:3428 config/defaults.php:3440
+#: config/defaults.php:3436 config/defaults.php:3448 config/defaults.php:3460
 msgid "Inherit from Slide Options"
 msgstr ""
 
-#: config/defaults.php:3425
+#: config/defaults.php:3445
 msgid ""
 "You can trigger the parallax effect by either scrolling the page, or by "
 "moving your mouse cursor / tilting your mobile device."
 msgstr ""
 
-#: config/defaults.php:3437
+#: config/defaults.php:3457
 msgid "Choose on which axes parallax layers should move."
 msgstr ""
 
-#: config/defaults.php:3442
+#: config/defaults.php:3462
 msgid "Both"
 msgstr ""
 
-#: config/defaults.php:3461
+#: config/defaults.php:3481
 msgid "Move Duration"
 msgstr ""
 
-#: config/defaults.php:3462
+#: config/defaults.php:3482
 msgid ""
 "Controls the speed of animating layers when you move your mouse cursor or "
 "tilt your mobile device."
 msgstr ""
 
-#: config/defaults.php:3474
+#: config/defaults.php:3494
 msgid "Leave Duration"
 msgstr ""
 
-#: config/defaults.php:3475
+#: config/defaults.php:3495
 msgid ""
 "Controls how quickly parallax layers revert to their original position when "
 "you move your mouse cursor outside of the slider. This value is in "
 "milliseconds. A second equals to 1000 milliseconds."
 msgstr ""
 
-#: config/defaults.php:3488
+#: config/defaults.php:3508
 msgid ""
 "Increase or decrease the amount of layer rotation in the 3D space when "
 "moving your mouse cursor or tilting on a mobile device."
 msgstr ""
 
-#: config/defaults.php:3500
+#: config/defaults.php:3520
 msgid ""
 "Increase or decrease the amount of layer movement when moving your mouse "
 "cursor or tilting on a mobile device."
 msgstr ""
 
-#: config/defaults.php:3525
+#: config/defaults.php:3545
 msgid "Keep this layer visible:"
 msgstr ""
 
-#: config/defaults.php:3527
+#: config/defaults.php:3547
 msgid ""
 "You can keep this layer on top of the slider across multiple slides. Just "
 "select the slide on which this layer should animate out. Alternatively, you "
 "can make this layer global on all slides after it transitioned in."
 msgstr ""
 
-#: config/defaults.php:3529
+#: config/defaults.php:3549
 msgid "Until the end of this slide (default)"
 msgstr ""
 
-#: config/defaults.php:3530
+#: config/defaults.php:3550
 msgid "Forever (the layer will never animate out)"
 msgstr ""
 
-#: config/defaults.php:3536
+#: config/defaults.php:3556
 msgid "Play By Scroll Keyframe"
 msgstr ""
 
-#: config/defaults.php:3538
+#: config/defaults.php:3558
 msgid ""
 "A Play by Scroll slider will pause when this layer finished its opening "
 "transition."
 msgstr ""
 
-#: config/defaults.php:3549
+#: config/defaults.php:3569
 msgid ""
 "If you want to link your layer, type here the URL. You can use a hash mark "
 "followed by a number to link this layer to another slide. Example: #3 - this "
 "will switch to the third slide."
 msgstr ""
 
-#: config/defaults.php:3582
+#: config/defaults.php:3602
 msgid "URL target"
 msgstr ""
 
-#: config/defaults.php:3598 config/defaults.php:3608
+#: config/defaults.php:3618 config/defaults.php:3628
 #: templates/tmpl-layer.php:1584
 msgid "Custom Attributes"
 msgstr ""
 
-#: config/defaults.php:3600 config/defaults.php:3610
+#: config/defaults.php:3620 config/defaults.php:3630
 msgid ""
 "Your list of custom attributes. Use this feature if your needs are not "
 "covered by the common attributes above or you want to override them. You can "
 "use data-* as well as regular attribute names. Empty attributes (without "
 "value) are also allowed. For example, to make a FancyBox gallery, you may "
-"enter \"data-fancybox-group\" and \"gallery1\" for the attribute name and "
-"value, respectively."
+"enter “data-fancybox-group” and “gallery1” for the attribute name and value, "
+"respectively."
 msgstr ""
 
-#: config/defaults.php:3622
+#: config/defaults.php:3642
 #, php-format
 msgid ""
 "You can set the width of your layer. You can use pixels, percentage, or the "
-"default value 'auto'. Examples: 100px, 50% or auto."
+"default value “auto”. Examples: 100px, 50% or auto."
 msgstr ""
 
-#: config/defaults.php:3632
+#: config/defaults.php:3652
 #, php-format
 msgid ""
 "You can set the height of your layer. You can use pixels, percentage, or the "
-"default value 'auto'. Examples: 100px, 50% or auto"
+"default value “auto”. Examples: 100px, 50% or auto"
 msgstr ""
 
-#: config/defaults.php:3640 config/defaults.php:3660 config/defaults.php:3700
+#: config/defaults.php:3660 config/defaults.php:3680 config/defaults.php:3720
 #: templates/tmpl-2d-transition.php:107 templates/tmpl-layer.php:1678
 #: views/transition_builder.php:560
 msgid "Top"
 msgstr ""
 
-#: config/defaults.php:3642
+#: config/defaults.php:3662
 msgid ""
 "The layer position from the top of the slide. You can use pixels and "
 "percentage. Examples: 100px or 50%. You can move your layers in the preview "
-"above with a drag n' drop, or set the exact values here."
+"above with a drag n’ drop, or set the exact values here."
 msgstr ""
 
-#: config/defaults.php:3650 config/defaults.php:3690 config/defaults.php:3730
-#: config/defaults.php:3824 templates/tmpl-2d-transition.php:110
+#: config/defaults.php:3670 config/defaults.php:3710 config/defaults.php:3750
+#: config/defaults.php:3858 templates/tmpl-2d-transition.php:110
 #: templates/tmpl-layer.php:1693 views/transition_builder.php:563
 msgid "Left"
 msgstr ""
 
-#: config/defaults.php:3652
+#: config/defaults.php:3672
 msgid ""
 "The layer position from the left side of the slide. You can use pixels and "
 "percentage. Examples: 100px or 50%. You can move your layers in the preview "
-"above with a drag n' drop, or set the exact values here."
+"above with a drag n’ drop, or set the exact values here."
 msgstr ""
 
-#: config/defaults.php:3662
+#: config/defaults.php:3682
 msgid "Padding on the top of the layer. Example: 10px"
 msgstr ""
 
-#: config/defaults.php:3670 config/defaults.php:3710 config/defaults.php:3825
+#: config/defaults.php:3690 config/defaults.php:3730 config/defaults.php:3859
 #: templates/tmpl-2d-transition.php:108 templates/tmpl-layer.php:1683
 #: views/transition_builder.php:561
 msgid "Right"
 msgstr ""
 
-#: config/defaults.php:3672
+#: config/defaults.php:3692
 msgid "Padding on the right side of the layer. Example: 10px"
 msgstr ""
 
-#: config/defaults.php:3680 config/defaults.php:3720
+#: config/defaults.php:3700 config/defaults.php:3740
 #: templates/tmpl-2d-transition.php:109 templates/tmpl-layer.php:1688
 #: views/transition_builder.php:562
 msgid "Bottom"
 msgstr ""
 
-#: config/defaults.php:3682
+#: config/defaults.php:3702
 msgid "Padding on the bottom of the layer. Example: 10px"
 msgstr ""
 
-#: config/defaults.php:3692
+#: config/defaults.php:3712
 msgid "Padding on the left side of the layer. Example: 10px"
 msgstr ""
 
-#: config/defaults.php:3702
+#: config/defaults.php:3722
 msgid "Border on the top of the layer. Example: 5px solid #000"
 msgstr ""
 
-#: config/defaults.php:3712
+#: config/defaults.php:3732
 msgid "Border on the right side of the layer. Example: 5px solid #000"
 msgstr ""
 
-#: config/defaults.php:3722
+#: config/defaults.php:3742
 msgid "Border on the bottom of the layer. Example: 5px solid #000"
 msgstr ""
 
-#: config/defaults.php:3732
+#: config/defaults.php:3752
 msgid "Border on the left side of the layer. Example: 5px solid #000"
 msgstr ""
 
-#: config/defaults.php:3740
+#: config/defaults.php:3760
 msgid "Family"
 msgstr ""
 
-#: config/defaults.php:3742
+#: config/defaults.php:3762
 msgid ""
 "List of your chosen fonts separated with a comma. Please use apostrophes if "
 "your font names contains white spaces. Example: Helvetica, Arial, sans-serif"
 msgstr ""
 
-#: config/defaults.php:3747
+#: config/defaults.php:3767
 msgid "Font size"
 msgstr ""
 
-#: config/defaults.php:3749
+#: config/defaults.php:3769
 msgid "The font size in pixels. Example: 16px."
 msgstr ""
 
-#: config/defaults.php:3758
+#: config/defaults.php:3778
 msgid "Line height"
 msgstr ""
 
-#: config/defaults.php:3760
+#: config/defaults.php:3780
 msgid ""
-"The line height of your text. The default setting is 'normal'. Example: 22px"
+"The line height of your text. The default setting is “normal”. Example: 22px"
 msgstr ""
 
-#: config/defaults.php:3768
+#: config/defaults.php:3788
 msgid "Font weight"
 msgstr ""
 
-#: config/defaults.php:3770
+#: config/defaults.php:3790
 msgid ""
 "Sets the font boldness. Please note, not every font supports all the listed "
 "variants, thus some settings may have the same result."
 msgstr ""
 
-#: config/defaults.php:3772
+#: config/defaults.php:3792
 msgid "100 (UltraLight)"
 msgstr ""
 
-#: config/defaults.php:3773
+#: config/defaults.php:3793
 msgid "200 (Thin)"
 msgstr ""
 
-#: config/defaults.php:3774
+#: config/defaults.php:3794
 msgid "300 (Light)"
 msgstr ""
 
-#: config/defaults.php:3775
+#: config/defaults.php:3795
 msgid "400 (Regular)"
 msgstr ""
 
-#: config/defaults.php:3776
+#: config/defaults.php:3796
 msgid "500 (Medium)"
 msgstr ""
 
-#: config/defaults.php:3777
+#: config/defaults.php:3797
 msgid "600 (Semibold)"
 msgstr ""
 
-#: config/defaults.php:3778
+#: config/defaults.php:3798
 msgid "700 (Bold)"
 msgstr ""
 
-#: config/defaults.php:3779
+#: config/defaults.php:3799
 msgid "800 (Heavy)"
 msgstr ""
 
-#: config/defaults.php:3780
+#: config/defaults.php:3800
 msgid "900 (Black)"
 msgstr ""
 
-#: config/defaults.php:3789
+#: config/defaults.php:3809
 msgid "Font style"
 msgstr ""
 
-#: config/defaults.php:3791
+#: config/defaults.php:3811
 msgid ""
 "Oblique is an auto-generated italic version of your chosen font and can "
 "force slating even if there is no italic font variant available. However, "
@@ -2384,155 +2406,166 @@ msgid ""
 "check to load italic font variants when using Google Fonts."
 msgstr ""
 
-#: config/defaults.php:3794
+#: config/defaults.php:3814
 msgid "Italic"
 msgstr ""
 
-#: config/defaults.php:3795
+#: config/defaults.php:3815
 msgid "Oblique (Forced slant)"
 msgstr ""
 
-#: config/defaults.php:3804
+#: config/defaults.php:3824
 msgid "Text decoration"
 msgstr ""
 
-#: config/defaults.php:3808
+#: config/defaults.php:3828
 msgid "Underline"
 msgstr ""
 
-#: config/defaults.php:3809
+#: config/defaults.php:3829
 msgid "Overline"
 msgstr ""
 
-#: config/defaults.php:3810
+#: config/defaults.php:3830
 msgid "Line through"
 msgstr ""
 
-#: config/defaults.php:3820
-msgid "Text align"
+#: config/defaults.php:3840
+msgid "Letter spacing"
 msgstr ""
 
-#: config/defaults.php:3823
-msgid "Initial (Language default)"
-msgstr ""
-
-#: config/defaults.php:3826
-msgid "Center"
-msgstr ""
-
-#: config/defaults.php:3827
-msgid "Justify"
-msgstr ""
-
-#: config/defaults.php:3852
-msgid "Min. font size"
+#: config/defaults.php:3842
+msgid ""
+"Controls the amount of space between each character. Useful the change "
+"letter density in a line or block of text. Negative values and decimals can "
+"be used."
 msgstr ""
 
 #: config/defaults.php:3854
+msgid "Text align"
+msgstr ""
+
+#: config/defaults.php:3857
+msgid "Initial (Language default)"
+msgstr ""
+
+#: config/defaults.php:3860
+msgid "Center"
+msgstr ""
+
+#: config/defaults.php:3861
+msgid "Justify"
+msgstr ""
+
+#: config/defaults.php:3886
+msgid "Min. font size"
+msgstr ""
+
+#: config/defaults.php:3888
 msgid ""
 "The minimum font size in a responsive slider. This option allows you to "
 "prevent your texts layers becoming too small on smaller screens."
 msgstr ""
 
-#: config/defaults.php:3859
+#: config/defaults.php:3893
 msgid "Min. mobile font size"
 msgstr ""
 
-#: config/defaults.php:3861
+#: config/defaults.php:3895
 msgid ""
 "The minimum font size in a responsive slider on mobile devices. This option "
 "allows you to prevent your texts layers becoming too small on smaller "
 "screens."
 msgstr ""
 
-#: config/defaults.php:3890
+#: config/defaults.php:3924
 msgid "If you want rounded corners, you can set its radius here. Example: 5px"
 msgstr ""
 
-#: config/defaults.php:3908
+#: config/defaults.php:3942
 msgid "Custom styles"
 msgstr ""
 
-#: config/defaults.php:3910
+#: config/defaults.php:3944
 msgid ""
 "If you want to set style settings other than above, you can use here any CSS "
 "codes. Please make sure to write valid markup."
 msgstr ""
 
-#: config/defaults.php:3929
+#: config/defaults.php:3963
 msgid ""
 "The rotation angle where this layer animates toward when entering into the "
 "slider canvas. Negative values are allowed for counterclockwise rotation."
 msgstr ""
 
-#: config/defaults.php:3936
+#: config/defaults.php:3970
 msgid ""
 "The rotation angle on the horizontal axis where this animates toward when "
 "entering into the slider canvas. Negative values are allowed for reversed "
 "direction."
 msgstr ""
 
-#: config/defaults.php:3943
+#: config/defaults.php:3977
 msgid ""
 "The rotation angle on the vertical axis where this layer animates toward "
 "when entering into the slider canvas. Negative values are allowed for "
 "reversed direction."
 msgstr ""
 
-#: config/defaults.php:3950
+#: config/defaults.php:3984
 msgid ""
 "The layer horizontal scale where this layer animates toward when entering "
 "into the slider canvas."
 msgstr ""
 
-#: config/defaults.php:3960
+#: config/defaults.php:3994
 msgid ""
 "The layer vertical scale where this layer animates toward when entering into "
 "the slider canvas."
 msgstr ""
 
-#: config/defaults.php:3970
+#: config/defaults.php:4004
 msgid ""
 "The layer horizontal skewing angle where this layer animates toward when "
 "entering into the slider canvas."
 msgstr ""
 
-#: config/defaults.php:3977
+#: config/defaults.php:4011
 msgid ""
 "The layer vertical skewing angle where this layer animates toward when "
 "entering into the slider canvas."
 msgstr ""
 
-#: config/defaults.php:3982
+#: config/defaults.php:4016
 msgid "Calculate positions from"
 msgstr ""
 
-#: config/defaults.php:3984
+#: config/defaults.php:4018
 msgid ""
 "Sets the layer position origin from which top and left values are "
 "calculated. The default is the upper left corner of the slider canvas. In a "
 "full width and full size slider, your content is centered based on the "
-"screen size to achieve the best possible fit. By selecting the \"sides of "
-"the screen\" option in those scenarios, you can allow layers to escape the "
+"screen size to achieve the best possible fit. By selecting the “sides of the "
+"screen” option in those scenarios, you can allow layers to escape the "
 "centered inner area and stick to the sides of the screen."
 msgstr ""
 
-#: config/defaults.php:3986
+#: config/defaults.php:4020
 msgid "sides of the slider"
 msgstr ""
 
-#: config/defaults.php:3987
+#: config/defaults.php:4021
 msgid "sides of the screen"
 msgstr ""
 
-#: config/defaults.php:3993
+#: config/defaults.php:4027
 msgid "Stacking order"
 msgstr ""
 
-#: config/defaults.php:3995
+#: config/defaults.php:4029
 msgid ""
 "This option controls the vertical stacking order of layers that overlap. In "
-"CSS, it's commonly called as z-index. Elements with a higher value are "
+"CSS, it’s commonly called as z-index. Elements with a higher value are "
 "stacked in front of elements with a lower one, effectively covering them. By "
 "default, this value is calculated automatically based on the order of your "
 "layers, thus simply re-ordering them can fix overlap issues. Use this option "
@@ -2543,79 +2576,79 @@ msgid ""
 "make the layer to be on top of everything else."
 msgstr ""
 
-#: config/defaults.php:4005
+#: config/defaults.php:4039
 msgid "Blend mode"
 msgstr ""
 
-#: config/defaults.php:4007
+#: config/defaults.php:4041
 msgid ""
 "Choose how layers and the slide background should blend into each other. "
 "Blend modes are an easy way to add eye-catching effects and is one of the "
 "most frequently used features in graphic and print design."
 msgstr ""
 
-#: config/defaults.php:4070 views/slider_list.php:294
+#: config/defaults.php:4104 views/slider_list.php:294
 msgid "ID"
 msgstr ""
 
-#: config/defaults.php:4072
+#: config/defaults.php:4106
 msgid ""
 "You can apply an ID attribute on the HTML element of this layer to work with "
 "it in your custom CSS or Javascript code."
 msgstr ""
 
-#: config/defaults.php:4080
+#: config/defaults.php:4114
 msgid "Classes"
 msgstr ""
 
-#: config/defaults.php:4082
+#: config/defaults.php:4116
 msgid ""
 "You can apply classes on the HTML element of this layer to work with it in "
 "your custom CSS or Javascript code."
 msgstr ""
 
-#: config/defaults.php:4090
+#: config/defaults.php:4124
 msgid "Title"
 msgstr ""
 
-#: config/defaults.php:4092
+#: config/defaults.php:4126
 msgid ""
 "You can add a title to this layer which will display as a tooltip if someone "
 "holds his mouse cursor over the layer."
 msgstr ""
 
-#: config/defaults.php:4100
+#: config/defaults.php:4134
 msgid "Alt"
 msgstr ""
 
-#: config/defaults.php:4102
+#: config/defaults.php:4136
 msgid ""
 "Name or describe your image layer, so search engines and VoiceOver softwares "
 "can properly identify it."
 msgstr ""
 
-#: config/defaults.php:4110
+#: config/defaults.php:4144
 msgid "Rel"
 msgstr ""
 
-#: config/defaults.php:4112
+#: config/defaults.php:4146
 msgid ""
 "Plugins and search engines may use this attribute to get more information "
 "about the role and behavior of a link."
 msgstr ""
 
-#: helpers/admin.ui.tools.php:12
+#: helpers/admin.ui.tools.php:12 templates/tmpl-slider-settings.php:156
 msgid "Advanced option"
 msgstr ""
 
 #: helpers/admin.ui.tools.php:17 templates/tmpl-layer.php:496
 #: templates/tmpl-layer.php:883 templates/tmpl-layer.php:1296
-#: templates/tmpl-layer.php:1860 templates/tmpl-layer.php:1871
+#: templates/tmpl-layer.php:1864 templates/tmpl-layer.php:1875
 msgid "Premium feature. Click to learn more."
 msgstr ""
 
 #: templates/tmpl-2d-transition.php:7 templates/tmpl-3d-transition.php:7
-#: templates/tmpl-slide.php:246 templates/tmpl-slide.php:309
+#: templates/tmpl-slide.php:251 templates/tmpl-slide.php:314
 #: views/transition_builder.php:157 views/transition_builder.php:458
 msgid "Preview"
 msgstr ""
@@ -2714,8 +2747,9 @@ msgstr ""
 msgid "The type of the animation, either slide, fade or both (mixed)."
 msgstr ""
 
-#: templates/tmpl-2d-transition.php:99 templates/tmpl-slide.php:310
-#: views/transition_builder.php:552
+#: templates/tmpl-2d-transition.php:99 views/transition_builder.php:552
+#: wp/scripts_l10n.php:15
+msgctxt "verb"
 msgid "Slide"
 msgstr ""
 
@@ -2730,7 +2764,7 @@ msgstr ""
 
 #: templates/tmpl-2d-transition.php:106 views/transition_builder.php:559
 msgid ""
-"The direction of the slide or mixed animation if you've chosen this type in "
+"The direction of the slide or mixed animation if you’ve chosen this type in "
 "the previous settings."
 msgstr ""
 
@@ -2750,8 +2784,32 @@ msgstr ""
 msgid "Bottom right"
 msgstr ""
 
+#: templates/tmpl-2d-transition.php:121 views/transition_builder.php:574
+msgid ""
+"The initial rotation of the individual tiles which will be animated to the "
+"default (0deg) value around the X axis. You can use negatuve values."
+msgstr ""
+
+#: templates/tmpl-2d-transition.php:123 views/transition_builder.php:576
+msgid ""
+"The initial rotation of the individual tiles which will be animated to the "
+"default (0deg) value around the Y axis. You can use negatuve values."
+msgstr ""
+
 #: templates/tmpl-2d-transition.php:126 views/transition_builder.php:579
 msgid "RotateZ"
+msgstr ""
+
+#: templates/tmpl-2d-transition.php:127 views/transition_builder.php:580
+msgid ""
+"The initial rotation of the individual tiles which will be animated to the "
+"default (0deg) value around the Z axis. You can use negatuve values."
+msgstr ""
+
+#: templates/tmpl-2d-transition.php:129 views/transition_builder.php:582
+msgid ""
+"The initial scale of the individual tiles which will be animated to the "
+"default (1.0) value."
 msgstr ""
 
 #: templates/tmpl-3d-transition.php:44 views/transition_builder.php:196
@@ -2826,15 +2884,16 @@ msgid "Add slider"
 msgstr ""
 
 #: templates/tmpl-beta-feedback.php:4
-msgid "Using beta version"
+#, php-format
+msgid "Using beta version (%s)"
 msgstr ""
 
 #: templates/tmpl-beta-feedback.php:5
 msgid "Send feedback"
 msgstr ""
 
-#: templates/tmpl-embed-slider.php:5 views/slider_list.php:353
-#: views/slider_list.php:443
+#: templates/tmpl-embed-slider.php:5 views/slider_list.php:354
+#: views/slider_list.php:450
 msgid "Embed Slider"
 msgstr ""
 
@@ -2852,7 +2911,7 @@ msgid ""
 msgstr ""
 
 #: templates/tmpl-embed-slider.php:20 templates/tmpl-embed-slider.php:32
-#: templates/tmpl-embed-slider.php:45
+#: templates/tmpl-embed-slider.php:45 wp/widgets.php:78
 msgid "Learn more"
 msgstr ""
 
@@ -2865,7 +2924,7 @@ msgid ""
 "Widgets can provide a super easy drag and drop way of sharing your sliders "
 "when it comes to embed content to a commonly used part on your site like the "
 "header area, sidebar of the footer. However, the available widget areas are "
-"controlled by your theme and it might not offer the perfect spot that you're "
+"controlled by your theme and it might not offer the perfect spot that you’re "
 "looking for. Just head to Appearance -> Widgets to see the options your "
 "theme offers."
 msgstr ""
@@ -2877,7 +2936,7 @@ msgstr ""
 #: templates/tmpl-embed-slider.php:40
 msgid ""
 "You can use the layerslider() PHP function to insert sliders by editing your "
-"theme's template files. Since you can implement custom logic in code, this "
+"theme’s template files. Since you can implement custom logic in code, this "
 "option gives you unlimited control on how your sliders are embedded."
 msgstr ""
 
@@ -2888,171 +2947,142 @@ msgid ""
 msgstr ""
 
 #: templates/tmpl-embed-slider.php:53
+#, php-format
 msgid ""
 "To find more details about how you can embed sliders on your site please "
-"refer to our"
+"refer to our %sonline documetation%s."
 msgstr ""
 
-#: templates/tmpl-embed-slider.php:54
-msgid "online documetation"
-msgstr ""
-
-#: templates/tmpl-import-templates.php:5
-msgid "Activate your site to access premium templates."
-msgstr ""
-
-#: templates/tmpl-import-templates.php:6
-msgid ""
-"This template is only available for activated sites. Please review the "
-"PRODUCT ACTIVATION section on the main LayerSlider screen or <a href=\\"
-"\"https://support.kreaturamedia.com/docs/layersliderwp/documentation."
-"html#activation\\\" target=\\\"_blank\\\">click here</a> for more "
-"information."
-msgstr ""
-
-#: templates/tmpl-import-templates.php:8
-msgid "Plugin update required"
-msgstr ""
-
-#: templates/tmpl-import-templates.php:9
-msgid ""
-"This slider template requires a newer version of LayerSlider in order to "
-"work properly. This is due to additional features introduced in a later "
-"version than you have. For updating instructions, please refer to our <a "
-"href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation."
-"html#updating\" target=\"_blank\">online documnetation</a>."
-msgstr ""
-
-#: templates/tmpl-import-templates.php:16 wp/widgets.php:12
+#: templates/tmpl-import-templates.php:11 wp/widgets.php:12
 msgid "LayerSlider"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:17
+#: templates/tmpl-import-templates.php:12
 msgid "Templates"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:21
+#: templates/tmpl-import-templates.php:16
 msgid "Sliders"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:22
+#: templates/tmpl-import-templates.php:17
 msgid "Plugins"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:23
+#: templates/tmpl-import-templates.php:18
 msgid "Skins"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:28
+#: templates/tmpl-import-templates.php:23
 msgid "Last updated: "
 msgstr ""
 
-#: templates/tmpl-import-templates.php:32
+#: templates/tmpl-import-templates.php:27
 msgid " ago"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:34
+#: templates/tmpl-import-templates.php:29
 msgid "Just now"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:38
+#: templates/tmpl-import-templates.php:33
 msgid "Force Library Update"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:45 views/slider_list.php:939
+#: templates/tmpl-import-templates.php:40 views/slider_list.php:979
 msgid "All"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:46
-msgid "All free"
+#: templates/tmpl-import-templates.php:41
+msgid "All Free"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:47
+#: templates/tmpl-import-templates.php:42
 msgid "All Premium"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:49
+#: templates/tmpl-import-templates.php:44
 msgid "Bundled"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:51
+#: templates/tmpl-import-templates.php:46
 msgid "SLIDER PACKS"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:52
+#: templates/tmpl-import-templates.php:47
 msgid "New"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:54
+#: templates/tmpl-import-templates.php:49
 msgid "Full Width"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:55
+#: templates/tmpl-import-templates.php:50
 msgid "Full Size"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:57
+#: templates/tmpl-import-templates.php:52
 msgid "Landing Page"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:58
+#: templates/tmpl-import-templates.php:53
 msgid "Parallax"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:59
+#: templates/tmpl-import-templates.php:54
 msgid "Loop"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:60
+#: templates/tmpl-import-templates.php:55
 msgid "Text Transition"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:61
+#: templates/tmpl-import-templates.php:56
 msgid "Ken Burns"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:63
+#: templates/tmpl-import-templates.php:58
 msgid "Filter Transition"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:64
+#: templates/tmpl-import-templates.php:59
 msgid "Blend Modes"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:65
+#: templates/tmpl-import-templates.php:60
 msgid "Carousel"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:66
+#: templates/tmpl-import-templates.php:61
 msgid "Media"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:68
+#: templates/tmpl-import-templates.php:63
 msgid "Experimental"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:69
+#: templates/tmpl-import-templates.php:64
 #: templates/tmpl-transition-window.php:16
 msgid "Special Effects"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:71
+#: templates/tmpl-import-templates.php:66
 msgid "3D Transition"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:72
+#: templates/tmpl-import-templates.php:67
 msgid "API"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:90
+#: templates/tmpl-import-templates.php:85
 msgid "preview"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:91
+#: templates/tmpl-import-templates.php:86
 msgid "import"
 msgstr ""
 
-#: templates/tmpl-import-templates.php:100
+#: templates/tmpl-import-templates.php:95
 msgid "Coming soon,<br>stay tuned!"
 msgstr ""
 
@@ -3062,6 +3092,12 @@ msgstr ""
 
 #: templates/tmpl-layer-item.php:7
 msgid "Prevent layer from dragging in the editor."
+msgstr ""
+
+#: templates/tmpl-layer-item.php:10 templates/tmpl-static-layer-item.php:6
+#: wp/scripts_l10n.php:49
+#, php-format
+msgid "Layer #%d"
 msgstr ""
 
 #: templates/tmpl-layer-item.php:11
@@ -3074,6 +3110,18 @@ msgstr ""
 
 #: templates/tmpl-layer.php:7
 msgid "Show this layer on the following devices:"
+msgstr ""
+
+#: templates/tmpl-layer.php:9
+msgid "Show this layer on desktop."
+msgstr ""
+
+#: templates/tmpl-layer.php:10
+msgid "Show this layer on tablets."
+msgstr ""
+
+#: templates/tmpl-layer.php:11
+msgid "Show this layer on mobile phones."
 msgstr ""
 
 #: templates/tmpl-layer.php:19
@@ -3144,6 +3192,22 @@ msgstr ""
 msgid "H6"
 msgstr ""
 
+#: templates/tmpl-layer.php:49 templates/tmpl-layer.php:78
+#: templates/tmpl-slide.php:28 templates/tmpl-slide.php:59
+#: templates/tmpl-slider-settings.php:264
+#: templates/tmpl-slider-settings.php:344
+#: templates/tmpl-slider-settings.php:397
+msgid "Click to set"
+msgstr ""
+
+#: templates/tmpl-layer.php:49 templates/tmpl-layer.php:78
+#: templates/tmpl-slide.php:28 templates/tmpl-slide.php:59
+#: templates/tmpl-slider-settings.php:264
+#: templates/tmpl-slider-settings.php:344
+#: templates/tmpl-slider-settings.php:397
+msgid "Click to change"
+msgstr ""
+
 #: templates/tmpl-layer.php:55
 msgid "Click on the image preview to open WordPress Media Library or"
 msgstr ""
@@ -3154,6 +3218,10 @@ msgstr ""
 
 #: templates/tmpl-layer.php:57 templates/tmpl-slide.php:35
 msgid "use post image"
+msgstr ""
+
+#: templates/tmpl-layer.php:64
+msgid "Enter layer content here"
 msgstr ""
 
 #: templates/tmpl-layer.php:67
@@ -3174,7 +3242,7 @@ msgstr ""
 
 #: templates/tmpl-layer.php:178
 msgid ""
-"Click on one or more post placeholders to insert them into your layer's "
+"Click on one or more post placeholders to insert them into your layer’s "
 "content. Post placeholders act like shortcodes in WP, and they will be "
 "filled with the actual content from your posts."
 msgstr ""
@@ -3385,8 +3453,8 @@ msgstr ""
 msgid "Distance &amp; Rotation"
 msgstr ""
 
-#: templates/tmpl-layer.php:1508 templates/tmpl-slider-settings.php:118
-#: templates/tmpl-slider-settings.php:182
+#: templates/tmpl-layer.php:1508 templates/tmpl-slider-settings.php:151
+#: templates/tmpl-slider-settings.php:216
 msgid "Other settings"
 msgstr ""
 
@@ -3410,7 +3478,7 @@ msgid ""
 "＜A＞ tag when you use layer linking. Some attributes will be applied on the "
 "wrapper (if any), which is desirable in many cases (e.g. lightbox plugins). "
 "If there is no wrapper element, attributes will be automatically applied on "
-"the layer itself. If the pre-defined option doesn't fit your needs, use "
+"the layer itself. If the pre-defined option doesn’t fit your needs, use "
 "custom attributes below to override it."
 msgstr ""
 
@@ -3442,7 +3510,7 @@ msgid ""
 "to apply this attribute on the layer element in all cases."
 msgstr ""
 
-#: templates/tmpl-layer.php:1615 templates/tmpl-slider-settings.php:29
+#: templates/tmpl-layer.php:1615 templates/tmpl-slider-settings.php:34
 msgid "Layout"
 msgstr ""
 
@@ -3490,47 +3558,47 @@ msgstr ""
 msgid "font &amp; style"
 msgstr ""
 
-#: templates/tmpl-layer.php:1830
+#: templates/tmpl-layer.php:1834
 msgid "Word-wrap"
 msgstr ""
 
-#: templates/tmpl-layer.php:1841 templates/tmpl-slider-settings.php:38
-#: templates/tmpl-slider-settings.php:343
+#: templates/tmpl-layer.php:1845 templates/tmpl-slider-settings.php:70
+#: templates/tmpl-slider-settings.php:377
 msgid "Misc"
 msgstr ""
 
-#: templates/tmpl-layer.php:1841
+#: templates/tmpl-layer.php:1845
 msgid "other settings"
 msgstr ""
 
-#: templates/tmpl-layer.php:1889
+#: templates/tmpl-layer.php:1893
 msgid "Custom CSS"
 msgstr ""
 
-#: templates/tmpl-layer.php:1889
+#: templates/tmpl-layer.php:1893
 msgid "write your own code"
 msgstr ""
 
-#: templates/tmpl-layer.php:1891
+#: templates/tmpl-layer.php:1895
 msgid ""
 "If you want to set style settings other then above, you can use here any CSS "
 "codes. Please make sure to write valid markup."
 msgstr ""
 
 #: templates/tmpl-post-options.php:34
-msgid "Find posts with the filters above"
+msgid "Find posts with the filters below"
 msgstr ""
 
 #: templates/tmpl-post-options.php:53
-msgid "Don't filter categories"
+msgid "Don’t filter categories"
 msgstr ""
 
 #: templates/tmpl-post-options.php:65
-msgid "Don't filter tags"
+msgid "Don’t filter tags"
 msgstr ""
 
 #: templates/tmpl-post-options.php:77
-msgid "Don't filter taxonomies"
+msgid "Don’t filter taxonomies"
 msgstr ""
 
 #: templates/tmpl-post-options.php:105
@@ -3542,19 +3610,156 @@ msgid "On this slide"
 msgstr ""
 
 #: templates/tmpl-post-options.php:118
-msgid "Get the "
+msgid "Use post from matches: "
 msgstr ""
 
 #: templates/tmpl-post-options.php:120
-msgid "following"
+msgid "next in line"
 msgstr ""
 
-#: templates/tmpl-post-options.php:125
-msgid "item in the set of matched selection"
-msgstr ""
-
-#: templates/tmpl-post-options.php:128
+#: templates/tmpl-post-options.php:127
 msgid "Preview from currenty matched elements"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:26
+#, php-format
+msgid " %s ago"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:165
+msgid "Revisions for Slider:"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:168
+msgid "Back to Slider"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:176
+msgid "Now"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:185
+#, php-format
+msgid "Selected Revision by %s"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:196
+msgid "Revert to This Revision"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:209
+msgid ""
+"Reverting a slider to an earlier version adds another snapshot to Revisions, "
+"which can also be reverted if you change your mind and would rather return "
+"to the original copy."
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:210
+msgid ""
+"Slider Revisions also saves the undo/redo controls. Even if there is no "
+"perfect snapshot, you will be able to undo the changes in-between to find "
+"what you are looking for."
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:213
+msgid "Preview for Selected Revision"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:219 views/slider_edit.php:390
+#: wp/scripts_l10n.php:47
+#, php-format
+msgid "Slide #%d"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:244 templates/tmpl-slide.php:264
+msgid "Auto-Fit"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:250 wp/scripts_l10n.php:72
+msgid "Preview Slide"
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:255 templates/tmpl-slide.php:321
+msgid "Show layers that are visible on desktop."
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:256 templates/tmpl-slide.php:322
+msgid "Show layers that are visible on tablets."
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:257 templates/tmpl-slide.php:323
+msgid "Show layers that are visible on mobile phones."
+msgstr ""
+
+#: templates/tmpl-revisions-history.php:264 templates/tmpl-slide.php:330
+msgid "Drop image(s) here"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:15
+#, php-format
+msgid ""
+"Slider Revisions is a premium feature. Activate your copy of LayerSlider in "
+"order to enjoy our premium benefits. %sPurchase a license%s or %sread the "
+"documentation%s to learn more. %sGot LayerSlider in a theme?%s"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:19
+msgid "You Can Now Rewind Time"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:21
+msgid ""
+"Have a peace of mind knowing that your slider edits are always safe and you "
+"can revert back unwanted changes or faulty saves at any time. This feature "
+"serves not just as a backup solution, but a complete version control system "
+"where you can visually compare the changes you have made along the way."
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:23
+msgid "Customize Revisions Preferences"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:24
+msgid "More Information"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:37
+msgid "Revisions Preferences"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:45
+msgid ""
+"Disabling Slider Revisions will also remove all revisions saved so far. Are "
+"you sure you want to continue?"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:46
+msgid "Enable Revisions"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:52
+msgid "Update Frequency"
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:53
+#, php-format
+msgid "Limit the total number of revisions per slider to %s."
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:54
+#, php-format
+msgid "Wait at least %s minutes between edits before adding a new revision."
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:59
+msgid ""
+"Slider Revisions also stores the undo/redo controls. There is no reason "
+"using very frequent saves since you will be able to undo the changes in-"
+"between."
+msgstr ""
+
+#: templates/tmpl-revisions-welcome.php:62
+msgid "Update Revisions Preferences"
 msgstr ""
 
 #: templates/tmpl-share-sheet.php:36
@@ -3588,16 +3793,12 @@ msgid "Slide Background Image"
 msgstr ""
 
 #: templates/tmpl-slide.php:34 templates/tmpl-slide.php:65
-#: views/slider_list.php:731
+#: views/slider_list.php:758
 msgid "or"
 msgstr ""
 
 #: templates/tmpl-slide.php:34 templates/tmpl-slide.php:65
 msgid "enter URL"
-msgstr ""
-
-#: templates/tmpl-slide.php:35
-msgid "|"
 msgstr ""
 
 #: templates/tmpl-slide.php:55
@@ -3617,6 +3818,10 @@ msgid ""
 "You can select your desired slide transitions by clicking on this button."
 msgstr ""
 
+#: templates/tmpl-slide.php:85
+msgid "Select transitions"
+msgstr ""
+
 #: templates/tmpl-slide.php:95
 msgid "Slide Linking"
 msgstr ""
@@ -3629,172 +3834,161 @@ msgstr ""
 msgid "Additional Slide Settings"
 msgstr ""
 
-#: templates/tmpl-slide.php:127
+#: templates/tmpl-slide.php:132
 msgid "Hide this slide"
 msgstr ""
 
-#: templates/tmpl-slide.php:142
+#: templates/tmpl-slide.php:147
 msgid "Ken Burns Effect"
 msgstr ""
 
-#: templates/tmpl-slide.php:176
+#: templates/tmpl-slide.php:181
 msgid "Parallax Defaults"
 msgstr ""
 
-#: templates/tmpl-slide.php:212
+#: templates/tmpl-slide.php:217
 msgid "Filters"
 msgstr ""
 
-#: templates/tmpl-slide.php:232
+#: templates/tmpl-slide.php:237
 msgid "Show More Options"
 msgstr ""
 
-#: templates/tmpl-slide.php:233
+#: templates/tmpl-slide.php:238
 msgid "Linking, Ken Burns, Parallax"
 msgstr ""
 
-#: templates/tmpl-slide.php:235
+#: templates/tmpl-slide.php:240
 msgid "Show Less Options"
 msgstr ""
 
-#: templates/tmpl-slide.php:259
-msgid "Auto-Fit"
-msgstr ""
-
-#: templates/tmpl-slide.php:265
+#: templates/tmpl-slide.php:270
 msgid "Align Layer to..."
 msgstr ""
 
-#: templates/tmpl-slide.php:270
+#: templates/tmpl-slide.php:275
 msgid "top left"
 msgstr ""
 
-#: templates/tmpl-slide.php:271
+#: templates/tmpl-slide.php:276
 msgid "top center"
 msgstr ""
 
-#: templates/tmpl-slide.php:272
+#: templates/tmpl-slide.php:277
 msgid "top right"
 msgstr ""
 
-#: templates/tmpl-slide.php:275
+#: templates/tmpl-slide.php:280
 msgid "middle left"
 msgstr ""
 
-#: templates/tmpl-slide.php:276
+#: templates/tmpl-slide.php:281
 msgid "middle center"
 msgstr ""
 
-#: templates/tmpl-slide.php:277
+#: templates/tmpl-slide.php:282
 msgid "middle right"
 msgstr ""
 
-#: templates/tmpl-slide.php:280
+#: templates/tmpl-slide.php:285
 msgid "bottom left"
 msgstr ""
 
-#: templates/tmpl-slide.php:281
+#: templates/tmpl-slide.php:286
 msgid "bottom center"
 msgstr ""
 
-#: templates/tmpl-slide.php:282
+#: templates/tmpl-slide.php:287
 msgid "bottom right"
 msgstr ""
 
-#: templates/tmpl-slide.php:292
+#: templates/tmpl-slide.php:297
 msgid "Undo"
 msgstr ""
 
-#: templates/tmpl-slide.php:296
+#: templates/tmpl-slide.php:301
 msgid "Redo"
 msgstr ""
 
-#: templates/tmpl-slide.php:304
+#: templates/tmpl-slide.php:309
 msgid "Copy..."
 msgstr ""
 
-#: templates/tmpl-slide.php:305
+#: templates/tmpl-slide.php:310
 msgid "Paste..."
 msgstr ""
 
-#: templates/tmpl-slide.php:311
+#: templates/tmpl-slide.php:315 wp/scripts_l10n.php:14
+msgctxt "noun"
+msgid "Slide"
+msgstr ""
+
+#: templates/tmpl-slide.php:316 wp/scripts_l10n.php:16
 msgid "Layer"
 msgstr ""
 
-#: templates/tmpl-slide.php:316
-msgid "Show layers that are visible on desktop."
-msgstr ""
-
-#: templates/tmpl-slide.php:317
-msgid "Show layers that are visible on tablets."
-msgstr ""
-
-#: templates/tmpl-slide.php:318
-msgid "Show layers that are visible on mobile phones."
-msgstr ""
-
-#: templates/tmpl-slide.php:325
-msgid "Drop image(s) here"
-msgstr ""
-
-#: templates/tmpl-slide.php:338
+#: templates/tmpl-slide.php:343
 msgid "Layers"
 msgstr ""
 
-#: templates/tmpl-slide.php:340 views/transition_builder.php:102
+#: templates/tmpl-slide.php:345 views/transition_builder.php:102
 #: views/transition_builder.php:127
 msgid "Add New"
 msgstr ""
 
-#: templates/tmpl-slide.php:344
+#: templates/tmpl-slide.php:349
 msgid "Layer options"
 msgstr ""
 
-#: templates/tmpl-slide.php:345
+#: templates/tmpl-slide.php:350
 msgid "Timeline"
 msgstr ""
 
-#: templates/tmpl-slide.php:353
+#: templates/tmpl-slide.php:358
 msgid "Static layers from other slides"
 msgstr ""
 
-#: templates/tmpl-slide.php:355
+#: templates/tmpl-slide.php:360
 msgid "Layers on this slide"
 msgstr ""
 
 #: templates/tmpl-slide.php:368
+msgid "You can grab me here and drag where you need."
+msgstr ""
+
+#: templates/tmpl-slide.php:373
 msgid "Layer editor"
 msgstr ""
 
-#: templates/tmpl-slide.php:371
+#: templates/tmpl-slide.php:376
 msgid "Put back"
 msgstr ""
 
-#: templates/tmpl-slide.php:376
+#: templates/tmpl-slide.php:381
 msgid "Multiple selection"
 msgstr ""
 
-#: templates/tmpl-slide.php:377
+#: templates/tmpl-slide.php:382
 msgid "Editing multiple layers feature is coming soon."
 msgstr ""
 
-#: templates/tmpl-slide.php:381
+#: templates/tmpl-slide.php:386
 msgid "Content"
 msgstr ""
 
-#: templates/tmpl-slide.php:382
+#: templates/tmpl-slide.php:387
 msgid "Transitions"
 msgstr ""
 
-#: templates/tmpl-slide.php:383
+#: templates/tmpl-slide.php:388
 msgid "Link & Attributes"
 msgstr ""
 
-#: templates/tmpl-slide.php:384
+#: templates/tmpl-slide.php:389
 msgid "Styles"
 msgstr ""
 
-#: templates/tmpl-slide.php:387
+#: templates/tmpl-slide.php:392
 msgid "Pop out editor"
 msgstr ""
 
@@ -3810,7 +4004,14 @@ msgstr ""
 msgid "e.g. homepageslider"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:21 views/slider_edit.php:341
+#: templates/tmpl-slider-settings.php:14
+msgid ""
+"Set a custom slider identifier to use in shortcodes instead of the database "
+"ID. Needs to be unique, and can contain only alphanumeric characters. This "
+"setting is optional."
+msgstr ""
+
+#: templates/tmpl-slider-settings.php:21 views/slider_edit.php:347
 msgid "Slider Settings"
 msgstr ""
 
@@ -3818,115 +4019,115 @@ msgstr ""
 msgid "Show advanced settings"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:28
+#: templates/tmpl-slider-settings.php:30
 msgid "Publish"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:30
+#: templates/tmpl-slider-settings.php:38
 msgid "Mobile"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:31
+#: templates/tmpl-slider-settings.php:42
 msgid "Slideshow"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:32 templates/tmpl-slider-settings.php:274
+#: templates/tmpl-slider-settings.php:46 templates/tmpl-slider-settings.php:308
 msgid "Appearance"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:33
+#: templates/tmpl-slider-settings.php:50
 msgid "Navigation Area"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:34
+#: templates/tmpl-slider-settings.php:54
 msgid "Thumbnail Navigation"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:35
+#: templates/tmpl-slider-settings.php:58
 msgid "Videos"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:37
+#: templates/tmpl-slider-settings.php:66
 msgid "Default Options"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:61 templates/tmpl-slider-settings.php:67
+#: templates/tmpl-slider-settings.php:94 templates/tmpl-slider-settings.php:100
 msgid "Interpreted as:"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:81
+#: templates/tmpl-slider-settings.php:114
 msgid "Slider type & dimensions"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:88
+#: templates/tmpl-slider-settings.php:121
 msgid "Fixed size"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:93
+#: templates/tmpl-slider-settings.php:126
 msgid "Responsive"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:98
+#: templates/tmpl-slider-settings.php:131
 msgid "Full width"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:103
+#: templates/tmpl-slider-settings.php:136
 msgid "Full size"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:155
+#: templates/tmpl-slider-settings.php:188
 msgid "Slideshow behavior"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:167
+#: templates/tmpl-slider-settings.php:200
 msgid "Slideshow navigation"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:191
+#: templates/tmpl-slider-settings.php:225
 msgid "Slider appearance"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:215
+#: templates/tmpl-slider-settings.php:249
 msgid "Custom slider CSS"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:219
+#: templates/tmpl-slider-settings.php:253
 msgid "Slider global background"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:253
+#: templates/tmpl-slider-settings.php:287
 msgid "Show navigation buttons"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:259
+#: templates/tmpl-slider-settings.php:293
 msgid "Navigation buttons on hover"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:264
+#: templates/tmpl-slider-settings.php:298
 msgid "Slideshow timers"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:279
+#: templates/tmpl-slider-settings.php:313
 msgid "Thumbnail dimensions"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:284
+#: templates/tmpl-slider-settings.php:318
 msgid "Thumbnail appearance"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:331
+#: templates/tmpl-slider-settings.php:365
 msgid "Slide background defaults"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:336
+#: templates/tmpl-slider-settings.php:370
 msgid "Parallax defaults"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:357
+#: templates/tmpl-slider-settings.php:391
 msgid "Slider preview image"
 msgstr ""
 
-#: templates/tmpl-slider-settings.php:368
+#: templates/tmpl-slider-settings.php:402
 msgid "The preview image you can see in your list of sliders."
 msgstr ""
 
@@ -3960,7 +4161,7 @@ msgstr ""
 msgid "Apply to others"
 msgstr ""
 
-#: templates/tmpl-transition-window.php:19
+#: templates/tmpl-transition-window.php:19 wp/scripts_l10n.php:18
 msgid "Select all"
 msgstr ""
 
@@ -3969,7 +4170,7 @@ msgid "Custom 2D transitions"
 msgstr ""
 
 #: templates/tmpl-transition-window.php:39
-msgid "You haven't created any custom 2D transitions yet."
+msgid "You haven’t created any custom 2D transitions yet."
 msgstr ""
 
 #: templates/tmpl-transition-window.php:45
@@ -3977,7 +4178,7 @@ msgid "Custom 3D transitions"
 msgstr ""
 
 #: templates/tmpl-transition-window.php:47
-msgid "You haven't created any custom 3D transitions yet."
+msgid "You haven’t created any custom 3D transitions yet."
 msgstr ""
 
 #: templates/tmpl-transition-window.php:56
@@ -3985,7 +4186,7 @@ msgid ""
 "Special effects are like regular slide transitions and they work in the same "
 "way. You can set them on each slide individually. Mixing them with other "
 "transitions on other slides is perfectly fine. You can also apply them on "
-"all of your slides at once by pressing the \"Apply to others\" button above. "
+"all of your slides at once by pressing the “Apply to others” button above. "
 "In case of 3D special effects, selecting additional 2D transitions can "
 "ensure backward compatibility for older browsers."
 msgstr ""
@@ -4019,8 +4220,9 @@ msgstr ""
 msgid "More effects are coming soon"
 msgstr ""
 
-#: templates/tmpl-upload-sliders.php:5
-msgid "Upload Slider"
+#: templates/tmpl-upload-sliders.php:5 templates/tmpl-upload-sliders.php:17
+#: views/slider_list.php:280 views/slider_list.php:404
+msgid "Import Sliders"
 msgstr ""
 
 #: templates/tmpl-upload-sliders.php:9
@@ -4031,10 +4233,9 @@ msgid ""
 msgstr ""
 
 #: templates/tmpl-upload-sliders.php:10
+#, php-format
 msgid ""
-"Looking for the importable demo content? Check out the <a href=\"#\" class="
-"\"ls-open-template-store\" data-delay=\"750\"><i class=\"dashicons dashicons-"
-"star-filled\"></i>Template Store</a>."
+"Looking for the importable demo content? Check out the %sTemplate Store%s."
 msgstr ""
 
 #: templates/tmpl-upload-sliders.php:11
@@ -4042,11 +4243,6 @@ msgid ""
 "Notice: In order to import from outdated versions (pre-v3.0.0), you need to "
 "create a new file and paste the export code into it. The file needs to have "
 "a .json extension, then you will be able to upload it."
-msgstr ""
-
-#: templates/tmpl-upload-sliders.php:17 views/slider_list.php:280
-#: views/slider_list.php:397
-msgid "Import Sliders"
 msgstr ""
 
 #: views/about.php:7
@@ -4059,11 +4255,11 @@ msgid ""
 msgstr ""
 
 #: views/about.php:11
-msgid "Let's Get Started"
+msgid "Let’s Get Started"
 msgstr ""
 
 #: views/about.php:31
-msgid "What's New"
+msgid "What’s New"
 msgstr ""
 
 #: views/about.php:32
@@ -4086,7 +4282,7 @@ msgstr ""
 msgid ""
 "Both the admin interface and front-end sliders load faster and perform "
 "better. This release has numerous bug fixes and improvements. So much "
-"actually, that we can't even write a complete list. The admin interface has "
+"actually, that we can’t even write a complete list. The admin interface has "
 "also been redesigned a bit to provide familiar but much cleaner and easier "
 "controls."
 msgstr ""
@@ -4101,7 +4297,7 @@ msgid ""
 "does not require any special configuration. LayerSlider now also have "
 "multiple new layout modes like full size, hero screne and full screen "
 "sliders. These will allow new use cases such as running slideshows on "
-"billboards. It's also possible to make different layouts for different "
+"billboards. It’s also possible to make different layouts for different "
 "devices (phones, tables, desktop)."
 msgstr ""
 
@@ -4111,12 +4307,12 @@ msgstr ""
 
 #: views/about.php:56
 msgid ""
-"We've added lots of new transition options, which greatly extends the "
+"We’ve added lots of new transition options, which greatly extends the "
 "capabilities of your slideshows. You can now create chainable multi-step "
 "animations enhanced with stylish text transitions and interactive hover "
-"animations. There's also hidden surprises like the much requested Ken Burns "
-"effect, 3D parallax effect, and our new \"play by scroll\" feature. Oh, and "
-"don't forget to try out filters, which can be used to apply blur, sepia, "
+"animations. There’s also hidden surprises like the much requested Ken Burns "
+"effect, 3D parallax effect, and our new “play by scroll” feature. Oh, and "
+"don’t forget to try out filters, which can be used to apply blur, sepia, "
 "grayscale etc. effects to your layers among many other."
 msgstr ""
 
@@ -4128,7 +4324,7 @@ msgstr ""
 msgid ""
 "Layers can now enter and leave on any slide. You can easily build more "
 "complex animations where layers persist across multiple slides. Or just use "
-"it as an \"always on top\" feature."
+"it as an “always on top” feature."
 msgstr ""
 
 #: views/about.php:68
@@ -4137,8 +4333,8 @@ msgstr ""
 
 #: views/about.php:69
 msgid ""
-"Web apps usually don't have controls to undo unwanted/accidental changes. "
-"LayerSlider now has. And it's even preserved for later use, whenever you "
+"Web apps usually don’t have controls to undo unwanted/accidental changes. "
+"LayerSlider now has. And it’s even preserved for later use, whenever you "
 "need it."
 msgstr ""
 
@@ -4151,7 +4347,7 @@ msgid ""
 "Do you ever wanted to move around multiple layers and once? LayerSlider 6 "
 "now supports multiple selection, which allows you altering groups of layers "
 "seamlessly. With rulers and keyboard shortcuts, you can now move/resize/etc "
-"your layers with precision. There's also Guides and a snap to feature built "
+"your layers with precision. There’s also Guides and a snap to feature built "
 "in."
 msgstr ""
 
@@ -4164,7 +4360,7 @@ msgid ""
 "The slider builder interface can now be controlled by keyboard shortcuts. "
 "These shortcuts also introduces a lot of new features, like editing layers "
 "content right in the preview area or copying and pasting layers across "
-"slides and sliders. We've also introduced the Popout Editor, which "
+"slides and sliders. We’ve also introduced the Popout Editor, which "
 "transforms the layer options area into a floating window that can be resized "
 "and placed wherever you want. This makes it extremely easy to edit "
 "everything in one place, without the need to scroll up and down constantly."
@@ -4176,10 +4372,10 @@ msgstr ""
 
 #: views/about.php:88
 msgid ""
-"With the help of Adobe's Creative SDK, LayerSlider 6 now has a built-in "
+"With the help of Adobe’s Creative SDK, LayerSlider 6 now has a built-in "
 "image editor. You can perform common tasks like resizing, cropping, rotating "
 "images, as well as photo retouching, adding frames, text, effects, stickers "
-"and a lot more. It's like a mini-Photoshop."
+"and a lot more. It’s like a mini-Photoshop."
 msgstr ""
 
 #: views/about.php:93
@@ -4188,12 +4384,12 @@ msgstr ""
 
 #: views/about.php:94
 msgid ""
-"There's way more new features and improvement that we can list here: "
+"There’s way more new features and improvement that we can list here: "
 "scheduled sliders, retina-ready, serving dynamically scaled images to reduce "
 "data usage and speed up page loads on mobile devices, redesigned transition "
 "builder with import feature, continuous live previews, new interactive "
 "timeline, reworked multimedia layer support with custom video poster and "
-"controls, custom HTML attributes, drag 'n' drop image upload, smart links, "
+"controls, custom HTML attributes, drag ’n’ drop image upload, smart links, "
 "copy & paste layer styles and transition settings, named slides, new slider/"
 "slide background settings, auto-fit zoom, align layers feature. <br><br>The "
 "number of new features almost never end, but this list must. :)"
@@ -4237,7 +4433,7 @@ msgstr ""
 
 #: views/about.php:122
 msgid ""
-"We've bundled several sample sliders into the plugin, so you can see how "
+"We’ve bundled several sample sliders into the plugin, so you can see how "
 "they built. You can find really simple sliders as well as compled and "
 "content rich ones."
 msgstr ""
@@ -4344,7 +4540,7 @@ msgstr ""
 msgid "Developer Documentation"
 msgstr ""
 
-#: views/about.php:269 views/slider_list.php:676
+#: views/about.php:269 views/slider_list.php:689
 msgid "Stay Updated"
 msgstr ""
 
@@ -4362,6 +4558,14 @@ msgstr ""
 
 #: views/about.php:285
 msgid "Watch our YouTube channel"
+msgstr ""
+
+#: views/revisions.php:16
+#, php-format
+msgid ""
+"There are no revisions available for the selected slider yet. Revisions will "
+"be added over time when you make new changes to your sliders. Check "
+"%sRevisions Preferences%s and make sure that Revisions is enabled."
 msgstr ""
 
 #: views/skin_editor.php:34 views/slider_list.php:169 views/style_editor.php:30
@@ -4383,7 +4587,7 @@ msgstr ""
 msgid "LayerSlider Skin Editor"
 msgstr ""
 
-#: views/skin_editor.php:50 views/slider_edit.php:326 views/style_editor.php:45
+#: views/skin_editor.php:50 views/slider_edit.php:332 views/style_editor.php:45
 #: views/transition_builder.php:76
 msgid "Back to the list"
 msgstr ""
@@ -4393,7 +4597,7 @@ msgstr ""
 msgid "Your changes has been saved!"
 msgstr ""
 
-#: views/skin_editor.php:66 wp/menus.php:39
+#: views/skin_editor.php:66 wp/menus.php:45
 msgid "Skin Editor"
 msgstr ""
 
@@ -4412,21 +4616,21 @@ msgid ""
 msgstr ""
 
 #: views/skin_editor.php:86
+#, php-format
 msgid ""
 "You need to make this file writable in order to save your changes. See the "
-"<a href=\"http://codex.wordpress.org/Changing_File_Permissions\" target="
-"\"_blank\">Codex</a> for more information."
+"%sCodex%s for more information."
 msgstr ""
 
-#: views/skin_editor.php:88 views/slider_edit.php:741 views/slider_list.php:796
-#: views/slider_list.php:909 views/style_editor.php:80
-#: views/transition_builder.php:600
+#: views/skin_editor.php:88 views/slider_edit.php:747 views/slider_list.php:823
+#: views/slider_list.php:949 views/style_editor.php:78
+#: views/transition_builder.php:600 wp/scripts_l10n.php:6
 msgid "Save changes"
 msgstr ""
 
 #: views/skin_editor.php:89
 msgid ""
-"Modifying a skin with invalid code can break your sliders' appearance. "
+"Modifying a skin with invalid code can break your sliders’ appearance. "
 "Changes cannot be reverted after saving."
 msgstr ""
 
@@ -4434,186 +4638,199 @@ msgstr ""
 msgid "Use features"
 msgstr ""
 
-#: views/slider_edit.php:323
+#: views/slider_edit.php:329
 msgid "Editing slider:"
 msgstr ""
 
-#: views/slider_edit.php:334
+#: views/slider_edit.php:340
 msgid "Slider saved successfully"
 msgstr ""
 
-#: views/slider_edit.php:345 views/slider_list.php:298
+#: views/slider_edit.php:351 views/slider_list.php:298
 msgid "Slides"
 msgstr ""
 
-#: views/slider_edit.php:349
+#: views/slider_edit.php:355
 msgid "Event Callbacks"
 msgstr ""
 
-#: views/slider_edit.php:353
+#: views/slider_edit.php:359
 msgid "FAQ"
 msgstr ""
 
-#: views/slider_edit.php:357
+#: views/slider_edit.php:363
 msgid "Documentation"
 msgstr ""
 
-#: views/slider_edit.php:359
-msgid "Need help? Try these: "
+#: views/slider_edit.php:365
+msgid "Need help? Try these:"
 msgstr ""
 
-#: views/slider_edit.php:394
+#: views/slider_edit.php:400
 msgid "Add new slide"
 msgstr ""
 
-#: views/slider_edit.php:409
+#: views/slider_edit.php:415
+#, php-format
 msgid ""
-"Please read our <a href=\"https://support.kreaturamedia.com/docs/"
-"layersliderwp/documentation.html#layerslider-api\" target=\"_blank\">online "
-"documentation</a> before start using the API. LayerSlider 6 introduced an "
-"entirely new API model with different events and methods."
+"Please read our %sonline documentation%s before start using the API. "
+"LayerSlider 6 introduced an entirely new API model with different events and "
+"methods."
 msgstr ""
 
-#: views/slider_edit.php:418
+#: views/slider_edit.php:424
 msgid "Fires before parsing user data and rendering the UI."
 msgstr ""
 
-#: views/slider_edit.php:430
+#: views/slider_edit.php:436
 msgid ""
 "Fires when the slider is fully initialized and its DOM nodes become "
 "accessible."
 msgstr ""
 
-#: views/slider_edit.php:445
+#: views/slider_edit.php:451
 msgid "Fires before the slider renders resize events."
 msgstr ""
 
-#: views/slider_edit.php:457
+#: views/slider_edit.php:463
 msgid "Fires after the slider has rendered resize events."
 msgstr ""
 
-#: views/slider_edit.php:472
+#: views/slider_edit.php:478
 msgid ""
 "Fires upon every slideshow state change, which may not influence the playing "
 "status."
 msgstr ""
 
-#: views/slider_edit.php:484
+#: views/slider_edit.php:490
 msgid "Fires when the slideshow pauses from playing status."
 msgstr ""
 
-#: views/slider_edit.php:496
+#: views/slider_edit.php:502
 msgid "Fires when the slideshow resumes from paused status."
 msgstr ""
 
-#: views/slider_edit.php:512
+#: views/slider_edit.php:518
 msgid ""
 "Signals when the slider wants to change slides, and is your last chance to "
 "divert it or intervene in any way."
 msgstr ""
 
-#: views/slider_edit.php:524
+#: views/slider_edit.php:530
 msgid "Fires when the slider has started a slide change."
 msgstr ""
 
-#: views/slider_edit.php:536
+#: views/slider_edit.php:542
 msgid "Fires before completing a slide change."
 msgstr ""
 
-#: views/slider_edit.php:548
+#: views/slider_edit.php:554
 msgid ""
 "Fires after a slide change has completed and the slide indexes have been "
 "updated. "
 msgstr ""
 
-#: views/slider_edit.php:563
+#: views/slider_edit.php:569
 msgid ""
-"Fires when the current slide's animation timeline (e.g. your layers) becomes "
+"Fires when the current slide’s animation timeline (e.g. your layers) becomes "
 "accessible for interfacing."
 msgstr ""
 
-#: views/slider_edit.php:576
+#: views/slider_edit.php:582
 msgid ""
 "Fires rapidly (at each frame) throughout the entire slide while playing, "
 "including reverse playback."
 msgstr ""
 
-#: views/slider_edit.php:589
+#: views/slider_edit.php:595
 msgid ""
-"Fires when the current slide's animation timeline (e.g. your layers) has "
+"Fires when the current slide’s animation timeline (e.g. your layers) has "
 "started playing."
 msgstr ""
 
-#: views/slider_edit.php:601
+#: views/slider_edit.php:607
 msgid ""
-"Fires when the current slide's animation timeline (e.g. layer transitions) "
+"Fires when the current slide’s animation timeline (e.g. layer transitions) "
 "has completed."
 msgstr ""
 
-#: views/slider_edit.php:613
+#: views/slider_edit.php:619
 msgid ""
 "Fires when all reversed animations have reached the beginning of the current "
 "slide."
 msgstr ""
 
-#: views/slider_edit.php:629
+#: views/slider_edit.php:635
 msgid ""
 "Fires when the slider destructor has finished and it is safe to remove the "
 "slider from the DOM."
 msgstr ""
 
-#: views/slider_edit.php:641
+#: views/slider_edit.php:647
 msgid ""
 "Fires when the slider has been removed from the DOM when using the "
 "<i>destroy</i> API method."
 msgstr ""
 
-#: views/slider_edit.php:654
+#: views/slider_edit.php:657
+msgid "Old API Events"
+msgstr ""
+
+#: views/slider_edit.php:660
 msgid ""
 "The events below were used in version 5 and earlier. These events are no "
 "longer in use, they cannot be edited. They are shown only to offer you a way "
 "of viewing and porting them to the new API."
 msgstr ""
 
-#: views/slider_edit.php:660
+#: views/slider_edit.php:666
 msgid "Fires when LayerSlider has loaded."
 msgstr ""
 
-#: views/slider_edit.php:670
+#: views/slider_edit.php:676
 msgid "Calling when the slideshow has started."
 msgstr ""
 
-#: views/slider_edit.php:680
+#: views/slider_edit.php:686
 msgid "Calling when the slideshow is stopped by the user."
 msgstr ""
 
-#: views/slider_edit.php:690
+#: views/slider_edit.php:696
 msgid ""
-"Fireing when the slideshow is temporary on hold (e.g.: \"Pause on hover\" "
+"Fireing when the slideshow is temporary on hold (e.g.: “Pause on hover” "
 "feature)."
 msgstr ""
 
-#: views/slider_edit.php:700
+#: views/slider_edit.php:706
 msgid "Calling when the slider commencing slide change (animation start)."
 msgstr ""
 
-#: views/slider_edit.php:710
+#: views/slider_edit.php:716
 msgid "Fireing when the slider finished a slide change (animation end)."
 msgstr ""
 
-#: views/slider_edit.php:720
+#: views/slider_edit.php:726
 msgid "Calling when the slider will change to the previous slide by the user."
 msgstr ""
 
-#: views/slider_edit.php:730
+#: views/slider_edit.php:736
 msgid "Calling when the slider will change to the next slide by the user."
 msgstr ""
 
-#: views/slider_edit.php:743
+#: views/slider_edit.php:753
+msgid "Revisions Available:"
+msgstr ""
+
+#: views/slider_edit.php:753
+#, php-format
+msgid "Browse %d Revisions"
+msgstr ""
+
+#: views/slider_edit.php:756
 msgid "Use shortcode:"
 msgstr ""
 
-#: views/slider_edit.php:744
+#: views/slider_edit.php:757
 msgid "Use PHP function:"
 msgstr ""
 
@@ -4677,6 +4894,13 @@ msgstr ""
 msgid "The import file seems to be invalid or corrupted."
 msgstr ""
 
+#: views/slider_list.php:152
+#, php-format
+msgid "%d slider has been successfully imported."
+msgid_plural "%d sliders has been successfully imported."
+msgstr[0] ""
+msgstr[1] ""
+
 #: views/slider_list.php:154
 msgid ""
 "Your account does not have the necessary permission you have chosen, and "
@@ -4704,7 +4928,7 @@ msgstr ""
 msgid "sliders per page"
 msgstr ""
 
-#: views/slider_list.php:173 views/slider_list.php:503
+#: views/slider_list.php:173 views/slider_list.php:516
 msgid "Apply"
 msgstr ""
 
@@ -4774,15 +4998,15 @@ msgstr ""
 msgid "Filter by name"
 msgstr ""
 
-#: views/slider_list.php:259 views/slider_list.php:776
+#: views/slider_list.php:259 views/slider_list.php:803
 msgid "Search"
 msgstr ""
 
-#: views/slider_list.php:275 views/slider_list.php:389
+#: views/slider_list.php:275 views/slider_list.php:396
 msgid "Template Store"
 msgstr ""
 
-#: views/slider_list.php:285 views/slider_list.php:405
+#: views/slider_list.php:285 views/slider_list.php:412
 msgid "Add New Slider"
 msgstr ""
 
@@ -4810,547 +5034,644 @@ msgstr ""
 msgid "ago"
 msgstr ""
 
-#: views/slider_list.php:337 views/slider_list.php:422
+#: views/slider_list.php:338 views/slider_list.php:429
 msgid "Restore removed slider"
 msgstr ""
 
-#: views/slider_list.php:359 views/slider_list.php:449
+#: views/slider_list.php:360 views/slider_list.php:456
 msgid "Export"
 msgstr ""
 
-#: views/slider_list.php:365 views/slider_list.php:455
+#: views/slider_list.php:366 views/slider_list.php:462
 msgid "Duplicate"
 msgstr ""
 
-#: views/slider_list.php:371 views/slider_list.php:461
+#: views/slider_list.php:372 views/slider_list.php:468 wp/menus.php:39
+msgid "Revisions"
+msgstr ""
+
+#: views/slider_list.php:378 views/slider_list.php:474
 msgid "Remove"
 msgstr ""
 
-#: views/slider_list.php:428
+#: views/slider_list.php:435 wp/tinymce_l10n.php:12
 msgid "No Preview"
 msgstr ""
 
-#: views/slider_list.php:429
+#: views/slider_list.php:436 wp/tinymce_l10n.php:13
 msgid "Previews are automatically generated from slide images in sliders."
 msgstr ""
 
-#: views/slider_list.php:479
+#: views/slider_list.php:492
+#, php-format
 msgid ""
-"No sliders found with the current filters set. <a href=\"?page=layerslider"
-"\">Click here</a> to reset filters."
-msgstr ""
-
-#: views/slider_list.php:481
-msgid ""
-"Add a new slider or check out the <a href=\"#\" class=\"ls-open-template-"
-"store\"><i class=\"dashicons dashicons-star-filled\"></i>Template Store</a> "
-"to get started using LayerSlider."
+"No sliders found with the current filters set. %sClick here%s to reset "
+"filters."
 msgstr ""
 
 #: views/slider_list.php:494
-msgid "Bulk Actions"
-msgstr ""
-
-#: views/slider_list.php:495
-msgid "Export selected"
-msgstr ""
-
-#: views/slider_list.php:496
-msgid "Remove selected"
-msgstr ""
-
-#: views/slider_list.php:497
-msgid "Delete permanently"
-msgstr ""
-
-#: views/slider_list.php:499
-msgid "Restore selected"
-msgstr ""
-
-#: views/slider_list.php:501
-msgid "Merge selected as new"
+#, php-format
+msgid ""
+"Add a new slider or check out the %sTemplate Store%s to get started using "
+"LayerSlider."
 msgstr ""
 
 #: views/slider_list.php:507
-msgid "items"
+msgid "Bulk Actions"
 msgstr ""
 
-#: views/slider_list.php:531
+#: views/slider_list.php:508
+msgid "Export selected"
+msgstr ""
+
+#: views/slider_list.php:509
+msgid "Remove selected"
+msgstr ""
+
+#: views/slider_list.php:510
+msgid "Delete permanently"
+msgstr ""
+
+#: views/slider_list.php:512
+msgid "Restore selected"
+msgstr ""
+
+#: views/slider_list.php:514
+msgid "Merge selected as new"
+msgstr ""
+
+#: views/slider_list.php:520
+#, php-format
+msgid "%d slider"
+msgid_plural "%d sliders"
+msgstr[0] ""
+msgstr[1] ""
+
+#: views/slider_list.php:522
+msgid "Go to the first page"
+msgstr ""
+
+#: views/slider_list.php:523
+msgid "Go to the previous page"
+msgstr ""
+
+#: views/slider_list.php:525
+#, php-format
+msgid "%1$d of %2$d"
+msgstr ""
+
+#: views/slider_list.php:527
+msgid "Go to the next page"
+msgstr ""
+
+#: views/slider_list.php:528
+msgid "Go to the last page"
+msgstr ""
+
+#: views/slider_list.php:544
 msgid "Product Activation"
 msgstr ""
 
-#: views/slider_list.php:536
+#: views/slider_list.php:549
 msgid "Not Activated"
 msgstr ""
 
-#: views/slider_list.php:541 views/system_status.php:69
+#: views/slider_list.php:554 views/system_status.php:62
 msgid "Activated"
 msgstr ""
 
-#: views/slider_list.php:549
+#: views/slider_list.php:562
 msgid "Unlock all these features by activating your site."
 msgstr ""
 
-#: views/slider_list.php:550 views/system_status.php:72
-#: views/system_status.php:131 views/system_status.php:149
-#: wp/shortcodes.php:308
+#: views/slider_list.php:563 views/system_status.php:124
+#: views/system_status.php:142
 msgid "Click here to learn more"
 msgstr ""
 
-#: views/slider_list.php:552
+#: views/slider_list.php:565
 msgid ""
 "You have successfully activated your site to receive all these features:"
 msgstr ""
 
-#: views/slider_list.php:558
+#: views/slider_list.php:571
 msgid "Automatic Updates"
 msgstr ""
 
-#: views/slider_list.php:559
+#: views/slider_list.php:572
 msgid "Always receive the latest LayerSlider version."
 msgstr ""
 
-#: views/slider_list.php:563 views/slider_list.php:631
+#: views/slider_list.php:576 views/slider_list.php:644
 msgid "Product Support"
 msgstr ""
 
-#: views/slider_list.php:564
+#: views/slider_list.php:577
 msgid "Direct help from our Support Team."
 msgstr ""
 
-#: views/slider_list.php:568
+#: views/slider_list.php:581
 msgid "Exclusive Features"
 msgstr ""
 
-#: views/slider_list.php:569
+#: views/slider_list.php:582
 msgid "Unlock exclusive and early-access features."
 msgstr ""
 
-#: views/slider_list.php:573
+#: views/slider_list.php:586
 msgid "Premium Slider Templates"
 msgstr ""
 
-#: views/slider_list.php:574
-msgid "Access more templates to get started with projects. "
+#: views/slider_list.php:587
+msgid "Access more templates to get started with projects."
 msgstr ""
 
-#: views/slider_list.php:578 views/slider_list.php:598
+#: views/slider_list.php:591 views/slider_list.php:611
 msgid "Activate Now"
 msgstr ""
 
-#: views/slider_list.php:584
-msgid "Enter your purchase code: "
+#: views/slider_list.php:597
+msgid "Enter your purchase code:"
 msgstr ""
 
-#: views/slider_list.php:585
-msgid "Where's my purchase code?"
-msgstr ""
-
-#: views/slider_list.php:592
-msgid ""
-"It seems you've received LayerSlider by a theme. Please note, the activation "
-"only works if you've purchased LayerSlider directly from Kreatura. <a href="
-"\"http://codecanyon.net/cart/add_items?ref=kreatura&amp;item_ids=1362246\" "
-"target=\"_blank\">Purchase a license</a> or read our <a href=\"https://"
-"support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation\" "
-"target=\"_blank\">activation guide</a>."
-msgstr ""
-
-#: views/slider_list.php:594
-msgid ""
-"If you experience any issue or need further information, please read our <a "
-"href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation."
-"html#activation\" target=\"_blank\">activation guide</a>."
-msgstr ""
-
-#: views/slider_list.php:599
-msgid "Purchase license"
-msgstr ""
-
-#: views/slider_list.php:603 views/slider_list.php:737
-msgid "Update"
+#: views/slider_list.php:598
+msgid "Where’s my purchase code?"
 msgstr ""
 
 #: views/slider_list.php:605
-msgid "Release channel:"
-msgstr ""
-
-#: views/slider_list.php:606
-msgid "Stable"
+#, php-format
+msgid ""
+"It seems you’ve received LayerSlider by a theme. Please note, the activation "
+"only works if you’ve purchased LayerSlider directly from Kreatura. "
+"%sPurchase a license%s or read our %sactivation guide%s."
 msgstr ""
 
 #: views/slider_list.php:607
+#, php-format
+msgid ""
+"If you experience any issue or need further information, please read our "
+"%sactivation guide%s."
+msgstr ""
+
+#: views/slider_list.php:612
+msgid "Purchase license"
+msgstr ""
+
+#: views/slider_list.php:616 views/slider_list.php:764
+msgid "Update"
+msgstr ""
+
+#: views/slider_list.php:618
+msgid "Release channel:"
+msgstr ""
+
+#: views/slider_list.php:619
+msgid "Stable"
+msgstr ""
+
+#: views/slider_list.php:620
 msgid ""
 "Although pre-release versions meant to work properly, they might contain "
 "unknown issues, and are not recommended for sites in production."
 msgstr ""
 
-#: views/slider_list.php:608
+#: views/slider_list.php:621
 msgid "Beta"
 msgstr ""
 
-#: views/slider_list.php:613
+#: views/slider_list.php:626
 msgid ""
 "Thank you for purchasing LayerSlider! Your site is activated to receive "
 "automatic updates and to access all premium content & features."
 msgstr ""
 
-#: views/slider_list.php:617
+#: views/slider_list.php:630
 msgid "Check for updates"
 msgstr ""
 
-#: views/slider_list.php:618
+#: views/slider_list.php:631
 msgid "Deactivate this site"
 msgstr ""
 
-#: views/slider_list.php:637
+#: views/slider_list.php:650
 msgid "Read the documentation"
 msgstr ""
 
-#: views/slider_list.php:638
+#: views/slider_list.php:651
 msgid "Get started with using LayerSlider."
 msgstr ""
 
-#: views/slider_list.php:642
+#: views/slider_list.php:655
 msgid "Browse the FAQs"
 msgstr ""
 
-#: views/slider_list.php:643
+#: views/slider_list.php:656
 msgid "Find answers for common questions."
 msgstr ""
 
-#: views/slider_list.php:647
+#: views/slider_list.php:660
 msgid "Direct Support"
 msgstr ""
 
-#: views/slider_list.php:648
+#: views/slider_list.php:661
 msgid "Get in touch with our Support Team."
 msgstr ""
 
-#: views/slider_list.php:652
+#: views/slider_list.php:665
 msgid "Unlock Now"
 msgstr ""
 
-#: views/slider_list.php:657
+#: views/slider_list.php:670
 msgid "Visit our Support Center"
 msgstr ""
 
-#: views/slider_list.php:670
+#: views/slider_list.php:683
 msgid "Kreatura Newsletter"
 msgstr ""
 
-#: views/slider_list.php:677
+#: views/slider_list.php:690
 msgid "News about the latest features and other product info."
 msgstr ""
 
-#: views/slider_list.php:681
-msgid "Sneak Peak on Product Updates"
+#: views/slider_list.php:694
+msgid "Sneak Peek on Product Updates"
 msgstr ""
 
-#: views/slider_list.php:682
+#: views/slider_list.php:695
 msgid "Access to all the cool new features before anyone else."
 msgstr ""
 
-#: views/slider_list.php:686
+#: views/slider_list.php:699
 msgid "Provide Feedback"
 msgstr ""
 
-#: views/slider_list.php:687
+#: views/slider_list.php:700
 msgid "Participate in various programs and help us improving LayerSlider."
 msgstr ""
 
-#: views/slider_list.php:693
+#: views/slider_list.php:706
 msgid "Enter your email address"
 msgstr ""
 
-#: views/slider_list.php:694
+#: views/slider_list.php:707
 msgid "Subscribe"
 msgstr ""
 
-#: views/slider_list.php:704
-msgid "Permissions"
+#: views/slider_list.php:718
+msgid "Need help with customization?"
 msgstr ""
 
-#: views/slider_list.php:705
-msgid "Google Fonts"
-msgstr ""
-
-#: views/slider_list.php:706
-msgid "Advanced"
-msgstr ""
-
-#: views/slider_list.php:707 views/system_status.php:29 wp/menus.php:55
-msgid "System Status"
-msgstr ""
-
-#: views/slider_list.php:714
-msgid "Allow non-admin users to change plugin settings and manage your sliders"
-msgstr ""
-
-#: views/slider_list.php:719
-msgid "Choose a role"
+#: views/slider_list.php:721
+#, php-format
+msgid ""
+"%sWPKraken%s has a professional team of WordPress experts to offer a variety "
+"of customization jobs. We’ve partnered with them in order to provide these "
+"kinds of services to you. Get a free quote if you’re looking for someone to "
+"manage your site, build sliders and customize LayerSlider according to your "
+"needs."
 msgstr ""
 
 #: views/slider_list.php:722
-msgid "Super Admin"
-msgstr ""
-
-#: views/slider_list.php:724
-msgid "Admin"
-msgstr ""
-
-#: views/slider_list.php:725
-msgid "Editor, Admin"
-msgstr ""
-
-#: views/slider_list.php:726
-msgid "Author, Editor, Admin"
-msgstr ""
-
-#: views/slider_list.php:727
-msgid "Contributor, Author, Editor, Admin"
-msgstr ""
-
-#: views/slider_list.php:728
-msgid "Custom"
+msgid "Learn More & Get a Free Quote"
 msgstr ""
 
 #: views/slider_list.php:731
+msgid "Permissions"
+msgstr ""
+
+#: views/slider_list.php:732
+msgid "Google Fonts"
+msgstr ""
+
+#: views/slider_list.php:733
+msgid "Advanced"
+msgstr ""
+
+#: views/slider_list.php:734 views/system_status.php:22 wp/menus.php:61
+msgid "System Status"
+msgstr ""
+
+#: views/slider_list.php:741
+msgid "Allow non-admin users to change plugin settings and manage your sliders"
+msgstr ""
+
+#: views/slider_list.php:746
+msgid "Choose a role"
+msgstr ""
+
+#: views/slider_list.php:749
+msgid "Super Admin"
+msgstr ""
+
+#: views/slider_list.php:751
+msgid "Admin"
+msgstr ""
+
+#: views/slider_list.php:752
+msgid "Editor, Admin"
+msgstr ""
+
+#: views/slider_list.php:753
+msgid "Author, Editor, Admin"
+msgstr ""
+
+#: views/slider_list.php:754
+msgid "Contributor, Author, Editor, Admin"
+msgstr ""
+
+#: views/slider_list.php:755
+msgid "Custom"
+msgstr ""
+
+#: views/slider_list.php:758
 msgid "enter a custom capability"
 msgstr ""
 
-#: views/slider_list.php:734
+#: views/slider_list.php:759
+msgid "Enter custom capability"
+msgstr ""
+
+#: views/slider_list.php:761
+#, php-format
 msgid ""
 "You can specify a custom capability if none of the pre-defined roles match "
-"your needs. You can find all the available capabilities on"
+"your needs. You can find all the available capabilities on %sthis%s page."
 msgstr ""
 
-#: views/slider_list.php:734
-msgid "this page"
-msgstr ""
-
-#: views/slider_list.php:745
+#: views/slider_list.php:772
 msgid "Choose from hundreds of custom fonts faces provided by Google Fonts"
 msgstr ""
 
-#: views/slider_list.php:757 views/slider_list.php:765
+#: views/slider_list.php:781 views/slider_list.php:789
+msgid "Remove this font"
+msgstr ""
+
+#: views/slider_list.php:784 views/slider_list.php:792
 msgid "Load only on admin interface"
 msgstr ""
 
-#: views/slider_list.php:769
-msgid "You haven't added any Google Font to your collection yet."
-msgstr ""
-
-#: views/slider_list.php:775
-msgid "Enter a font name to add to your collection"
-msgstr ""
-
-#: views/slider_list.php:780
-msgid "Choose a font family"
-msgstr ""
-
-#: views/slider_list.php:787
-msgid "Add font"
-msgstr ""
-
-#: views/slider_list.php:788
-msgid "Back to results"
-msgstr ""
-
-#: views/slider_list.php:799
-msgid "Cyrillic"
-msgstr ""
-
-#: views/slider_list.php:800
-msgid "Cyrillic Extended"
-msgstr ""
-
-#: views/slider_list.php:801
-msgid "Devanagari"
+#: views/slider_list.php:796 wp/scripts_l10n.php:41
+msgid "You haven’t added any Google Font to your collection yet."
 msgstr ""
 
 #: views/slider_list.php:802
+msgid "Enter a font name to add to your collection"
+msgstr ""
+
+#: views/slider_list.php:807 wp/scripts_l10n.php:43
+msgid "Choose a font family"
+msgstr ""
+
+#: views/slider_list.php:814
+msgid "Add font"
+msgstr ""
+
+#: views/slider_list.php:815
+msgid "Back to results"
+msgstr ""
+
+#: views/slider_list.php:826
+msgid "Arabic"
+msgstr ""
+
+#: views/slider_list.php:827
+msgid "Bengali"
+msgstr ""
+
+#: views/slider_list.php:828
+msgid "Cyrillic"
+msgstr ""
+
+#: views/slider_list.php:829
+msgid "Cyrillic Extended"
+msgstr ""
+
+#: views/slider_list.php:830
+msgid "Devanagari"
+msgstr ""
+
+#: views/slider_list.php:831
 msgid "Greek"
 msgstr ""
 
-#: views/slider_list.php:803
+#: views/slider_list.php:832
 msgid "Greek Extended"
 msgstr ""
 
-#: views/slider_list.php:804
+#: views/slider_list.php:833
+msgid "Gujarati"
+msgstr ""
+
+#: views/slider_list.php:834
+msgid "Gurmukhi"
+msgstr ""
+
+#: views/slider_list.php:835
+msgid "Hebrew"
+msgstr ""
+
+#: views/slider_list.php:836
+msgid "Kannada"
+msgstr ""
+
+#: views/slider_list.php:837
 msgid "Khmer"
 msgstr ""
 
-#: views/slider_list.php:805
+#: views/slider_list.php:838
 msgid "Latin"
 msgstr ""
 
-#: views/slider_list.php:806
+#: views/slider_list.php:839
 msgid "Latin Extended"
 msgstr ""
 
-#: views/slider_list.php:807
-msgid "Vietnamese"
+#: views/slider_list.php:840
+msgid "Malayalam"
 msgstr ""
 
-#: views/slider_list.php:813
-msgid "Select new"
+#: views/slider_list.php:841
+msgid "Myanmar"
 msgstr ""
 
-#: views/slider_list.php:822 views/slider_list.php:829
-#: views/slider_list.php:836 views/slider_list.php:841
-msgid "Remove character set"
+#: views/slider_list.php:842
+msgid "Oriya"
+msgstr ""
+
+#: views/slider_list.php:843
+msgid "Sinhala"
+msgstr ""
+
+#: views/slider_list.php:844
+msgid "Tamil"
+msgstr ""
+
+#: views/slider_list.php:845
+msgid "Telugu"
 msgstr ""
 
 #: views/slider_list.php:846
+msgid "Thai"
+msgstr ""
+
+#: views/slider_list.php:847
+msgid "Vietnamese"
+msgstr ""
+
+#: views/slider_list.php:853
+msgid "Select new"
+msgstr ""
+
+#: views/slider_list.php:862 views/slider_list.php:869
+#: views/slider_list.php:876 views/slider_list.php:881
+msgid "Remove character set"
+msgstr ""
+
+#: views/slider_list.php:886
 msgid "Use character sets:"
 msgstr ""
 
-#: views/slider_list.php:856
+#: views/slider_list.php:896
 msgid "Troubleshooting &amp; Advanced Settings"
 msgstr ""
 
-#: views/slider_list.php:857
+#: views/slider_list.php:897
 msgid ""
-"Don't change these options without experience, incorrect settings might "
+"Don’t change these options without experience, incorrect settings might "
 "break your site."
 msgstr ""
 
-#: views/slider_list.php:865
+#: views/slider_list.php:905
 msgid "Use slider markup caching"
 msgstr ""
 
-#: views/slider_list.php:868
+#: views/slider_list.php:908
 msgid ""
 "Enabled caching can drastically increase the plugin performance and spare "
 "your server from unnecessary load."
 msgstr ""
 
-#: views/slider_list.php:869
+#: views/slider_list.php:909
 msgid "Empty caches"
 msgstr ""
 
-#: views/slider_list.php:873
+#: views/slider_list.php:913
 msgid "Include scripts in the footer"
 msgstr ""
 
-#: views/slider_list.php:875
+#: views/slider_list.php:915
 msgid ""
 "Including resources in the footer can improve load times and solve other "
 "type of issues. Outdated themes might not support this method."
 msgstr ""
 
-#: views/slider_list.php:878
+#: views/slider_list.php:918
 msgid "Conditional script loading"
 msgstr ""
 
-#: views/slider_list.php:880
+#: views/slider_list.php:920
 msgid ""
-"Increase your site's performance by loading resources only when necessary. "
+"Increase your site’s performance by loading resources only when necessary. "
 "Outdated themes might not support this method."
 msgstr ""
 
-#: views/slider_list.php:883
+#: views/slider_list.php:923
 msgid "Concatenate output"
 msgstr ""
 
-#: views/slider_list.php:885
+#: views/slider_list.php:925
 msgid ""
-"Concatenating the plugin's output could solve issues caused by custom "
+"Concatenating the plugin’s output could solve issues caused by custom "
 "filters your theme might use."
 msgstr ""
 
-#: views/slider_list.php:888
+#: views/slider_list.php:928
 msgid "Use Google CDN version of jQuery"
 msgstr ""
 
-#: views/slider_list.php:890
+#: views/slider_list.php:930
 msgid ""
-"This option will likely solve \"Old jQuery\" issues, but can easily have "
-"other side effects. Use it only when it is necessary."
+"This option will likely solve “Old jQuery” issues, but can easily have other "
+"side effects. Use it only when it is necessary."
 msgstr ""
 
-#: views/slider_list.php:893
+#: views/slider_list.php:933
 msgid "Put JS includes to body"
 msgstr ""
 
-#: views/slider_list.php:895
+#: views/slider_list.php:935
 msgid ""
 "This is the most common workaround for jQuery related issues, and is "
 "recommended when you experience problems with jQuery."
 msgstr ""
 
-#: views/slider_list.php:898
+#: views/slider_list.php:938
 msgid "Use GreenSock (GSAP) sandboxing"
 msgstr ""
 
-#: views/slider_list.php:900
+#: views/slider_list.php:940
 msgid ""
 "Enabling GreenSock sandboxing can solve issues when other plugins are using "
 "multiple/outdated versions of this library."
 msgstr ""
 
-#: views/slider_list.php:903
+#: views/slider_list.php:943
 msgid "Scripts priority"
 msgstr ""
 
-#: views/slider_list.php:905
+#: views/slider_list.php:945
 msgid ""
 "Used to specify the order in which scripts are loaded. Lower numbers "
 "correspond with earlier execution."
 msgstr ""
 
-#: views/slider_list.php:917
+#: views/slider_list.php:957
 msgid ""
 "This section is intended to help you identify possible issues and display "
 "relevant debug information about your site."
 msgstr ""
 
-#: views/slider_list.php:922
+#: views/slider_list.php:962
 msgid "Click here to check System Status"
 msgstr ""
 
-#: views/slider_list.php:925
+#: views/slider_list.php:965
 msgid ""
 "System Status is intended to help you identifying possible issues and to "
 "display relevant debug information about your site. <br>It also provides "
-"tools to list every server settings, easily set up a debug account or to "
-"erase all plugin data."
+"tools to list every server settings or to erase all plugin data."
 msgstr ""
 
-#: views/slider_list.php:935
+#: views/slider_list.php:975
 msgid "LayerSlider News"
 msgstr ""
 
-#: views/slider_list.php:937
+#: views/slider_list.php:977
 msgid "Filter:"
 msgstr ""
 
-#: views/slider_list.php:940
+#: views/slider_list.php:980
 msgid "Announcements"
 msgstr ""
 
-#: views/slider_list.php:941
+#: views/slider_list.php:981
 msgid "Release log"
 msgstr ""
 
-#: views/slider_list.php:942
+#: views/slider_list.php:982
 msgid "Beta versions"
 msgstr ""
 
-#: views/slider_list.php:945
-msgid ">You have version"
+#: views/slider_list.php:985
+#, php-format
+msgid "You have version %s installed"
 msgstr ""
 
-#: views/slider_list.php:945
-msgid "installed"
-msgstr ""
-
-#: views/slider_list.php:964
+#: views/slider_list.php:1004
 msgid "The documentation is here"
 msgstr ""
 
-#: views/slider_list.php:964
+#: views/slider_list.php:1004
 msgid "Open this help menu to quickly access to our online documentation."
 msgstr ""
 
@@ -5365,305 +5686,290 @@ msgstr ""
 #: views/style_editor.php:68
 msgid ""
 "You can type here custom CSS code, which will be loaded both on your admin "
-"and front-end pages."
+"and front-end pages. Please make sure to not override layout properties "
+"(positions and sizes), as they can interfere with the sliders built-in "
+"responsive functionality. Here are few example targets to help you get "
+"started:"
 msgstr ""
 
-#: views/style_editor.php:69
-msgid ""
-"Please make sure to not override layout properties (positions and sizes), as "
-"they can interfere"
-msgstr ""
-
-#: views/style_editor.php:70
-msgid ""
-"with the sliders built-in responsive functionality. Here are few example "
-"targets to help you get started:"
-msgstr ""
-
-#: views/style_editor.php:78
+#: views/style_editor.php:76
+#, php-format
 msgid ""
 "You need to make your uploads folder writable in order to save your changes. "
-"See the <a href=\"http://codex.wordpress.org/Changing_File_Permissions\" "
-"target=\"_blank\">Codex</a> for more information."
+"See the %sCodex%s for more information."
 msgstr ""
 
-#: views/style_editor.php:81
+#: views/style_editor.php:79
 msgid ""
 "Using invalid CSS code could break the appearance of your site or your "
 "sliders. Changes cannot be reverted after saving."
 msgstr ""
 
-#: views/system_status.php:19
-msgid ""
-"Successfully created debug account. The credentials were sent to us via "
-"email. We will get back to you as soon as we've checked your site."
-msgstr ""
-
-#: views/system_status.php:20
-msgid ""
-"Debug account already exists. Please try again after removing it manually by "
-"clicking "
-msgstr ""
-
-#: views/system_status.php:20
-msgid "here"
-msgstr ""
-
-#: views/system_status.php:30
+#: views/system_status.php:23
 msgid "Back"
 msgstr ""
 
-#: views/system_status.php:54
+#: views/system_status.php:47
 msgid ""
 "This page is intended to help you identifying possible issues and to display "
 "relevant debug information about your site."
 msgstr ""
 
-#: views/system_status.php:55
+#: views/system_status.php:48
 msgid ""
 "Whenever a potential issues is detected, it will be marked with red or "
 "orange text describing the nature of that issue."
 msgstr ""
 
-#: views/system_status.php:56
+#: views/system_status.php:49
 msgid ""
 "Please keep in mind that in most cases only your web hosting company can "
 "change server settings, thus you should contact them with the messages "
 "provided (if any)."
 msgstr ""
 
-#: views/system_status.php:62
+#: views/system_status.php:55
 msgid "Available Updates"
 msgstr ""
 
-#: views/system_status.php:67
+#: views/system_status.php:60
 msgid "Auto-Updates:"
 msgstr ""
 
-#: views/system_status.php:69
+#: views/system_status.php:62
 msgid "Not set"
 msgstr ""
 
-#: views/system_status.php:72
+#: views/system_status.php:65
+#, php-format
 msgid ""
 "Activate your copy of LayerSlider to receive updates, so you can always use "
-"the latest release with all the new features and bug fixes."
+"the latest release with all the new features and bug fixes. %sClick here to "
+"learn more%s."
 msgstr ""
 
-#: views/system_status.php:78
+#: views/system_status.php:71
 msgid "LayerSlider version:"
 msgstr ""
 
-#: views/system_status.php:83
+#: views/system_status.php:76
 #, php-format
 msgid ""
 "Update to latest version (%1$s), as we are constantly working on new "
 "features, improvements and bug fixes."
 msgstr ""
 
-#: views/system_status.php:89
+#: views/system_status.php:82
 msgid "WordPress version:"
 msgstr ""
 
-#: views/system_status.php:96
+#: views/system_status.php:89
 msgid "Site Setup & Plugin Settings"
 msgstr ""
 
-#: views/system_status.php:108
+#: views/system_status.php:101
 msgid "Install Location"
 msgstr ""
 
-#: views/system_status.php:110 views/system_status.php:144
-#: views/system_status.php:312 views/system_status.php:323
+#: views/system_status.php:103 views/system_status.php:137
+#: views/system_status.php:305 views/system_status.php:316
 msgid "OK"
 msgstr ""
 
-#: views/system_status.php:110
+#: views/system_status.php:103
 msgid "Non-standard"
 msgstr ""
 
-#: views/system_status.php:114
+#: views/system_status.php:107
 msgid ""
 "Using LayerSlider from a non-standard install location or having a different "
 "directory name could lead issues in receiving and installing updates. "
-"Commonly, you see this issue when you're using a theme-included version of "
+"Commonly, you see this issue when you’re using a theme-included version of "
 "LayerSlider. To fix this, please first search for an option to disable/"
 "unload the bundled version in your theme, then re-install a fresh copy "
 "downloaded from CodeCanyon. Your sliders and settings are stored in the "
 "database, re-installing the plugin will not harm them."
 msgstr ""
 
-#: views/system_status.php:124
+#: views/system_status.php:117
 msgid "WP Debug Mode:"
 msgstr ""
 
-#: views/system_status.php:130
+#: views/system_status.php:123
 msgid ""
 "If you experience any issue, we recommend enabling the WP Debug mode while "
 "debugging."
 msgstr ""
 
-#: views/system_status.php:142
+#: views/system_status.php:135
 msgid "Uploads directory:"
 msgstr ""
 
-#: views/system_status.php:144 views/system_status.php:323
+#: views/system_status.php:137 views/system_status.php:316
 msgid "Unavailable"
 msgstr ""
 
-#: views/system_status.php:148
+#: views/system_status.php:141
 msgid ""
 "LayerSlider uses the uploads directory for image uploads, exporting/"
 "importing sliders, etc. Make sure that your /wp-content/uploads/ directory "
 "exists and has write permission."
 msgstr ""
 
-#: views/system_status.php:166
+#: views/system_status.php:159
 msgid "Cache plugins"
 msgstr ""
 
-#: views/system_status.php:168 views/system_status.php:254
+#: views/system_status.php:161 views/system_status.php:247
 msgid "Not found"
 msgstr ""
 
-#: views/system_status.php:171
+#: views/system_status.php:164
 msgid ""
 "The listed plugin(s) may prevent edits and other changes to show up on your "
 "site in real-time. Empty your caches if you experience any issue."
 msgstr ""
 
-#: views/system_status.php:177
+#: views/system_status.php:170
 msgid "jQuery Google CDN:"
 msgstr ""
 
-#: views/system_status.php:182
+#: views/system_status.php:175
 msgid ""
 "Should be used in special cases only, as it can break otherwise functioning "
-"sites."
+"sites. This option is located on the main LayerSlider admin screen under the "
+"Advanced tab."
 msgstr ""
 
-#: views/system_status.php:189
+#: views/system_status.php:182
 msgid "Server Settings"
 msgstr ""
 
-#: views/system_status.php:195
+#: views/system_status.php:188
 msgid "PHP Version:"
 msgstr ""
 
-#: views/system_status.php:200
-msgid "LayerSlider requires PHP 5.3 or newer."
+#: views/system_status.php:193
+msgid ""
+"LayerSlider requires PHP 5.3.0 or newer. Please contact your host and ask "
+"them to upgrade PHP on your web server."
 msgstr ""
 
-#: views/system_status.php:206
+#: views/system_status.php:199
 msgid "PHP Time Limit:"
 msgstr ""
 
-#: views/system_status.php:211
+#: views/system_status.php:204
 msgid ""
 "PHP max. execution time should be set to at least 60 seconds or higher when "
-"importing large sliders."
+"importing large sliders. Please contact your host and ask them to change "
+"this PHP setting on your web server accordingly."
 msgstr ""
 
-#: views/system_status.php:217
+#: views/system_status.php:210
 msgid "PHP Memory Limit:"
 msgstr ""
 
-#: views/system_status.php:222
+#: views/system_status.php:215
 msgid ""
 "PHP memory limit should be set to at least 64MB or higher when dealing with "
-"large sliders."
+"large sliders. Please contact your host and ask them to change this PHP "
+"setting on your web server accordingly."
 msgstr ""
 
-#: views/system_status.php:229
+#: views/system_status.php:222
 msgid "PHP Post Max Size:"
 msgstr ""
 
-#: views/system_status.php:234 views/system_status.php:245
-msgid "Importing larger sliders could be problematic in some cases."
+#: views/system_status.php:227 views/system_status.php:238
+msgid ""
+"Importing larger sliders could be problematic in some cases. This option is "
+"needed to upload large files. We recommend to set it to at least 16MB or "
+"higher. Please contact your host and ask them to change this PHP setting on "
+"your web server accordingly."
 msgstr ""
 
-#: views/system_status.php:240
+#: views/system_status.php:233
 msgid "PHP Max Upload Size:"
 msgstr ""
 
-#: views/system_status.php:252
+#: views/system_status.php:245
 msgid "Suhosin:"
 msgstr ""
 
-#: views/system_status.php:254
+#: views/system_status.php:247
 msgid "Active"
 msgstr ""
 
-#: views/system_status.php:257
+#: views/system_status.php:250
 msgid ""
 "Suhosin may override PHP server settings that are otherwise marked OK here. "
 "If you experience issues, please contact your web hosting company and ask "
 "them to verify the listed server settings above."
 msgstr ""
 
-#: views/system_status.php:263
+#: views/system_status.php:256
 msgid "PHP ZipArchive Extension:"
 msgstr ""
 
-#: views/system_status.php:268
+#: views/system_status.php:261
 msgid ""
 "The PHP ZipArchive extension is needed to use the Template Store and import/"
 "export sliders with images."
 msgstr ""
 
-#: views/system_status.php:274
+#: views/system_status.php:267
 msgid "PHP DOMDocument Extension:"
 msgstr ""
 
-#: views/system_status.php:279
+#: views/system_status.php:272
 msgid ""
-"Front-end sliders and the slider builder interfaces relies on the PHP "
+"Front-end sliders and the slider builder interface require the PHP "
 "DOMDocument extension."
 msgstr ""
 
-#: views/system_status.php:285
+#: views/system_status.php:278
 msgid "PHP Multibyte String Extension:"
 msgstr ""
 
-#: views/system_status.php:290
+#: views/system_status.php:283
 msgid ""
-"The lack of PHP \"mbstring\" extension can lead to unexpected issues. "
-"Contact your server hosting provider and ask them to install/enable this "
-"extension."
+"The lack of PHP “mbstring” extension can lead to unexpected issues. Contact "
+"your server hosting provider and ask them to install/enable this extension."
 msgstr ""
 
-#: views/system_status.php:296
+#: views/system_status.php:289
 msgid "PHP Multibyte Regex Functions:"
 msgstr ""
 
-#: views/system_status.php:301
+#: views/system_status.php:294
 msgid ""
-"The lack of PHP \"mbregex\" module can lead to unexpected issues. Contact "
-"your server hosting provider and ask them to install/enable this module."
+"The lack of PHP “mbregex” module can lead to unexpected issues. Contact your "
+"server hosting provider and ask them to install/enable this module."
 msgstr ""
 
-#: views/system_status.php:310
+#: views/system_status.php:303
 msgid "WP Remote functions:"
 msgstr ""
 
-#: views/system_status.php:312
+#: views/system_status.php:305
 msgid "Blocked"
 msgstr ""
 
-#: views/system_status.php:315
+#: views/system_status.php:308
 msgid ""
 "Failed to connect to our update server. This could cause issues with product "
 "activation, serving updates or downloading templates from the Template "
-"Store. It's most likely a web server configuration issue. Please contact "
+"Store. It’s most likely a web server configuration issue. Please contact "
 "your web host and ask them to allow external connection to the following "
 "domain: <mark>repository.kreaturamedia.com</mark>"
 msgstr ""
 
-#: views/system_status.php:321
+#: views/system_status.php:314
 msgid "$_SERVER variables"
 msgstr ""
 
-#: views/system_status.php:326
+#: views/system_status.php:319
 msgid ""
 "Product activation and some of the related features depend on the <mark>"
 "$_SERVER['SERVER_NAME']</mark> PHP variable. It seems that this variable is "
@@ -5672,23 +5978,23 @@ msgid ""
 "know what to change."
 msgstr ""
 
-#: views/system_status.php:338
+#: views/system_status.php:331
 msgid "Update info"
 msgstr ""
 
-#: views/system_status.php:347
+#: views/system_status.php:340
 msgid "Update info after cancellation"
 msgstr ""
 
-#: views/system_status.php:362
+#: views/system_status.php:355
 msgid "Advanced Debug Details"
 msgstr ""
 
-#: views/system_status.php:373
+#: views/system_status.php:366 views/system_status.php:405
 msgid "Erase All Plugin Data"
 msgstr ""
 
-#: views/system_status.php:377
+#: views/system_status.php:370
 msgid ""
 "This action cannot be undone. All LayerSlider data will be permanently "
 "deleted and you will not be able to restore them afterwards. Please consider "
@@ -5696,143 +6002,80 @@ msgid ""
 "continue?"
 msgstr ""
 
-#: views/system_status.php:379
+#: views/system_status.php:372
 msgid ""
 "When you remove LayerSlider, it does not automatically delete your settings "
 "and sliders by default to prevent accidental data loss. You can use this "
 "utility if you really want to erase all data used by LayerSlider."
 msgstr ""
 
-#: views/system_status.php:380
+#: views/system_status.php:373
 msgid ""
 "The following actions will be performed when you confirm your intention to "
 "erase all plugin data:"
 msgstr ""
 
-#: views/system_status.php:383
+#: views/system_status.php:376
 msgid ""
 "Remove the <i>wp_layerslider</i> database table, which stores your sliders."
 msgstr ""
 
-#: views/system_status.php:384
+#: views/system_status.php:377
 msgid ""
 "Remove the relevant entries from the <i>wp_options</i> database table, which "
 "stores plugin settings."
 msgstr ""
 
-#: views/system_status.php:385
+#: views/system_status.php:378
 msgid ""
 "Remove the relevant entries from the <i>wp_usermeta</i> database table, "
 "which stores user associated plugin settings."
 msgstr ""
 
-#: views/system_status.php:386
+#: views/system_status.php:379
 msgid ""
 "Remove files and folders created by LayerSlider from the <i>/wp-content/"
 "uploads</i> directory. This will not affect your own uploads in the Media "
 "Library."
 msgstr ""
 
-#: views/system_status.php:387
-msgid "Remove created LayerSlider Debug Account (if any)"
-msgstr ""
-
-#: views/system_status.php:388
+#: views/system_status.php:380
 msgid "Deactivate LayerSlider as a last step."
 msgstr ""
 
-#: views/system_status.php:390
+#: views/system_status.php:382
 msgid ""
 "The actions above will be performed on this blog only. If you have a "
-"multisite network and you are a network administrator, then an \"Apply to "
-"all sites\" checkbox will appear, which you can use to erase data from every "
-"site in your network if you choose so."
+"multisite network and you are a network administrator, then an “Apply to all "
+"sites” checkbox will appear, which you can use to erase data from every site "
+"in your network if you choose so."
 msgstr ""
 
-#: views/system_status.php:392
+#: views/system_status.php:384
 msgid ""
 "Please note: You CANNOT UNDO this action. Please CONSIDER EVERY POSSIBILITY "
 "before choosing to erase all plugin data, as you will not be able to restore "
 "data afterwards."
 msgstr ""
 
-#: views/system_status.php:396
+#: views/system_status.php:388
 msgid "Are you sure you want to erase plugin data from every site in network?"
 msgstr ""
 
-#: views/system_status.php:402
+#: views/system_status.php:388
+msgid "Apply to all sites in multisite network"
+msgstr ""
+
+#: views/system_status.php:392
+msgid "Erase Plugin Data"
+msgstr ""
+
+#: views/system_status.php:394
 msgid "You must be an administrator to use this feature."
 msgstr ""
 
-#: views/system_status.php:413 views/system_status.php:439
-msgid "Create Debug Account"
-msgstr ""
-
-#: views/system_status.php:417
-msgid ""
-"In some cases we may need to access the admin area of your site in order to "
-"find and fix issues you may experience. This tool is intended to "
-"automatically create a debug account, so you don't have to bother to "
-"manually perform the necessary steps."
-msgstr ""
-
-#: views/system_status.php:418
-msgid ""
-"After your confirmation, the following actions will be performed on your "
-"site:"
-msgstr ""
-
-#: views/system_status.php:420
-msgid ""
-"A new user account named <i><span class=\"dark\">KreaturaSupport</span></i> "
-"will be created with a randomly generated secure password."
-msgstr ""
-
-#: views/system_status.php:421
-msgid ""
-"This newly created account will have administrator permissions in order to "
-"access key pages on the admin area (e.g. the LayerSlider menu)"
-msgstr ""
-
-#: views/system_status.php:422
-msgid ""
-"The login credentials for this account will be emailed to us (from your "
-"site's admin email address), so we can have a look and help you as fast as "
-"possible."
-msgstr ""
-
-#: views/system_status.php:423
-msgid ""
-"You can remove this account manually after we've managed to find a solution, "
-"or at any time if you change your mind."
-msgstr ""
-
-#: views/system_status.php:425
-msgid ""
-"Please note: this utility is intended to make your life easier. No action "
-"will be performed without your consent. If you feel uncomfortable using it, "
-"you can always create a debug account on your own or manually edit/remove "
-"the created one at any time."
-msgstr ""
-
-#: views/system_status.php:426
-msgid ""
-"This is not an error reporting tool. Make sure to contact our support team "
-"before using this utility!"
-msgstr ""
-
-#: views/system_status.php:430
-msgid ""
-"To use this feature, you must be an administrator and have activated your "
-"site with a LayerSlider purchase code."
-msgstr ""
-
-#: views/system_status.php:438
+#: views/system_status.php:403
 msgid "Show Advanced Details"
-msgstr ""
-
-#: views/system_status.php:442
-msgid "Erase Plugin Data"
 msgstr ""
 
 #: views/transition_builder.php:75
@@ -5848,7 +6091,13 @@ msgid "Import"
 msgstr ""
 
 #: views/transition_builder.php:112 views/transition_builder.php:137
+#: wp/scripts_l10n.php:90
 msgid "Type transition name"
+msgstr ""
+
+#: views/transition_builder.php:113 views/transition_builder.php:138
+#: wp/scripts_l10n.php:91
+msgid "Remove transition"
 msgstr ""
 
 #: views/transition_builder.php:118
@@ -5864,10 +6113,10 @@ msgid "No 3D transitions yet."
 msgstr ""
 
 #: views/transition_builder.php:602
+#, php-format
 msgid ""
-"Before you can save your changes, you need to make your \"/wp-content/uploads"
-"\" folder writable. See the <a href=\"http://codex.wordpress.org/"
-"Changing_File_Permissions\" target=\"_blank\">Codex</a>"
+"Before you can save your changes, you need to make your “/wp-content/"
+"uploads” folder writable. See the %sCodex%s"
 msgstr ""
 
 #: views/transition_builder.php:622
@@ -5880,43 +6129,43 @@ msgid ""
 "online documentation by clicking on this help menu."
 msgstr ""
 
-#: wp/actions.php:589
+#: wp/actions.php:663
 msgid ""
-"LayerSlider couldn't download your selected slider. Please check LayerSlider "
+"LayerSlider couldn’t download your selected slider. Please check LayerSlider "
 "-> System Status for potential issues. The WP Remote functions may be "
 "unavailable or your web hosting provider has to allow external connections "
 "to our domain."
 msgstr ""
 
-#: wp/actions.php:610
+#: wp/actions.php:684
 msgid ""
-"LayerSlider couldn't download your selected slider. The server responded "
+"LayerSlider couldn’t download your selected slider. The server responded "
 "with the following error message: "
 msgstr ""
 
-#: wp/actions.php:626
+#: wp/actions.php:700
 msgid ""
-"LayerSlider couldn't save the downloaded slider on your server. Please check "
+"LayerSlider couldn’t save the downloaded slider on your server. Please check "
 "LayerSlider -> System Status for potential issues. The most common reason "
 "for this issue is the lack of write permission on the /wp-content/uploads/ "
 "directory."
 msgstr ""
 
-#: wp/actions.php:789 wp/actions.php:816
+#: wp/actions.php:863 wp/actions.php:890
 msgid ""
-"It looks like your files isn't writable, so PHP couldn't make any changes "
+"It looks like your files isn’t writable, so PHP couldn’t make any changes "
 "(CHMOD)."
 msgstr ""
 
-#: wp/actions.php:789 wp/actions.php:816
+#: wp/actions.php:863 wp/actions.php:890
 msgid "Cannot write to file"
 msgstr ""
 
-#: wp/actions.php:803
-msgid "It looks like you haven't selected any skin to edit."
+#: wp/actions.php:877
+msgid "It looks like you haven’t selected any skin to edit."
 msgstr ""
 
-#: wp/actions.php:803
+#: wp/actions.php:877
 msgid "No skin selected."
 msgstr ""
 
@@ -5924,108 +6173,115 @@ msgstr ""
 msgid "All Sliders"
 msgstr ""
 
-#: wp/menus.php:45
+#: wp/menus.php:51
 msgid "CSS Editor"
 msgstr ""
 
-#: wp/menus.php:50
+#: wp/menus.php:56
 msgid "Transition Builder"
 msgstr ""
 
-#: wp/menus.php:60
+#: wp/menus.php:66
 msgid "About"
 msgstr ""
 
-#: wp/notices.php:45 wp/notices.php:69
+#: wp/menus.php:77
+msgid "Getting Help"
+msgstr ""
+
+#: wp/menus.php:78
+#, php-format
+msgid ""
+"Please read our  %sOnline Documentation%s carefully, it will likely answer "
+"all of your questions.<br><br>You can also check the %sFAQs%s for additional "
+"information, including our support policies and licensing rules."
+msgstr ""
+
+#: wp/notices.php:76 wp/notices.php:213
+msgid "OK, I understand"
+msgstr ""
+
+#: wp/notices.php:103 wp/notices.php:128
 msgid "An update is available for LayerSlider WP!"
 msgstr ""
 
-#: wp/notices.php:47
+#: wp/notices.php:105
 #, php-format
 msgid "You have version %1$s. Update to version %2$s."
 msgstr ""
 
-#: wp/notices.php:49 wp/notices.php:50
+#: wp/notices.php:107 wp/notices.php:108
 msgid "Install now"
 msgstr ""
 
-#: wp/notices.php:71
+#: wp/notices.php:130
 #, php-format
 msgid "You have version %1$s. The latest version is %2$s."
 msgstr ""
 
-#: wp/notices.php:72
+#: wp/notices.php:131
 msgid ""
 "New releases contain new features, bug fixes and various improvements across "
 "the entire plugin."
 msgstr ""
 
-#: wp/notices.php:73
+#: wp/notices.php:132
+#, php-format
 msgid ""
 "Set up auto-updates to upgrade to this new version, or request it from the "
-"author of your theme if you've received LayerSlider from them."
+"author of your theme if you’ve received LayerSlider from them. %sClick here"
+"%s to learn more."
 msgstr ""
 
-#: wp/notices.php:73
-msgid "Click here"
-msgstr ""
-
-#: wp/notices.php:73
-msgid "to learn more"
-msgstr ""
-
-#: wp/notices.php:74
+#: wp/notices.php:133
 msgid "Hide this message"
 msgstr ""
 
-#: wp/notices.php:87
+#: wp/notices.php:146
 msgid "The new version of LayerSlider WP is almost ready!"
 msgstr ""
 
-#: wp/notices.php:89
+#: wp/notices.php:148
 msgid ""
 "For a faster and more reliable solution, LayerSlider WP needs to convert "
 "your data associated with the plugin. Your sliders and settings will remain "
 "still, and it only takes a click on this button."
 msgstr ""
 
-#: wp/notices.php:92
+#: wp/notices.php:151
 msgid "Convert Data"
 msgstr ""
 
-#: wp/notices.php:104
+#: wp/notices.php:163
 msgid "Server configuration issues detected!"
 msgstr ""
 
-#: wp/notices.php:106
+#: wp/notices.php:165
+#, php-format
 msgid ""
 "phpQuery, an external library in LayerSlider, have unmet dependencies. It "
-"requires PHP5 with the following extensions installed: PHP DOM extension, "
-"PHP Multibyte String extension. Please contact with your hosting provider to "
-"resolve these dependencies, as it will likely prevent LayerSlider from "
-"functioning properly."
+"requires PHP 5.3.0 or newer with the following extensions installed: PHP DOM "
+"extension, PHP Multibyte String extension. Please contact with your hosting "
+"provider to resolve these dependencies, as it will likely prevent "
+"LayerSlider from functioning properly. %sThis issue could result a blank "
+"page in slider builder.%s"
 msgstr ""
 
-#: wp/notices.php:107
-msgid "This issue could result a blank page in slider builder."
-msgstr ""
-
-#: wp/notices.php:119
+#: wp/notices.php:177
 msgid "Unlock the full potential of LayerSlider"
 msgstr ""
 
-#: wp/notices.php:121
+#: wp/notices.php:179
+#, php-format
 msgid ""
 "Activate LayerSlider to unlock premium features, slider templates and other "
 "exclusive content & services. Receive live plugin updates with 1-Click "
 "installation (including optional early access releases) and premium support. "
-"If you've received LayerSlider bundled in a theme, please refer to <a href="
-"\"https://support.kreaturamedia.com/docs/layersliderwp/documentation."
-"html#activation-bundles\" target=\"_blank\">this guide</a> in our online "
-"documentation."
+"If you’ve received LayerSlider bundled in a theme, please refer to %sthis "
+"guide%s in our online documentation."
 msgstr ""
 
-#: wp/notices.php:139
+#: wp/notices.php:197
 #, php-format
 msgid ""
 "License activation is required in order to receive updates and premium "
@@ -6033,28 +6289,323 @@ msgid ""
 "%s to learn more. %sGot LayerSlider in a theme?%s"
 msgstr ""
 
-#: wp/notices.php:151
+#: wp/notices.php:209
 msgid "LayerSlider product activation was canceled on this site"
 msgstr ""
 
-#: wp/notices.php:153
+#: wp/notices.php:211
 msgid ""
-"You've previously activated your copy of LayerSlider on this site to receive "
+"You’ve previously activated your copy of LayerSlider on this site to receive "
 "plugin updates, use exclusive features and access to premium templates in "
 "the Template Store. However, your activation was canceled and you can no "
 "longer enjoy these benefits. There are a number of potential reasons why "
-"this could happen, the common ones include: you've remotely deactivated your "
+"this could happen, the common ones include: you’ve remotely deactivated your "
 "site using our online tools or asked us to do the same on your behalf; your "
 "purchase have been refunded or the transaction disputed; Envato have revoked "
 "your purchase code with an undisclosed reason."
 msgstr ""
 
-#: wp/notices.php:154
+#: wp/notices.php:212
+#, php-format
 msgid ""
 "To review all the possible reasons and find out what to do next, please "
-"refer to the <a target=\"_blank\" href=\"https://support.kreaturamedia.com/"
-"docs/layersliderwp/documentation.html#canceled-activation\">Why was my "
-"activation canceled?</a> section in our documentation."
+"refer to the %sWhy was my activation canceled?%s section in our "
+"documentation."
+msgstr ""
+
+#: wp/scripts_l10n.php:7
+msgid "Saving ..."
+msgstr ""
+
+#: wp/scripts_l10n.php:8
+msgid "Saved"
+msgstr ""
+
+#: wp/scripts_l10n.php:9
+msgid "ERROR"
+msgstr ""
+
+#: wp/scripts_l10n.php:10
+msgid "Untitled"
+msgstr ""
+
+#: wp/scripts_l10n.php:11
+msgid "Working ..."
+msgstr ""
+
+#: wp/scripts_l10n.php:12
+msgid "Stop"
+msgstr ""
+
+#: wp/scripts_l10n.php:19
+msgid "Deselect all"
+msgstr ""
+
+#: wp/scripts_l10n.php:22
+msgid "Are you sure you want to remove this slider?"
+msgstr ""
+
+#: wp/scripts_l10n.php:23
+msgid "Uploading, please wait ..."
+msgstr ""
+
+#: wp/scripts_l10n.php:24
+msgid ""
+"Please enter a valid Item Purchase Code. For more information, please click "
+"on the “Where’s my purchase code?” button."
+msgstr ""
+
+#: wp/scripts_l10n.php:25
+msgid "Are you sure you want to deactivate this site?"
+msgstr ""
+
+#: wp/scripts_l10n.php:26
+msgid ""
+"WARNING: This option controls who can access to this plugin, you can easily "
+"lock out yourself by accident. Please, make sure that you have entered a "
+"valid capability without whitespaces or other invalid characters. Do you "
+"want to proceed?"
+msgstr ""
+
+#: wp/scripts_l10n.php:27
+msgid ""
+"Do not enable this option unless you’re  experiencing issues with jQuery on "
+"your site. This option can easily cause unexpected issues when used "
+"incorrectly. Do you want to proceed?"
+msgstr ""
+
+#: wp/scripts_l10n.php:28
+msgid ""
+"Do not forget to disable this option later on if it does not help, or if you "
+"experience unexpected issues. This includes your entire site, not just "
+"LayerSlider."
+msgstr ""
+
+#: wp/scripts_l10n.php:30
+msgid "Importing, please wait..."
+msgstr ""
+
+#: wp/scripts_l10n.php:31
+msgid ""
+"It seems there is a server issue that prevented LayerSlider from importing "
+"your selected slider. Please check LayerSlider -> System Status for "
+"potential errors, try to temporarily disable themes/plugins to rule out "
+"incompatibility issues or contact your hosting provider to resolve server "
+"configuration problems. In many cases retrying to import the same slider can "
+"help."
+msgstr ""
+
+#: wp/scripts_l10n.php:32
+#, php-format
+msgid ""
+"It seems there is a server issue that prevented LayerSlider from importing "
+"your selected slider. Please check LayerSlider -> System Status for "
+"potential errors, try to temporarily disable themes/plugins to rule out "
+"incompatibility issues or contact your hosting provider to resolve server "
+"configuration problems. In many cases retrying to import the same slider can "
+"help. Your HTTP server thrown the following error: \\n\\n %s"
+msgstr ""
+
+#: wp/scripts_l10n.php:35
+msgid "Activate your site to access premium templates."
+msgstr ""
+
+#: wp/scripts_l10n.php:36
+#, php-format
+msgid ""
+"This template is only available for activated sites. Please review the "
+"PRODUCT ACTIVATION section on the main LayerSlider screen or %sclick here%s "
+"for more information."
+msgstr ""
+
+#: wp/scripts_l10n.php:37
+msgid "Plugin update required"
+msgstr ""
+
+#: wp/scripts_l10n.php:38
+#, php-format
+msgid ""
+"This slider template requires a newer version of LayerSlider in order to "
+"work properly. This is due to additional features introduced in a later "
+"version than you have. For updating instructions, please refer to our "
+"%sonline documnetation%s."
+msgstr ""
+
+#: wp/scripts_l10n.php:42
+msgid ""
+"You need to have at least one character set added. Please select another "
+"item before removing this one."
+msgstr ""
+
+#: wp/scripts_l10n.php:44
+#, php-format
+msgid "Select %s font variants"
+msgstr ""
+
+#: wp/scripts_l10n.php:48
+#, php-format
+msgid "Slide #%d copy"
+msgstr ""
+
+#: wp/scripts_l10n.php:50
+#, php-format
+msgid "Layer #%d copy"
+msgstr ""
+
+#: wp/scripts_l10n.php:51
+msgid "Layer settings"
+msgstr ""
+
+#: wp/scripts_l10n.php:52
+msgid "Slide settings"
+msgstr ""
+
+#: wp/scripts_l10n.php:53
+msgid "New layer"
+msgstr ""
+
+#: wp/scripts_l10n.php:54
+msgid "New layers"
+msgstr ""
+
+#: wp/scripts_l10n.php:55
+msgid "Video poster"
+msgstr ""
+
+#: wp/scripts_l10n.php:56
+msgid "Remove video poster"
+msgstr ""
+
+#: wp/scripts_l10n.php:57
+msgid "Layer position"
+msgstr ""
+
+#: wp/scripts_l10n.php:58
+msgid "Remove layer(s)"
+msgstr ""
+
+#: wp/scripts_l10n.php:59
+msgid "Hide layer"
+msgstr ""
+
+#: wp/scripts_l10n.php:60
+msgid "Lock layer"
+msgstr ""
+
+#: wp/scripts_l10n.php:61
+msgid "Paste layer settings"
+msgstr ""
+
+#: wp/scripts_l10n.php:62
+msgid "Slide image"
+msgstr ""
+
+#: wp/scripts_l10n.php:63
+msgid "Layer image"
+msgstr ""
+
+#: wp/scripts_l10n.php:64
+msgid "Sort layers"
+msgstr ""
+
+#: wp/scripts_l10n.php:65
+msgid "Layer type"
+msgstr ""
+
+#: wp/scripts_l10n.php:66
+msgid "Layer media"
+msgstr ""
+
+#: wp/scripts_l10n.php:67
+msgid "Layer resize"
+msgstr ""
+
+#: wp/scripts_l10n.php:68
+msgid "Align layer(s)"
+msgstr ""
+
+#: wp/scripts_l10n.php:69
+msgid "Remove slide image"
+msgstr ""
+
+#: wp/scripts_l10n.php:70
+msgid "Remove layer image"
+msgstr ""
+
+#: wp/scripts_l10n.php:71
+msgid "Drag me :)"
+msgstr ""
+
+#: wp/scripts_l10n.php:73
+#, php-format
+msgid "Until the end of Slide #%d"
+msgstr ""
+
+#: wp/scripts_l10n.php:74
+msgid "There’s nothing to paste. Copy a layer first!"
+msgstr ""
+
+#: wp/scripts_l10n.php:75
+msgid "There is nothing to paste!"
+msgstr ""
+
+#: wp/scripts_l10n.php:76
+msgid "Are you sure you want to remove this slide?"
+msgstr ""
+
+#: wp/scripts_l10n.php:77
+msgid "Are you sure you want to remove this layer?"
+msgstr ""
+
+#: wp/scripts_l10n.php:78
+msgid "Pick an image to use it in LayerSlider WP"
+msgstr ""
+
+#: wp/scripts_l10n.php:79
+msgid "Upload error"
+msgstr ""
+
+#: wp/scripts_l10n.php:80
+#, php-format
+msgid "Upload error: %s"
+msgstr ""
+
+#: wp/scripts_l10n.php:81
+msgid "Invalid format"
+msgstr ""
+
+#: wp/scripts_l10n.php:82
+msgid "Enter an image URL"
+msgstr ""
+
+#: wp/scripts_l10n.php:83
+msgid ""
+"Are you sure you want to apply the currently selected transitions and "
+"effects on the other slides?"
+msgstr ""
+
+#: wp/scripts_l10n.php:84
+msgid "No posts were found with the current filters."
+msgstr ""
+
+#: wp/scripts_l10n.php:85
+#, php-format
+msgid ""
+"It seems there is a server issue that prevented LayerSlider from saving your "
+"work. Please check LayerSlider -> System Status for potential errors, try to "
+"temporarily disable themes/plugins to rule out incompatibility issues or "
+"contact your hosting provider to resolve server configuration problems. Your "
+"HTTP server thrown the following error: \\n\\n %s"
+msgstr ""
+
+#: wp/scripts_l10n.php:86
+msgid ""
+"You have unsaved changes on this page. Do you want to leave and discard the "
+"changes made since your last save?"
+msgstr ""
+
+#: wp/scripts_l10n.php:92
+msgid "Are you sure you want to remove this transition?"
 msgstr ""
 
 #: wp/shortcodes.php:159
@@ -6066,14 +6617,11 @@ msgid "Unpublished slider"
 msgstr ""
 
 #: wp/shortcodes.php:167
+#, php-format
 msgid ""
-"The slider you've inserted here is yet to be published, thus it won't be "
+"The slider you’ve inserted here is yet to be published, thus it won’t be "
 "displayed to your visitors. You can publish it by enabling the appropriate "
-"option in "
-msgstr ""
-
-#: wp/shortcodes.php:167 wp/shortcodes.php:195
-msgid "Slider Settings -> Publish"
+"option in %sSlider Settings -> Publish%s. "
 msgstr ""
 
 #: wp/shortcodes.php:174
@@ -6081,76 +6629,139 @@ msgid "Removed slider"
 msgstr ""
 
 #: wp/shortcodes.php:175
+#, php-format
 msgid ""
-"The slider you've inserted here was removed in the meantime, thus it won't "
+"The slider you’ve inserted here was removed in the meantime, thus it won’t "
 "be displayed to your visitors. This slider is still recoverable on the admin "
 "interface. You can enable listing removed sliders with the Screen Options -> "
 "Removed sliders option, then choose the Restore option for the corresponding "
-"item to reinstate this slider, or just click "
+"item to reinstate this slider, or just click %shere%s."
 msgstr ""
 
 #: wp/shortcodes.php:189
-msgid "This slider is scheduled to display on "
+#, php-format
+msgid "This slider is scheduled to display on %s"
 msgstr ""
 
 #: wp/shortcodes.php:194
-msgid "This slider was scheduled to hide on "
+#, php-format
+msgid "This slider was scheduled to hide on %s "
 msgstr ""
 
 #: wp/shortcodes.php:195
+#, php-format
 msgid ""
 "Due to scheduling, this slider is no longer visible to your visitors. If you "
-"wish to reinstate this slider, just remove the schedule in "
+"wish to reinstate this slider, just remove the schedule in %sSlider Settings "
+"-> Publish%s."
 msgstr ""
 
-#: wp/shortcodes.php:307
+#: wp/shortcodes.php:321
 msgid "Premium features is available for preview purposes only."
 msgstr ""
 
-#: wp/shortcodes.php:308
+#: wp/shortcodes.php:322
+#, php-format
 msgid ""
-"We've detected that you're using premium features in this slider, but you "
+"We’ve detected that you’re using premium features in this slider, but you "
 "have not yet activated your copy of LayerSlider. Premium features in your "
-"sliders will not be available for your visitors without activation. "
+"sliders will not be available for your visitors without activation. %sClick "
+"here to learn more%s. Detected features: %s"
 msgstr ""
 
-#: wp/shortcodes.php:343
+#: wp/shortcodes.php:357
 msgid "LayerSlider encountered a problem while it tried to show your slider."
 msgstr ""
 
-#: wp/shortcodes.php:347
+#: wp/shortcodes.php:361
 msgid ""
-"Please make sure that you've used the right shortcode or method to insert "
-"the slider, and check if the corresponding slider exists and it wasn't "
+"Please make sure that you’ve used the right shortcode or method to insert "
+"the slider, and check if the corresponding slider exists and it wasn’t "
 "deleted previously."
 msgstr ""
 
-#: wp/shortcodes.php:355
+#: wp/shortcodes.php:369
 msgid ""
 "Only you and other administrators can see this to take appropriate actions "
 "if necessary."
+msgstr ""
+
+#: wp/tinymce_l10n.php:6
+msgid "Add LayerSlider"
+msgstr ""
+
+#: wp/tinymce_l10n.php:7
+msgid "Insert LayerSlider"
+msgstr ""
+
+#: wp/tinymce_l10n.php:8
+msgid "Embed Options:"
+msgstr ""
+
+#: wp/tinymce_l10n.php:9
+msgid "Starting Slide:"
+msgstr ""
+
+#: wp/tinymce_l10n.php:10
+msgid "no override"
+msgstr ""
+
+#: wp/tinymce_l10n.php:11
+msgid "Insert into post"
 msgstr ""
 
 #: wp/widgets.php:15
 msgid "Insert sliders with the LayerSlider Widget"
 msgstr ""
 
-#: wp/widgets.php:54
+#: wp/widgets.php:56
 msgid "Title:"
 msgstr ""
 
-#: wp/widgets.php:58
+#: wp/widgets.php:60
 msgid "Choose a slider:"
 msgstr ""
 
-#: wp/widgets.php:71
+#: wp/widgets.php:73
 msgid "You have not created any slider yet."
 msgstr ""
 
-#: wp/widgets.php:75
+#: wp/widgets.php:77
 msgid "Optional filters:"
 msgstr ""
 
-#: wp/widgets.php:76
-msgid "learn more"
+#: wp/widgets.php:79
+msgid "e.g. homepage"
+msgstr ""
+
+#: wp/widgets.php:82
+msgid "Override starting slide:"
+msgstr ""
+
+#: wp/widgets.php:83
+msgid "leave it empty to use default"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "LayerSlider WP"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid ""
+"https://codecanyon.net/item/layerslider-responsive-wordpress-slider-"
+"plugin-/1362246"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"LayerSlider is the most advanced responsive WordPress slider plugin with the "
+"famous Parallax Effect and over 200 2D & 3D transitions."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Kreatura Media"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://layerslider.kreaturamedia.com"
 msgstr ""

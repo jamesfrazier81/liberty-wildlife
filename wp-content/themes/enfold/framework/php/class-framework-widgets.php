@@ -563,7 +563,7 @@ if (!class_exists('avia_newsbox'))
 			}
 			echo "</a>";
 
-			if('display title and excerpt' == $excerpt)
+			if( 'display title and excerpt' == $excerpt )
 			{
 				echo "<div class='news-excerpt'>";
 
@@ -667,13 +667,17 @@ if (!class_exists('avia_newsbox'))
 				<select class="widefat" id="<?php echo $this->get_field_id('excerpt'); ?>" name="<?php echo $this->get_field_name('excerpt'); ?>">
 					<?php
 					$list = "";
-					$answers = array(__('show title only', 'avia_framework'),__('display title and excerpt', 'avia_framework'));
-					foreach ($answers as $answer)
+					$answers = array(
+								'show title only'			=>	__( 'show title only', 'avia_framework' ),
+								'display title and excerpt'	=>	__('display title and excerpt', 'avia_framework')
+								);
+					
+					foreach ( $answers as $key => $answer )
 					{
 						$selected = "";
-						if($answer == $excerpt) $selected = 'selected="selected"';
+						if( $key == $excerpt ) $selected = 'selected="selected"';
 
-						$list .= "<option $selected value='$answer'>$answer</option>";
+						$list .= "<option $selected value='$key'>$answer</option>";
 					}
 					$list .= "</select>";
 					echo $list;

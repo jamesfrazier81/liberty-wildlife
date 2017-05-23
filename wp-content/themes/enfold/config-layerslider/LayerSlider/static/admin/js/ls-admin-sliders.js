@@ -84,7 +84,7 @@ jQuery(function($) {
 					// Add notice if needed
 					if($(this).siblings().length < 2) {
 						$(this).parent().append(
-							$('<li>', { 'class' : 'ls-notice', 'text' : 'You haven\'t added any Google font to your library yet.'})
+							$('<li>', { 'class' : 'ls-notice', 'text' : LS_l10n.GFEmptyList })
 						);
 					}
 
@@ -130,7 +130,7 @@ jQuery(function($) {
 				if($('.ls-google-font-scripts li').length > 2) {
 					$(this).closest('li').remove();
 				} else {
-					alert('You need to have at least one character set added. Please select another item before removing this one.');
+					alert(LS_l10n.GFEmptyCharset);
 				}
 			});
 		},
@@ -201,7 +201,8 @@ jQuery(function($) {
 
 
 			// Change header
-			$(li).closest('.ls-box').children('.header').text('Select "'+fontName+'" variants');
+			var title = LS_l10n.GFFontVariant.replace('%s', fontName);
+			$(li).closest('.ls-box').children('.header').text(title);
 
 			// Append variants
 			for(c = 0; c < fontObject.length; c++) {
@@ -219,7 +220,7 @@ jQuery(function($) {
 		},
 
 		showFonts : function(button) {
-			$(button).closest('.ls-box').children('.header').text('Choose a font family');
+			$(button).closest('.ls-box').children('.header').text(LS_l10n.GFFontFamily);
 			$(button).closest('.variants').hide().prev().show();
 		},
 
@@ -349,7 +350,7 @@ jQuery(function($) {
 		var $this = $(this);
 		setTimeout(function() {
 			var offsets = $this.position(),
-				height 	= $('#ls-slider-actions-template').removeClass('ls-hidden').height();
+				height 	= $('#ls-slider-actions-template').removeClass('ls-hidden').show().height();
 
 			$('#ls-slider-actions-template').css({
 				top : offsets.top + 15 - height / 2,
@@ -363,7 +364,8 @@ jQuery(function($) {
 
 			$('#ls-slider-actions-template a:eq(1)').attr('href', $this.data('export-url') );
 			$('#ls-slider-actions-template a:eq(2)').attr('href', $this.data('duplicate-url') );
-			$('#ls-slider-actions-template a:eq(3)').attr('href', $this.data('remove-url') );
+			$('#ls-slider-actions-template a:eq(3)').attr('href', $this.data('revisions-url') );
+			$('#ls-slider-actions-template a:eq(4)').attr('href', $this.data('remove-url') );
 
 
 			setTimeout(function() {
@@ -377,7 +379,7 @@ jQuery(function($) {
 	// Slider remove
 	$('.ls-slider-list-form').on('click', 'a.remove', function(e) {
 		e.preventDefault();
-		if(confirm('Are you sure you want to remove this slider?')){
+		if(confirm(LS_l10n.SLRemoveSlider)){
 			document.location.href = $(this).attr('href');
 		}
 
@@ -551,7 +553,7 @@ jQuery(function($) {
 	// Upload window
 	}).on('submit', '#ls-upload-modal-window form', function(e) {
 
-		jQuery('.button', this).text('Uploading, please wait ...').addClass('saving');
+		jQuery('.button', this).text(LS_l10n.SLUploadSlider).addClass('saving');
 
 	}).on('click', '.ls-open-template-store', function(e) {
 
@@ -594,12 +596,12 @@ jQuery(function($) {
 			$button = $form.find('.button-save:visible');
 
 		if( $key.val().length < 10 ) {
-			alert('Please enter a valid Item Purchase Code. For more information, please click on the "Where\'s my purchase code?" button.');
+			alert(LS_l10n.SLEnterCode);
 			return false;
 		}
 
 		// Send request and provide feedback message
-		$button.data('text', $button.text() ).text('Working ...').addClass('saving');
+		$button.data('text', $button.text() ).text(LS_l10n.working).addClass('saving');
 
 		// Post it
 		$.post( ajaxurl, $(this).serialize(), function(data) {
@@ -634,7 +636,7 @@ jQuery(function($) {
 	$('.ls-auto-update a.ls-deauthorize').click(function(event) {
 		event.preventDefault();
 
-		if( confirm('Are you sure you want to deactivate this site?') ) {
+		if( confirm(LS_l10n.SLDeactivate) ) {
 
 			var $form = $(this).closest('form');
 
@@ -694,7 +696,7 @@ jQuery(function($) {
 	// Permission form
 	$('#ls-permission-form').submit(function(e) {
 		e.preventDefault();
-		if(confirm('WARNING: This option controls who can access to this plugin, you can easily lock out yourself by accident. Please, make sure that you have entered a valid capability without whitespaces or other invalid characters. Do you want to proceed?')) {
+		if(confirm(LS_l10n.SLPermissions)) {
 			this.submit();
 		}
 	});
@@ -703,13 +705,13 @@ jQuery(function($) {
 	// Google CDN version warning
 	$('#ls_use_custom_jquery').on('click', '.ls-checkbox', function(e) {
 		if( $(this).hasClass('off') ) {
-			if( ! confirm('Do not enable this option unless you\'re  experiencing issues with jQuery on your site. This option can easily cause unexpected issues when used incorrectly. Do you want to proceed?') ) {
+			if( ! confirm(LS_l10n.SLJQueryConfirm) ) {
 				e.preventDefault();
 				return false;
 
 			}
 
-			alert('Do not forget to disable this option later on if it does not help, or if you experience unexpected issues. This includes your entire site, not just LayerSlider.');
+			alert(LS_l10n.SLJQueryReminder);
 		}
 	});
 
@@ -752,8 +754,8 @@ jQuery(function($) {
 		if( $figure.data('premium') && ! window.lsSiteActivation ) {
 			kmUI.modal.open( {
 				into: '#ls-import-modal-window',
-				title: window.lsImportWarningTitle,
-				content: window.lsImportWarningContent,
+				title: LS_l10n.TSImportWarningTitle,
+				content: LS_l10n.TSImportWarningContent,
 				width: 700,
 				height: 200,
 				overlayAnimate: 'fade'
@@ -763,8 +765,8 @@ jQuery(function($) {
 		} else if( $figure.data('version-warning') ) {
 			kmUI.modal.open( {
 				into: '#ls-import-modal-window',
-				title: window.lsImportVersionWarningTitle,
-				content: window.lsImportVersionWarningContent,
+				title: LS_l10n.TSVersionWarningTitle,
+				content: LS_l10n.TSVersionWarningContent,
 				width: 700,
 				height: 200,
 				overlayAnimate: 'fade'
@@ -807,7 +809,7 @@ jQuery(function($) {
 
 				} else {
 					setTimeout(function() {
-						alert('It seems there is a server issue that prevented LayerSlider from importing your selected slider. Please check LayerSlider -> System Status for potential errors, try to temporarily disable themes/plugins to rule out incompatibility issues or contact your hosting provider to resolve server configuration problems. In many cases retrying to import the same slider can help.');
+						alert(LS_l10n.SLImportError);
 						setTimeout(function() {
 							kmUI.modal.close();
 							kmUI.overlay.close();
@@ -819,7 +821,7 @@ jQuery(function($) {
 				setTimeout(function() {
 					kmUI.modal.close();
 							kmUI.overlay.close();
-					alert('It seems there is a server issue that prevented LayerSlider from importing your selected slider. Please check LayerSlider -> System Status for potential errors, try to temporarily disable themes/plugins to rule out incompatibility issues or contact your hosting provider to resolve server configuration problems. In many cases retrying to import the same slider can help. Your HTTP server thrown the following error: \n\r\n\r'+errorThrown);
+					alert(LS_l10n.SLImportHTTPError.replace('%s', errorThrown) );
 					setTimeout(function() {
 						kmUI.modal.close();
 						kmUI.overlay.close();

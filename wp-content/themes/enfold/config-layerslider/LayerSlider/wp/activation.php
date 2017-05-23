@@ -55,7 +55,7 @@ function layerslider_activation_routine( ) {
 
 	// Update database
 	layerslider_create_db_table();
-	update_option('ls-db-version', '6.0.0');
+	update_option('ls-db-version', LS_DB_VERSION);
 
 	// Fresh installation
 	if( ! get_option('ls-installed') ) {
@@ -96,7 +96,6 @@ function layerslider_create_db_table() {
 
 	global $wpdb;
 	$charset_collate = '';
-	$table_name = $wpdb->prefix . "layerslider";
 
 	// Get DB collate
 	if( ! empty($wpdb->charset) ) {
@@ -107,8 +106,10 @@ function layerslider_create_db_table() {
 		$charset_collate .= " COLLATE $wpdb->collate";
 	}
 
-	// Building the query
-	$sql = "CREATE TABLE $table_name (
+	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+	// Table for Sliders
+	dbDelta("CREATE TABLE {$wpdb->prefix}layerslider (
 			  id int(10) NOT NULL AUTO_INCREMENT,
 			  author int(10) NOT NULL DEFAULT 0,
 			  name varchar(100) DEFAULT '',
@@ -121,11 +122,18 @@ function layerslider_create_db_table() {
 			  flag_hidden tinyint(1) NOT NULL DEFAULT 0,
 			  flag_deleted tinyint(1) NOT NULL DEFAULT 0,
 			  PRIMARY KEY  (id)
-			) $charset_collate;";
+			) $charset_collate;");
 
-	// Execute the query
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	dbDelta($sql);
+
+	// Table for Slider Revisions
+	dbDelta("CREATE TABLE {$wpdb->prefix}layerslider_revisions (
+		  id int(10) NOT NULL AUTO_INCREMENT,
+		  slider_id int(10) NOT NULL,
+		  author int(10) NOT NULL DEFAULT 0,
+		  data mediumtext NOT NULL,
+		  date_c int(10) NOT NULL,
+		  PRIMARY KEY  (id)
+		) $charset_collate;");
 }
 
 

@@ -133,6 +133,7 @@ NestedPages.jsData = {
 	syncmenu : 'nosync', // Whether to sync the menu
 	posttype : '', // current Screen's post type
 	nestable : true, // boolean - whether post type is nestable
+	sortable : true, // boolean - whether post type is sortable
 	hierarchical : true, // boolean - whether post type is hierarchical
 	expandText : nestedpages.expand_text, // Expand all button text
 	collapseText : nestedpages.collapse_text, // Collapse all button text
@@ -156,7 +157,8 @@ NestedPages.formActions = {
 	clonePost : 'npclonePost',
 	search : 'npmenuSearch',
 	newMenuItem : 'npnewMenuItem',
-	manualMenuSync : 'npmanualMenuSync'
+	manualMenuSync : 'npmanualMenuSync',
+	postSearch: 'nppostSearch'
 }
 
 
@@ -185,13 +187,16 @@ NestedPages.Factory = function()
 	plugin.hiddenItemCount = new NestedPages.HiddenItemCount;
 	plugin.confirmDelete = new NestedPages.ConfirmDelete;
 	plugin.manualSync = new NestedPages.ManualSync;
+	plugin.postSearch = new NestedPages.PostSearch;
 
 	plugin.init = function()
 	{
+		if ( nestedpages.settings_page ) return;
 		plugin.bindEvents();
 		plugin.setPostType();
 		plugin.setMenuSync();
 		plugin.setNestable();
+		plugin.setSortable();
 		plugin.formatter.updateSubMenuToggle();
 		plugin.formatter.setBorders();
 		plugin.formatter.setNestedMargins();
@@ -225,10 +230,26 @@ NestedPages.Factory = function()
 	}
 
 
+	// Set whether or not post type is sortable
+	plugin.setSortable = function()
+	{
+		var sortable = true;
+		$.each(NestedPages.jsData.allPostTypes, function(i, v){
+			if ( v.name !== NestedPages.jsData.posttype ) return;
+			if ( typeof v.disable_sorting === 'undefined' || v.disable_sorting === '' ) return;
+			if ( v.disable_sorting === "true" ) sortable = false;
+		});
+		NestedPages.jsData.sortable = sortable;
+	}
+
+
 	// Set the Screen's Post Type
 	plugin.setPostType = function()
 	{
-		NestedPages.jsData.posttype = $(NestedPages.selectors.sortable).attr('id').substring(3);
+		NestedPages.jsData.posttype = nestedpages.current_post_type;
+		if ( typeof NestedPages.jsData.posttype === 'undefined' || NestedPages.jsData.posttype === '' ){
+			NestedPages.jsData.posttype = $(NestedPages.selectors.sortable).attr('id').substring(3);
+		}
 		NestedPages.jsData.hierarchical = NestedPages.jsData.allPostTypes[NestedPages.jsData.posttype].hierarchical;
 	}
 

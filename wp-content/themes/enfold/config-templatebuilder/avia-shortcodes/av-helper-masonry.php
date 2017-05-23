@@ -35,6 +35,7 @@ if ( !class_exists( 'avia_masonry' ) )
 		                                 		'query_order' 		=> 'DESC',
 		                                 		'color'				=> '',
 		                                 		'custom_bg'			=> '',
+		                                 		'orientation'		=> '',
 		                                 		), $atts, 'av_masonry_entries');
 		 	
 		 	
@@ -230,7 +231,9 @@ if ( !class_exists( 'avia_masonry' ) )
 				$style  = AviaHelper::style_string( $style );
 			}
 			
-			$output .= "<div id='av-masonry-".self::$element."' class='av-masonry noHover av-{$size}-size av-{$this->atts['gap']}-gap av-hover-overlay-{$this->atts['overlay_fx']} av-masonry-col-{$this->atts['columns']} av-caption-{$this->atts['caption_display']} av-caption-style-{$this->atts['caption_styling']} {$this->atts['container_class']}' {$style} >";
+			$orientation = $this->atts['size'] == "fixed" ? $this->atts['orientation'] : ""; 
+			
+			$output .= "<div id='av-masonry-".self::$element."' class='av-masonry noHover av-{$size}-size av-{$this->atts['gap']}-gap av-hover-overlay-{$this->atts['overlay_fx']} av-masonry-col-{$this->atts['columns']} av-caption-{$this->atts['caption_display']} av-caption-style-{$this->atts['caption_styling']} {$this->atts['container_class']} {$orientation} ' {$style} >";
 			
 			$output .= $this->atts['sort'] != "no" ? $this->sort_buttons() : "";
 			
@@ -525,7 +528,7 @@ if ( !class_exists( 'avia_masonry' ) )
 					if(function_exists('avia_woocommerce_enabled') && avia_woocommerce_enabled())
 					{
 						$tagTax 		= "product_tag"; 
-						$product 		= get_product( $id );
+						$product 		= function_exists('wc_get_product') ? wc_get_product($id) : get_product( $id );
 						$overlay_img 	= avia_woocommerce_gallery_first_thumbnail($id, $img_size, true);
 
 						$this->loop[$key]['text_after'] .= '<span class="av-masonry-price price">'.$product->get_price_html()."</span>";

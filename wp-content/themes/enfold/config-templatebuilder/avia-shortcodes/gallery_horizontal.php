@@ -15,8 +15,8 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 			{
 				$this->config['name']			= __('Horizontal Gallery', 'avia_framework' );
 				$this->config['tab']			= __('Media Elements', 'avia_framework' );
-				$this->config['icon']			= AviaBuilder::$path['imagesURL']."sc-gallery.png";
-				$this->config['order']			= 7;
+				$this->config['icon']			= AviaBuilder::$path['imagesURL']."sc-accordion-slider.png";
+				$this->config['order']			= 6;
 				$this->config['target']			= 'avia-target-insert';
 				$this->config['shortcode'] 		= 'av_horizontal_gallery';
 				$this->config['tooltip']        = __('Creates a horizontal scrollable gallery ', 'avia_framework' );

@@ -88,7 +88,7 @@ class NavMenuSyncMenu extends NavMenuSync
 	*/
 	private function updatePost($item)
 	{
-		$parent_id = ( $item->menu_item_parent == '0' ) ? 0 : $this->index[$item->menu_item_parent]['ID'];
+		$parent_id = ( $item->menu_item_parent == '0' || !isset($this->index[$item->menu_item_parent]['ID']) ) ? 0 : $this->index[$item->menu_item_parent]['ID'];
 		
 		if ( $this->nav_menu_repo->isNavMenuItem($parent_id) ) {
 			$parent_id = $this->nav_menu_repo->getLinkfromTitle($this->index[$item->menu_item_parent]['title']);
@@ -139,7 +139,7 @@ class NavMenuSyncMenu extends NavMenuSync
 			'titleAttribute' => $item->attr_title
 		);
 		$post_id = $this->post_update_repo->saveRedirect($post_data);
-		update_post_meta($item->ID, '_menu_item_xfn', $post_id);
+		update_post_meta($item->ID, '_menu_item_xfn', absint($post_id));
 	}
 
 	/**

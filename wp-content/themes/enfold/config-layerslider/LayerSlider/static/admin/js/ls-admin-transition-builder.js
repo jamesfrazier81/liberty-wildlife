@@ -48,8 +48,8 @@ var lsTrBuilder = {
 		jQuery('.ls-transitions-sidebar li').removeClass('active');
 		var $item = jQuery('<li class="active"> \
 						<span class="dashicons dashicons-menu"></span> \
-						<input type="text" value="Untitled" placeholder="Type transition name"> \
-						<a href="#" title="Remove transition" class="dashicons dashicons-trash remove"></a> \
+						<input type="text" value="'+LS_l10n.untitled+'" placeholder="'+LS_l10n.TBTransitionName+'"> \
+						<a href="#" title="'+LS_l10n.TBRemoveTransition+'" class="dashicons dashicons-trash remove"></a> \
 					</li>').hide().prependTo($list);
 
 
@@ -65,7 +65,7 @@ var lsTrBuilder = {
 	removeTransition: function(el) {
 
 		// Ask confirmation to continue ...
-		if(!confirm('Are you sure you want to remove this transition?')) { return; }
+		if(!confirm(LS_l10n.TBRemoveConfirmation)) { return; }
 
 		// Gather info
 		var	$el = jQuery(el).closest('li'),
@@ -372,8 +372,7 @@ var lsTrBuilder = {
 	save: function(el) {
 
 		// Temporary disable submit button
-		jQuery('.ls-publish').addClass('saving').find('button').text('Saving ...').attr('disabled', true);
-		jQuery('.ls-saving-warning').text('Please don\'t navigate away while saving');
+		jQuery('.ls-publish').addClass('saving').find('button').text(LS_l10n.saving).attr('disabled', true);
 
 		// Serialize & store JSON
 		this.serializeTransitions();
@@ -385,12 +384,11 @@ var lsTrBuilder = {
 		jQuery.post( window.location.href, jQuery(el).serialize(), function() {
 
 			// Give feedback
-			jQuery('.ls-publish').removeClass('saving').addClass('saved').find('button').text('Saved');
-			jQuery('.ls-saving-warning').text('');
+			jQuery('.ls-publish').removeClass('saving').addClass('saved').find('button').text(LS_l10n.saved);
 
 			// Re-enable the button
 			setTimeout(function() {
-				jQuery('.ls-publish').removeClass('saved').find('button').attr('disabled', false).text('Save changes');
+				jQuery('.ls-publish').removeClass('saved').find('button').attr('disabled', false).text(LS_l10n.save);
 			}, 2000);
 		});
 	}

@@ -1,10 +1,13 @@
 <?php
 
-// Update notice
+add_action('admin_notices', 'layerslider_important_notice');
+
+
 if(strpos($_SERVER['REQUEST_URI'], '?page=layerslider') !== false) {
 	add_action('admin_notices', 'layerslider_update_notice');
 	add_action('admin_notices', 'layerslider_unauthorized_update_notice');
 	add_action('admin_notices', 'layerslider_dependency_notice');
+
 	if( get_option('ls-show-support-notice', 1) && ! get_option('layerslider-authorized-site', null) ) {
 		add_action('admin_notices', 'layerslider_premium_support');
 	}
@@ -28,6 +31,57 @@ if(!get_option('layerslider-authorized-site', null)) {
 	add_action('after_plugin_row_'.LS_PLUGIN_BASE, 'layerslider_plugins_purchase_notice', 10, 3 );
 }
 
+function layerslider_important_notice() {
+
+	// Get data
+	$storeData 	= get_option('ls-store-data', false);
+	$lastNotice = get_option('ls-last-important-notice', 0);
+
+	// Check if there's an important notice
+	if( $storeData && ! empty($storeData['important_notice']) ) {
+
+		// Get notice data
+		$notice = $storeData['important_notice'];
+
+		// Check notice validity
+		if( ! empty($notice['date']) && ! empty($notice['title']) && ! empty($notice['message']) ) {
+
+			// Check date
+			if( $notice['date'] <= $lastNotice ) {
+				return;
+			}
+
+
+			// Check min version (if any)
+			if( ! empty($notice['min_version']) ) {
+				if( version_compare(LS_PLUGIN_VERSION, $notice['min_version'], '<') ) {
+					return;
+				}
+			}
+
+
+			// Check max version (if any)
+			if( ! empty($notice['max_version']) ) {
+				if( version_compare(LS_PLUGIN_VERSION, $notice['max_version'], '>') ) {
+					return;
+				}
+			}
+
+			// Show the notice  ?>
+			<div class="layerslider_notice">
+				<img src="<?php echo ! empty($notice['image']) ? $notice['image'] : LS_ROOT_URL.'/static/admin/img/ls_80x80.png' ?>" alt="LayerSlider icon">
+				<h1><?php echo $notice['title'] ?></h1>
+				<p>
+					<?php echo $notice['message'] ?>
+					<a href="<?php echo wp_nonce_url('?page=layerslider&action=hide-important-notice', 'hide-important-notice') ?>" class="button button-primary button-hero"><?php _e('OK, I understand', 'LayerSlider') ?></a>
+				</p>
+				<div class="clear"></div>
+			</div>
+			<?php
+		}
+	}
+}
+
 function layerslider_update_notice() {
 
 	if(get_option('layerslider-authorized-site', false)) {
@@ -37,14 +91,18 @@ function layerslider_update_notice() {
 
 		// Check for update
 		if(isset($updates[LS_PLUGIN_BASE]) && isset($updates[LS_PLUGIN_BASE]->update)) {
-			$update = $updates[LS_PLUGIN_BASE];
+			$update 		= $updates[LS_PLUGIN_BASE];
+			$currentVersion = $update->Version;
+			$newVersion 	= $update->update->new_version;
+
+			if( version_compare($newVersion, $currentVersion, '>') ) {
 			add_thickbox();
 			?>
 			<div class="layerslider_notice">
 				<img src="<?php echo LS_ROOT_URL.'/static/admin/img/ls_80x80.png' ?>" alt="LayerSlider icon">
 				<h1><?php _e('An update is available for LayerSlider WP!', 'LayerSlider') ?></h1>
 				<p>
-					<?php echo sprintf(__('You have version %1$s. Update to version %2$s.', 'LayerSlider'), $update->Version, $update->update->new_version); ?><br>
+					<?php echo sprintf(__('You have version %1$s. Update to version %2$s.', 'LayerSlider'), $currentVersion, $newVersion); ?><br>
 					<i><?php echo $update->update->upgrade_notice ?></i>
 					<a href="<?php echo wp_nonce_url(self_admin_url('update.php?action=upgrade-plugin&plugin='.LS_PLUGIN_BASE), 'upgrade-plugin_'.LS_PLUGIN_BASE) ?>" class="button button-primary button-hero" title="<?php _e('Install now', 'LayerSlider') ?>">
 						<?php _e('Install now', 'LayerSlider') ?>
@@ -53,6 +111,7 @@ function layerslider_update_notice() {
 				<div class="clear"></div>
 			</div>
 			<?php
+			}
 		}
 	}
 }
@@ -70,7 +129,7 @@ function layerslider_unauthorized_update_notice() {
 				<p>
 					<?php echo sprintf(__('You have version %1$s. The latest version is %2$s.', 'LayerSlider'), LS_PLUGIN_VERSION, $latest); ?><br>
 					<i><?php _e('New releases contain new features, bug fixes and various improvements across the entire plugin.', 'LayerSlider') ?></i>
-					<i><?php _e("Set up auto-updates to upgrade to this new version, or request it from the author of your theme if you've received LayerSlider from them.", "LayerSlider") ?> <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank"><?php _e('Click here', 'LayerSlider') ?></a> <?php _e('to learn more', 'LayerSlider') ?></a>.</i>
+					<i><?php echo sprintf(__('Set up auto-updates to upgrade to this new version, or request it from the author of your theme if you’ve received LayerSlider from them. %sClick here%s to learn more.', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank">', '</a>') ?></i>
 					<a href="<?php echo wp_nonce_url('?page=layerslider&action=hide-update-notice', 'hide-update-notice') ?>" class="button button-extra"><?php _e('Hide this message', 'LayerSlider') ?></a>
 				</p>
 				<div class="clear"></div>
@@ -103,8 +162,7 @@ function layerslider_dependency_notice() {
 		<img src="<?php echo LS_ROOT_URL.'/static/admin/img/ls_80x80.png' ?>" alt="LayerSlider icon">
 		<h1><?php _e('Server configuration issues detected!', 'LayerSlider') ?></h1>
 		<p>
-			<?php _e('phpQuery, an external library in LayerSlider, have unmet dependencies. It requires PHP5 with the following extensions installed: PHP DOM extension, PHP Multibyte String extension. Please contact with your hosting provider to resolve these dependencies, as it will likely prevent LayerSlider from functioning properly.', 'LayerSlider') ?>
-			<strong><?php _e('This issue could result a blank page in slider builder.', 'LayerSlider') ?></strong>
+			<?php echo sprintf(__('phpQuery, an external library in LayerSlider, have unmet dependencies. It requires PHP 5.3.0 or newer with the following extensions installed: PHP DOM extension, PHP Multibyte String extension. Please contact with your hosting provider to resolve these dependencies, as it will likely prevent LayerSlider from functioning properly. %sThis issue could result a blank page in slider builder.%s', 'LayerSlider'), '<strong>', '</strong>' ) ?>
 		</p>
 		<div class="clear"></div>
 	</div>
@@ -118,7 +176,7 @@ function layerslider_premium_support() {
 	<img src="<?php echo LS_ROOT_URL.'/static/admin/img/ls_80x80.png' ?>" alt="LayerSlider icon">
 		<h1><?php _e('Unlock the full potential of LayerSlider', 'LayerSlider') ?></h1>
 		<p>
-			<?php _e('Activate LayerSlider to unlock premium features, slider templates and other exclusive content & services. Receive live plugin updates with 1-Click installation (including optional early access releases) and premium support. If you\'ve received LayerSlider bundled in a theme, please refer to <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation-bundles" target="_blank">this guide</a> in our online documentation.', 'LayerSlider') ?>
+			<?php echo sprintf(__('Activate LayerSlider to unlock premium features, slider templates and other exclusive content & services. Receive live plugin updates with 1-Click installation (including optional early access releases) and premium support. If you’ve received LayerSlider bundled in a theme, please refer to %sthis guide%s in our online documentation.', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation-bundles" target="_blank">', '</a>') ?>
 			<a href="<?php echo wp_nonce_url('?page=layerslider&action=hide-support-notice', 'hide-support-notice') ?>" class="button">Hide this message</a>
 		</p>
 	<div class="clear"></div>
@@ -150,9 +208,9 @@ function layerslider_canceled_activation() { ?>
 	<img src="<?php echo LS_ROOT_URL.'/static/admin/img/ls_80x80.png' ?>" alt="LayerSlider icon">
 	<h1><?php _e('LayerSlider product activation was canceled on this site', 'LayerSlider') ?></h1>
 	<p>
-		<?php _e("You've previously activated your copy of LayerSlider on this site to receive plugin updates, use exclusive features and access to premium templates in the Template Store. However, your activation was canceled and you can no longer enjoy these benefits. There are a number of potential reasons why this could happen, the common ones include: you've remotely deactivated your site using our online tools or asked us to do the same on your behalf; your purchase have been refunded or the transaction disputed; Envato have revoked your purchase code with an undisclosed reason.", 'LayerSlider') ?>
-		<br><br> <?php _e('To review all the possible reasons and find out what to do next, please refer to the <a target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#canceled-activation">Why was my activation canceled?</a> section in our documentation.', 'LayerSlider') ?>
-		<a href="<?php echo wp_nonce_url('?page=layerslider&action=hide-canceled-activation-notice', 'hide-canceled-activation-notice') ?>" class="button button-primary button-hero">OK, I understand</a>
+		<?php _e('You’ve previously activated your copy of LayerSlider on this site to receive plugin updates, use exclusive features and access to premium templates in the Template Store. However, your activation was canceled and you can no longer enjoy these benefits. There are a number of potential reasons why this could happen, the common ones include: you’ve remotely deactivated your site using our online tools or asked us to do the same on your behalf; your purchase have been refunded or the transaction disputed; Envato have revoked your purchase code with an undisclosed reason.', 'LayerSlider') ?>
+		<br><br> <?php echo sprintf(__('To review all the possible reasons and find out what to do next, please refer to the %sWhy was my activation canceled?%s section in our documentation.', 'LayerSlider'), '<a target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#canceled-activation">', '</a>') ?>
+		<a href="<?php echo wp_nonce_url('?page=layerslider&action=hide-canceled-activation-notice', 'hide-canceled-activation-notice') ?>" class="button button-primary button-hero"><?php _e('OK, I understand', 'LayerSlider') ?></a>
 	</p>
 	<div class="clear"></div>
 </div>

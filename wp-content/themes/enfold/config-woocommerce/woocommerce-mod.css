@@ -519,6 +519,7 @@ display:block;
 position: relative;
 }
 
+.products .product h2,
 .products .product h3, .products .product h4, .products .product h5, .products .product h6, h2.woocommerce-loop-product__title {
 padding-top:5px;
 font-size: 1em;
@@ -1092,6 +1093,15 @@ width: 19.2%;
 
 #top .related.products h2, #top .upsells.products h2{
 font-size: 18px;
+}
+
+#top.single-product .related.products h2.woocommerce-loop-product__title{
+
+}
+
+#top.single-product h2.woocommerce-loop-product__title {
+	font-size: 1em;	
+    text-transform: none;
 }
 
 .single .product_column {
@@ -2453,7 +2463,7 @@ p.order-again {
 #top .av-product-class-minimal-overlay .inner_product_header_cell{vertical-align: middle; display:table-cell;}
 
 #top .av-product-class-minimal-overlay a, #top .av-product-class-minimal-overlay img{border-radius: 0; }
-#top .av-product-class-minimal-overlay h3, #top .av-product-class-minimal-overlay span, #top #wrap_all .av-product-class-minimal-overlay ins:before, #top #wrap_all .av-product-class-minimal-overlay .price, #top #wrap_all div .av-product-class-minimal-overlay del{color:#fff;}
+#top .av-product-class-minimal-overlay h2, #top .av-product-class-minimal-overlay h3, #top .av-product-class-minimal-overlay span, #top #wrap_all .av-product-class-minimal-overlay ins:before, #top #wrap_all .av-product-class-minimal-overlay .price, #top #wrap_all div .av-product-class-minimal-overlay del{color:#fff;}
 #top .av-product-class-minimal-overlay h3{font-size: 1.5em;}
 #top .av-product-class-minimal-overlay .onsale{border-radius: 0; top:0; right:0;}
 
@@ -2506,6 +2516,158 @@ margin:0;
     background-size: cover;
 }
 
+/*
+	Modifications for WooCommerce 3.0 gallery - selectable by option
+	================================================================
+*/
+.single-product div.product .woocommerce-product-gallery {
+  margin-bottom:2.617924em;
+  margin-top:0;
+}
+
+.single-product div.product .woocommerce-product-gallery {
+    position:relative;
+}
+
+.single-product .single-product-main-image .avia-wc-30-product-gallery-lightbox{
+	position: absolute;
+    top: 15px;
+    left: 15px;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: #fff;
+    width: 40px;
+    font-size: 20px;
+    border-radius: 333px;
+    z-index: 99;
+    text-align: center;
+    overflow: hidden;
+    border: 0px;
+    color: #b0b0b0;
+}
+
+.single-product .single-product-main-image .avia-wc-30-product-gallery-lightbox:hover{
+	opacity: 0.6;
+	cursor: pointer;
+}
+
+.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger:before {
+	font-family: dashicons;
+	content: "\f179";
+	font-size: 1.5em;
+}
+
+.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger {
+	position:absolute;
+	top:.875em;
+	right:.875em;
+	display:block;
+	height:2em;
+	width:2em;
+	/*border-radius:3px;*/
+	z-index:99;
+	text-align:center;
+	overflow:hidden;
+	background: transparent;
+	border: 0px;
+}
+
+.single-product div.product .woocommerce-product-gallery .woocommerce-product-gallery__trigger img {
+  display: block !important;
+}
+
+.single-product div.product .woocommerce-product-gallery img{
+  margin:0;
+}
+
+.single-product div.product .woocommerce-product-gallery .flex-viewport{
+  margin-bottom:20px;
+}
+
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs{
+  margin:0;
+  padding:0
+}
+
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs:after,.single-product div.product .woocommerce-product-gallery .flex-control-thumbs:before{
+  content:"";
+  display:table;
+}
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li{
+  list-style:none;
+  margin-bottom:0;
+  cursor:pointer;
+}
+
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li img {
+  opacity:.5;
+  -webkit-transition:all,ease,.2s;
+  -moz-transition:all,ease,.2s;
+  transition:all,ease,.2s;
+}
+
+.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li img.flex-active,.single-product div.product .woocommerce-product-gallery .flex-control-thumbs li:hover img{
+  opacity:1;
+}
+
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-2 .flex-control-thumbs li{
+  width:50%;
+  float:left;
+  margin-right:0;
+}
+
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-2 .flex-control-thumbs li:nth-child(2n){
+  margin-right:0;
+}
+
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-3 .flex-control-thumbs li{
+  width:33.333%;
+  float:left;
+  margin-right:0;
+}
+
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-3 .flex-control-thumbs li:nth-child(3n){
+  margin-right:0;
+}
+
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-4 .flex-control-thumbs li{
+  width:25%;
+  float:left;
+  margin-right:0;
+}
+
+.single-product div.product .woocommerce-product-gallery.woocommerce-product-gallery--columns-4 .flex-control-thumbs li:nth-child(4n){
+  margin-right:0;
+}
+
+.single-product div.product .images .woocommerce-main-image{
+  margin-bottom:1.618em;
+  display:block;
+}
+
+.single-product div.product .images .thumbnails a.zoom{
+  display:block;
+  width:22.05%;
+  margin-right:3.8%;
+  float:left;
+  margin-bottom:1em;
+}
+
+.single-product div.product .images .thumbnails a.zoom.last{
+  margin-right:0;
+}
+
+.single-product div.product .woocommerce-product-gallery img{
+	border-style:solid;
+	border-width: 1px;
+}
+
+/*
+	End Modifications for WooCommerce 3.0 gallery
+	=============================================
+*/
 
 /* #Media Queries
 ================================================== */

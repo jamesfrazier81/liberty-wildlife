@@ -176,14 +176,7 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 							"id" 	=> "zoom_control",
 							"std" 	=> "active",
 							"type" 	=> "checkbox"),
-							
-						array(	
-							"name" 	=> __("Display Pan Control?", 'avia_framework' ),
-							"desc" 	=> __("Check to display the Pan control wheel at the top left side of the map", 'avia_framework' )  ,
-							"id" 	=> "pan_control",
-							"std" 	=> "",
-							"type" 	=> "checkbox"),
-							
+						
 /*
 						array(	
 							"name" 	=> __("Map dragging on mobile", 'avia_framework' ),
@@ -256,7 +249,6 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 				'saturation'	=> '',
 				'zoom'			=> '',
 				'zoom_control'  => '',
-				'pan_control'  	=> '',
 				'mobile_drag_control' =>'',
 				'handle'		=> $shortcodename,
 				'content'		=> ShortcodeHelper::shortcode2array($content, 1)

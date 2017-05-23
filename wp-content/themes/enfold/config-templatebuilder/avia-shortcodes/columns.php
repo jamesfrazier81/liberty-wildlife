@@ -753,7 +753,22 @@ array(
 					}
 				}
 				
+				/**
+				 * check if row will break into next column 
+				 */
+				if( ( false === $force_close ) && ! empty( avia_sc_columns::$first_atts['min_height'] ) && ( 'av-equal-height-column' ==  avia_sc_columns::$first_atts['min_height'] ) )
+				{
+					if( ! isset( $meta['siblings']['next']['tag'] ) )
+					{
+						$force_close = true;
+					}
+					else if( ( avia_sc_columns::$calculated_size + avia_sc_columns::$size_array[ $meta['siblings']['next']['tag'] ] ) > 1.0 )
+					{
+						$force_close = true;
+					}
+				}
 				
+
 				if( !empty( avia_sc_columns::$first_atts['min_height']) && (avia_sc_columns::$calculated_size >= 0.95 || $force_close) )
 				{
 					$output .= "</div><!--close column table wrapper. Autoclose: {$force_close} -->";

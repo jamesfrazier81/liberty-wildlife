@@ -77,7 +77,7 @@ if ( !class_exists( 'avia_sc_tab_sub_section' ) )
 				avia_sc_tab_section::$tab_titles[ avia_sc_tab_section::$tab ] = !empty($args['tab_title']) ? ": ".$args['tab_title'] : "";
 				
 
-				$output  = "<div  class='avia_layout_column avia_layout_tab {$active_tab} avia-no-visual-updates ".$name." av_drag' {$dataString} data-width='{$name}' data-av-tab-section-content='".avia_sc_tab_section::$tab."'>";
+				$output  = "<div  class='avia_layout_column avia_layout_tab {$active_tab} avia-no-visual-updates ".$name." av_drag' {$dataString} data-width='{$name}' data-av-tab-section-content='".avia_sc_tab_section::$tab."' >";
 				$output .= "<div class='avia_sorthandle'>";
 
 				//$output .= "<span class='avia-element-title'>".$this->config['name']."<span class='avia-element-title-id'>".$title_id."</span></span>";
@@ -181,7 +181,7 @@ if ( !class_exists( 'avia_sc_tab_sub_section' ) )
 					
 					array(	
 							"name" 	=> __("Vertical align", 'avia_framework' ),
-							"desc" 	=> __("Choose the vertical alignment of your tab content.", 'avia_framework' ),
+							"desc" 	=> __("Choose the vertical alignment of your tab content. (only applies if tabs are set to fixed height)", 'avia_framework' ),
 							"id" 	=> "vertical_align",
 							"type" 	=> "select",
 							"std" 	=> "middle",
@@ -374,6 +374,10 @@ if ( !class_exists( 'avia_sc_tab_sub_section' ) )
 				
 				), $atts, $this->config['shortcode']);
 				
+				if(avia_sc_tab_sub_section::$attr['content_height'] == "av-tab-content-auto"){
+					$atts['vertical_align'] = "top";
+				}
+				
 				avia_sc_tab_section::$tab += 1;
 				avia_sc_tab_section::$tab_titles[ avia_sc_tab_section::$tab ] = !empty($atts['tab_title']) ? $atts['tab_title'] : "";
 				avia_sc_tab_section::$tab_atts[ avia_sc_tab_section::$tab ] = $atts;
@@ -454,7 +458,7 @@ if ( !class_exists( 'avia_sc_tab_sub_section' ) )
 				$active_tab = avia_sc_tab_section::$tab == $tab_nr ? "av-active-tab-content __av_init_open" : "";
 				
 				
-				$output   = '<div data-av-tab-section-content="'.avia_sc_tab_section::$tab.'" class="av-layout-tab av-animation-delay-container '.$active_tab.' '.$meta['el_class'].' '.$extraClass.' '.avia_sc_tab_sub_section::$extraClass.'" '.$outer_style.' '.$data.'>';
+				$output   = '<div data-av-tab-section-content="'.avia_sc_tab_section::$tab.'" class="av-layout-tab av-animation-delay-container '.$active_tab.' '.$meta['el_class'].' '.$extraClass.' '.avia_sc_tab_sub_section::$extraClass.'" '.$outer_style.' '.$data.' data-tab-section-id="'.$atts['tab_title'].'">';
 				$output  .= "<div class='av-layout-tab-inner'>";
 				$output  .= "<div class='container'>";
 				//if the user uses the column shortcode without the layout builder make sure that paragraphs are applied to the text

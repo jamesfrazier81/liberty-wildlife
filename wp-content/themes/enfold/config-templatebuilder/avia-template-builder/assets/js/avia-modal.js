@@ -108,11 +108,11 @@
    				output += '<div class="avia-modal-inner-content '+loading+'">'+content+'</div>';
    				output += attach;
    				output += '<div class="avia-modal-inner-footer">';
-   				if(this.options.button == "save")
+   				if(this.options.button === "save")
    				{
    					output += '<a href="#save" class="avia-modal-save button button-primary button-large">' + avia_modal_L10n.save + '</a>';
    				}
-   				else if(this.options.button == "close")
+   				else if(this.options.button === "close")
    				{
    					output += '<a href="#close" class="avia-attach-close-event button button-primary button-large">' + avia_modal_L10n.close + '</a>';
    				}
@@ -789,7 +789,7 @@
 			{
 				if(_self.namespace == modal.namespace)
 				{
-					window.tinyMCE.execCommand(executeRem, true, el_id); 
+					if(window.tinyMCE) window.tinyMCE.execCommand(executeRem, true, el_id); 
 					$doc.unbind('avia_modal_before_close'  + _self.namespace + "tiny_close"); 
 				}
 			});

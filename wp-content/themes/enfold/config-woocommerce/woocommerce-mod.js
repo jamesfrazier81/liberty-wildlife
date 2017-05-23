@@ -10,6 +10,14 @@ jQuery(document).ready(function($) {
 	}
 	
 	
+	//make woocommerce 3.6 gallery search icon clickable and open lightbox
+	jQuery( 'body.single-product' ).on( 'click', '.single-product-main-image .avia-wc-30-product-gallery-lightbox', function( e ){
+		e.preventDefault();
+		var clicked = $(this), container = clicked.parents('.single-product-main-image');
+		container.find('.flex-active-slide a.lightbox-added').eq(0).trigger('click');
+	});
+	
+	
 	product_add_to_cart_click();
 	
 	

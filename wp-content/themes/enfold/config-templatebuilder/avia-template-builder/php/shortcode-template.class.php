@@ -141,7 +141,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 				$this->elements = $this->avia_custom_class_for_element($this->elements);
 			}
 			
-			if(!empty($this->config['preview']))
+			if( !empty($this->config['preview']) )
 			{
 				$this->elements = $this->avia_custom_preview_bg($this->elements);
 			}
@@ -648,7 +648,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 		/**
 		 * helper function that gets the default value of the content element
 		 *
-		 * @param array $elements
+		 * @param array $content
 		 * @return array $args
 		 */
 		public function get_default_content($content = "")

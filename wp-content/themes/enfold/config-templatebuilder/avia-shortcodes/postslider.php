@@ -422,11 +422,48 @@ if ( !class_exists( 'avia_post_slider' ) )
 		                        $meta_out .= '</span>';
 		                    }
 	                    }
+						
+						/**
+						 * Allow to change default output of categories - by default supressed for setting Default(Business) blog style
+						 * 
+						 * @since 4.0.6
+						 * @param string $blogstyle						'' | 'elegant-blog' | 'elegant-blog modern-blog'
+						 * @param avia_post_slider $this
+						 * @return string								'show_elegant' | 'show_business' | 'use_theme_default' | 'no_show_cats' 
+						 */
+						$show_cats = apply_filters( 'avf_postslider_show_catergories', 'use_theme_default', $blogstyle, $this );
 	                    
-	                    if( strpos($blogstyle, 'modern-blog') === false && $blogstyle != "") $output .= $meta_out;
+						switch( $show_cats )
+						{
+							case 'no_show_cats':
+								$new_blogstyle = '';
+								break;
+							case 'show_elegant':
+								$new_blogstyle = 'elegant-blog';
+								break;
+							case 'show_business':
+								$new_blogstyle = 'elegant-blog modern-blog';
+								break;
+							case 'use_theme_default':
+							default:
+								$new_blogstyle = $blogstyle;
+								break;
+						}
+						
+							//	elegant style
+	                    if( ( strpos( $new_blogstyle, 'modern-blog' ) === false ) && ( $new_blogstyle != "" ) )
+						{
+							$output .= $meta_out;
+						}
+						
                     	$output .=  "<h3 class='slide-entry-title entry-title' $markup><a href='{$link}' title='".esc_attr(strip_tags($title))."'>".$title."</a></h3>";
                     	
-                    	if( strpos($blogstyle, 'modern-blog') !== false && $blogstyle != "") $output .= $meta_out;
+							//	modern business style
+                    	if( ( strpos( $new_blogstyle, 'modern-blog' ) !== false ) && ( $new_blogstyle != "" ) ) 
+						{
+							$output .= $meta_out;
+						}
+						
                     	$output .= '<span class="av-vertical-delimiter"></span>';
                     }
                     

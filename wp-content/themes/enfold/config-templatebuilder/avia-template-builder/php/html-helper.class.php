@@ -1051,16 +1051,16 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				$table_name = $wpdb->prefix . "posts";
 	 			$limit 		= apply_filters( 'avf_dropdown_post_number', 4000 );
 	    		
-	    		if( isset( AviaHtmlHelper::$cache['entry_'+$limit] ) && isset( AviaHtmlHelper::$cache['entry_'+$limit][$element['subtype']] ) )
+	    		if( isset( AviaHtmlHelper::$cache['entry_' . $limit] ) && isset( AviaHtmlHelper::$cache['entry_' . $limit][$element['subtype']] ) )
 	    		{
-	    			$entries = AviaHtmlHelper::$cache['entry_'+$limit][$element['subtype']];
+	    			$entries = AviaHtmlHelper::$cache['entry_' . $limit][$element['subtype']];
 	    		}
 	    		else
 	    		{	
 					$prepare_sql = "SELECT distinct ID, post_title FROM {$table_name} WHERE post_status = 'publish' AND post_type = '".$element['subtype']."' ORDER BY post_title ASC LIMIT {$limit}";
 					$prepare_sql = apply_filters('avf_dropdown_post_query', $prepare_sql, $table_name, $limit, $element);
 					$entries 	= $wpdb->get_results($prepare_sql);
-					AviaHtmlHelper::$cache['entry_'+$limit][$element['subtype']] = $entries;
+					AviaHtmlHelper::$cache['entry_' . $limit][$element['subtype']] = $entries;
 	    		}	
 	    		//$entries 	= $wpdb->get_results( "SELECT ID, post_title FROM {$table_name} WHERE post_status = 'publish' AND post_type = '".$element['subtype']."' ORDER BY post_title ASC LIMIT {$limit}" );
 				//$entries = get_posts(array('numberposts' => apply_filters( 'avf_dropdown_post_number', 200 ), 'post_type' => $element['subtype'], 'post_status'=> 'publish', 'orderby'=> 'post_date', 'order'=> 'ASC'));

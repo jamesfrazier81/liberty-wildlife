@@ -36,7 +36,7 @@
 				<section data-tr-type="custom_2d_transitions">
 					<h4><?php _e('Custom 2D transitions', 'LayerSlider') ?></h4>
 					<div>
-						<p><?php _e("You haven't created any custom 2D transitions yet.", 'LayerSlider') ?></p>
+						<p><?php _e('You haven’t created any custom 2D transitions yet.', 'LayerSlider') ?></p>
 					</div>
 				</section>
 
@@ -44,7 +44,7 @@
 				<section data-tr-type="custom_3d_transitions">
 					<h4><?php _e('Custom 3D transitions', 'LayerSlider') ?></h4>
 					<div>
-						<p><?php _e("You haven't created any custom 3D transitions yet.", 'LayerSlider') ?></p>
+						<p><?php _e('You haven’t created any custom 3D transitions yet.', 'LayerSlider') ?></p>
 					</div>
 				</section>
 
@@ -53,7 +53,7 @@
 
 				<p class="ls-description">
 					<small>
-						<?php _e('Special effects are like regular slide transitions and they work in the same way. You can set them on each slide individually. Mixing them with other transitions on other slides is perfectly fine. You can also apply them on all of your slides at once by pressing the "Apply to others" button above. In case of 3D special effects, selecting additional 2D transitions can ensure backward compatibility for older browsers.', 'LayerSlider') ?>
+						<?php _e('Special effects are like regular slide transitions and they work in the same way. You can set them on each slide individually. Mixing them with other transitions on other slides is perfectly fine. You can also apply them on all of your slides at once by pressing the “Apply to others” button above. In case of 3D special effects, selecting additional 2D transitions can ensure backward compatibility for older browsers.', 'LayerSlider') ?>
 					</small>
 				</p>
 

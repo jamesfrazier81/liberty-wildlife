@@ -5,6 +5,7 @@
  * We'll eventually move these to a better place, and figure out ones not being used anymore.
  *
  * @package All-in-One-SEO-Pack
+ * @version 2.3.13
  */
 
 if ( ! function_exists( 'aioseop_load_modules' ) ) {
@@ -183,7 +184,7 @@ if ( ! function_exists( 'aioseop_mrt_pcolumns' ) ) {
 if ( ! function_exists( 'aioseop_admin_head' ) ) {
 
 	function aioseop_admin_head() {
-		wp_enqueue_script( 'aioseop_welcome_js', AIOSEOP_PLUGIN_URL . '/js/quickedit_functions.js', array( 'jquery' ), AIOSEOP_VERSION);
+		wp_enqueue_script( 'aioseop_welcome_js', AIOSEOP_PLUGIN_URL . 'js/quickedit_functions.js', array( 'jquery' ), AIOSEOP_VERSION);
 		?>
 		<style>
 			.aioseop_edit_button {
@@ -955,4 +956,20 @@ function aioseop_update_yst_detected_notice() {
 function aioseop_woo_upgrade_notice_dismissed() {
 
 	update_user_meta( get_current_user_id(), 'aioseop_woo_upgrade_notice_dismissed', true );
+}
+
+/**
+ * Returns home_url() value compatible for any use.
+ * Thought for compatibility purposes.
+ *
+ * @since 2.3.12.3
+ *
+ * @param string $path Relative path to home_url().
+ *
+ * @return string url.
+ */
+function aioseop_home_url( $path = '/' ) {
+
+	$url = apply_filters( 'aioseop_home_url', $path );
+	return $path === $url ? home_url( $path ) : $url;
 }

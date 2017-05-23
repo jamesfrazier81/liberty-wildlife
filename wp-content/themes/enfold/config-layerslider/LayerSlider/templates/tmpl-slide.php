@@ -25,14 +25,14 @@
 						<div class="float">
 							<input type="hidden" name="backgroundId">
 							<input type="hidden" name="background">
-							<div class="ls-image ls-upload ls-bulk-upload ls-slide-image not-set" data-help="<?php echo $lsDefaults['slides']['image']['tooltip'] ?>">
+							<div class="ls-image ls-upload ls-bulk-upload ls-slide-image not-set" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>" data-help="<?php echo $lsDefaults['slides']['image']['tooltip'] ?>">
 								<div><img src="<?php echo LS_ROOT_URL.'/static/admin/img/blank.gif' ?>" alt=""></div>
 								<a href="#" class="aviary"></a>
 								<a href="#" class="dashicons dashicons-dismiss"></a>
 							</div>
 							<span class="indent">
 								<?php _e('or', 'LayerSlider') ?> <a href="#" class="ls-url-prompt"><?php _e('enter URL', 'LayerSlider') ?></a>
-								<?php _e('|', 'LayerSlider') ?> <a href="#" class="ls-post-image"><?php _e('use post image', 'LayerSlider') ?></a>
+								| <a href="#" class="ls-post-image"><?php _e('use post image', 'LayerSlider') ?></a>
 							</span>
 						</div>
 						<div class="float">
@@ -56,7 +56,7 @@
 					<div class="inner">
 						<input type="hidden" name="thumbnailId">
 						<input type="hidden" name="thumbnail">
-						<div class="ls-image ls-upload ls-slide-thumbnail not-set" data-help="<?php echo $lsDefaults['slides']['thumbnail']['tooltip'] ?>">
+						<div class="ls-image ls-upload ls-slide-thumbnail not-set" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>" data-help="<?php echo $lsDefaults['slides']['thumbnail']['tooltip'] ?>">
 							<div><img src="<?php echo LS_ROOT_URL.'/static/admin/img/blank.gif' ?>" alt=""></div>
 							<a href="#" class="aviary"></a>
 							<a href="#" class="dashicons dashicons-dismiss"></a>
@@ -82,7 +82,7 @@
 				<td class="slide-transition">
 					<h3 class="subheader"><?php _e('Slide Transition', 'LayerSlider') ?></h3>
 					<div class="inner">
-						<button type="button" class="button ls-select-transitions new" data-help="<?php _e('You can select your desired slide transitions by clicking on this button.', 'LayerSlider') ?>">Select transitions</button> <br>
+						<button type="button" class="button ls-select-transitions new" data-help="<?php _e('You can select your desired slide transitions by clicking on this button.', 'LayerSlider') ?>"><?php _e('Select transitions', 'LayerSlider') ?></button> <br>
 						<div class="row-helper">
 							<?php lsGetInput($lsDefaults['slides']['transitionDuration'], null, array('class' => 'slideprop')) ?>
 							<span>ms</span>
@@ -117,6 +117,16 @@
 							<?php echo $lsDefaults['slides']['deeplink']['name'] ?>
 							<?php lsGetInput($lsDefaults['slides']['deeplink'], null, array('class' => 'slideprop')) ?>
 						</div>
+
+						<div class="row-helper ls-global-hover">
+							<div class="ls-premium">
+								<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+							</div>
+							<a href="https://layerslider.kreaturamedia.com/sliders/global-hover-example/" target="_blank">
+								<?php echo $lsDefaults['slides']['globalHover']['name'] ?>
+							</a>
+							<?php lsGetCheckbox($lsDefaults['slides']['globalHover'], null, array('class' => 'slideprop')) ?>
+						</div>
 					</div>
 				</td>
 				<td class="slide-actions">
@@ -126,7 +136,7 @@
 							<span>
 								<?php _e('Hide this slide', 'LayerSlider') ?>
 							</span>
-							<input type="checkbox" name="skip" class="checkbox large slideprop" data-help="<?php _e("If you don't want to use this slide in your front-page, but you want to keep it, you can hide it with this switch.", "LayerSlider") ?>">
+							<input type="checkbox" name="skip" class="checkbox large slideprop" data-help="<?php _e('If you don’t want to use this slide in your front-page, but you want to keep it, you can hide it with this switch.', 'LayerSlider') ?>">
 						</div>
 						<div class="row-helper">
 							<span>
@@ -307,7 +317,7 @@
  -->
  					<div class="ls-editor-preview">
 						<?php _e('Preview', 'LayerSlider') ?>
-						<button type="button" class="button ls-preview-button"><?php _e('Slide', 'LayerSlider') ?></button><!--
+						<button type="button" class="button ls-preview-button"><?php _ex('Slide', 'noun', 'LayerSlider') ?></button><!--
 					 --><button type="button" class="button ls-layer-preview-button"><?php _e('Layer', 'LayerSlider') ?></button>
 					</div>
 
@@ -360,7 +370,7 @@
 					<div id="ls-layers-settings-popout" data-km-ui-resize="600,950,1300">
 
 						<div id="ls-layers-settings-popout-handler"
-							data-help="You can grab me here and drag where you need."
+							data-help="<?php _e('You can grab me here and drag where you need.', 'LayerSlider') ?>"
 							data-km-ui-popover-once="true"
 							data-km-ui-popover-autoclose="3"
 							data-km-ui-popover-distance="20"

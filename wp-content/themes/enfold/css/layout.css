@@ -2463,6 +2463,7 @@ padding:0 8px;
 .html_elegant-blog .avia-content-slider .read-more-link{
 	position: relative;
 	top:18px;	
+	padding-bottom: 10px;
 }
 
 .html_elegant-blog .avia-content-slider .av-vertical-delimiter{
@@ -2938,6 +2939,15 @@ padding-bottom:30px;
     line-height: 1.4em;
     font-size: 13px;
     margin-bottom: 20px;}
+
+
+/*direct mailchimp form embeds: show the button which has a clear attribute*/
+
+#mc_embed_signup .clear{
+	visibility: visible;
+	overflow: visible;
+	height:auto;
+}
 
 
 /*text*/

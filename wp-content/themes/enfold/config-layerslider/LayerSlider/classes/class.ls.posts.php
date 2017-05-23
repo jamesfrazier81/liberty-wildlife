@@ -62,7 +62,7 @@ class LS_Posts {
 			$ret[$key]['thumbnail'] = !empty($ret[$key]['thumbnail']) ? $ret[$key]['thumbnail'] : LS_ROOT_URL . '/static/admin/img/blank.gif';
 			$ret[$key]['image'] = '<img src="'.$ret[$key]['thumbnail'].'" alt="">';
 			$ret[$key]['image-url'] = $ret[$key]['thumbnail'];
-			$ret[$key]['title'] = htmlspecialchars($this->getTitle(), ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE);
+			$ret[$key]['title'] = htmlspecialchars($this->getTitle());
 			$ret[$key]['content'] = $this->getContent();
 			$ret[$key]['excerpt'] = $this->getExcerpt();
 			$ret[$key]['author'] = get_userdata($val->post_author)->user_nicename;

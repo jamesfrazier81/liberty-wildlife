@@ -79,11 +79,13 @@ html, body {
   .ls-overlay.dim {
     opacity: 0.2; }
 
-#ls-list-page button, #ls-list-page input,
+#ls-list-page button, #ls-list-page input, #ls-list-page a,
 #ls-slider-form button,
 #ls-slider-form input,
+#ls-slider-form a,
 .ls-box button,
-.ls-box input {
+.ls-box input,
+.ls-box a {
   box-shadow: none !important; }
 
 input::-webkit-input-placeholder,
@@ -389,9 +391,10 @@ select:-ms-input-placeholder {
   font-size: 0px !important; }
 
 .km-tabs a {
-  display: inline-block !important;
+  display: block !important;
+  float: left;
   position: relative;
-  width: 95px;
+  width: 120px;
   height: 30px;
   padding: 0px 10px;
   border: 1px solid #dfdfdf;
@@ -403,7 +406,10 @@ select:-ms-input-placeholder {
   margin: 3px 3px 0px 0px;
   line-height: 30px;
   font-size: 13px;
-  text-align: center; }
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; }
 
 .km-tabs a.active {
   color: #333;
@@ -601,6 +607,92 @@ select:-ms-input-placeholder {
 .km-combo-box li:hover {
   background: #efefef; }
 
+.ls-pointer {
+  width: 330px;
+  min-height: 100px;
+  position: absolute !important;
+  margin: 40px 0 0 0;
+  z-index: 9999992;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0px 0px 10px #666;
+  opacity: 0; }
+  .ls-pointer:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    z-index: -1;
+    width: 20px;
+    height: 20px;
+    margin-left: -10px;
+    border: 1px solid #dfdfdf;
+    background: #f7f7f7;
+    box-shadow: 0px 0px 5px black;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg); }
+  .ls-pointer .header {
+    height: 28px;
+    margin: 0;
+    border-top: 0 !important;
+    border-bottom: 1px solid #dfdfdf;
+    text-align: center !important;
+    color: #333;
+    text-shadow: 0px 1px 0px #fff;
+    text-transform: none !important; }
+  .ls-pointer ul.sep {
+    border-top: 1px solid #dedede;
+    padding-top: 5px !important; }
+  .ls-pointer div.inner {
+    border-top: 1px solid #dedede;
+    text-align: justify;
+    font-size: 12px;
+    color: #777; }
+  .ls-pointer ul.inner {
+    max-height: 250px;
+    overflow: auto;
+    padding: 0 !important;
+    margin: 5px !important; }
+    .ls-pointer ul.inner li {
+      margin: 0;
+      padding: 5px;
+      border-radius: 3px;
+      font: normal normal normal 14px/20px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
+      cursor: pointer;
+      text-align: left; }
+      .ls-pointer ul.inner li:hover {
+        background: #2ea2cc;
+        color: white; }
+        .ls-pointer ul.inner li:hover a {
+          color: white; }
+      .ls-pointer ul.inner li.unselectable {
+        background: none;
+        color: black;
+        cursor: normal; }
+      .ls-pointer ul.inner li div.preview {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        position: relative;
+        margin-right: 10px;
+        overflow: hidden;
+        border-radius: 2px;
+        float: left; }
+        .ls-pointer ul.inner li div.preview img {
+          height: 20px;
+          position: absolute;
+          top: 0;
+          left: 50%;
+          margin-left: -10px; }
+      .ls-pointer ul.inner li div.title {
+        display: inline-block; }
+      .ls-pointer ul.inner li a {
+        color: #444;
+        transition: none !important; }
+
 .ls-wp-hack {
   margin: 0 !important; }
   .ls-wp-hack h2 {
@@ -684,6 +776,7 @@ select:-ms-input-placeholder {
     vertical-align: middle; }
   #ls-slider-filters select {
     height: 26px;
+    max-width: 150px;
     font-size: 13px !important;
     margin: 0 1px; }
     #ls-slider-filters select:last-child {
@@ -1105,10 +1198,10 @@ select:-ms-input-placeholder {
       list-style-type: none; }
       .ls-sliders-grid .slider-item-wrapper .slider-actions-sheet li {
         position: relative;
-        top: 17px;
+        top: 8px;
         height: 24px;
         margin: -1px 0 0 0;
-        padding: 5px 0 0 0;
+        padding: 3px 0 0 0;
         border-top: 1px solid rgba(255, 255, 255, 0.05);
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         line-height: 24px; }
@@ -1131,7 +1224,6 @@ select:-ms-input-placeholder {
 
 div.ls-bulk-actions {
   float: left;
-  width: 260px;
   height: 30px;
   margin-top: 3px; }
   div.ls-bulk-actions button {
@@ -1186,7 +1278,7 @@ div.ls-bulk-actions {
   position: relative;
   overflow: visible !important; }
   #ls-importing-modal-window .layerslider-logo:after {
-    content: 'Importing, please wait...';
+    content: attr(data-l10n-importing);
     position: absolute;
     width: 200%;
     height: 50px;
@@ -1352,7 +1444,8 @@ div.ls-bulk-actions {
 
 #ls-permission-form .inner {
   padding: 20px;
-  text-align: center; }
+  text-align: center;
+  font-size: 13px; }
 
 #ls-permission-form i {
   margin: 0 20px; }
@@ -1528,11 +1621,22 @@ div.ls-bulk-actions {
   bottom: 10px;
   margin: 0 !important; }
 
+.ls-product-tips {
+  text-align: justify; }
+  .ls-product-tips .button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    height: 30px; }
+
 .ls-product-support a.button {
   position: absolute;
   left: 10px;
-  bottom: 11px;
+  bottom: 10px;
   box-shadow: none; }
+
+.ls-product-support a.button-normal {
+  height: 30px; }
 
 .ls-product-support a.button-small {
   left: auto;
@@ -1698,6 +1802,7 @@ ul.ls-font-list {
   font-size: 16px; }
 
 .ls-system-status .inner p {
+  max-width: 900px;
   margin: 20px auto 30px auto;
   text-align: center; }
 
@@ -1796,9 +1901,6 @@ ul.ls-font-list {
     border-color: #ba281e !important;
     text-shadow: none !important; }
 
-.ls-debug-account-button {
-  margin-left: 15px !important; }
-
 #ls-erase-modal-window i.ls-notice {
   position: absolute;
   bottom: 16px;
@@ -1861,7 +1963,7 @@ ul.ls-font-list {
       position: absolute;
       right: 100px;
       top: 10px;
-      width: 180px;
+      width: 250px;
       text-align: center;
       font-weight: normal;
       font-size: 12px;
@@ -2358,7 +2460,6 @@ ul.ls-font-list {
     position: relative;
     margin: 0;
     border-bottom: 1px solid #e3e3e3;
-    text-overflow: clip;
     line-height: 40px;
     cursor: pointer;
     font-size: 13px;
@@ -2369,6 +2470,14 @@ ul.ls-font-list {
       padding: 0 5px;
       transition: none;
       -webkit-transition: none; }
+    .ls-settings-sidebar li strong {
+      display: inline-block;
+      max-width: 180px;
+      font-weight: normal;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 12px; }
     .ls-settings-sidebar li.active {
       color: white;
       text-shadow: 1px 1px 1px #666;
@@ -2403,7 +2512,7 @@ ul.ls-font-list {
   margin: 15px 5px 0 -100px; }
 
 .ls-datepicker-input {
-  width: 250px;
+  width: 250px !important;
   height: 50px;
   margin: 0px 0 25px 0;
   font-size: 20px;
@@ -2417,6 +2526,8 @@ ul.ls-font-list {
   margin: 10px auto 20px auto; }
   .ls-slider-settings .datepicker-inline .ls-datepicker {
     margin: 0 auto; }
+  .ls-slider-settings .datepicker-inline span {
+    font-weight: normal; }
 
 .ls-schedule-desc {
   display: inline-block; }
@@ -2621,6 +2732,11 @@ ul.ls-font-list {
   .ls-slide-options td.additional-settings .inner .row-helper input {
     width: 140px; }
 
+.ls-slide-options .ls-global-hover .ls-premium {
+  display: inline-block; }
+  .ls-slide-options .ls-global-hover .ls-premium a {
+    position: static; }
+
 .ls-slide-options td.post-options,
 .ls-slide-options td.additional-settings,
 .ls-slide-options td.slide-parallax {
@@ -2686,7 +2802,7 @@ div.ls-image {
   div.ls-image a {
     display: none; }
   div.ls-image.not-set:after, div.ls-image.has-image:hover:after {
-    content: 'Click to set';
+    content: attr(data-l10n-set);
     position: absolute;
     top: 0;
     bottom: 0;
@@ -2700,7 +2816,7 @@ div.ls-image {
     color: #555;
     text-shadow: 0 0 1px white; }
   div.ls-image.has-image:hover:after {
-    content: 'Click to change' !important; }
+    content: attr(data-l10n-change) !important; }
   div.ls-image.hover div,
   div.ls-image:hover div {
     background-color: #fafafa;
@@ -2753,10 +2869,12 @@ div.ls-image {
     background: white;
     text-align: center; }
   .ls-configure-posts-modal select {
-    width: 130px;
+    width: 170px;
     color: #222; }
     .ls-configure-posts-modal select.offset {
-      width: 96px; }
+      width: auto;
+      max-width: 180px;
+      margin: 0 !important; }
     .ls-configure-posts-modal select.multiple {
       height: 200px !important;
       border-radius: 3px;
@@ -2777,13 +2895,12 @@ div.ls-image {
     border: 0; }
 
 .ls-post-filters {
-  width: 560px;
+  width: 720px;
   margin: 0 auto; }
   .ls-post-filters select {
     float: left;
     margin: 0 10px 10px 0; }
     .ls-post-filters select.ls-post-taxonomy {
-      width: 130px;
       height: 26px; }
     .ls-post-filters select:last-child {
       height: 164px !important; }
@@ -2792,7 +2909,9 @@ div.ls-image {
   margin: 5px 0; }
 
 .ls-post-adv-settings select {
-  width: 130px; }
+  width: 160px; }
+  .ls-post-adv-settings select:first-child {
+    margin-right: 10px; }
 
 .ls-post-adv-settings input {
   width: 50px; }
@@ -3196,7 +3315,7 @@ select.sublayerprop.connect-hover {
     border-radius: 26px !important; }
 
 #slider-editor-toolbar .ls-editor-preview button {
-  width: 55px;
+  min-width: 55px;
   background: #e3e3e3;
   border-radius: 0;
   color: #222;
@@ -3843,7 +3962,8 @@ button.ls-configure-posts,
 button.ls-layer-duplicate {
   width: auto !important;
   padding: 0  10px 1px 10px !important;
-  margin-top: 15px !important; }
+  margin-top: 15px !important;
+  white-space: normal !important; }
   button.ls-configure-posts span,
   button.ls-layer-duplicate span {
     margin-right: 6px;

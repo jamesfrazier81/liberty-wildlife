@@ -110,7 +110,7 @@
 							<li>
 								<span class="dashicons dashicons-menu"></span>
 								<input type="text" value="<?php echo htmlspecialchars(html_entity_decode($tr['name'])) ?>" placeholder="<?php _e('Type transition name', 'LayerSlider') ?>">
-								<a href="#" title="Remove transition" class="dashicons dashicons-trash remove"></a>
+								<a href="#" title="<?php _e('Remove transition', 'LayerSlider') ?>" class="dashicons dashicons-trash remove"></a>
 							</li>
 							<?php endforeach ?>
 							<?php endif ?>
@@ -135,7 +135,7 @@
 							<li>
 								<span class="dashicons dashicons-menu"></span>
 								<input type="text" value="<?php echo htmlspecialchars(html_entity_decode($tr['name'])) ?>" placeholder="<?php _e('Type transition name', 'LayerSlider') ?>">
-								<a href="#" title="Remove transition" class="dashicons dashicons-trash remove"></a>
+								<a href="#" title="<?php _e('Remove transition', 'LayerSlider') ?>" class="dashicons dashicons-trash remove"></a>
 							</li>
 							<?php endforeach ?>
 							<?php endif ?>
@@ -549,14 +549,14 @@
 													<td class="right"><?php _e('Type', 'LayerSlider') ?></td>
 													<td>
 														<select name="type" data-help="<?php _e('The type of the animation, either slide, fade or both (mixed).', 'LayerSlider') ?>">
-															<option value="slide"<?php echo ($tr['transition']['type'] == 'slide') ? ' selected="selected"' : '' ?>><?php _e('Slide', 'LayerSlider') ?></option>
+															<option value="slide"<?php echo ($tr['transition']['type'] == 'slide') ? ' selected="selected"' : '' ?>><?php _ex('Slide', 'verb', 'LayerSlider') ?></option>
 															<option value="fade"<?php echo ($tr['transition']['type'] == 'fade') ? ' selected="selected"' : '' ?>><?php _e('Fade', 'LayerSlider') ?></option>
 															<option value="mixed"<?php echo ($tr['transition']['type'] == 'mixed') ? ' selected="selected"' : '' ?>><?php _e('Mixed', 'LayerSlider') ?></option>
 														</select>
 													</td>
 													<td class="right"><?php _e('Direction', 'LayerSlider') ?></td>
 													<td>
-														<select name="direction" data-help="<?php _e('The direction of the slide or mixed animation if you\'ve chosen this type in the previous settings.', 'LayerSlider') ?>">
+														<select name="direction" data-help="<?php _e('The direction of the slide or mixed animation if you’ve chosen this type in the previous settings.', 'LayerSlider') ?>">
 															<option value="top"<?php echo ($tr['transition']['direction'] == 'top') ? ' selected="selected"' : '' ?>><?php _e('Top', 'LayerSlider') ?></option>
 															<option value="right"<?php echo ($tr['transition']['direction'] == 'right') ? ' selected="selected"' : '' ?>><?php _e('Right', 'LayerSlider') ?></option>
 															<option value="bottom"<?php echo ($tr['transition']['direction'] == 'bottom') ? ' selected="selected"' : '' ?>><?php _e('Bottom', 'LayerSlider') ?></option>
@@ -571,15 +571,15 @@
 												</tr>
 												<tr>
 													<td class="right"><?php _e('RotateX', 'LayerSlider') ?></td>
-													<td><input type="text" name="rotateX" value="<?php echo !empty($tr['transition']['rotateX']) ? $tr['transition']['rotateX'] : '0' ?>" data-help="The initial rotation of the individual tiles which will be animated to the default (0deg) value around the X axis. You can use negatuve values."></td>
+													<td><input type="text" name="rotateX" value="<?php echo !empty($tr['transition']['rotateX']) ? $tr['transition']['rotateX'] : '0' ?>" data-help="<?php _e('The initial rotation of the individual tiles which will be animated to the default (0deg) value around the X axis. You can use negatuve values.', 'LayerSlider') ?>"></td>
 													<td class="right"><?php _e('RotateY', 'LayerSlider') ?></td>
-													<td><input type="text" name="rotateY" value="<?php echo !empty($tr['transition']['rotateY']) ? $tr['transition']['rotateY'] : '0' ?>" data-help="The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Y axis. You can use negatuve values."></td>
+													<td><input type="text" name="rotateY" value="<?php echo !empty($tr['transition']['rotateY']) ? $tr['transition']['rotateY'] : '0' ?>" data-help="<?php _e('The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Y axis. You can use negatuve values.', 'LayerSlider') ?>"></td>
 												</tr>
 												<tr>
 													<td class="right"><?php _e('RotateZ', 'LayerSlider') ?></td>
-													<td><input type="text" name="rotate" value="<?php echo !empty($tr['transition']['rotate']) ? $tr['transition']['rotate'] : '0' ?>" data-help="The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Z axis. You can use negatuve values."></td>
+													<td><input type="text" name="rotate" value="<?php echo !empty($tr['transition']['rotate']) ? $tr['transition']['rotate'] : '0' ?>" data-help="<?php _e('The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Z axis. You can use negatuve values.', 'LayerSlider') ?>"></td>
 													<td class="right"><?php _e('Scale', 'LayerSlider') ?></td>
-													<td><input type="text" name="scale" value="<?php echo !empty($tr['transition']['scale']) ? $tr['transition']['scale'] : '1.0' ?>" data-help="The initial scale of the individual tiles which will be animated to the default (1.0) value."></td>
+													<td><input type="text" name="scale" value="<?php echo !empty($tr['transition']['scale']) ? $tr['transition']['scale'] : '1.0' ?>" data-help="<?php _e('The initial scale of the individual tiles which will be animated to the default (1.0) value.', 'LayerSlider') ?>"></td>
 												</tr>
 											</tbody>
 										</table>
@@ -599,7 +599,7 @@
 			<?php if(is_writable($upload_dir['basedir'])) : ?>
 			<button class="button button-primary button-hero"><?php _e('Save changes', 'LayerSlider') ?></button>
 			<?php else : ?>
-			<?php _e('Before you can save your changes, you need to make your "/wp-content/uploads" folder writable. See the <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Codex</a>', 'LayerSlider') ?>
+			<?php echo sprintf(__('Before you can save your changes, you need to make your “/wp-content/uploads” folder writable. See the %sCodex%s', 'LayerSlider'), '<a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">', '</a>') ?>
 			<?php endif; ?>
 		</div>
 	</form>

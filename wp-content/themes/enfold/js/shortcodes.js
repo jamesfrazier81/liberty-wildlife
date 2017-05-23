@@ -521,7 +521,6 @@
 				mapTypeControl: false,
 				backgroundColor:'transparent',
 				streetViewControl: false,
-				panControl: this.$data.pan_control,
 				zoomControl: this.$data.zoom_control,
 				//draggable: mobile_drag,
 				gestureHandling: 'cooperative',
@@ -531,7 +530,6 @@
 				center: new google.maps.LatLng(this.$data.marker[0].lat, this.$data.marker[0].long),
 				styles:[{featureType: "poi", elementType: "labels", stylers: [ { visibility: "off" }] }]
 			};
-			
 
 			this.map = new google.maps.Map(this.container, this.mapVars);
 		
@@ -1269,14 +1267,14 @@ $.fn.avia_masonry = function(options)
 			filters['layoutMode'] = 'packery';
 			filters['packery'] = {gutter:0};
 			filters['percentPosition'] = true;
-			filters['itemSelector'] = "a.isotope-item";
+			filters['itemSelector'] = "a.isotope-item, div.isotope-item";
 			
 			container.isotope(filters, function()
 			{
 				the_win.trigger('av-height-change');
 			});
 			
-			if(typeof callback == 'function')
+			if(typeof callback === 'function')
 			{
 				setTimeout(callback, 0);
 			}
@@ -2835,6 +2833,10 @@ $.fn.avia_sc_tab_section= function()
 			tab_nav			= container.find('.av_tab_navigation'), 
 			content_wrap	= container.find('.av-tab-section-inner-container'),
 			single_tabs		= container.find('.av-animation-delay-container'), //for elements inside the tab that receive waypoint animation
+			inner_content	= container.find('.av-layout-tab-inner'),
+			sliding_active  = container.is('.av-tab-slide-transition'),
+			flexible    	= container.is('.av-tab-content-auto'),
+			current_content = container.find('.__av_init_open'),
 			min_width		= 0,
 			change_tab 		= function(e)
 			{
@@ -2842,17 +2844,21 @@ $.fn.avia_sc_tab_section= function()
 				
 				var current_tab 	= $(e.currentTarget),
 					current_arrow	= current_tab.find('.av-tab-arrow-container span'),
-					tab_nr			= current_tab.data('av-tab-section-title'),
-					current_content = container.find('[data-av-tab-section-content="'+tab_nr+'"]'),
-					new_bg			= current_content.data('av-tab-bg-color'),
-					new_font		= current_content.data('av-tab-color');
+					tab_nr			= current_tab.data('av-tab-section-title');
+					
+					current_content = container.find('[data-av-tab-section-content="'+tab_nr+'"]');
+				
+				var new_bg			= current_content.data('av-tab-bg-color'),
+					new_font		= current_content.data('av-tab-color'),
+					prev_container 	= container.find('.av-active-tab-content').not('[data-av-tab-section-content="'+tab_nr+'"]');
 
 				tabs.attr('style','').removeClass('av-active-tab-title');
 				current_tab.addClass('av-active-tab-title');
+				current_content.addClass("av-active-tab-content");
 				
-				if(new_bg != "") current_arrow.css('background-color', new_bg);
-				if(new_font != "") current_tab.css('color', new_font);
-				
+				if(new_bg !== "") current_arrow.css('background-color', new_bg);
+				if(new_font !== "") current_tab.css('color', new_font);
+					
 				var new_pos = ((parseInt(tab_nr,10) - 1) * -100 );
 				
 				if(cssActive)
@@ -2869,12 +2875,15 @@ $.fn.avia_sc_tab_section= function()
 				}
 				
 				set_tab_titlte_pos();
+				set_slide_height();
 				
 				setTimeout(function()
 				{
 					current_content.trigger('avia_start_animation_if_current_slide_is_active');
 					single_tabs.not(current_content).trigger('avia_remove_animation');
-				}, 600);				
+					
+				}, 600);	
+				
 			},
 			set_min_width = function()
 			{
@@ -2886,6 +2895,22 @@ $.fn.avia_sc_tab_section= function()
 				
 				tab_wrap.css('min-width',min_width);
 			},
+			
+			set_slide_height = function()
+			{				
+				if(current_content.length && flexible)
+				{
+					var old_height = inner_content.height();
+					inner_content.height('auto');
+					
+					var height = current_content.find('.av-layout-tab-inner').height();
+					inner_content.height(old_height);
+					inner_content.height(height);
+					
+					setTimeout(function() { win.trigger('av-height-change'); }, 600);
+				}
+			},
+			
 			set_tab_titlte_pos = function()
 			{
 				//scroll the tabs if there is not enough room to display them all
@@ -2913,16 +2938,40 @@ $.fn.avia_sc_tab_section= function()
 					{
 						current_tab.next('.av-section-tab-title').trigger('click');
 					}
+			},
+			
+			get_init_open = function()
+			{
+				if(!hash && window.location.hash) hash = window.location.hash;
+	            		if(!hash) return;
+	            		
+				var open = tabs.filter('[data-tab-section-id="'+hash+'"]');
+	
+				if(open.length)
+				{
+					if(!open.is('.active_tab')) open.trigger('click');
+					window.scrollTo(0, container.offset().top - 70);
+				}
+			};
+				
+		$.avia_utilities.preload({
+			
+			container: current_content , 
+			single_callback:  function(){ 
+			
+				tabs.on('click', change_tab);
+				tab_nav.on('click', switch_to_next_prev);
+				win.on('debouncedresize', set_tab_titlte_pos);	
+				win.on('debouncedresize', set_slide_height);	
+				
+				set_min_width();
+				set_slide_height();
+			
 			}
 			
+		});	
 			
-		tabs.on('click', change_tab);
 		
-		tab_nav.on('click', switch_to_next_prev);
-		
-		win.on('debouncedresize', set_tab_titlte_pos);	
-		
-		set_min_width();
 		
 		//force a click on page load to properly set the tab color
 		container.find('.av-active-tab-title').trigger('click');	
@@ -3060,8 +3109,8 @@ $.fn.avia_hor_gallery= function(options)
 			{
 				if(container.data('av-enlarge') > 1 && !$(e.target).is('a') )
 				{
-					slide_container.find("." +options.active).removeClass(options.active);
-					currentIndex = false;	
+					//slide_container.find("." +options.active).removeClass(options.active);
+					//currentIndex = false;	
 				}
 				return;
 			}

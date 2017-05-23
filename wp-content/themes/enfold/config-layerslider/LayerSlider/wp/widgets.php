@@ -35,6 +35,7 @@ class LayerSlider_Widget extends WP_Widget {
 		$instance['id'] = strip_tags( $new_instance['id'] );
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		$instance['filters'] = strip_tags( $new_instance['filters'] );
+		$instance['firstslide'] = strip_tags( $new_instance['firstslide'] );
 
 		return $instance;
 	}
@@ -44,7 +45,8 @@ class LayerSlider_Widget extends WP_Widget {
 		$defaults = array(
 			'id' => '',
 			'title' => '',
-			'filters' => ''
+			'filters' => '',
+			'firstslide' => ''
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults );
 		$sliders = LS_Sliders::find(array('limit' => 100));
@@ -73,8 +75,12 @@ class LayerSlider_Widget extends WP_Widget {
 		</p>
 		<p style="margin-top: 20px; padding-top: 10px; border-top: 1px dashed #dedede; margin-bottom: 20px;">
 			<label for="<?php echo $this->get_field_id( 'filters' ); ?>"><?php _e('Optional filters:', 'LayerSlider'); ?></label>
-			<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-filters" target="_blank" style="float: right;"><?php _e('learn more', 'LayerSlider') ?></a>
-			<input type="text" id="<?php echo $this->get_field_id( 'filters' ); ?>" placeholder="e.g. homepage" class="widefat" name="<?php echo $this->get_field_name( 'filters' ); ?>" value="<?php echo $instance['filters']; ?>">
+			<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-filters" target="_blank" style="float: right;"><?php _e('Learn more', 'LayerSlider') ?></a>
+			<input type="text" id="<?php echo $this->get_field_id( 'filters' ); ?>" placeholder="<?php _e('e.g. homepage', 'LayerSlider') ?>" class="widefat" name="<?php echo $this->get_field_name( 'filters' ); ?>" value="<?php echo $instance['filters']; ?>">
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'firstslide' ); ?>"><?php _e('Override starting slide:', 'LayerSlider'); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'firstslide' ); ?>" placeholder="<?php _e('leave it empty to use default', 'LayerSlider') ?>" class="widefat" name="<?php echo $this->get_field_name( 'firstslide' ); ?>" value="<?php echo $instance['firstslide']; ?>">
 		</p>
 	<?php
 	}

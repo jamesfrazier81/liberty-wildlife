@@ -6,6 +6,7 @@ $row_classes = '';
 if ( !$this->post_type->hierarchical ) $row_classes .= ' non-hierarchical';
 if ( !$this->user->canSortPages() ) $row_classes .= ' no-sort';
 if ( $this->isSearch() ) $row_classes .= ' search';
+$assigned_pt = ( $this->post_type->name == 'page' && array_key_exists($this->post->id, $this->assigned_pt_pages) ) ? get_post_type_object($this->assigned_pt_pages[$this->post->id]) : false;
 ?>
 <div class="row<?php echo $row_classes; ?>">
 	
@@ -20,7 +21,7 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 	<div class="row-inner">
 		<i class="np-icon-sub-menu"></i>
 		
-		<?php if ( $this->user->canSortPages() && !$this->isSearch() ) : ?>
+		<?php if ( $this->user->canSortPages() && !$this->isSearch() && !$this->post_type_settings->disable_sorting ) : ?>
 		<i class="handle np-icon-menu"></i>
 		<?php endif; ?>
 
@@ -28,8 +29,10 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 			<span class="title">
 				<?php 
 					echo apply_filters( 'the_title', $this->post->title, $this->post->id, $view = 'nestedpages_title' ); 
-					if ( $this->post->id == get_option('page_on_front') ) echo ' <em class="np-page-type"><strong>&ndash; ' . __('Front Page', 'nestedpages') . '</strong></em>';
-					if ( $this->post->id == get_option('page_for_posts') ) echo ' <em class="np-page-type"><strong>&ndash; ' . __('Posts Page', 'nestedpages') . '</strong></em>';
+					if ( !$assigned_pt ) :
+						if ( $this->post->id == get_option('page_on_front') ) echo ' <em class="np-page-type"><strong>&ndash; ' . __('Front Page', 'wp-nested-pages') . '</strong></em>';
+						if ( $this->post->id == get_option('page_for_posts') ) echo ' <em class="np-page-type"><strong>&ndash; ' . __('Posts Page', 'wp-nested-pages') . '</strong></em>';
+					endif;
 				?>
 			</span>
 			<?php 
@@ -45,7 +48,7 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 
 				// Nav Status
 				if ( $this->post->nav_status == 'hide' ){
-					echo '<span class="nav-status">' . __('Hidden', 'nestedpages') . '</span>';
+					echo '<span class="nav-status">' . __('Hidden', 'wp-nested-pages') . '</span>';
 				} else {
 					echo '<span class="nav-status"></span>';
 				}
@@ -53,7 +56,7 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 				// Post Lock
 				if ( $user = wp_check_post_lock($this->post->id) ){
 					$u = get_userdata($user);
-					echo '<span class="locked"><i class="np-icon-lock"></i><em> ' . $u->display_name . ' ' . __('currently editing', 'nestedpages') . '</em></span>';
+					echo '<span class="locked"><i class="np-icon-lock"></i><em> ' . esc_html($u->display_name) . ' ' . __('currently editing', 'wp-nested-pages') . '</em></span>';
 				} elseif ( !$this->integrations->plugins->editorial_access_manager->hasAccess($this->post->id) ){
 					echo '<span class="locked"><i class="np-icon-lock"></i></span>';
 				} else {
@@ -62,6 +65,15 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 				
 			?>
 		</a>
+
+		<?php if ( $assigned_pt ) : ?>
+		<ul class="np-assigned-pt-actions">
+			<?php if ( current_user_can('publish_posts') ) : ?>
+			<li><a href="<?php echo $this->post_type_repo->addNewPostLink($assigned_pt->name); ?>" class=""><?php echo $assigned_pt->labels->add_new; ?></a></li>
+			<?php endif; ?>
+			<li><a href="<?php echo $this->post_type_repo->allPostsLink($assigned_pt->name); ?>" class=""><?php echo $assigned_pt->labels->all_items . ' (' . wp_count_posts($assigned_pt->name)->publish . ')'; ?></a></li>
+		</ul>
+		<?php endif; ?>
 
 		<!-- Responsive Toggle Button -->
 		<a href="#" class="np-toggle-edit"><i class="np-icon-pencil"></i></a>
@@ -77,7 +89,7 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 
 		<?php
 		if ( $this->integrations->plugins->yoast->installed ){
-			echo '<span class="np-seo-indicator ' . $this->post->score . '"></span>';
+			echo '<span class="np-seo-indicator ' . esc_html($this->post->score) . '"></span>';
 		}
 		?>
 
@@ -86,54 +98,55 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 			<?php if ( $this->post->comment_status == 'open' ) : $comments = wp_count_comments($this->post->id); $cs = 'open' ?>
 
 			
+			
 			<a href="<?php echo admin_url( 'edit-comments.php?p=' . get_the_id() ); ?>" class="np-btn">
 				<i class="np-icon-bubble"></i> <?php echo $comments->total_comments; ?>
 			</a>
 			
 			<?php else : $cs = 'closed'; endif; ?>
 
-
 			<?php if ( current_user_can('publish_pages') && $this->post_type->hierarchical && !$this->isSearch() ) : ?>
 		
 			<?php if (!$this->settings->menusDisabled()) : ?>
-			<a href="#" class="np-btn open-redirect-modal" data-parentid="<?php echo $this->post->id; ?>"><i class="np-icon-link"></i></a>
+			<a href="#" class="np-btn open-redirect-modal" data-parentid="<?php echo esc_attr($this->post->id); ?>"><i class="np-icon-link"></i></a>
 			<?php endif; ?>
 			
-			<a href="#" class="np-btn add-new-child" data-id="<?php echo get_the_id(); ?>" data-parentname="<?php echo $this->post->title; ?>"><?php _e('Add Child', 'nestedpages'); ?></a>
+			<a href="#" class="np-btn add-new-child" data-id="<?php echo esc_attr(get_the_id()); ?>" data-parentname="<?php echo esc_html($this->post->title); ?>"><?php _e('Add Child', 'wp-nested-pages'); ?></a>
 
 			<?php endif; ?>
 
 			<?php if ( current_user_can('edit_pages') && current_user_can('edit_posts') ) : ?>
-			<a href="#" class="np-btn clone-post" data-id="<?php echo get_the_id(); ?>" data-parentname="<?php echo $this->post->title; ?>"><?php _e('Clone', 'nestedpages'); ?></a>
+			<a href="#" class="np-btn clone-post" data-id="<?php echo esc_attr(get_the_id()); ?>" data-parentname="<?php echo esc_html($this->post->title); ?>"><?php _e('Clone', 'wp-nested-pages'); ?></a>
 			<?php endif; ?>
 
 			<?php if ( !$user = wp_check_post_lock($this->post->id) || !$this->integrations->plugins->editorial_access_manager->hasAccess($this->post->id) ) : ?>
 			<a href="#" 
 				class="np-btn np-quick-edit" 
-				data-id="<?php echo $this->post->id; ?>" 
-				data-template="<?php echo $this->post->template; ?>" 
-				data-title="<?php echo $this->post->title; ?>" 
-				data-slug="<?php echo urldecode($post->post_name); ?>" 
-				data-commentstatus="<?php echo $cs; ?>" 
-				data-status="<?php echo $this->post->status; ?>" 
-				data-np-status="<?php echo $this->post->np_status; ?>"
-				data-navstatus="<?php echo $this->post->nav_status; ?>" 
-				data-navtitleattr="<?php echo $this->post->nav_title_attr; ?>"
-				data-navcss="<?php echo $this->post->nav_css; ?>"
-				data-linktarget="<?php echo $this->post->link_target; ?>" 
-				data-navtitle="<?php echo $this->post->nav_title; ?>"
-				data-author="<?php echo $post->post_author; ?>" 
+				data-id="<?php echo esc_attr($this->post->id); ?>" 
+				data-template="<?php echo esc_attr($this->post->template); ?>" 
+				data-title="<?php echo esc_attr($this->post->title); ?>" 
+				data-slug="<?php echo esc_attr(urldecode($post->post_name)); ?>" 
+				data-commentstatus="<?php echo esc_attr($cs); ?>" 
+				data-status="<?php echo esc_attr($this->post->status); ?>" 
+				data-np-status="<?php echo esc_attr($this->post->np_status); ?>"
+				data-navstatus="<?php echo esc_attr($this->post->nav_status); ?>" 
+				data-navtitleattr="<?php echo esc_attr($this->post->nav_title_attr); ?>"
+				data-navcss="<?php echo esc_attr($this->post->nav_css); ?>"
+				data-linktarget="<?php echo esc_attr($this->post->link_target); ?>" 
+				data-navtitle="<?php echo esc_attr($this->post->nav_title); ?>"
+				data-author="<?php echo esc_attr($post->post_author); ?>" 
 				<?php if ( current_user_can('publish_pages') ) : ?>
-				data-password="<?php echo $post->post_password; ?>"
+				data-password="<?php echo esc_attr($post->post_password); ?>"
 				<?php endif; ?>
-				data-month="<?php echo $this->post->date->month; ?>" 
-				data-day="<?php echo $this->post->date->d; ?>" 
-				data-year="<?php echo $this->post->date->y; ?>" 
-				data-hour="<?php echo $this->post->date->h; ?>" 
-				data-minute="<?php echo $this->post->date->m;?>"
+				data-month="<?php echo esc_attr($this->post->date->month); ?>" 
+				data-day="<?php echo esc_attr($this->post->date->d); ?>" 
+				data-year="<?php echo esc_attr($this->post->date->y); ?>" 
+				data-hour="<?php echo esc_attr($this->post->date->h); ?>" 
+				data-minute="<?php echo esc_attr($this->post->date->m);?>"
 				data-datepicker="<?php echo date_i18n('n/j/Y', $this->post->date->datepicker); ?>"
 				data-time="<?php echo date_i18n('H:i', $this->post->date->datepicker); ?>"
 				data-formattedtime="<?php echo date_i18n('g:i', $this->post->date->datepicker); ?>"
+				data-timeformat="<?php echo get_option('time_format'); ?>"
 				data-ampm="<?php echo date('a', $this->post->date->datepicker); ?>">
 				<?php _e('Quick Edit'); ?>
 			</a>
@@ -175,6 +188,6 @@ if ( $this->isSearch() ) $row_classes .= ' search';
 	?>
 
 	<div class="np-bulk-checkbox">
-		<input type="checkbox" name="nestedpages_bulk[]" value="<?php echo $this->post->id; ?>" data-np-bulk-checkbox="<?php echo $this->post->title; ?>" data-np-post-type="<?php echo $this->post->post_type; ?>" />
+		<input type="checkbox" name="nestedpages_bulk[]" value="<?php echo esc_attr($this->post->id); ?>" data-np-bulk-checkbox="<?php echo esc_attr($this->post->title); ?>" data-np-post-type="<?php echo esc_attr($this->post->post_type); ?>" />
 	</div>
 </div><!-- .row -->

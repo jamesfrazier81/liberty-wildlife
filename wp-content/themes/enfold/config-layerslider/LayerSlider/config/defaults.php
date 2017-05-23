@@ -26,9 +26,9 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Schedule From', 'LayerSlider'),
 			'keys' => 'schedule_start',
-			'desc' => __("<ul>
+			'desc' => __('<ul>
 	<li>Scheduled sliders will only be visible to your visitors between the time period you set here.</li>
-	<li>We're using international date and time format to avoid ambiguity.</li>
+	<li>We’re using international date and time format to avoid ambiguity.</li>
 	<li>You can also use relative formats described <a href=\"http://php.net/manual/en/datetime.formats.relative.php\" target=\"_blank\">here</a>. For example: <br> <i>tomorrow noon</i>, <i>monday 9am</i> or <i>+1 month</i></li>
 	<li>Clear the text field above and left it empty if you want to cancel the schedule.</li>
 </ul>
@@ -37,7 +37,7 @@ $lsDefaults = array(
 <ul>
 	<li>You will still need to set the slider status as published,</li>
 	<li>and insert the slider to the target page with one of the methods described in the <a href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-shortcode\" target=\"_blank\">documentation</a>.</li>
-</ul>", 'LayerSlider'),
+</ul>', 'LayerSlider'),
 			'attrs' => array(
 				'placeholder' => __('No schedule', 'LayerSlider')
 			),
@@ -181,7 +181,7 @@ $lsDefaults = array(
 			'value' => true,
 			'name' => __('Fit to screen width', 'LayerSlider'),
 			'keys' => 'fitScreenWidth',
-			'desc' => __('If enabled, the slider will always have the same width as the viewport, even if a theme uses a boxed layout, unless you choose the "Fit to parent height" full size mode.', 'LayerSlider'),
+			'desc' => __('If enabled, the slider will always have the same width as the viewport, even if a theme uses a boxed layout, unless you choose the “Fit to parent height” full size mode.', 'LayerSlider'),
 			'advanced' => true
 		),
 
@@ -418,7 +418,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('Start with slide', 'LayerSlider'),
 			'keys' => array('firstlayer', 'firstSlide'),
-			'desc' => __('The slider will start with the specified slide. You can also use the value "random".', 'LayerSlider'),
+			'desc' => __('The slider will start with the specified slide. You can also use the value “random”.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '["random"]')
 		),
 
@@ -442,7 +442,7 @@ $lsDefaults = array(
 			'value' => false,
 			'name' => __('Play By Scroll', 'LayerSlider'),
 			'keys' => 'playByScroll',
-			'desc' => __('Play the slider by scrolling the web page. <a href="https://layerslider.kreaturamedia.com/sliders/play-by-scroll/" target="_blank">Click here</a> to see a live example.', 'LayerSlider'),
+			'desc' => sprintf(__('Play the slider by scrolling the web page. %sClick here%s to see a live example.', 'LayerSlider'), '<a href="https://layerslider.kreaturamedia.com/sliders/play-by-scroll/" target="_blank">', '</a>' ),
 			'premium' => true
 		),
 
@@ -452,6 +452,15 @@ $lsDefaults = array(
 			'name' => __('Play By Scroll Speed', 'LayerSlider'),
 			'keys' => 'playByScrollSpeed',
 			'desc' => __('Play By Scroll speed multiplier.', 'LayerSlider'),
+			'premium' => true
+		),
+
+
+		'playByScrollStart' => array(
+			'value' => false,
+			'name' => __('Start immediately', 'LayerSlider'),
+			'keys' => 'playByScrollStart',
+			'desc' => __('Instead of freezing the slider until visitors start scrolling, the slider will automatically start playback and will only pause at the first keyframe.', 'LayerSlider'),
 			'premium' => true
 		),
 
@@ -517,7 +526,7 @@ $lsDefaults = array(
 			'value' => 'v6',
 			'name' => __('Skin', 'LayerSlider'),
 			'keys' => 'skin',
-			'desc' => __("The skin used for this slider. The 'noskin' skin is a border- and buttonless skin. Your custom skins will appear in the list when you create their folders.", "LayerSlider")
+			'desc' => __('The skin used for this slider. The “noskin” skin is a border- and buttonless skin. Your custom skins will appear in the list when you create their folders.', 'LayerSlider')
 		),
 
 
@@ -752,7 +761,7 @@ $lsDefaults = array(
 			'value' => 35,
 			'name' => __('Active thumbnail opacity', 'LayerSlider'),
 			'keys' => array('thumb_active_opacity', 'tnActiveOpacity'),
-			'desc' => __("Opacity in percentage of the active slide's thumbnail.", "LayerSlider"),
+			'desc' => __('Opacity in percentage of the active slide’s thumbnail.', 'LayerSlider'),
 			'attrs' => array(
 				'min' => 0,
 				'max' => 100
@@ -1111,7 +1120,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Duration', 'LayerSlider'),
 			'keys' => array('slidedelay', 'duration'),
-			'tooltip' => __("Here you can set the time interval between slide changes, this slide will stay visible for the time specified here. This value is in millisecs, so the value 1000 means 1 second. Please don't use 0 or very low values.", "LayerSlider"),
+			'tooltip' => __('Here you can set the time interval between slide changes, this slide will stay visible for the time specified here. This value is in millisecs, so the value 1000 means 1 second. Please don’t use 0 or very low values.', 'LayerSlider'),
 			'attrs' => array(
 				'type' => 'number',
 				'min' => 0,
@@ -1151,7 +1160,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Duration', 'LayerSlider'),
 			'keys' => 'transitionduration',
-			'tooltip' => __("We've made our pre-defined slide transitions with special care to fit in most use cases. However, if you would like to increase or decrease the speed of these transitions, you can override their timing here by providing your own transition length in milliseconds. (1 second = 1000 milliseconds)", "LayerSlider"),
+			'tooltip' => __('We’ve made our pre-defined slide transitions with special care to fit in most use cases. However, if you would like to increase or decrease the speed of these transitions, you can override their timing here by providing your own transition length in milliseconds. (1 second = 1000 milliseconds)', 'LayerSlider'),
 			'attrs' => array(
 				'type' => 'number',
 				'min' => 0,
@@ -1165,7 +1174,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('Time Shift', 'LayerSlider'),
 			'keys' => 'timeshift',
-			'tooltip' => __("You can shift the starting point of the slide animation timeline, so layers can animate in an earlier time after a slide change. This value is in milliseconds. A second is 1000 milliseconds. You can only use a negative value.", 'LayerSlider'),
+			'tooltip' => __('You can shift the starting point of the slide animation timeline, so layers can animate in an earlier time after a slide change. This value is in milliseconds. A second is 1000 milliseconds. You can only use a negative value.', 'LayerSlider'),
 			'attrs' => array(
 				'step' => 50
 			)
@@ -1253,6 +1262,14 @@ $lsDefaults = array(
 			'tooltip' => __('You can specify a slide alias name which you can use in your URLs with a hash mark, so LayerSlider will start with the correspondig slide.', 'LayerSlider')
 		),
 
+		'globalHover' => array(
+			'value' => false,
+			'name' => __('Global Hover', 'LayerSlider'),
+			'keys' => 'globalhover',
+			'tooltip' => __('By turning this option on, all layers will trigger their Hover Transitions at the same time when you hover over the slider with your mouse cursor. It’s useful to create spectacular effects that involve multiple layer transitions and activate on hovering over the slider instead of individual layers.', 'LayerSlider'),
+			'premium' => true
+		),
+
 		'postContent' => array(
 			'value' => null,
 			'keys' => 'post_content',
@@ -1274,7 +1291,7 @@ $lsDefaults = array(
 			'value' => false,
 			'name' => __('Hidden', 'LayerSlider'),
 			'keys' => 'skip',
-			'tooltip' => __("If you don't want to use this slide in your front-page, but you want to keep it, you can hide it with this switch.", 'LayerSlider'),
+			'tooltip' => __('If you don’t want to use this slide in your front-page, but you want to keep it, you can hide it with this switch.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -1657,7 +1674,7 @@ $lsDefaults = array(
 			'value' => '0',
 			'name' => __('OffsetX', 'LayerSlider'),
 			'keys' => 'offsetxin',
-			'tooltip' => __("Shifts the layer starting position from its original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'left' or 'right' position the layer out the staging area, so it enters the scene from either side when animating to its destination location.", "LayerSlider"),
+			'tooltip' => __('Shifts the layer starting position from its original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position the layer out the staging area, so it enters the scene from either side when animating to its destination location.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Enter the stage from left",
 				"value": "left"
@@ -1686,7 +1703,7 @@ $lsDefaults = array(
 			'value' => '0',
 			'name' => __('OffsetY', 'LayerSlider'),
 			'keys' => 'offsetyin',
-			'tooltip' => __("Shifts the layer starting position from its original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values 'top' or 'bottom' position the layer out the staging area, so it enters the scene from either vertical side when animating to its destination location.", "LayerSlider"),
+			'tooltip' => __('Shifts the layer starting position from its original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values “top” or “bottom” position the layer out the staging area, so it enters the scene from either vertical side when animating to its destination location.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Enter the stage from top",
 				"value": "top"
@@ -1740,7 +1757,7 @@ $lsDefaults = array(
 			'value' => 'easeInOutQuint',
 			'name' => __('Easing', 'LayerSlider'),
 			'keys' => 'easingin',
-			'tooltip' => __("The timing function of the animation. With this function you can manipulate the movement of the animated object. Please click on the link next to this select field to open easings.net for more information and real-time examples.", "LayerSlider")
+			'tooltip' => __('The timing function of the animation. With this function you can manipulate the movement of the animated object. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider')
 		),
 
 		'transitionInFade' => array(
@@ -1812,7 +1829,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys' => 'scalexin',
-			'tooltip' => __("Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -1823,7 +1840,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys' => 'scaleyin',
-			'tooltip' => __("Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -1841,7 +1858,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Mask', 'LayerSlider'),
 			'keys' => 'clipin',
-			'tooltip' => __("Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.", "LayerSlider"),
+			'tooltip' => __('Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.', 'LayerSlider'),
 			'attrs' => array('data-options' => '[{
 				"name": "From top",
 				"value": "0 0 100% 0"
@@ -1861,14 +1878,14 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Background', 'LayerSlider'),
 			'keys' => 'bgcolorin',
-			'tooltip' => __("The background color of your layer. You can use color names, hexadecimal, RGB or RGBA values as well as the 'transparent' keyword. Example: #FFF", 'LayerSlider'),
+			'tooltip' => __('The background color of your layer. You can use color names, hexadecimal, RGB or RGBA values as well as the “transparent” keyword. Example: #FFF', 'LayerSlider'),
 		),
 
 		'transitionInColor' => array(
 			'value' => '',
 			'name' => __('Color', 'LayerSlider'),
 			'keys' => 'colorin',
-			'tooltip' => __("The color of your text. You can use color names, hexadecimal, RGB or RGBA values. Example: #333", 'LayerSlider'),
+			'tooltip' => __('The color of your text. You can use color names, hexadecimal, RGB or RGBA values. Example: #333', 'LayerSlider'),
 		),
 
 		'transitionInRadius' => array(
@@ -1896,7 +1913,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Filter', 'LayerSlider'),
 			'keys' => 'filterin',
-			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the "Filter" link for more information.', 'LayerSlider'),
+			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the “Filter” link for more information.', 'LayerSlider'),
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
@@ -1945,7 +1962,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('OffsetX', 'LayerSlider'),
 			'keys' => 'offsetxout',
-			'tooltip' => __("Shifts the layer from its original position on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'left' or 'right' animate the layer out the staging area, so it can leave the scene on either side.", "LayerSlider"),
+			'tooltip' => __('Shifts the layer from its original position on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” animate the layer out the staging area, so it can leave the scene on either side.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Leave the stage on left",
 				"value": "left"
@@ -1974,7 +1991,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('OffsetY', 'LayerSlider'),
 			'keys' => 'offsetyout',
-			'tooltip' => __("Shifts the layer from its original position on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values 'top' or 'bottom' animate the layer out the staging area, so it can leave the scene on either vertical side.", "LayerSlider"),
+			'tooltip' => __('Shifts the layer from its original position on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values “top” or “bottom” animate the layer out the staging area, so it can leave the scene on either vertical side.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Leave the stage on top",
 				"value": "top"
@@ -2065,7 +2082,7 @@ $lsDefaults = array(
 			'value' => 'easeInOutQuint',
 			'name' => __('Easing', 'LayerSlider'),
 			'keys' => 'easingout',
-			'tooltip' => __("The timing function of the animation. With this function you can manipulate the movement of the animated object. Please click on the link next to this select field to open easings.net for more information and real-time examples.", "LayerSlider")
+			'tooltip' => __('The timing function of the animation. With this function you can manipulate the movement of the animated object. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider')
 		),
 
 		'transitionOutFade' => array(
@@ -2138,7 +2155,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys' => 'scalexout',
-			'tooltip' => __("Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -2149,7 +2166,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys' => 'scaleyout',
-			'tooltip' => __("Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -2167,7 +2184,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Mask', 'LayerSlider'),
 			'keys' => 'clipout',
-			'tooltip' => __("Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.", "LayerSlider"),
+			'tooltip' => __('Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.', 'LayerSlider'),
 			'attrs' => array('data-options' => '[{
 				"name": "From top",
 				"value": "0 0 100% 0"
@@ -2187,7 +2204,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Filter', 'LayerSlider'),
 			'keys' => 'filterout',
-			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the "Filter" link for more information.', 'LayerSlider'),
+			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the “Filter” link for more information.', 'LayerSlider'),
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
@@ -2231,7 +2248,7 @@ $lsDefaults = array(
 			'value' => false,
 			'name' => __('Hidden', 'LayerSlider'),
 			'keys' => 'skip',
-			'tooltip' => __("If you don't want to use this layer, but you want to keep it, you can hide it with this switch.", "LayerSlider"),
+			'tooltip' => __('If you don’t want to use this layer, but you want to keep it, you can hide it with this switch.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -2346,7 +2363,7 @@ $lsDefaults = array(
 		'textOffsetXIn' => array(
 			'value' => 0,
 			'name' => __('OffsetX', 'LayerSlider'),
-			'tooltip' => __("Shifts the starting position of text nodes from their original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'left' or 'right' position text nodes out the staging area, so they enter the scene from either side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Shifts the starting position of text nodes from their original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position text nodes out the staging area, so they enter the scene from either side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetxin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Enter the stage from left",
@@ -2378,7 +2395,7 @@ $lsDefaults = array(
 		'textOffsetYIn' => array(
 			'value' => 0,
 			'name' => __('OffsetY', 'LayerSlider'),
-			'tooltip' => __("Shifts the starting position of text nodes from their original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'top' or 'bottom' position text nodes out the staging area, so they enter the scene from either vertical side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Shifts the starting position of text nodes from their original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “top” or “bottom” position text nodes out the staging area, so they enter the scene from either vertical side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetyin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Enter the stage from top",
@@ -2418,7 +2435,7 @@ $lsDefaults = array(
 		'textEasingIn' => array(
 			'value' => 'easeInOutQuint',
 			'name' => __('Easing', 'LayerSlider'),
-			'tooltip' => __("The timing function of the animation. With this function you can manipulate the movement of animated text fragments. Please click on the link next to this select field to open easings.net for more information and real-time examples.", "LayerSlider"),
+			'tooltip' => __('The timing function of the animation. With this function you can manipulate the movement of animated text fragments. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider'),
 			'keys'  => 'texteasingin',
 		),
 
@@ -2511,7 +2528,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys'  => 'textscalexin',
-			'tooltip' => __("Scales text fragments along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Scales text fragments along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Cycle between values",
 				"value": "30|-30"
@@ -2525,7 +2542,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys'  => 'textscaleyin',
-			'tooltip' => __("Scales text fragments along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Scales text fragments along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Cycle between values",
 				"value": "30|-30"
@@ -2632,7 +2649,7 @@ $lsDefaults = array(
 		'textOffsetXOut' => array(
 			'value' => 0,
 			'name' => __('OffsetX', 'LayerSlider'),
-			'tooltip' => __("Shifts the ending position of text nodes from their original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'left' or 'right' position text nodes out the staging area, so they leave the scene from either side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Shifts the ending position of text nodes from their original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position text nodes out the staging area, so they leave the scene from either side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetxout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Leave the stage on left",
@@ -2664,7 +2681,7 @@ $lsDefaults = array(
 		'textOffsetYOut' => array(
 			'value' => 0,
 			'name' => __('OffsetY', 'LayerSlider'),
-			'tooltip' => __("Shifts the ending position of text nodes from their original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'top' or 'bottom' position text nodes out the staging area, so they leave the scene from either vertical side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Shifts the ending position of text nodes from their original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “top” or “bottom” position text nodes out the staging area, so they leave the scene from either vertical side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetyout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Leave the stage on top",
@@ -2704,7 +2721,7 @@ $lsDefaults = array(
 		'textEasingOut' => array(
 			'value' => 'easeInOutQuint',
 			'name' => __('Easing', 'LayerSlider'),
-			'tooltip' => __("The timing function of the animation. With this function you can manipulate the movement of animated text fragments. Please click on the link next to this select field to open easings.net for more information and real-time examples.", "LayerSlider"),
+			'tooltip' => __('The timing function of the animation. With this function you can manipulate the movement of animated text fragments. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider'),
 			'keys'  => 'texteasingout',
 			'attrs' => array('type' => 'hidden')
 		),
@@ -2800,7 +2817,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys'  => 'textscalexout',
-			'tooltip' => __("Scales text fragments along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Scales text fragments along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Cycle between values",
 				"value": "30|-30"
@@ -2814,7 +2831,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys'  => 'textscaleyout',
-			'tooltip' => __("Scales text fragments along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.", "LayerSlider"),
+			'tooltip' => __('Scales text fragments along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Cycle between values",
 				"value": "30|-30"
@@ -2893,7 +2910,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('OffsetX', 'LayerSlider'),
 			'keys' => 'loopoffsetx',
-			'tooltip' => __("Shifts the layer starting position from its original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values 'left' or 'right' position the layer out the staging area, so it can leave and re-enter the scene from either side during the transition.", "LayerSlider"),
+			'tooltip' => __('Shifts the layer starting position from its original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position the layer out the staging area, so it can leave and re-enter the scene from either side during the transition.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Move out of stage on left",
 				"value": "left"
@@ -2922,7 +2939,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('OffsetY', 'LayerSlider'),
 			'keys' => 'loopoffsety',
-			'tooltip' => __("Shifts the layer starting position from its original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values 'top' or 'bottom' position the layer out the staging area, so it can leave and re-enter the scene from either vertical side during the transition.", "LayerSlider"),
+			'tooltip' => __('Shifts the layer starting position from its original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values “top” or “bottom” position the layer out the staging area, so it can leave and re-enter the scene from either vertical side during the transition.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Move out of stage on top",
 				"value": "top"
@@ -2993,7 +3010,7 @@ $lsDefaults = array(
 			'value' => 'linear',
 			'name' => __('Easing', 'LayerSlider'),
 			'keys' => 'loopeasing',
-			'tooltip' => __("The timing function of the animation to manipualte the layer's movement. Click on the link next to this field to open easings.net for examples and more information", "LayerSlider")
+			'tooltip' => __('The timing function of the animation to manipualte the layer’s movement. Click on the link next to this field to open easings.net for examples and more information', 'LayerSlider')
 		),
 
 		'loopOpacity' => array(
@@ -3063,7 +3080,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys' => 'loopscalex',
-			'tooltip' => __("Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -3074,7 +3091,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys' => 'loopscaley',
-			'tooltip' => __("Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -3151,7 +3168,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Filter', 'LayerSlider'),
 			'keys' => 'loopfilter',
-			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the "Filter" link for more information.', 'LayerSlider'),
+			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the “Filter” link for more information.', 'LayerSlider'),
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
@@ -3198,7 +3215,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('OffsetX', 'LayerSlider'),
 			'keys' => 'hoveroffsetx',
-			'tooltip' => __("Moves the layer horizontally by the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. ", "LayerSlider"),
+			'tooltip' => __('Moves the layer horizontally by the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. ', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "20% layer width",
 				"value": "20lw"
@@ -3215,7 +3232,7 @@ $lsDefaults = array(
 			'value' => 0,
 			'name' => __('OffsetY', 'LayerSlider'),
 			'keys' => 'hoveroffsety',
-			'tooltip' => __("Moves the layer vertically by the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. ", "LayerSlider"),
+			'tooltip' => __('Moves the layer vertically by the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. ', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "20% layer height",
 				"value": "20lh"
@@ -3248,23 +3265,27 @@ $lsDefaults = array(
 			'value' => 'easeInOutQuint',
 			'name' => __('Easing', 'LayerSlider'),
 			'keys' => 'hovereasingin',
-			'tooltip' => __("The timing function of the animation to manipualte the layer's movement. Click on the link next to this field to open easings.net for examples and more information", "LayerSlider")
+			'tooltip' => __('The timing function of the animation to manipualte the layer’s movement. Click on the link next to this field to open easings.net for examples and more information', 'LayerSlider')
 		),
 
 		'hoverOutEasing' => array(
 			'value' => '',
 			'name' => __('Reverse<br>easing', 'LayerSlider'),
 			'keys' => 'hovereasingout',
-			'tooltip' => __("The timing function of the reverse animation to manipualte the layer's movement. Click on the link next to this field to open easings.net for examples and more information", "LayerSlider"),
+			'tooltip' => __('The timing function of the reverse animation to manipualte the layer’s movement. Click on the link next to this field to open easings.net for examples and more information', 'LayerSlider'),
 			'attrs' => array( 'placeholder' => 'same')
 		),
 
 		'hoverOpacity' => array(
-			'value' => 1,
+			'value' => '',
 			'name' => __('Opacity', 'LayerSlider'),
 			'keys' => 'hoveropacity',
 			'tooltip' => __('Fades the layer. You can use values between 1 and 0 to set the layer fully opaque or transparent respectively. For example, the value 0.5 will make the layer semi-transparent.', 'LayerSlider'),
-			'attrs' => array( 'min' => 0, 'max' => 1, 'step' => 0.1 )
+			'attrs' => array(
+				'min' => 0,
+				'max' => 1,
+				'step' => 0.1
+			)
 		),
 
 		'hoverRotate' => array(
@@ -3326,7 +3347,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleX', 'LayerSlider'),
 			'keys' => 'hoverscalex',
-			'tooltip' => __("Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -3337,7 +3358,7 @@ $lsDefaults = array(
 			'value' => 1,
 			'name' => __('ScaleY', 'LayerSlider'),
 			'keys' => 'hoverscaley',
-			'tooltip' => __("Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.", "LayerSlider"),
+			'tooltip' => __('Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
 				"name": "Random",
 				"value": "random(2,4)"
@@ -3356,7 +3377,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Background', 'LayerSlider'),
 			'keys' => 'hoverbgcolor',
-			'tooltip' => __("The background color of this layer. You can use color names, hexadecimal, RGB or RGBA values as well as the 'transparent' keyword. Example: #FFF", "LayerSlider")
+			'tooltip' => __('The background color of this layer. You can use color names, hexadecimal, RGB or RGBA values as well as the “transparent” keyword. Example: #FFF', 'LayerSlider')
 		),
 
 		'hoverColor' => array(
@@ -3524,7 +3545,7 @@ $lsDefaults = array(
 			'value' => 'none',
 			'name' => __('Keep this layer visible:', 'LayerSlider'),
 			'keys' => 'static',
-			'tooltip' => __("You can keep this layer on top of the slider across multiple slides. Just select the slide on which this layer should animate out. Alternatively, you can make this layer global on all slides after it transitioned in.", "LayerSlider"),
+			'tooltip' => __('You can keep this layer on top of the slider across multiple slides. Just select the slide on which this layer should animate out. Alternatively, you can make this layer global on all slides after it transitioned in.', 'LayerSlider'),
 			'options' => array(
 				'none' => __('Until the end of this slide (default)', 'LayerSlider'),
 				'forever' => __('Forever (the layer will never animate out)', 'LayerSlider')
@@ -3597,7 +3618,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Custom Attributes', 'LayerSlider'),
 			'keys' => 'innerAttributes',
-			'desc' => __('Your list of custom attributes. Use this feature if your needs are not covered by the common attributes above or you want to override them. You can use data-* as well as regular attribute names. Empty attributes (without value) are also allowed. For example, to make a FancyBox gallery, you may enter "data-fancybox-group" and "gallery1" for the attribute name and value, respectively.', 'LayerSlider'),
+			'desc' => __('Your list of custom attributes. Use this feature if your needs are not covered by the common attributes above or you want to override them. You can use data-* as well as regular attribute names. Empty attributes (without value) are also allowed. For example, to make a FancyBox gallery, you may enter “data-fancybox-group” and “gallery1” for the attribute name and value, respectively.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3607,7 +3628,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Custom Attributes', 'LayerSlider'),
 			'keys' => 'outerAttributes',
-			'desc' => __('Your list of custom attributes. Use this feature if your needs are not covered by the common attributes above or you want to override them. You can use data-* as well as regular attribute names. Empty attributes (without value) are also allowed. For example, to make a FancyBox gallery, you may enter "data-fancybox-group" and "gallery1" for the attribute name and value, respectively.', 'LayerSlider'),
+			'desc' => __('Your list of custom attributes. Use this feature if your needs are not covered by the common attributes above or you want to override them. You can use data-* as well as regular attribute names. Empty attributes (without value) are also allowed. For example, to make a FancyBox gallery, you may enter “data-fancybox-group” and “gallery1” for the attribute name and value, respectively.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3619,7 +3640,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Width', 'LayerSlider'),
 			'keys' => 'width',
-			'tooltip' => __("You can set the width of your layer. You can use pixels, percentage, or the default value 'auto'. Examples: 100px, 50% or auto.", "LayerSlider"),
+			'tooltip' => __('You can set the width of your layer. You can use pixels, percentage, or the default value “auto”. Examples: 100px, 50% or auto.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3629,7 +3650,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Height', 'LayerSlider'),
 			'keys' => 'height',
-			'tooltip' => __("You can set the height of your layer. You can use pixels, percentage, or the default value 'auto'. Examples: 100px, 50% or auto", "LayerSlider"),
+			'tooltip' => __('You can set the height of your layer. You can use pixels, percentage, or the default value “auto”. Examples: 100px, 50% or auto', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3639,7 +3660,7 @@ $lsDefaults = array(
 			'value' => '10px',
 			'name' => __('Top', 'LayerSlider'),
 			'keys' => 'top',
-			'tooltip' => __("The layer position from the top of the slide. You can use pixels and percentage. Examples: 100px or 50%. You can move your layers in the preview above with a drag n' drop, or set the exact values here.", "LayerSlider"),
+			'tooltip' => __('The layer position from the top of the slide. You can use pixels and percentage. Examples: 100px or 50%. You can move your layers in the preview above with a drag n’ drop, or set the exact values here.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3649,7 +3670,7 @@ $lsDefaults = array(
 			'value' => '10px',
 			'name' => __('Left', 'LayerSlider'),
 			'keys' => 'left',
-			'tooltip' => __("The layer position from the left side of the slide. You can use pixels and percentage. Examples: 100px or 50%. You can move your layers in the preview above with a drag n' drop, or set the exact values here.", "LayerSlider"),
+			'tooltip' => __('The layer position from the left side of the slide. You can use pixels and percentage. Examples: 100px or 50%. You can move your layers in the preview above with a drag n’ drop, or set the exact values here.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3757,7 +3778,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Line height', 'LayerSlider'),
 			'keys' => 'line-height',
-			'tooltip' => __("The line height of your text. The default setting is 'normal'. Example: 22px", "LayerSlider"),
+			'tooltip' => __('The line height of your text. The default setting is “normal”. Example: 22px', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3809,6 +3830,20 @@ $lsDefaults = array(
 				'overline' => __('Overline', 'LayerSlider'),
 				'line-through' => __('Line through', 'LayerSlider')
 
+			),
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'letterSpacing' => array(
+			'value' => '',
+			'name' => __('Letter spacing', 'LayerSlider'),
+			'keys' => 'letter-spacing',
+			'tooltip' => __('Controls the amount of space between each character. Useful the change letter density in a line or block of text. Negative values and decimals can be used.', 'LayerSlider'),
+			'attrs' => array(
+				'type' => 'number',
+				'step' => 0.5
 			),
 			'props' => array(
 				'meta' => true
@@ -3877,7 +3912,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Background', 'LayerSlider'),
 			'keys' => 'background',
-			'tooltip' => __("The background color of your layer. You can use color names, hexadecimal, RGB or RGBA values as well as the 'transparent' keyword. Example: #FFF", "LayerSlider"),
+			'tooltip' => __('The background color of your layer. You can use color names, hexadecimal, RGB or RGBA values as well as the “transparent” keyword. Example: #FFF', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -3981,7 +4016,7 @@ $lsDefaults = array(
 			'value' => 'relative',
 			'name' => __('Calculate positions from', 'LayerSlider'),
 			'keys' => 'position',
-			'tooltip' => __('Sets the layer position origin from which top and left values are calculated. The default is the upper left corner of the slider canvas. In a full width and full size slider, your content is centered based on the screen size to achieve the best possible fit. By selecting the "sides of the screen" option in those scenarios, you can allow layers to escape the centered inner area and stick to the sides of the screen.', 'LayerSlider'),
+			'tooltip' => __('Sets the layer position origin from which top and left values are calculated. The default is the upper left corner of the slider canvas. In a full width and full size slider, your content is centered based on the screen size to achieve the best possible fit. By selecting the “sides of the screen” option in those scenarios, you can allow layers to escape the centered inner area and stick to the sides of the screen.', 'LayerSlider'),
 			'options' => array(
 				'relative' => __('sides of the slider', 'LayerSlider'),
 				'fixed' => __('sides of the screen', 'LayerSlider'),
@@ -3992,7 +4027,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Stacking order', 'LayerSlider'),
 			'keys' => 'z-index',
-			'tooltip' => __("This option controls the vertical stacking order of layers that overlap. In CSS, it's commonly called as z-index. Elements with a higher value are stacked in front of elements with a lower one, effectively covering them. By default, this value is calculated automatically based on the order of your layers, thus simply re-ordering them can fix overlap issues. Use this option only if you want to set your own value manually in special cases like using static layers.<br><br>On each slide, the stacking order starts counting from 100. Providing a number less than 100 will put the layer behind every other layer on all slides. Specifying a much greater number, for example 500, will make the layer to be on top of everything else.", 'LayerSlider'),
+			'tooltip' => __('This option controls the vertical stacking order of layers that overlap. In CSS, it’s commonly called as z-index. Elements with a higher value are stacked in front of elements with a lower one, effectively covering them. By default, this value is calculated automatically based on the order of your layers, thus simply re-ordering them can fix overlap issues. Use this option only if you want to set your own value manually in special cases like using static layers.<br><br>On each slide, the stacking order starts counting from 100. Providing a number less than 100 will put the layer behind every other layer on all slides. Specifying a much greater number, for example 500, will make the layer to be on top of everything else.', 'LayerSlider'),
 			'attrs' => array(
 				'type' => 'number',
 				'min' => 1,
@@ -4030,7 +4065,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Filter', 'LayerSlider'),
 			'keys' => 'filter',
-			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the "Filter" link for more information.', 'LayerSlider'),
+			'tooltip' => __('Filters provide effects like blurring or color shifting your layers. Click into the text field to see a selection of filters you can use. Although clicking on the pre-defined options will reset the text field, you can apply multiple filters simply by providing a space separated list of all the filters you would like to use. Click on the “Filter” link for more information.', 'LayerSlider'),
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
@@ -4069,7 +4104,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('ID', 'LayerSlider'),
 			'keys' => 'id',
-			'tooltip' => __("You can apply an ID attribute on the HTML element of this layer to work with it in your custom CSS or Javascript code.", 'LayerSlider'),
+			'tooltip' => __('You can apply an ID attribute on the HTML element of this layer to work with it in your custom CSS or Javascript code.', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)

@@ -119,7 +119,7 @@ if($headerS['header_topbar'] == true)
 							$addition = "<img src='".$headerS['header_replacement_logo']."' class='alternate' alt='' title='' />";
 						}
 						
-						$output .= avia_logo(AVIA_BASE_URL.'images/layout/logo.png', $addition, 'strong', true);
+						$output .= avia_logo(AVIA_BASE_URL.'images/layout/logo.png', $addition, 'span', true);
 						
 							if(!empty($headerS['bottom_menu']))
 							{

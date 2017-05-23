@@ -68,7 +68,8 @@ if ( !class_exists( 'avia_sc_produc_info' ) )
 			$output .= "<div class='av-woo-product-info ".$meta['el_class']."'>";
 			ob_start();
 			
-			$product->list_attributes();
+			function_exists( 'wc_display_product_attributes' ) ? wc_display_product_attributes( $product ) : $product->list_attributes();
+			
 			$output .= ob_get_clean();
 			$output .= "</div>";
 			

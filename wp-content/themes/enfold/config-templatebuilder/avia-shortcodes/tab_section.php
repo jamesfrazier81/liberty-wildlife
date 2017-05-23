@@ -130,7 +130,6 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 					$active_tab = $i == avia_sc_tab_section::$admin_active ? "av-admin-section-tab-active" : "";
 					$tab_title = isset(avia_sc_tab_section::$tab_titles[$i]) ? avia_sc_tab_section::$tab_titles[$i] : "";
 					
-					
 					$output  .= "<a href='#' data-av-tab-section-title='{$i}' class='av-admin-section-tab {$active_tab}'><span class='av-admin-section-tab-move-handle'></span><span class='av-tab-title-text-wrap-full'>".__('Tab','avia_framework' )." <span class='av-tab-nr'>{$i}</span><span class='av-tab-custom-title'>{$tab_title}</span></span></a>";
 				}
 				
@@ -212,7 +211,17 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 											  __('Display Tabs below content','avia_framework' )	=>'av-tab-below-content',
 						                  )),
 					
-					
+					array(
+						"name"		=>	__( "Content height", 'avia_framework' ),
+						"id"		=>	"content_height",
+						"desc"		=>	__( "Define the behaviour for the size of the content tabs when switching between the tabs.", 'avia_framework' ),
+						"type"		=>	"select",
+						"std"		=>	"",
+						"required"	=>	array( 'tab_pos', 'contains', 'av-tab-above-content' ),
+						"subtype"	=>	array(  	__( 'Same height for all tabs','avia_framework' )	=>	'', 
+													__( 'Auto adjust to content','avia_framework' )		=>	'av-tab-content-auto',
+											)),
+										
 					
 					array(
 						"name" 	=> __("Tab Padding",'avia_framework' ),
@@ -226,7 +235,7 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 												__('Large Padding','avia_framework' )	=>'large',
 						                  )),
 					
-										
+					
 					array(
                     "name" 	=> __("Initial Open", 'avia_framework' ),
                     "desc" 	=> __("Enter the Number of the Tab that should be open initially.", 'avia_framework' ),
@@ -307,14 +316,15 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 				avia_sc_tab_section::$count++;
 				
 			    $atts = shortcode_atts(array(
-				'initial'		=> 1,
-				'id'			=> '',
-				'padding'		=>'default',
-				'tab_padding' 	=>'default', 
-				'transition'	=>'av-tab-no-transition' , 
-				'bg_color'		=>'' , 
-				'color'			=>'' , 
-				'tab_pos'		=>'av-tab-above-content',
+				'initial'			=>	1,
+				'id'				=>	'',
+				'padding'			=>	'default',
+				'tab_padding'		=>	'default', 
+				'transition'		=>	'av-tab-no-transition' , 
+				'bg_color'			=>	'' , 
+				'color'				=>	'' , 
+				'tab_pos'			=>	'av-tab-above-content',
+				'content_height'	=>  ''
 				
 				
 				
@@ -324,7 +334,7 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 				$output  	= "";
 				
 				
-				$params['class'] = "av-tab-section-container entry-content-wrapper main_color {$transition} {$tab_pos} ".$meta['el_class'];
+				$params['class'] = "av-tab-section-container entry-content-wrapper main_color {$transition} {$content_height} {$tab_pos} ".$meta['el_class'];
 				$params['open_structure'] = false; 
 				$params['id'] = !empty($id) ? AviaHelper::save_string($id,'-') : "av-tab-section-".avia_sc_tab_section::$count;
 				$params['custom_markup'] = $meta['custom_markup'];
@@ -370,7 +380,7 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 					}
 					
 					
-					$tabs  .= "<a href='#' data-av-tab-section-title='{$i}' class='av-section-tab-title {$active_tab} {$extraClass} '>{$icon}{$image}<span class='av-outer-tab-title'><span class='av-inner-tab-title'>{$tab_title}</span></span>{$arrow}</a>";
+					$tabs  .= "<a href='#{$tab_title}' data-av-tab-section-title='{$i}' class='av-section-tab-title {$active_tab} {$extraClass} '>{$icon}{$image}<span class='av-outer-tab-title'><span class='av-inner-tab-title'>{$tab_title}</span></span>{$arrow}</a>";
 				}
 				
 				

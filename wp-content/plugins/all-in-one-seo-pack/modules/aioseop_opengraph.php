@@ -254,13 +254,13 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Opengraph' ) ) {
 					'name'            => __( 'Select OG:Image Source', 'all-in-one-seo-pack' ),
 					'type'            => 'select',
 					'initial_options' => Array(
-						''         => __( 'Default Image' ),
-						'featured' => __( 'Featured Image' ),
-						'attach'   => __( 'First Attached Image' ),
-						'content'  => __( 'First Image In Content' ),
-						'custom'   => __( 'Image From Custom Field' ),
-						'author'   => __( 'Post Author Image' ),
-						'auto'     => __( 'First Available Image' ),
+						''         => __( 'Default Image', 'all-in-one-seo-pack' ),
+ 						'featured' => __( 'Featured Image', 'all-in-one-seo-pack' ),
+ 						'attach'   => __( 'First Attached Image', 'all-in-one-seo-pack' ),
+ 						'content'  => __( 'First Image In Content', 'all-in-one-seo-pack' ),
+ 						'custom'   => __( 'Image From Custom Field', 'all-in-one-seo-pack' ),
+ 						'author'   => __( 'Post Author Image', 'all-in-one-seo-pack' ),
+ 						'auto'     => __( 'First Available Image', 'all-in-one-seo-pack' ),
 					),
 				),
 				'fallback'               => Array(
@@ -1341,7 +1341,7 @@ END;
 				'filter_metabox_options',
 			), 10, 3 );
 			$post_types                                        = $this->get_post_type_titles();
-			$rempost                                           = array( 'revision' => 1, 'nav_menu_item' => 1 );
+			$rempost = array( 'revision' => 1, 'nav_menu_item' => 1, 'custom_css' => 1, 'customize_changeset' => 1 );
 			$post_types                                        = array_diff_key( $post_types, $rempost );
 			$this->default_options['types']['initial_options'] = $post_types;
 			foreach ( $post_types as $slug => $name ) {

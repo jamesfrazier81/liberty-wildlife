@@ -65,9 +65,7 @@
 			<textarea rows="10" cols="50" name="contents" class="ls-codemirror"><?php if(!empty($contents)) {
 					echo htmlentities($contents);
 				} else {
-					echo '/*' . NL . TAB . __('You can type here custom CSS code, which will be loaded both on your admin and front-end pages.', 'LayerSlider');
-					echo NL . TAB . __('Please make sure to not override layout properties (positions and sizes), as they can interfere', 'LayerSlider');
-					echo NL . TAB . __('with the sliders built-in responsive functionality. Here are few example targets to help you get started:', 'LayerSlider');
+					echo '/*' . NL . __('You can type here custom CSS code, which will be loaded both on your admin and front-end pages. Please make sure to not override layout properties (positions and sizes), as they can interfere with the sliders built-in responsive functionality. Here are few example targets to help you get started:', 'LayerSlider');
 					echo NL . '*/' . NL . NL;
 					echo '.ls-container { /* Slider container */' . NL . NL . '}' .NL.NL;
 					echo '.ls-layers { /* Layers wrapper */ ' . NL  . NL . '}' . NL.NL;
@@ -75,7 +73,7 @@
 				}?></textarea>
 			<p class="footer">
 				<?php if(!is_writable($upload_dir['basedir'])) { ?>
-				<?php _e('You need to make your uploads folder writable in order to save your changes. See the <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Codex</a> for more information.', 'LayerSlider') ?>
+				<?php sprintf(__('You need to make your uploads folder writable in order to save your changes. See the %sCodex%s for more information.', 'LayerSlider'), '<a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">', '</a>') ?>
 				<?php } else { ?>
 				<button class="button-primary"><?php _e('Save changes', 'LayerSlider') ?></button>
 				<?php _e('Using invalid CSS code could break the appearance of your site or your sliders. Changes cannot be reverted after saving.','LayerSlider') ?>

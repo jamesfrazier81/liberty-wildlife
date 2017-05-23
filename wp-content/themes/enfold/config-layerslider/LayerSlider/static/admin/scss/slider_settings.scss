@@ -242,7 +242,6 @@
 		position: relative;
 		margin: 0;
 		border-bottom: 1px solid #e3e3e3;
-		text-overflow: clip;
 		line-height: 40px;
 		cursor: pointer;
 		font-size: 13px;
@@ -254,6 +253,16 @@
 			padding: 0 5px;
 			transition: none;
 			-webkit-transition: none;
+		}
+
+		strong {
+			display: inline-block;
+			max-width: 180px;
+			font-weight: normal;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-size: 12px;
 		}
 
 		&.active {
@@ -294,7 +303,7 @@
 }
 
 .ls-datepicker-input {
-	width: 250px;
+	width: 250px !important;
 	height: 50px;
 	margin: 0px 0 25px 0;
 	font-size: 20px;
@@ -310,6 +319,10 @@
 
 	.ls-datepicker {
 		margin: 0 auto;
+	}
+
+	span {
+		font-weight: normal;
 	}
 }
 

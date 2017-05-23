@@ -43,8 +43,8 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Importer_Exporter' ) ) {
 					'name'            => __( 'Export Settings', 'all-in-one-seo-pack' ),
 					'type'            => 'multicheckbox',
 					'initial_options' => Array(
-						1 => 'General Settings',
-						2 => 'Post Data',
+						1 => __( 'General Settings', 'all-in-one-seo-pack' ),
+ +						2 => __( 'Post Data', 'all-in-one-seo-pack' ),
 					),
 				),
 				'export_post_types'  => Array(
@@ -120,10 +120,12 @@ if ( ! class_exists( 'All_in_One_SEO_Pack_Importer_Exporter' ) ) {
 
 		function debug_post_types() {
 			$post_types                                                    = $this->get_post_type_titles();
-			$rempost                                                       = array(
+			$rempost = array(
 				'attachment'    => 1,
 				'revision'      => 1,
 				'nav_menu_item' => 1,
+				'custom_css' => 1,
+				'customize_changeset' => 1,
 			);
 			$this->default_options['export_post_types']['initial_options'] = array_diff_key(
 				$post_types,

@@ -544,8 +544,10 @@ jQuery( function( $ ){
 
 			put: function( $el ){
 
-				$el.data( 'km-ui-resize', $el.data( 'km-ui-resize').split( ',') );
-				kmUI.smartResize.$elements = kmUI.smartResize.$elements.add( $el );
+				if( $el.length ) {
+					$el.data( 'km-ui-resize', $el.data( 'km-ui-resize').split( ',') );
+					kmUI.smartResize.$elements = kmUI.smartResize.$elements.add( $el );
+				}
 			},
 
 			set: function(){

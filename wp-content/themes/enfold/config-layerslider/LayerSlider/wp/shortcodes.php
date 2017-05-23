@@ -69,7 +69,7 @@ class LS_Shortcode {
 
 				// Otherwise continue processing the shortcode
 				} else {
-					$output .= self::processShortcode( $item['data'] );
+					$output .= self::processShortcode( $item['data'], $atts );
 				}
 			}
 
@@ -164,7 +164,7 @@ class LS_Shortcode {
 			} elseif( (int)$slider['flag_hidden'] ) {
 				$error = self::generateErrorMarkup(
 					__('Unpublished slider', 'LayerSlider'),
-					__("The slider you've inserted here is yet to be published, thus it won't be displayed to your visitors. You can publish it by enabling the appropriate option in ", "LayerSlider").'<a href="'.admin_url('admin.php?page=layerslider&action=edit&id='.(int)$slider['id'].'&showsettings=1#publish').'" target="_blank">'.__("Slider Settings -> Publish", 'LayerSlider').'</a>.',
+					sprintf(__('The slider you’ve inserted here is yet to be published, thus it won’t be displayed to your visitors. You can publish it by enabling the appropriate option in %sSlider Settings -> Publish%s. ', 'LayerSlider'), '<a href="'.admin_url('admin.php?page=layerslider&action=edit&id='.(int)$slider['id'].'&showsettings=1#publish').'" target="_blank">', '</a>.'),
 					'dashicons-hidden'
 				);
 
@@ -172,7 +172,7 @@ class LS_Shortcode {
 			} elseif( (int)$slider['flag_deleted'] ) {
 				$error = self::generateErrorMarkup(
 					__('Removed slider', 'LayerSlider'),
-					__("The slider you've inserted here was removed in the meantime, thus it won't be displayed to your visitors. This slider is still recoverable on the admin interface. You can enable listing removed sliders with the Screen Options -> Removed sliders option, then choose the Restore option for the corresponding item to reinstate this slider, or just click ", "LayerSlider") . "<a href=".admin_url('admin.php') . wp_nonce_url('?page=layerslider&action=restore&id='.$slider['id'].'&ref='.urlencode(get_permalink()), 'restore_'.$slider['id']).">here</a>.",
+					sprintf(__('The slider you’ve inserted here was removed in the meantime, thus it won’t be displayed to your visitors. This slider is still recoverable on the admin interface. You can enable listing removed sliders with the Screen Options -> Removed sliders option, then choose the Restore option for the corresponding item to reinstate this slider, or just click %shere%s.', 'LayerSlider'), '<a href="'.admin_url('admin.php').wp_nonce_url('?page=layerslider&action=restore&id='.$slider['id'].'&ref='.urlencode(get_permalink()), 'restore_'.$slider['id']).'">', '</a>'),
 					'dashicons-trash'
 				);
 
@@ -186,13 +186,13 @@ class LS_Shortcode {
 
 				if( ! empty($slider['schedule_start']) && (int) $slider['schedule_start'] > time() ) {
 					$error = self::generateErrorMarkup(
-						__('This slider is scheduled to display on '. date_i18n(get_option('date_format').' @ '.get_option('time_format'), (int) $slider['schedule_start']), 'LayerSlider'),
+						sprintf(__('This slider is scheduled to display on %s', 'LayerSlider'), date_i18n(get_option('date_format').' @ '.get_option('time_format'), (int) $slider['schedule_start']) ),
 						'', 'dashicons-calendar-alt', 'scheduled'
 					);
 				} elseif( ! empty($slider['schedule_end']) && (int) $slider['schedule_end'] < time() ) {
 					$error = self::generateErrorMarkup(
-						__('This slider was scheduled to hide on '. date_i18n(get_option('date_format').' @ '.get_option('time_format'), (int) $slider['schedule_end']), 'LayerSlider'),
-						__('Due to scheduling, this slider is no longer visible to your visitors. If you wish to reinstate this slider, just remove the schedule in ', 'LayerSlider').'<a href="'.admin_url('admin.php?page=layerslider&action=edit&id='.(int)$slider['id'].'&showsettings=1#publish').'" target="_blank">'.__('Slider Settings -> Publish', 'LayerSlider').'</a>.',
+						sprintf(__('This slider was scheduled to hide on %s ','LayerSlider'), date_i18n(get_option('date_format').' @ '.get_option('time_format'), (int) $slider['schedule_end']) ),
+						sprintf(__('Due to scheduling, this slider is no longer visible to your visitors. If you wish to reinstate this slider, just remove the schedule in %sSlider Settings -> Publish%s.', 'LayerSlider'), '<a href="'.admin_url('admin.php?page=layerslider&action=edit&id='.(int)$slider['id'].'&showsettings=1#publish').'" target="_blank">', '</a>'),
 						'dashicons-no-alt', 'dead'
 					);
 				}
@@ -215,7 +215,7 @@ class LS_Shortcode {
 
 
 
-	public static function processShortcode($slider) {
+	public static function processShortcode( $slider, $embed = array() ) {
 
 		// Slider ID
 		$sID = 'layerslider_'.$slider['id'];
@@ -230,7 +230,7 @@ class LS_Shortcode {
 		// slider markup retrieved via Transients
 		if(!empty($slider['_cached'])) { $output = $slider;}
 		else {
-			$output = self::generateSliderMarkup($slider);
+			$output = self::generateSliderMarkup( $slider, $embed );
 			set_transient('ls-slider-data-'.$slider['id'], $output, HOUR_IN_SECONDS * 6);
 		}
 
@@ -241,6 +241,8 @@ class LS_Shortcode {
 			$output['init'] = str_replace($sID, $sID.'_'.$sliderCount, $output['init']);
 			$output['container'] = str_replace($sID, $sID.'_'.$sliderCount, $output['container']);
 
+			$sID = $sID.'_'.$sliderCount;
+
 		} else {
 
 			// Add current slider ID to identify duplicates later on
@@ -248,12 +250,22 @@ class LS_Shortcode {
 			self::$slidersOnPage[ $slider['id'] ] = 1;
 		}
 
+		// Override firstSlide if it is specified in embed params
+		if( ! empty( $embed['firstslide'] ) ) {
+			$output['init'] = str_replace('[firstSlide]', $embed['firstslide'], $output['init']);
+		}
+
+		// Filter to override the printed JavaScript init code
+		if( has_filter('layerslider_slider_init') ) {
+			$output['init'] = apply_filters('layerslider_slider_init', $output['init'], $slider, $sID );
+		}
+
 		// Unify the whole markup after any potential string replacement
 		$output['markup'] = $output['container'].$output['markup'];
 
 		// Filter to override the printed HTML markup
-		if(has_filter('layerslider_slider_markup')) {
-			$output['markup'] = apply_filters('layerslider_slider_markup', $output['markup']);
+		if( has_filter('layerslider_slider_markup') ) {
+			$output['markup'] = apply_filters('layerslider_slider_markup', $output['markup'], $slider, $sID);
 		}
 
 		// Origami
@@ -271,7 +283,7 @@ class LS_Shortcode {
 
 
 
-	public static function generateSliderMarkup($slider = null) {
+	public static function generateSliderMarkup( $slider = null, $embed = array() ) {
 
 		// Bail out early if no params received
 		if(!$slider) { return array('init' => '', 'container' => '', 'markup' => ''); }
@@ -307,7 +319,7 @@ class LS_Shortcode {
 			if( ! empty( $GLOBALS['lsPremiumNotice'] ) ) {
 				array_unshift($lsContainer, self::generateErrorMarkup(
 					__('Premium features is available for preview purposes only.', 'LayerSlider'),
-					__("We've detected that you're using premium features in this slider, but you have not yet activated your copy of LayerSlider. Premium features in your sliders will not be available for your visitors without activation. ", 'LayerSlider').'<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">'.__('Click here to learn more', 'LayerSlider').'</a>. Detected features: ' . implode(', ', $GLOBALS['lsPremiumNotice']),
+					sprintf(__('We’ve detected that you’re using premium features in this slider, but you have not yet activated your copy of LayerSlider. Premium features in your sliders will not be available for your visitors without activation. %sClick here to learn more%s. Detected features: %s', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">', '</a>', implode(', ', $GLOBALS['lsPremiumNotice'])),
 					'dashicons-star-filled', 'info'
 				));
 			}
@@ -346,7 +358,7 @@ class LS_Shortcode {
 		}
 
 		if( is_null($description) ) {
-			$description = __("Please make sure that you've used the right shortcode or method to insert the slider, and check if the corresponding slider exists and it wasn't deleted previously.", "LayerSlider");
+			$description = __('Please make sure that you’ve used the right shortcode or method to insert the slider, and check if the corresponding slider exists and it wasn’t deleted previously.', 'LayerSlider');
 		}
 
 		if( $description ) {

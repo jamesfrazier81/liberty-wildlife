@@ -159,7 +159,24 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 						'fixed manually' => __('Perfect Manual Masonry: Manually control the height and width of entries by adding either a "landscape" or "portrait" tag when creating the entry. Elements with no such tag use a fixed default size, elements with both tags will display extra large',  'avia_framework' ),
 					)),
 					
+/*
+				array(
+					"name" 	=> __("Orientation", 'avia_framework' ),
+					"desc" 	=> __("Set the orientation of the cropped preview images", 'avia_framework' ),
+					"id" 	=> "orientation",
+					"type" 	=> "select",
+					"std" 	=> "",
+					"required" => array('size','equals','fixed'),
+					"subtype" => array(
+						__('Wide Landscape',  'avia_framework' ) =>'av-orientation-landscape-large',
+						__('Landscape',  'avia_framework' ) =>'',
+						__('Square',  'avia_framework' ) =>'av-orientation-square',
+						__('Portrait',  'avia_framework' ) =>'av-orientation-portrait',
+						__('High Portrait',  'avia_framework' ) =>'av-orientation-portrait-large',
+					)),	
 					
+*/
+						
 				array(
 					"name" 	=> __("Gap between elements", 'avia_framework' ),
 					"desc" 	=> __("Select the gap between the elements", 'avia_framework' ),

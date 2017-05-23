@@ -1113,6 +1113,7 @@ li.active .ls-sublayer-title {
 
 #ls-main-nav-bar .right.help {
 	color: #999 !important;
+	font-size: 12px;
 }
 
 
@@ -1188,23 +1189,35 @@ li.active .ls-sublayer-title {
 }
 
 .ls-publish button {
-	width: 180px;
+	min-width: 180px;
+	margin-right: 20px !important;
 	float: left;
 }
 
 
-.ls-publish .ls-save-shortcode,
-.ls-publish .ls-saving-warning {
+.ls-publish .ls-save-shortcode {
 	height: 40px;
 	padding: 3px;
-	margin: 0 0 0 195px;
 }
 
 .ls-save-shortcode p {
 	float: left;
 	margin: 0 15px 0 0;
 	line-height: 11px;
-	font-size: 11px;
+	font-size: 13px;
+}
+
+.ls-save-shortcode .revisions {
+	text-align: center;
+}
+
+.ls-save-shortcode .revisions .dashicons {
+	font-size: 16px;
+	line-height: 12px;
+}
+
+.ls-save-shortcode .revisions a {
+	font-size: 13px;
 }
 
 .ls-save-shortcode span:last-child {

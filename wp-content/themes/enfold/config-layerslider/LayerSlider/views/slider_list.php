@@ -149,7 +149,7 @@
 
 		'importSelectError' => __('Choose a file to import sliders.', 'LayerSlider'),
 		'importFailed' => __('The import file seems to be invalid or corrupted.', 'LayerSlider'),
-		'importSuccess' => sprintf( _n( '%s slider has been successfully imported.', '%s sliders has been successfully imported.', $importSliderCount, 'LayerSlider' ), $importSliderCount ),
+		'importSuccess' => sprintf( _n( '%d slider has been successfully imported.', '%d sliders has been successfully imported.', $importSliderCount, 'LayerSlider' ), $importSliderCount ),
 
 		'permissionError' => __('Your account does not have the necessary permission you have chosen, and your settings have not been saved in order to prevent locking yourself out of the plugin.', 'LayerSlider'),
 		'permissionSuccess' => __('Permission changes has been updated.', 'LayerSlider'),
@@ -182,7 +182,7 @@
 <div id="ls-guides" class="metabox-prefs">
 	<div id="ls-guides-wrap" class="hidden">
 		<h5><?php _e('Interactive guides coming soon!', 'LayerSlider') ?></h5>
-		<p><?php _e("Interactive step-by-step tutorial guides will shortly arrive to help you get started using LayerSlider.", 'LayerSlider') ?></p>
+		<p><?php _e('Interactive step-by-step tutorial guides will shortly arrive to help you get started using LayerSlider.', 'LayerSlider') ?></p>
 	</div>
 	<div id="show-guides-link-wrap" class="hide-if-no-js screen-meta-toggle">
 		<button type="button" id="show-guides-link" class="button show-settings" aria-controls="ls-guides-wrap" aria-expanded="false"><?php _e('Guides', 'LayerSlider') ?></button>
@@ -330,6 +330,7 @@
 										data-slug="<?php echo htmlentities($item['slug']) ?>"
 										data-export-url="<?php echo wp_nonce_url('?page=layerslider&action=export&id='.$item['id'], 'export-sliders') ?>"
 										data-duplicate-url="<?php echo wp_nonce_url('?page=layerslider&action=duplicate&id='.$item['id'], 'duplicate_'.$item['id']) ?>"
+										data-revisions-url="<?php echo admin_url('admin.php?page=ls-revisions&id='.$item['id']) ?>"
 										data-remove-url="<?php echo wp_nonce_url('?page=layerslider&action=remove&id='.$item['id'], 'remove_'.$item['id']) ?>">
 									</span>
 									<?php else : ?>
@@ -363,6 +364,12 @@
 								<a href="#">
 									<i class="dashicons dashicons-admin-page"></i>
 									<?php _e('Duplicate', 'LayerSlider') ?>
+								</a>
+							</li>
+							<li>
+								<a href="#">
+									<i class="dashicons dashicons-backup"></i>
+									<?php _e('Revisions', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
@@ -456,6 +463,12 @@
 								</a>
 							</li>
 							<li>
+								<a href="<?php echo admin_url('admin.php?page=ls-revisions&id='.$item['id']) ?>">
+									<i class="dashicons dashicons-backup"></i>
+									<?php _e('Revisions', 'LayerSlider') ?>
+								</a>
+							</li>
+							<li>
 								<a href="<?php echo wp_nonce_url('?page=layerslider&action=remove&id='.$item['id'], 'remove_'.$item['id']) ?>" class="remove">
 									<i class="dashicons dashicons-trash"></i>
 									<?php _e('Remove', 'LayerSlider') ?>
@@ -476,9 +489,9 @@
 				<div class="ls-notification-info">
 					<i class="dashicons dashicons-info"></i>
 					<?php if( $userFilters ) : ?>
-					<span><?php _e('No sliders found with the current filters set. <a href="?page=layerslider">Click here</a> to reset filters.', 'LayerSlider') ?></span>
+					<span><?php echo sprintf(__('No sliders found with the current filters set. %sClick here%s to reset filters.', 'LayerSlider'), '<a href="?page=layerslider">', '</a>') ?></span>
 					<?php else : ?>
-					<span><?php _e('Add a new slider or check out the <a href="#" class="ls-open-template-store"><i class="dashicons dashicons-star-filled"></i>Template Store</a> to get started using LayerSlider.', 'LayerSlider') ?></span>
+					<span><?php echo sprintf(__('Add a new slider or check out the %sTemplate Store%s to get started using LayerSlider.', 'LayerSlider'), '<a href="#" class="ls-open-template-store"><i class="dashicons dashicons-star-filled"></i>', '</a>') ?></span>
 					<?php endif ?>
 				</div>
 			</div>
@@ -504,15 +517,15 @@
 			</div>
 			<div class="ls-pagination bottom">
 				<div class="tablenav-pages">
-					<span class="displaying-num"><?php echo $maxItem ?> <?php _e('items', 'LayerSlider') ?></span>
+					<span class="displaying-num"><?php echo sprintf(_n('%d slider', '%d sliders', $maxItem, 'LayerSlider'), $maxItem) ?></span>
 					<span class="pagination-links">
-						<a class="button first-page<?php echo ($curPage <= 1) ? ' disabled' : ''; ?>" title="Go to the first page" href="admin.php?page=layerslider&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">«</a>
-						<a class="button prev-page <?php echo ($curPage <= 1) ? ' disabled' : ''; ?>" title="Go to the previous page" href="admin.php?page=layerslider&amp;paged=<?php echo ($curPage-1) ?>&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">‹</a>
+						<a class="button first-page<?php echo ($curPage <= 1) ? ' disabled' : ''; ?>" title="<?php _e('Go to the first page', 'LayerSlider') ?>" href="admin.php?page=layerslider&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">«</a>
+						<a class="button prev-page <?php echo ($curPage <= 1) ? ' disabled' : ''; ?>" title="<?php _e('Go to the previous page', 'LayerSlider') ?>" href="admin.php?page=layerslider&amp;paged=<?php echo ($curPage-1) ?>&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">‹</a>
 
-						<span class="total-pages"><?php echo $curPage ?> of <?php echo $maxPage ?></span>
+						<span class="total-pages"><?php echo sprintf(__('%1$d of %2$d', 'LayerSlider'), $curPage, $maxPage) ?> </span>
 
-						<a class="button next-page <?php echo ($curPage >= $maxPage) ? ' disabled' : ''; ?>" title="Go to the next page" href="admin.php?page=layerslider&amp;paged=<?php echo ($curPage+1) ?>&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">›</a>
-						<a class="button last-page <?php echo ($curPage >= $maxPage) ? ' disabled' : ''; ?>" title="Go to the last page" href="admin.php?page=layerslider&amp;paged=<?php echo $maxPage ?>&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">»</a>
+						<a class="button next-page <?php echo ($curPage >= $maxPage) ? ' disabled' : ''; ?>" title="<?php _e('Go to the next page', 'LayerSlider') ?>" href="admin.php?page=layerslider&amp;paged=<?php echo ($curPage+1) ?>&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">›</a>
+						<a class="button last-page <?php echo ($curPage >= $maxPage) ? ' disabled' : ''; ?>" title="<?php _e('Go to the last page', 'LayerSlider') ?>" href="admin.php?page=layerslider&amp;paged=<?php echo $maxPage ?>&amp;filter=<?php echo $urlParamFilter ?>&amp;term=<?php echo $urlParamTerm ?>&amp;order=<?php echo $urlParamOrder ?>">»</a>
 					</span>
 				</div>
 			</div>
@@ -571,7 +584,7 @@
 						<li>
 							<i class="dashicons dashicons-store"></i>
 							<strong><?php _e('Premium Slider Templates', 'LayerSlider') ?></strong>
-							<small><?php _e('Access more templates to get started with projects. ', 'LayerSlider') ?></small>
+							<small><?php _e('Access more templates to get started with projects.', 'LayerSlider') ?></small>
 						</li>
 					</ul>
 
@@ -581,17 +594,17 @@
 					<input type="hidden" name="action" value="layerslider_authorize_site">
 
 					<div class="main-controls">
-						<span class="enter"><?php _e('Enter your purchase code: ', 'LayerSlider') ?></span>
-						<a target="_blank" class="button button-small where-button" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation-purchase-code"><?php _e("Where's my purchase code?", "LayerSlider") ?></a>
+						<span class="enter"><?php _e('Enter your purchase code:', 'LayerSlider') ?></span>
+						<a target="_blank" class="button button-small where-button" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation-purchase-code"><?php _e('Where’s my purchase code?', 'LayerSlider') ?></a>
 
 						<div class="key">
 							<input type="text" name="purchase_code" value="<?php echo $codeFormatted ?>" placeholder="e.g. bc8e2b24-3f8c-4b21-8b4b-90d57a38e3c7">
 						</div>
 						<p>
 							<?php if( $GLOBALS['lsAutoUpdateBox'] == false ) {
-								_e("It seems you've received LayerSlider by a theme. Please note, the activation only works if you've purchased LayerSlider directly from Kreatura. <a href=\"http://codecanyon.net/cart/add_items?ref=kreatura&amp;item_ids=1362246\" target=\"_blank\">Purchase a license</a> or read our <a href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation\" target=\"_blank\">activation guide</a>.", "LayerSlider");
+								echo sprintf(__('It seems you’ve received LayerSlider by a theme. Please note, the activation only works if you’ve purchased LayerSlider directly from Kreatura. %sPurchase a license%s or read our %sactivation guide%s.', 'LayerSlider'), '<a href="http://codecanyon.net/cart/add_items?ref=kreatura&amp;item_ids=1362246" target="_blank">', '</a>', '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">', '</a>');
 							} else {
-								_e('If you experience any issue or need further information, please read our <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">activation guide</a>.', 'LayerSlider');
+								echo sprintf(__('If you experience any issue or need further information, please read our %sactivation guide%s.', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">', '</a>');
 							} ?>
 						</p>
 
@@ -654,7 +667,7 @@
 							<?php endif ?>
 						</li>
 					</ul>
-					<a href="https://kreatura.ticksy.com/" target="_blank" class="button"><?php _e('Visit our Support Center', 'LayerSlider') ?></a>
+					<a href="https://kreatura.ticksy.com/" target="_blank" class="button button-normal"><?php _e('Visit our Support Center', 'LayerSlider') ?></a>
 				</div>
 			</div>
 		</div>
@@ -678,7 +691,7 @@
 						</li>
 						<li>
 							<i class="dashicons dashicons-heart"></i>
-							<strong><?php _e('Sneak Peak on Product Updates', 'LayerSlider') ?></strong>
+							<strong><?php _e('Sneak Peek on Product Updates', 'LayerSlider') ?></strong>
 							<small><?php _e('Access to all the cool new features before anyone else.', 'LayerSlider') ?></small>
 						</li>
 						<li>
@@ -693,6 +706,20 @@
 						<div class="email"><input type="text" name="email" placeholder="<?php _e('Enter your email address', 'LayerSlider') ?>"></div>
 						<button class="button"><?php _e('Subscribe', 'LayerSlider') ?></button>
 					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- Tips & Recommendations -->
+		<div class="half">
+			<div class="ls-box ls-product-banner ls-product-tips">
+				<div class="header medium">
+					<h2><?php _e('Need help with customization?', 'LayerSlider') ?></h2>
+				</div>
+				<div class="inner">
+					<?php echo sprintf(__('%sWPKraken%s has a professional team of WordPress experts to offer a variety of customization jobs. We’ve partnered with them in order to provide these kinds of services to you. Get a free quote if you’re looking for someone to manage your site, build sliders and customize LayerSlider according to your needs.', 'LayerSlider'), '<a href="https://wpkraken.io/?ref=kreatura" target="_blank">', '</a>') ?>
+					<a href="https://wpkraken.io/?ref=kreatura" target="_blank" class="button"><?php _e('Learn More & Get a Free Quote', 'LayerSlider') ?></a>
 				</div>
 			</div>
 		</div>
@@ -729,9 +756,9 @@
 					</select>
 
 					<i><?php _e('or', 'LayerSlider') ?></i> <?php _e('enter a custom capability', 'LayerSlider') ?>
-					<input type="text" name="custom_capability" value="<?php echo $custom_capability ?>" placeholder="Enter custom capability">
+					<input type="text" name="custom_capability" value="<?php echo $custom_capability ?>" placeholder="<?php _e('Enter custom capability', 'LayerSlider') ?>">
 
-					<p><?php _e('You can specify a custom capability if none of the pre-defined roles match your needs. You can find all the available capabilities on', 'LayerSlider') ?> <a href="http://codex.wordpress.org/Roles_and_Capabilities#Capability_vs._Role_Table" target="_blank"><?php _e('this page', 'LayerSlider') ?></a>.</p>
+					<p><?php echo sprintf(__('You can specify a custom capability if none of the pre-defined roles match your needs. You can find all the available capabilities on %sthis%s page.', 'LayerSlider'), '<a href="http://codex.wordpress.org/Roles_and_Capabilities#Capability_vs._Role_Table" target="_blank">', '</a>') ?></a>.</p>
 				</div>
 				<div class="footer">
 					<button class="button"><?php _e('Update', 'LayerSlider') ?></button>
@@ -751,7 +778,7 @@
 				<div class="inner">
 					<ul class="ls-font-list">
 						<li class="ls-hidden">
-							<a href="#" class="remove dashicons dashicons-dismiss" title="Remove this font"></a>
+							<a href="#" class="remove dashicons dashicons-dismiss" title="<?php _e('Remove this font', 'LayerSlider') ?>"></a>
 							<input type="text" data-name="urlParams" readonly>
 							<input type="checkbox" data-name="onlyOnAdmin">
 							<?php _e('Load only on admin interface', 'LayerSlider') ?>
@@ -759,14 +786,14 @@
 						<?php if(is_array($googleFonts) && !empty($googleFonts)) : ?>
 						<?php foreach($googleFonts as $item) : ?>
 						<li>
-							<a href="#" class="remove dashicons dashicons-dismiss" title="Remove this font"></a>
+							<a href="#" class="remove dashicons dashicons-dismiss" title="<?php _e('Remove this font', 'LayerSlider') ?>"></a>
 							<input type="text" data-name="urlParams" value="<?php echo htmlspecialchars($item['param']) ?>" readonly>
 							<input type="checkbox" data-name="onlyOnAdmin" <?php echo $item['admin'] ? ' checked="checked"' : '' ?>>
 							<?php _e('Load only on admin interface', 'LayerSlider') ?>
 						</li>
 						<?php endforeach ?>
 						<?php else : ?>
-						<li class="ls-notice"><?php _e("You haven't added any Google Font to your collection yet.", "LayerSlider") ?></li>
+						<li class="ls-notice"><?php _e('You haven’t added any Google Font to your collection yet.', 'LayerSlider') ?></li>
 						<?php endif ?>
 					</ul>
 				</div>
@@ -796,14 +823,27 @@
 					<button type="submit" class="button"><?php _e('Save changes', 'LayerSlider') ?></button>
 					<?php
 						$scripts = array(
+							'arabic' => __('Arabic', 'LayerSlider'),
+							'bengali' => __('Bengali', 'LayerSlider'),
 							'cyrillic' => __('Cyrillic', 'LayerSlider'),
 							'cyrillic-ext' => __('Cyrillic Extended', 'LayerSlider'),
 							'devanagari' => __('Devanagari', 'LayerSlider'),
 							'greek' => __('Greek', 'LayerSlider'),
 							'greek-ext' => __('Greek Extended', 'LayerSlider'),
+							'gujarati' => __('Gujarati', 'LayerSlider'),
+							'gurmukhi' => __('Gurmukhi', 'LayerSlider'),
+							'hebrew' => __('Hebrew', 'LayerSlider'),
+							'kannada' => __('Kannada', 'LayerSlider'),
 							'khmer' => __('Khmer', 'LayerSlider'),
 							'latin' => __('Latin', 'LayerSlider'),
 							'latin-ext' => __('Latin Extended', 'LayerSlider'),
+							'malayalam' => __('Malayalam', 'LayerSlider'),
+							'myanmar' => __('Myanmar', 'LayerSlider'),
+							'oriya' => __('Oriya', 'LayerSlider'),
+							'sinhala' => __('Sinhala', 'LayerSlider'),
+							'tamil' => __('Tamil', 'LayerSlider'),
+							'telugu' => __('Telugu', 'LayerSlider'),
+							'thai' => __('Thai', 'LayerSlider'),
 							'vietnamese' => __('Vietnamese', 'LayerSlider')
 						);
 					?>
@@ -854,7 +894,7 @@
 		<div class="ls-global-settings">
 			<figure>
 				<?php _e('Troubleshooting &amp; Advanced Settings', 'LayerSlider') ?>
-				<span class="warning"><?php _e("Don't change these options without experience, incorrect settings might break your site.", "LayerSlider") ?></span>
+				<span class="warning"><?php _e('Don’t change these options without experience, incorrect settings might break your site.', 'LayerSlider') ?></span>
 			</figure>
 			<form method="post" class="ls-box km-tabs-inner">
 				<?php wp_nonce_field('save-advanced-settings'); ?>
@@ -870,24 +910,24 @@
 						</td>
 					</tr>
 					<tr>
-						<td><?php _e("Include scripts in the footer", "LayerSlider") ?></td>
+						<td><?php _e('Include scripts in the footer', 'LayerSlider') ?></td>
 						<td><input type="checkbox" name="include_at_footer" <?php echo get_option('ls_include_at_footer', false) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e("Including resources in the footer can improve load times and solve other type of issues. Outdated themes might not support this method.", "LayerSlider") ?></td>
+						<td class="desc"><?php _e('Including resources in the footer can improve load times and solve other type of issues. Outdated themes might not support this method.', 'LayerSlider') ?></td>
 					</tr>
 					<tr>
-						<td><?php _e("Conditional script loading", "LayerSlider") ?></td>
+						<td><?php _e('Conditional script loading', 'LayerSlider') ?></td>
 						<td><input type="checkbox" name="conditional_script_loading" <?php echo get_option('ls_conditional_script_loading', false) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e("Increase your site's performance by loading resources only when necessary. Outdated themes might not support this method.", "LayerSlider") ?></td>
+						<td class="desc"><?php _e('Increase your site’s performance by loading resources only when necessary. Outdated themes might not support this method.', 'LayerSlider') ?></td>
 					</tr>
 					<tr>
 						<td><?php _e('Concatenate output', 'LayerSlider') ?></td>
 						<td><input type="checkbox" name="concatenate_output" <?php echo get_option('ls_concatenate_output', false) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e("Concatenating the plugin's output could solve issues caused by custom filters your theme might use.", "LayerSlider") ?></td>
+						<td class="desc"><?php _e('Concatenating the plugin’s output could solve issues caused by custom filters your theme might use.', 'LayerSlider') ?></td>
 					</tr>
 					<tr id="ls_use_custom_jquery">
 						<td><?php _e('Use Google CDN version of jQuery', 'LayerSlider') ?></td>
 						<td><input type="checkbox" name="use_custom_jquery" <?php echo get_option('ls_use_custom_jquery', false) ? 'checked="checked"' : '' ?>></td>
-						<td class="desc"><?php _e('This option will likely solve "Old jQuery" issues, but can easily have other side effects. Use it only when it is necessary.', 'LayerSlider') ?></td>
+						<td class="desc"><?php _e('This option will likely solve “Old jQuery” issues, but can easily have other side effects. Use it only when it is necessary.', 'LayerSlider') ?></td>
 					</tr>
 					<tr>
 						<td><?php _e('Put JS includes to body', 'LayerSlider') ?></td>
@@ -922,7 +962,7 @@
 						<?php _e('Click here to check System Status', 'LayerSlider') ?>
 					</a>
 					<p class="center">
-						<?php _e('System Status is intended to help you identifying possible issues and to display relevant debug information about your site. <br>It also provides tools to list every server settings, easily set up a debug account or to erase all plugin data.', 'LayerSlider') ?>
+						<?php _e('System Status is intended to help you identifying possible issues and to display relevant debug information about your site. <br>It also provides tools to list every server settings or to erase all plugin data.', 'LayerSlider') ?>
 					</p>
 				</div>
 			</div>
@@ -942,7 +982,7 @@
 					<li data-page="betas"><?php _e('Beta versions', 'LayerSlider') ?></li>
 				</ul>
 			</div>
-			<div class="ls-version"<?php _e('>You have version', 'LayerSlider') ?> <?php echo LS_PLUGIN_VERSION ?> <?php _e('installed', 'LayerSlider') ?></div>
+			<div class="ls-version"><?php echo sprintf(__('You have version %s installed', 'LayerSlider'), LS_PLUGIN_VERSION) ?></div>
 		</div>
 		<div>
 			<iframe src="https://news.kreaturamedia.com/layerslider/"></iframe>

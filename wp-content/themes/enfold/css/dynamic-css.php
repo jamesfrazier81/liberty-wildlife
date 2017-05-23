@@ -332,6 +332,12 @@ background-color:$bg;
 color: $heading;
 }
 
+#top $key .avia-color-theme-color-highlight{
+color: $button_font;
+border-color: $secondary;
+background-color: $secondary;
+}
+
 
 ";
 

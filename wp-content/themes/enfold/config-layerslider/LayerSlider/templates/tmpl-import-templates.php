@@ -2,11 +2,6 @@
 $demoSliders = LS_Sources::getDemoSliders(); ?>
 <script type="text/javascript">
 	window.lsImportNonce = '<?php echo wp_create_nonce('ls-import-demos'); ?>';
-	window.lsImportWarningTitle = "<?php _e('Activate your site to access premium templates.', 'LayerSlider') ?>";
-	window.lsImportWarningContent = "<?php _e('This template is only available for activated sites. Please review the PRODUCT ACTIVATION section on the main LayerSlider screen or <a href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation\" target=\"_blank\">click here</a> for more information.', 'LayerSlider') ?>";
-
-	window.lsImportVersionWarningTitle = "<?php _e('Plugin update required', 'LayerSlider') ?>";
-	window.lsImportVersionWarningContent = '<?php _e('This slider template requires a newer version of LayerSlider in order to work properly. This is due to additional features introduced in a later version than you have. For updating instructions, please refer to our <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank">online documnetation</a>.', 'LayerSlider') ?>';
 </script>
 <script type="text/html" id="tmpl-import-sliders">
 	<div id="ls-import-modal-window" class="ls-modal fullpage ls-box <?php echo $lsStoreHasUpdate ? 'has-updates' : '' ?>">
@@ -43,7 +38,7 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 			<nav>
 				<ul>
 					<li class="uppercase active" data-group="all"><?php _e('All', 'LayerSlider') ?></li>
-					<li class="uppercase" data-group="free"><?php _e('All free', 'LayerSlider') ?></li>
+					<li class="uppercase" data-group="free"><?php _e('All Free', 'LayerSlider') ?></li>
 					<li class="uppercase" data-group="premium"><?php _e('All Premium', 'LayerSlider') ?></li>
 					<?php if( count($demoSliders) ) : ?>
 					<li class="uppercase" data-group="bundled"><?php _e('Bundled', 'LayerSlider') ?></li>

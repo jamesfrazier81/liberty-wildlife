@@ -65,12 +65,14 @@ if ( !class_exists( 'avia_sc_produc_button' ) )
 
 			// $product = wc_get_product();
 			$output .= "<div class='av-woo-purchase-button ".$meta['el_class']."'>";
+			$output .= '<p class="price">' . $product->get_price_html() . '</p>';
+			
 			ob_start();
 			wc_clear_notices();
 			woocommerce_template_single_add_to_cart();
 			$output .= ob_get_clean();
-			$output .= "</div>";
 			
+			$output .= "</div>";
 			
 			return $output;
 		}

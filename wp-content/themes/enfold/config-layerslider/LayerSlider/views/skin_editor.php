@@ -83,10 +83,10 @@
 			<textarea rows="10" cols="50" name="contents" class="ls-codemirror"><?php echo htmlentities(file_get_contents($file)); ?></textarea>
 			<p class="footer">
 				<?php if(!is_writable($file)) { ?>
-				<?php _e('You need to make this file writable in order to save your changes. See the <a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">Codex</a> for more information.', 'LayerSlider') ?>
+				<?php echo sprintf(__('You need to make this file writable in order to save your changes. See the %sCodex%s for more information.', 'LayerSlider'), '<a href="http://codex.wordpress.org/Changing_File_Permissions" target="_blank">', '</a>') ?>
 				<?php } else { ?>
 				<button class="button-primary"><?php _e('Save changes', 'LayerSlider') ?></button>
-				<?php _e("Modifying a skin with invalid code can break your sliders' appearance. Changes cannot be reverted after saving.", "LayerSlider") ?>
+				<?php _e('Modifying a skin with invalid code can break your sliders’ appearance. Changes cannot be reverted after saving.', 'LayerSlider') ?>
 				<?php } ?>
 			</p>
 		</div>

@@ -344,7 +344,7 @@
 	{
 		var the_body = $("body"), container = "";
 	
-		the_body.on('change', '.avia-style select, .avia-style textarea, .avia-style radio, .avia-style input[type=checkbox], .avia-style input[type=hidden], .avia-style input[type=text]', function()
+		the_body.on('change', '.avia-style select, .avia-style textarea, .avia-style radio, .avia-style input[type=checkbox], .avia-style input[type=hidden], .avia-style input[type=text], .avia-style input[type=radio]', function()
 		{
 			var current 	= $(this), 
 				scope	= current.parents('.avia-modal:eq(0)');
@@ -357,6 +357,13 @@
 				is_hidden	= current.parents('.avia-form-element-container:eq(0)').is('.avia-hidden');
 				
 				if(current.is('input[type=checkbox]') && !current.prop('checked')) value1 = "";
+				if(current.is('input[type=radio]'))
+				{
+					var name = this.name.replace(/aviaTB/g,"");
+					dependent = scope.find('.avia-form-element-container[data-check-element="'+name+'"]'); 
+				}
+				
+								
 				if(!dependent.length) return;
 				
 				dependent.each(function()

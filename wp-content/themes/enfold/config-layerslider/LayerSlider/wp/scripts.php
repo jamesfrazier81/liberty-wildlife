@@ -10,6 +10,24 @@ add_action('admin_enqueue_scripts', 'ls_load_google_fonts', $lsPriority);
 add_action('wp_enqueue_scripts', 'ls_load_google_fonts', ($lsPriority+1));
 add_action('wp_head', 'ls_meta_generator', 9);
 
+// Fix for CloudFlare's Rocket Loader
+add_filter('script_loader_tag', 'layerslider_script_attributes', 10, 3);
+function layerslider_script_attributes( $tag, $handle, $src ) {
+
+	if(
+		$handle === 'layerslider' ||
+		$handle === 'layerslider-greensock' ||
+		$handle === 'layerslider-transitions' ||
+		$handle === 'layerslider-origami' ||
+		$handle === 'ls-user-transitions'
+	) {
+		$tag = str_replace('src=', 'data-cfasync="false" src=', $tag);
+	}
+
+
+	return $tag;
+}
+
 
 function layerslider_enqueue_content_res() {
 
@@ -111,6 +129,13 @@ function layerslider_enqueue_admin_res() {
 	// Load global LayerSlider CSS
 	wp_enqueue_style('layerslider-global', LS_ROOT_URL.'/static/admin/css/global.css', false, LS_PLUGIN_VERSION );
 
+	// Load global LayerSlider JS
+	include LS_ROOT_PATH.'/wp/tinymce_l10n.php';
+	wp_enqueue_script('layerslider-global', LS_ROOT_URL.'/static/admin/js/ls-admin-global.js', false, LS_PLUGIN_VERSION );
+	wp_localize_script('layerslider-global', 'LS_MCE_l10n', $l10n_ls_mce);
+
+
+	// Embed CSS. Hides the admin menu bar and the sidebar.
 	if( ! empty( $_GET['ls-embed'] ) ) {
 		wp_enqueue_style('layerslider-embed', LS_ROOT_URL.'/static/admin/css/embed.css', false, LS_PLUGIN_VERSION);
 	}
@@ -142,7 +167,7 @@ function layerslider_enqueue_admin_res() {
 		// Global scripts & stylesheets
 		wp_enqueue_script('layerslider-greensock', LS_ROOT_URL.'/static/layerslider/js/greensock.js', false, '1.18.0' );
 		wp_enqueue_script('kreaturamedia-ui', LS_ROOT_URL.'/static/admin/js/km-ui.js', array('jquery'), LS_PLUGIN_VERSION );
-		wp_enqueue_script('ls-admin-global', LS_ROOT_URL.'/static/admin/js/ls-admin-global.js', array('jquery'), LS_PLUGIN_VERSION );
+		wp_enqueue_script('ls-admin-global', LS_ROOT_URL.'/static/admin/js/ls-admin-common.js', array('jquery'), LS_PLUGIN_VERSION );
 		wp_enqueue_style('layerslider-admin', LS_ROOT_URL.'/static/admin/css/admin.css', false, LS_PLUGIN_VERSION );
 		wp_enqueue_style('layerslider-admin-new', LS_ROOT_URL.'/static/admin/css/admin_new.css', false, LS_PLUGIN_VERSION );
 		wp_enqueue_style('kreaturamedia-ui', LS_ROOT_URL.'/static/admin/css/km-ui.css', false, LS_PLUGIN_VERSION );
@@ -158,8 +183,13 @@ function layerslider_enqueue_admin_res() {
 		wp_enqueue_script('codemirror-brace-fold', LS_ROOT_URL.'/static/codemirror/addon/fold/brace-fold.js', array('jquery'), LS_PLUGIN_VERSION );
 		wp_enqueue_script('codemirror-active-line', LS_ROOT_URL.'/static/codemirror/addon/selection/active-line.js', array('jquery'), LS_PLUGIN_VERSION );
 
+		// Localize admin scripts
+		include LS_ROOT_PATH.'/wp/scripts_l10n.php';
+		wp_localize_script('ls-admin-global', 'LS_l10n', $l10n_ls);
+
+
 		// Sliders list page
-		if(!empty($_GET['page']) && $_GET['page'] != 'ls-transition-builder' && empty($_GET['action'])) {
+		if(!empty($_GET['page']) && $_GET['page'] != 'ls-transition-builder' && $_GET['page'] != 'ls-revisions' && empty($_GET['action'])) {
 			wp_enqueue_script('ls-admin-sliders', LS_ROOT_URL.'/static/admin/js/ls-admin-sliders.js', array('jquery'), LS_PLUGIN_VERSION );
 			wp_enqueue_script('ls-shuffle', LS_ROOT_URL.'/static/shuffle/shuffle.min.js', array('jquery'), LS_PLUGIN_VERSION );
 
@@ -173,9 +203,11 @@ function layerslider_enqueue_admin_res() {
 			wp_enqueue_script('jquery-ui-resizable');
 			wp_enqueue_script('jquery-ui-slider');
 
-			// Slider Builder JS. Don't load for Transition Builder.
-			if(!empty($_GET['page']) && $_GET['page'] != 'ls-transition-builder') {
-				wp_enqueue_script('layerslider-admin', LS_ROOT_URL.'/static/admin/js/ls-admin-slider-builder.js', array('jquery', 'json2'), LS_PLUGIN_VERSION );
+			wp_register_script('layerslider-admin', LS_ROOT_URL.'/static/admin/js/ls-admin-slider-builder.js', array('jquery', 'json2'), LS_PLUGIN_VERSION );
+
+			// Slider Builder JS. Don't load automatically other than the Slider Builder
+			if(! empty( $_GET['page'] ) && $_GET['page'] != 'ls-transition-builder' && $_GET['page'] != 'ls-revisions') {
+				wp_enqueue_script('layerslider-admin');
 			}
 
 			// LayerSlider includes for preview
@@ -223,6 +255,13 @@ function layerslider_enqueue_admin_res() {
 	if(strpos($screen->base, 'ls-transition-builder') !== false) {
 		wp_enqueue_script('layerslider_tr_builder', LS_ROOT_URL.'/static/admin/js/ls-admin-transition-builder.js', array('jquery'), LS_PLUGIN_VERSION );
 	}
+
+	// Revisions
+	if(strpos($screen->base, 'ls-revisions') !== false) {
+		wp_enqueue_style('ls-revisions', LS_ROOT_URL.'/static/admin/css/revisions.css', false, LS_PLUGIN_VERSION );
+		wp_enqueue_script('ls-revisions', LS_ROOT_URL.'/static/admin/js/ls-admin-revisions.js', array('jquery'), LS_PLUGIN_VERSION );
+	}
+
 
 	// Skin editor
 	if(strpos($screen->base, 'ls-skin-editor') !== false || strpos($screen->base, 'ls-style-editor') !== false) {

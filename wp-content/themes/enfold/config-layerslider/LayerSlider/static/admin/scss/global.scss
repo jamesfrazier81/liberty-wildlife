@@ -73,34 +73,14 @@
 		margin-left: -50%;
 		width: 90%;
 		height: 90%;
-		-webkit-transform: rotateX(50deg) rotate(45deg);
-		-moz-transform: rotateX(50deg) rotate(45deg);
-		transform: rotateX(50deg) rotate(45deg);
+		-webkit-transform: rotateX(60deg) rotate(45deg);
+		-moz-transform: rotateX(60deg) rotate(45deg);
+		transform: rotateX(60deg) rotate(45deg);
 		z-index: 3;
-		opacity: .6;
-
-		&:nth-child(2) {
-			top: 40%;
-			left: 50%;
-			margin-left: -40%;
-			width: 70%;
-			height: 70%;
-			opacity: .45;
-			z-index: 2
-		}
-
-		&:nth-child(3) {
-			top: 68%;
-			left: 50%;
-			margin-left: -35%;
-			width: 60%;
-			height: 60%;
-			opacity: .33;
-			z-index: 1
-		}
+		opacity: 1;
 
 		.layerslider-logo-inner {
-			background: black;
+			background: #ccc;
 			border-radius: 20%;
 			padding: 10%;
 			width: 100%;
@@ -112,7 +92,6 @@
 			margin-top: -60%;
 
 			.layerslider-logo-color {
-				background-color: white;
 				position: absolute;
 				width: 80%;
 				height: 80%;
@@ -121,6 +100,32 @@
 				top: 50%;
 				margin-left: -40%;
 				margin-top: -40%;
+			}
+		}
+
+		&:nth-child(2) {
+			top: 40%;
+			left: 50%;
+			margin-left: -40%;
+			width: 70%;
+			height: 70%;
+			z-index: 2;
+
+			.layerslider-logo-inner {
+				background: #aaa;
+			}
+		}
+
+		&:nth-child(3) {
+			top: 68%;
+			left: 50%;
+			margin-left: -35%;
+			width: 60%;
+			height: 60%;
+			z-index: 1;
+
+			.layerslider-logo-inner {
+				background: #888;
 			}
 		}
 	}
@@ -152,31 +157,31 @@
 
 @-webkit-keyframes layerslider-logo {
 	0% {
-		-webkit-transform: rotateX(50deg) rotate(45deg)
+		-webkit-transform: rotateX(60deg) rotate(45deg)
     }
     100%,
     70% {
-		-webkit-transform: rotateX(50deg) rotate(135deg)
+		-webkit-transform: rotateX(60deg) rotate(135deg)
     }
 }
 
 @-moz-keyframes layerslider-logo {
     0% {
-		-moz-transform: rotateX(50deg) rotate(45deg)
+		-moz-transform: rotateX(60deg) rotate(45deg)
     }
     100%,
     70% {
-		-moz-transform: rotateX(50deg) rotate(135deg)
+		-moz-transform: rotateX(60deg) rotate(135deg)
     }
 }
 
 @keyframes layerslider-logo {
     0% {
-		transform: rotateX(50deg) rotate(45deg)
+		transform: rotateX(60deg) rotate(45deg)
     }
     100%,
     70% {
-		transform: rotateX(50deg) rotate(135deg)
+		transform: rotateX(60deg) rotate(135deg)
     }
 }
 

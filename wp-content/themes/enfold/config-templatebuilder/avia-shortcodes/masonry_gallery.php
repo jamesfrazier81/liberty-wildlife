@@ -113,6 +113,23 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 						'fixed masonry' => __('Perfect Automatic Masonry: Display a grid where most images get the same size, only very wide images get twice the width and very high images get twice the height. To qualify for "very wide" or "very high" the image must have a aspect ratio of 16:9 or higher',  'avia_framework' ),
 					)),
 					
+/*
+				array(
+					"name" 	=> __("Orientation", 'avia_framework' ),
+					"desc" 	=> __("Set the orientation of the cropped preview images", 'avia_framework' ),
+					"id" 	=> "orientation",
+					"type" 	=> "select",
+					"std" 	=> "",
+					"required" => array('size','equals','fixed'),
+					"subtype" => array(
+						__('Wide Landscape',  'avia_framework' ) =>'av-orientation-landscape-large',
+						__('Landscape',  'avia_framework' ) =>'',
+						__('Square',  'avia_framework' ) =>'av-orientation-square',
+						__('Portrait',  'avia_framework' ) =>'av-orientation-portrait',
+						__('High Portrait',  'avia_framework' ) =>'av-orientation-portrait-large',
+					)),	
+					
+*/
 					
 				array(
 					"name" 	=> __("Gap between elements", 'avia_framework' ),

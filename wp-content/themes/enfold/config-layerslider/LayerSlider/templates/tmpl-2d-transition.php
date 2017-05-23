@@ -96,14 +96,14 @@
 					<td class="right"><?php _e('Type', 'LayerSlider') ?></td>
 					<td>
 						<select name="type" data-help="<?php _e('The type of the animation, either slide, fade or both (mixed).', 'LayerSlider') ?>">
-							<option value="slide"><?php _e('Slide', 'LayerSlider') ?></option>
+							<option value="slide"><?php _ex('Slide', 'verb', 'LayerSlider') ?></option>
 							<option value="fade"><?php _e('Fade', 'LayerSlider') ?></option>
 							<option value="mixed"><?php _e('Mixed', 'LayerSlider') ?></option>
 						</select>
 					</td>
 					<td class="right"><?php _e('Direction', 'LayerSlider') ?></td>
 					<td>
-						<select name="direction" data-help="<?php _e('The direction of the slide or mixed animation if you\'ve chosen this type in the previous settings.', 'LayerSlider') ?>">
+						<select name="direction" data-help="<?php _e('The direction of the slide or mixed animation if you’ve chosen this type in the previous settings.', 'LayerSlider') ?>">
 							<option value="top"><?php _e('Top', 'LayerSlider') ?></option>
 							<option value="right"><?php _e('Right', 'LayerSlider') ?></option>
 							<option value="bottom"><?php _e('Bottom', 'LayerSlider') ?></option>
@@ -118,15 +118,15 @@
 				</tr>
 				<tr>
 					<td class="right"><?php _e('RotateX', 'LayerSlider') ?></td>
-					<td><input type="text" name="rotateX" value="0" data-help="The initial rotation of the individual tiles which will be animated to the default (0deg) value around the X axis. You can use negatuve values."></td>
+					<td><input type="text" name="rotateX" value="0" data-help="<?php _e('The initial rotation of the individual tiles which will be animated to the default (0deg) value around the X axis. You can use negatuve values.', 'LayerSlider') ?>"></td>
 					<td class="right"><?php _e('RotateY', 'LayerSlider') ?></td>
-					<td><input type="text" name="rotateY" value="0" data-help="The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Y axis. You can use negatuve values."></td>
+					<td><input type="text" name="rotateY" value="0" data-help="<?php _e('The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Y axis. You can use negatuve values.', 'LayerSlider') ?>"></td>
 				</tr>
 				<tr>
 					<td class="right"><?php _e('RotateZ', 'LayerSlider') ?></td>
-					<td><input type="text" name="rotate" value="0" data-help="The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Z axis. You can use negatuve values."></td>
+					<td><input type="text" name="rotate" value="0" data-help="<?php _e('The initial rotation of the individual tiles which will be animated to the default (0deg) value around the Z axis. You can use negatuve values.', 'LayerSlider') ?>"></td>
 					<td class="right"><?php _e('Scale', 'LayerSlider') ?></td>
-					<td><input type="text" name="scale" value="1.0" data-help="The initial scale of the individual tiles which will be animated to the default (1.0) value."></td>
+					<td><input type="text" name="scale" value="1.0" data-help="<?php _e('The initial scale of the individual tiles which will be animated to the default (1.0) value.', 'LayerSlider') ?>"></td>
 				</tr>
 			</tbody>
 		</table>
