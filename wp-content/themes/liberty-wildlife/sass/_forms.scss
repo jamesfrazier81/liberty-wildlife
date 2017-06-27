@@ -1,11 +1,100 @@
 #top #wrap_all #main {
-	// Enfold form element
-	.avia_ajax_form {
-		.form_element {
-			label {
-				abbr.required {
-					color: red;
-				}
+    // Enfold form element
+    .avia_ajax_form {
+        .form_element {
+            label {
+                abbr.required {
+                    color: red;
+                }
+            }
+        }
+    }
+}
+
+// Contact Form 7
+.wpcf7-form {
+    display: flex;
+    flex-wrap: wrap;
+
+    p {
+        width: 100%;
+        margin: 0;
+
+        &:nth-child(6) {
+        	width: 39%;
+        	margin: 0 1% 0 0;
+        }
+
+        &:nth-child(7) {
+        	width: 39%;
+        	margin: 0 1% 0 0;
+        }
+
+        &:nth-child(8) {
+        	width: 20%;
+        	margin: 0;
+        }
+
+        label > sup {
+        	color: red;
+        }
+
+        .wpcf7-form-control-wrap {
+        	// Radio
+        	.wpcf7-radio {
+        		display: block;
+        		margin-bottom: 20px;
+        	}
+
+        	// Checkboxes
+        	.wpcf7-checkbox {
+        		.wpcf7-list-item {
+        			width: 100%;
+        			margin: 0;
+        		}
+        	}
+        }
+
+        input[type="submit"] {
+        	margin-top: 20px;
+        	font-family: $font-main;
+        	font-size: 0.85rem;
+        	font-weight: bold;
+        	background-color: $color-orange;
+        }
+    }
+
+    // reCAPTCHA
+    .wpcf7-form-control-wrap {
+    	width: 100%;
+    }
+}
+
+@media screen and (max-width: $media-tablet) {
+	.responsive #top #wrap_all #main {
+		// Contact Form 7
+		.wpcf7-form {
+		    display: flex;
+		    flex-wrap: none;
+
+		    p {
+		        width: 100%;
+		        margin: 0;
+
+		        &:nth-child(6) {
+		        	width: 100%;
+		        	margin: 0;
+		        }
+
+		        &:nth-child(7) {
+		        	width: 100%;
+		        	margin: 0;
+		        }
+
+		        &:nth-child(8) {
+		        	width: 100%;
+		        	margin: 0;
+		        }
 			}
 		}
 	}

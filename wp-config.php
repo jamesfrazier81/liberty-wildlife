@@ -142,6 +142,9 @@ define('WPLANG', '');
  */
 define('WP_DEBUG', false);
 
+/* Remove Contact Form 7 form validation */
+// define( 'WPCF7_VALIDATE_CONFIGURATION', false );
+
 /* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */

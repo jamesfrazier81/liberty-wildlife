@@ -22,6 +22,9 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 <meta name="theme-color" content="#ffffff">
+
+<!-- Contact Form 7 reCAPTCHA code snippet -->
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <?php
 /*
  * outputs a rel=follow or nofollow tag to circumvent google duplicate content for archives
