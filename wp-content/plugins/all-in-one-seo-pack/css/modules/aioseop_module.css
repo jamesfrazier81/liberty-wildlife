@@ -361,6 +361,10 @@ div.aioseop_tip_icon:before {
     margin-top: 20px;
 }
 
+.aioseop_translations {
+	margin-top: 15px;
+}
+
 .aioseop_option_label {
     float: left;
     margin: 0;
