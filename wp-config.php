@@ -19,7 +19,7 @@ if (
 		preg_match('/^([a-z-_0-9]+\.)*[a-z-_0-9]+\.dev(?!\.)/', $_SERVER['SERVER_NAME']) // Request Domain follows the pattern [xxx.]xxx.dev
 	) {
 	define('WP_ENV', 'local');
-} elseif (preg_match('/staging.libertywildlife.com/', $_SERVER['HTTP_HOST'])) { // staging_server_domain
+} elseif (preg_match('/staging.libertywildlife.org/', $_SERVER['HTTP_HOST'])) { // staging_server_domain
 	define('WP_ENV', 'staging');
 } else {
 	define('WP_ENV', 'production');
@@ -57,9 +57,9 @@ if ( WP_ENV == 'local' ) {
 	/** MySQL hostname */
 	define('DB_HOST', '107.180.51.25'); // staging_db_host
 
-	define('WP_SITEURL', "http://staging.libertywildlife.com"); // staging_site_url
+	define('WP_SITEURL', "http://staging.libertywildlife.org"); // staging_site_url
 
-	define('WP_HOME', "http://staging.libertywildlife.com"); // staging_home_url
+	define('WP_HOME', "http://staging.libertywildlife.org"); // staging_home_url
 
 } else {
 	// ** MySQL settings - You can get this info from your web host ** //
@@ -75,9 +75,9 @@ if ( WP_ENV == 'local' ) {
 	/** MySQL hostname */
 	define('DB_HOST', '107.180.51.25'); // production_db_host
 
-	define('WP_SITEURL', "https://www.libertywildlife.org"); // production_site_url
+	define('WP_SITEURL', "http://libertywildlife.org"); // production_site_url
 
-	define('WP_HOME', "https://www.libertywildlife.org"); // production_home_url
+	define('WP_HOME', "http://libertywildlife.org"); // production_home_url
 }
 
 /** Set flask to the default template for WordPress to use. */
@@ -141,9 +141,6 @@ define('WPLANG', '');
  * in their development environments.
  */
 define('WP_DEBUG', false);
-
-/* Remove Contact Form 7 form validation */
-// define( 'WPCF7_VALIDATE_CONFIGURATION', false );
 
 /* That's all, stop editing! Happy blogging. */
 

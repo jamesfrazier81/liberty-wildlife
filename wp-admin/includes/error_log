@@ -1,0 +1,4 @@
+[05-Jul-2017 15:29:38 UTC] PHP Fatal error:  Class 'WP_List_Table' not found in /home/califcondor1981/public_html/wp-admin/includes/class-wp-plugin-install-list-table.php on line 18
+[06-Jul-2017 08:38:59 UTC] PHP Fatal error:  Class 'WP_List_Table' not found in /home/califcondor1981/public_html/wp-admin/includes/class-wp-terms-list-table.php on line 18
+[06-Jul-2017 08:39:05 UTC] PHP Fatal error:  Class 'WP_List_Table' not found in /home/califcondor1981/public_html/wp-admin/includes/class-wp-terms-list-table.php on line 18
+[06-Jul-2017 08:39:13 UTC] PHP Fatal error:  Class 'WP_List_Table' not found in /home/califcondor1981/public_html/wp-admin/includes/class-wp-terms-list-table.php on line 18

@@ -1,0 +1,7 @@
+[05-Jul-2017 10:40:48 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/califcondor1981/public_html/wp-includes/class-snoopy.php on line 6
+[05-Jul-2017 10:40:49 UTC] PHP Fatal error:  Call to undefined function _deprecated_file() in /home/califcondor1981/public_html/wp-includes/class-snoopy.php on line 6
+[05-Jul-2017 10:41:28 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/califcondor1981/public_html/wp-includes/ms-default-filters.php on line 16
+[05-Jul-2017 10:41:29 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/califcondor1981/public_html/wp-includes/ms-default-filters.php on line 16
+[06-Jul-2017 10:38:33 UTC] PHP Fatal error:  Call to undefined function feed_content_type() in /home/califcondor1981/public_html/wp-includes/feed-rss2.php on line 8
+[06-Jul-2017 10:38:40 UTC] PHP Fatal error:  Call to undefined function feed_content_type() in /home/califcondor1981/public_html/wp-includes/feed-rss2.php on line 8
+[06-Jul-2017 10:38:41 UTC] PHP Fatal error:  Call to undefined function feed_content_type() in /home/califcondor1981/public_html/wp-includes/feed-rss2.php on line 8

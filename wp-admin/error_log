@@ -1,0 +1,1 @@
+[04-Jul-2017 17:21:00 UTC] PHP Warning:  stream_socket_enable_crypto(): Peer certificate CN=`*.prod.iad2.secureserver.net' did not match expected CN=`localhost' in /home/califcondor1981/public_html/wp-includes/class-smtp.php on line 369

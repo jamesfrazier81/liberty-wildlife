@@ -1,0 +1,4 @@
+[29-Jul-2012 16:53:00] PHP Fatal error:  Call to undefined function  sanitize_title() in /home/libertyw/public_html/wp-content/plugins/configure-smtp/c2c-plugin.php on line 57
+[29-Jul-2012 16:53:40] PHP Fatal error:  Call to undefined function  sanitize_title() in /home/libertyw/public_html/wp-content/plugins/configure-smtp/c2c-plugin.php on line 57
+[29-Jul-2012 16:54:18] PHP Fatal error:  Call to undefined function  sanitize_title() in /home/libertyw/public_html/wp-content/plugins/configure-smtp/c2c-plugin.php on line 57
+[29-Jul-2012 16:55:00] PHP Fatal error:  Call to undefined function  sanitize_title() in /home/libertyw/public_html/wp-content/plugins/configure-smtp/c2c-plugin.php on line 57
