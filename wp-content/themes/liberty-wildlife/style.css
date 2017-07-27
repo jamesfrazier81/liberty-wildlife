@@ -268,6 +268,19 @@ html, body {
           background-position: center center;
           color: transparent; }
 
+#top #wrap_all #main .av-section-bottom-logo {
+  display: none; }
+
+#top #wrap_all #mobile-advanced {
+  background-color: #333333; }
+  #top #wrap_all #mobile-advanced li a {
+    font-weight: 700;
+    color: white; }
+    #top #wrap_all #mobile-advanced li a:before {
+      color: #da5834; }
+  #top #wrap_all #mobile-advanced li .sub-menu li a {
+    background-color: #292929; }
+
 @media screen and (max-width: 989px) {
   #top #wrap_all #header {
     position: relative; }

@@ -95,32 +95,32 @@
         }
     }
 
-    // #main {
-    //     .av-section-bottom-logo {
-    //         display: none;
-    //     }
-    // }
+    #main {
+        .av-section-bottom-logo {
+            display: none;
+        }
+    }
 
-    // #mobile-advanced {
-    //     background-color: $color-gray-dark;
+    #mobile-advanced {
+        background-color: $color-gray-dark;
 
-    //     li {
-    //         a {
-    //             font-weight: $font-bold;
-    //             color: white;
+        li {
+            a {
+                font-weight: $font-bold;
+                color: white;
 
-    //             &:before {
-    //                 color: $color-orange;
-    //             }
-    //         }
+                &:before {
+                    color: $color-orange;
+                }
+            }
 
-    //         .sub-menu {
-    //             li a {
-    //                 background-color: #292929;
-    //             }
-    //         }
-    //     }
-    // }
+            .sub-menu {
+                li a {
+                    background-color: #292929;
+                }
+            }
+        }
+    }
 }
 
 @media screen and (max-width: $media-navswitch) {
