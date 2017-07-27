@@ -26,7 +26,7 @@ function my_login_logo() { ?>
 			background-image: url('/wp-content/themes/liberty-wildlife/img/dist/logo-liberty-wildlife-vert.png');
 			background-size: 100%;
 			width: 100%;
-			height: 187px;
+			height: 198px;
 		}
 		body.login div#login form#loginform {
 			background-color: rgba(255, 255, 255, 0.75);

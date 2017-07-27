@@ -1,4 +1,0 @@
-[05-Jul-2017 19:04:02 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/califcondor1981/public_html/wp-content/plugins/contact-form-7/modules/file.php on line 8
-[05-Jul-2017 19:04:07 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/califcondor1981/public_html/wp-content/plugins/contact-form-7/modules/file.php on line 8
-[05-Jul-2017 19:04:12 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/califcondor1981/public_html/wp-content/plugins/contact-form-7/modules/file.php on line 8
-[05-Jul-2017 19:04:15 UTC] PHP Fatal error:  Call to undefined function add_action() in /home/califcondor1981/public_html/wp-content/plugins/contact-form-7/modules/file.php on line 8

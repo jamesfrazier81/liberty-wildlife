@@ -3,7 +3,7 @@
 Plugin Name: Disable Comments
 Plugin URI: https://wordpress.org/plugins/disable-comments/
 Description: Allows administrators to globally disable comments on their site. Comments can be disabled according to post type.
-Version: 1.6
+Version: 1.7
 Author: Samir Shah
 Author URI: http://www.rayofsolaris.net/
 License: GPL2
@@ -28,7 +28,7 @@ class Disable_Comments {
 		return self::$instance;
 	}
 
-	private function __construct() {
+	function __construct() {
 		// are we network activated?
 		$this->networkactive = ( is_multisite() && array_key_exists( plugin_basename( __FILE__ ), (array) get_site_option( 'active_sitewide_plugins' ) ) );
 
@@ -196,7 +196,6 @@ class Disable_Comments {
 
 			if( $this->options['remove_everywhere'] ) {
 				add_filter( 'feed_links_show_comments_feed', '__return_false' );
-				add_action( 'wp_footer', array( $this, 'hide_meta_widget_link' ), 100 );
 			}
 		}
 	}
@@ -341,12 +340,6 @@ jQuery(document).ready(function($){
 		</script>';
 	}
 
-	public function hide_meta_widget_link(){
-		if ( is_active_widget( false, false, 'meta', true ) && wp_script_is( 'jquery', 'enqueued' ) ) {
-			echo '<script> jQuery(function($){ $(".widget_meta a[href=\'' . esc_url( get_bloginfo( 'comments_rss2_url' ) ) . '\']").parent().remove(); }); </script>';
-		}
-	}
-
 	public function filter_existing_comments($comments, $post_id) {
 		$post = get_post( $post_id );
 		return ( $this->options['remove_everywhere'] || $this->is_post_type_disabled( $post->post_type ) ) ? array() : $comments;
@@ -388,7 +381,7 @@ jQuery(document).ready(function($){
 	}
 
 	public function settings_menu() {
-		$title = __( 'Disable Comments', 'disable-comments' );
+		$title = _x( 'Disable Comments', 'settings menu title', 'disable-comments' );
 		if( $this->networkactive )
 			add_submenu_page( 'settings.php', $title, $title, 'manage_network_plugins', 'disable_comments_settings', array( $this, 'settings_page' ) );
 		else
@@ -443,8 +436,6 @@ jQuery(document).ready(function($){
 		if( defined( 'DISABLE_COMMENTS_ALLOW_PERSISTENT_MODE' ) && DISABLE_COMMENTS_ALLOW_PERSISTENT_MODE == false ) {
 			return false;
 		}
-		// The filter below is deprecated and will be removed in future versions. Use the define instead.
-		return apply_filters( 'disable_comments_allow_persistent_mode', true );
 	}
 
 	public function single_site_deactivate() {
