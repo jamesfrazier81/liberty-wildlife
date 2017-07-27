@@ -19,6 +19,7 @@ function layerslider_script_attributes( $tag, $handle, $src ) {
 		$handle === 'layerslider-greensock' ||
 		$handle === 'layerslider-transitions' ||
 		$handle === 'layerslider-origami' ||
+		$handle === 'layerslider-popup' ||
 		$handle === 'ls-user-transitions'
 	) {
 		$tag = str_replace('src=', 'data-cfasync="false" src=', $tag);
@@ -56,6 +57,10 @@ function layerslider_enqueue_content_res() {
 	// LayerSlider Origami plugin
 	wp_register_script('layerslider-origami', LS_ROOT_URL.'/static/layerslider/plugins/origami/layerslider.origami.js', array('jquery'), LS_PLUGIN_VERSION, $footer );
 	wp_register_style('layerslider-origami', LS_ROOT_URL.'/static/layerslider/plugins/origami/layerslider.origami.css', false, LS_PLUGIN_VERSION );
+
+	// LayerSlider Popup plugin
+	wp_register_script('layerslider-popup', LS_ROOT_URL.'/static/layerslider/plugins/popup/layerslider.popup.js', array('jquery'), LS_PLUGIN_VERSION, $footer );
+	wp_register_style('layerslider-popup', LS_ROOT_URL.'/static/layerslider/plugins/popup/layerslider.popup.css', false, LS_PLUGIN_VERSION );
 
 
 	// Build LS_Meta object
@@ -224,6 +229,10 @@ function layerslider_enqueue_admin_res() {
 			// LayerSlider Origami plugin
 			wp_enqueue_script('layerslider-origami', LS_ROOT_URL.'/static/layerslider/plugins/origami/layerslider.origami.js', array('jquery'), LS_PLUGIN_VERSION );
 			wp_enqueue_style('layerslider-origami', LS_ROOT_URL.'/static/layerslider/plugins/origami/layerslider.origami.css', false, LS_PLUGIN_VERSION );
+
+			// LayerSlider Popup plugin
+			wp_enqueue_script('layerslider-popup', LS_ROOT_URL.'/static/layerslider/plugins/popup/layerslider.popup.js', array('jquery'), LS_PLUGIN_VERSION );
+			wp_enqueue_style('layerslider-popup', LS_ROOT_URL.'/static/layerslider/plugins/popup/layerslider.popup.css', false, LS_PLUGIN_VERSION );
 
 			// 3rd-party: MiniColor
 			wp_enqueue_script('minicolor', LS_ROOT_URL.'/static/minicolors/jquery.minicolors.js', array('jquery'), LS_PLUGIN_VERSION );

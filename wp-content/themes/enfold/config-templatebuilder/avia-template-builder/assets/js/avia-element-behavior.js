@@ -354,7 +354,8 @@
 			var id			= this.id.replace(/aviaTB/g,""),
 				dependent	= scope.find('.avia-form-element-container[data-check-element="'+id+'"]'), 
 				value1		= this.value,
-				is_hidden	= current.parents('.avia-form-element-container:eq(0)').is('.avia-hidden');
+				is_hidden	= current.parents('.avia-form-element-container:eq(0)').is('.avia-hidden'),
+				parent_val  = '';
 				
 				if(current.is('input[type=checkbox]') && !current.prop('checked')) value1 = "";
 				if(current.is('input[type=radio]'))
@@ -363,6 +364,23 @@
 					dependent = scope.find('.avia-form-element-container[data-check-element="'+name+'"]'); 
 				}
 				
+				//	Get value of parent element when depending subelements are changed
+				var parent_element = current.closest('.avia-form-element-container').find('#'+ this.id+':eq(0)');
+				if( parent_element.is('input[type=checkbox]') )
+				{
+					parent_val = parent_element.prop('checked') ? parent_element.val() : '';
+				}
+				else if( parent_element.is('input[type=radio]' ) )
+				{
+					if( '' === parent_val )
+					{
+						parent_val = parent_element.prop('checked');
+					}
+				}
+				else
+				{
+					parent_val = parent_element.val();
+				}
 								
 				if(!dependent.length) return;
 				
@@ -381,19 +399,31 @@
 								case 'not': 			if(value1 != value2) show = true; break;
 								case 'is_larger': 		if(value1 >  value2) show = true; break;
 								case 'is_smaller': 		if(value1 <  value2) show = true; break;
-								case 'contains': 		if(value1.indexOf(value2) != -1) show = true; break;
-								case 'doesnt_contain':  if(value1.indexOf(value2) == -1) show = true; break;
-								case 'is_empty_or':  	if(value1 == "" || value1 == value2) show = true; break;
-								case 'not_empty_and':  	if(value1 != "" && value1 != value2) show = true; break;
+								case 'contains': 		if(value1.indexOf(value2) !== -1) show = true; break;
+								case 'doesnt_contain':  if(value1.indexOf(value2) === -1) show = true; break;
+								case 'is_empty_or':  	if(value1 === "" || value1 === value2) show = true; break;
+								case 'not_empty_and':  	if(value1 !== "" && value1 !== value2) show = true; break;
+								case 'parent_in_array': 
+														if( '' !== parent_val )
+														{
+															show = ( -1 !== $.inArray( parent_val, value2.split( ' ' ) ) ); 
+														}
+														break;
+								case 'parent_not_in_array': 
+														if( '' !== parent_val )
+														{
+															show = ( -1 === $.inArray( parent_val, value2.split( ' ' ) ) ); 
+														}
+														break;
 							}
 						}
 						
-						if(show == true && current.is('.avia-hidden'))
+						if(show === true && current.is('.avia-hidden'))
 						{
 							current.css({display:'none'}).removeClass('avia-hidden').find('select, radio, input[type=checkbox]').trigger('change');
 							current.slideDown(300);
 						}
-						else if(show == false  && !current.is('.avia-hidden'))
+						else if(show === false  && !current.is('.avia-hidden'))
 						{
 							current.css({display:'block'}).addClass('avia-hidden').find('select, radio, input[type=checkbox]').trigger('change');
 							current.slideUp(300);

@@ -217,6 +217,85 @@ if ( !class_exists( 'avia_sc_headline_rotator' ) )
 						),
 						
 					array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+									
+								array(
+									"name" 	=> __("Heading Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the heading, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'' , __("Hidden", 'avia_framework' )=>'hidden' ), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
+						
+					array(
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
@@ -255,6 +334,9 @@ if ( !class_exists( 'avia_sc_headline_rotator' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				$this->screen_options = AviaHelper::av_mobile_sizes($atts);
+				extract($this->screen_options); //return $av_font_classes, $av_title_font_classes and $av_display_classes	
+							
 				extract(shortcode_atts(array(
 				
 				'align'=>'left', 
@@ -293,10 +375,10 @@ if ( !class_exists( 'avia_sc_headline_rotator' ) )
 				
 				
 				$output	 = "";
-				$output .= "<div {$style} class='av-rotator-container av-rotation-container-".$atts['align']." ".$meta['el_class']."' {$data}>";
-				$output .= "<{$tag} class='av-rotator-container-inner'>";
+				$output .= "<div {$style} class='av-rotator-container av-rotation-container-".$atts['align']." {$av_display_classes} ".$meta['el_class']."' {$data}>";
+				$output .= "<{$tag} class='av-rotator-container-inner {$av_title_font_classes}'>";
 				$output .= apply_filters('avia_ampersand', $before_rotating);
-				$output .= "<span class='av-rotator-text av-rotator-multiline-{$multiline}'>";
+				$output .= "<span class='av-rotator-text av-rotator-multiline-{$multiline} '>";
 				$output .= ShortcodeHelper::avia_remove_autop( $content, true );
 				$output .= "</span>";
 				$output .= apply_filters('avia_ampersand', $after_rotating);
@@ -309,6 +391,8 @@ if ( !class_exists( 'avia_sc_headline_rotator' ) )
 
 			function av_rotator_item($atts, $content = "", $shortcodename = "")
 			{
+				extract($this->screen_options); //return $av_font_classes, $av_title_font_classes and $av_display_classes	
+				
                 $atts = shortcode_atts(
                 array(	
                 	'title' 		=> '',

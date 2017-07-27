@@ -392,6 +392,14 @@ $lsDefaults = array(
 			'desc' => __('The slider will not start until it becomes visible.', 'LayerSlider')
 		),
 
+		'hashChange' => array(
+			'value' => false,
+			'name' => __('Change URL hash', 'LayerSlider'),
+			'keys' => 'hashChange',
+			'desc' => __('Updates the hash in the page URL when changing slides based on the deeplinks you’ve set to your slides. This makes it possible to share URLs that will start the slider with the currently visible slide.', 'LayerSlider'),
+			'advanced' => true
+		),
+
 		'pauseLayers' => array(
 			'value' => false,
 			'name' => __('Pause layers', 'LayerSlider'),
@@ -828,6 +836,533 @@ $lsDefaults = array(
 			)
 		),
 
+
+		// =========== //
+		// |  Popup  | //
+		// =========== //
+
+		'popupShowOnClick' => array(
+			'value' => '',
+			'name' => __('Open by click', 'LayerSlider'),
+			'keys' => 'popupShowOnClick',
+			'desc' => __('Enter a jQuery selector to open the Popup by clicking on the target element(s). Acting as a toggle, a secondary click will close the Popup. Leave this field empty if you don’t want to use this trigger.', 'LayerSlider')
+		),
+
+		'popupShowOnScroll' => array(
+			'value' => '',
+			'name' => __('Open at scroll position', 'LayerSlider'),
+			'keys' => 'popupShowOnScroll',
+			'desc' => __('Enter a scroll position in pixels or percents, which will open the Popup when visitors scroll to that location. Leave this field empty if you don’t want to use this trigger.', 'LayerSlider')
+		),
+
+		'popupCloseOnScroll' => array(
+			'value' => '',
+			'name' => __('Close at scroll position', 'LayerSlider'),
+			'keys' => 'popupCloseOnScroll',
+			'desc' => __('Enter a scroll position in pixels or percents, which will close the Popup when visitors scroll to that location. Leave this field empty if you don’t want to use this trigger.', 'LayerSlider')
+		),
+
+		'popupCloseOnTimeout' => array(
+			'value' => '',
+			'name' => __('Close automatically after', 'LayerSlider'),
+			'keys' => 'popupCloseOnTimeout',
+			'desc' => __('Automatically closes the Popup in the specified number of seconds after it was opened. Leave this field empty if you don’t want to use this trigger.', 'LayerSlider')
+		),
+
+		'popupCloseOnSliderEnd' => array(
+			'value' => false,
+			'name' => __('Close on slider end', 'LayerSlider'),
+			'keys' => 'popupCloseOnSliderEnd',
+			'desc' => __('Closes the Popup after the slider has completed a full cycle and all your slides were displayed.', 'LayerSlider')
+		),
+
+		'popupShowOnLeave' => array(
+			'value' => false,
+			'name' => __('Before leaving the page', 'LayerSlider'),
+			'keys' => 'popupShowOnLeave',
+			'desc' => __('Opens the Popup before leaving the page. A leave intent is considered when visitors leave the browser window with their mouse cursor in the direction where the window controls and the tab bar is located.', 'LayerSlider')
+		),
+
+		'popupShowOnIdle' => array(
+			'value' => '',
+			'name' => __('Open when idle for', 'LayerSlider'),
+			'keys' => 'popupShowOnIdle',
+			'desc' => __('Opens the Popup after the specified number of seconds when the user is inactive without moving the mouse cursor or pressing any button. Leave this field empty if you don’t want to use this trigger.', 'LayerSlider')
+		),
+
+		'popupShowOnTimeout' => array(
+			'value' => '',
+			'name' => __('Open automatically after', 'LayerSlider'),
+			'keys' => 'popupShowOnTimeout',
+			'desc' => __('Automatically opens the Popup after the specified number of seconds. Leave this field empty if you don’t want to use this trigger.', 'LayerSlider')
+		),
+
+
+		'popupShowOnce' => array(
+			'value' => true,
+			'name' => __('Show only once', 'LayerSlider'),
+			'keys' => 'popupShowOnce',
+			'desc' => __('Depending on your settings, the same Popup can be displayed in multiple times without reloading the page. Enabling this option will prevent opening this Popup consequently.', 'LayerSlider'),
+			'advanced' => true
+		),
+
+		'popupDisableOverlay' => array(
+			'value' => false,
+			'name' => __('Disable overlay', 'LayerSlider'),
+			'keys' => 'popupDisableOverlay',
+			'desc' => __('Disable this option to hide the overlay behind the Popup.', 'LayerSlider')
+		),
+
+		'popupShowCloseButton' => array(
+			'value' => true,
+			'name' => __('Show close button', 'LayerSlider'),
+			'keys' => 'popupShowCloseButton',
+			'desc' => __('Disable this option to hide the Popup close button. This option is also useful when you would like to use a custom close button. To do that, select the “Close the Popup” option from the layer linking field.', 'LayerSlider')
+		),
+
+		'popupCloseButtonStyle' => array(
+			'value' => '',
+			'name' => __('Close button custom CSS', 'LayerSlider'),
+			'keys' => 'popupCloseButtonStyle',
+			'desc' => __('Enter a list of CSS properties, which will be applied to the built-in close button (if enabled) to customize it’s appearance.', 'LayerSlider'),
+			'advanced' => true
+		),
+
+		'popupOverlayClickToClose' => array(
+			'value' => true,
+			'name' => __('Close by clicking away', 'LayerSlider'),
+			'keys' => 'popupOverlayClickToClose',
+			'desc' => __('Close the Popup by clicking on the overlay.', 'LayerSlider')
+		),
+
+		'popupStartSliderImmediately' => array(
+			'value' => false,
+			'name' => __('Start slider immediately', 'LayerSlider'),
+			'keys' => 'popupStartSliderImmediately',
+			'desc' => __('Enable this option to start your slider immediately, without waiting for the Popup to complete its opening transition.', 'LayerSlider'),
+			'advanced' => true
+		),
+
+		'popupResetOnClose' => array(
+			'value' => 'slide',
+			'name' => __('Reset on close', 'LayerSlider'),
+			'keys' => 'popupResetOnClose',
+			'desc' => __('Choose whether the slider should play all slide transitions over again when re-opening the Popup.', 'LayerSlider'),
+			'advanced' => true,
+			'options' => array(
+				'disabled' => __('Disabled', 'LayerSlider'),
+				'slide' => __('Enabled', 'LayerSlider')
+			)
+		),
+
+		// 'popupCustomStyle' => array(
+		// 	'value' => '',
+		// 	'name' => __('Popup custom CSS', 'LayerSlider'),
+		// 	'keys' => 'popupCustomStyle',
+		// 	'desc' => __('Enter CSS properties, which will be applied to the popup main container element to customize it’s appearance.', 'LayerSlider')
+		// ),
+
+		'popupWidth' => array(
+			'value' => 640,
+			'name' => __('Popup Width', 'LayerSlider'),
+			'keys' => 'popupWidth',
+			'attrs' => array(
+				'type' => 'number',
+				'min' => 0,
+ 			),
+			'props' => array(
+				'output' => true
+			)
+		),
+
+		'popupHeight' => array(
+			'value' => 360,
+			'name' => __('Popup Height', 'LayerSlider'),
+			'keys' => 'popupHeight',
+			'attrs' => array(
+				'type' => 'number',
+				'min' => 0,
+ 			),
+			'props' => array(
+				'output' => true
+			)
+		),
+
+		'popupFitWidth' => array(
+			'value' => false,
+			'name' => __('Fit Width', 'LayerSlider'),
+			'keys' => 'popupFitWidth'
+		),
+
+		'popupFitHeight' => array(
+			'value' => false,
+			'name' => __('Fit Height', 'LayerSlider'),
+			'keys' => 'popupFitHeight'
+		),
+
+		'popupPositionHorizontal' => array(
+			'value' => 'center',
+			'keys' => 'popupPositionHorizontal'
+		),
+
+		'popupPositionVertical' => array(
+			'value' => 'middle',
+			'keys' => 'popupPositionVertical'
+		),
+
+		'popupDistanceLeft' => array(
+			'value' => 10,
+			'name' => __('Distance left', 'LayerSlider'),
+			'keys' => 'popupDistanceLeft',
+			'tooltip' => __('Distance specified in pixels from the left side of the browser window.', 'LayerSlider')
+		),
+
+		'popupDistanceRight' => array(
+			'value' => 10,
+			'name' => __('Distance right', 'LayerSlider'),
+			'keys' => 'popupDistanceRight',
+			'tooltip' => __('Distance specified in pixels from the right side of the browser window.', 'LayerSlider')
+		),
+
+		'popupDistanceTop' => array(
+			'value' => 10,
+			'name' => __('Distance top', 'LayerSlider'),
+			'keys' => 'popupDistanceTop',
+			'tooltip' => __('Distance specified in pixels from the top of the browser window.', 'LayerSlider')
+		),
+
+		'popupDistanceBottom' => array(
+			'value' => 10,
+			'name' => __('Distance bottom', 'LayerSlider'),
+			'keys' => 'popupDistanceBottom',
+			'tooltip' => __('Distance specified in pixels from the bottom of the browser window.', 'LayerSlider')
+		),
+
+		'popupDurationIn' => array(
+			'value' => 1000,
+			'name' => __('Opening duration', 'LayerSlider'),
+			'keys' => 'popupDurationIn',
+			'desc' => __('The Popup opening transition duration specified in milliseconds. A second equals to 1000 milliseconds.', 'LayerSlider'),
+			'attrs' => array(
+				'min' => 0,
+				'step' => 100
+			)
+		),
+
+		'popupDurationOut' => array(
+			'value' => 500,
+			'name' => __('Closing duration', 'LayerSlider'),
+			'keys' => 'popupDurationOut',
+			'desc' => __('The Popup closing transition duration specified in milliseconds. A second equals to 1000 milliseconds.', 'LayerSlider'),
+			'attrs' => array(
+				'min' => 0,
+				'step' => 100
+			)
+		),
+
+		'popupDelayIn' => array(
+			'value' => 200,
+			'name' => __('Opening delay', 'LayerSlider'),
+			'keys' => 'popupDelayIn',
+			'desc' => __('Delay before opening the Popup specified in milliseconds. A second equals to 1000 milliseconds.', 'LayerSlider'),
+			'advanced' => true,
+			'attrs' => array(
+				'min' => 0,
+				'step' => 100
+			)
+		),
+
+		// 'popupEaseIn' => array(
+		// 	'value' => 'easeInOutQuint',
+		// 	'name' => __('Opening easing', 'LayerSlider'),
+		// 	'keys' => 'popupEaseIn',
+		// 	'desc' => __('The timing function of the animation. With it you can manipulate the movement of animated objects. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider')
+		// ),
+
+		// 'popupEaseOut' => array(
+		// 	'value' => 'easeInQuint',
+		// 	'name' => __('Closing easing', 'LayerSlider'),
+		// 	'keys' => 'popupEaseOut',
+		// 	'desc' => __('The timing function of the animation. With it you can manipulate the movement of animated objects. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider')
+		// ),
+
+		'popupTransitionIn' => array(
+			'value' => 'fade',
+			'name' => __('Opening transition', 'LayerSlider'),
+			'keys' => 'popupTransitionIn',
+			'desc' => __('Choose from one of the pre-defined Popup opening transitions.', 'LayerSlider'),
+			'options' => array(
+				'fade' => __('Fade', 'LayerSlider'),
+				'slidefromtop' => __('Slide from top', 'LayerSlider'),
+				'slidefrombottom' => __('Slide from bottom', 'LayerSlider'),
+				'slidefromleft' => __('Slide from left', 'LayerSlider'),
+				'slidefromright' => __('Slide from right', 'LayerSlider'),
+				'rotatefromtop' => __('Rotate from top', 'LayerSlider'),
+				'rotatefrombottom' => __('Rotate from bottom', 'LayerSlider'),
+				'rotatefromleft' => __('Rotate from left', 'LayerSlider'),
+				'rotatefromright' => __('Rotate from right', 'LayerSlider'),
+				'scalefromtop' => __('Scale from top', 'LayerSlider'),
+				'scalefrombottom' => __('Scale from bottom', 'LayerSlider'),
+				'scalefromleft' => __('Scale from left', 'LayerSlider'),
+				'scalefromright' => __('Scale from right', 'LayerSlider'),
+				'scale' => __('Scale', 'LayerSlider'),
+				'spin' => __('Spin', 'LayerSlider'),
+				'spinx' => __('Spin horizontally', 'LayerSlider'),
+				'spiny' => __('Spin vertically', 'LayerSlider'),
+				'elastic' => __('Elastic', 'LayerSlider')
+			)
+		),
+
+		'popupTransitionOut' => array(
+			'value' => 'fade',
+			'name' => __('Closing transition', 'LayerSlider'),
+			'keys' => 'popupTransitionOut',
+			'desc' => __('Choose from one of the pre-defined Popup closing transitions.', 'LayerSlider'),
+			'options' => array(
+				'fade' => __('Fade', 'LayerSlider'),
+				'slidetotop' => __('Slide to top', 'LayerSlider'),
+				'slidetobottom' => __('Slide to bottom', 'LayerSlider'),
+				'slidetoleft' => __('Slide to left', 'LayerSlider'),
+				'slidetoright' => __('Slide to right', 'LayerSlider'),
+				'rotatetotop' => __('Rotate to top', 'LayerSlider'),
+				'rotatetobottom' => __('Rotate to bottom', 'LayerSlider'),
+				'rotatetoleft' => __('Rotate to left', 'LayerSlider'),
+				'rotatetoright' => __('Rotate to right', 'LayerSlider'),
+				'scaletotop' => __('Scale to top', 'LayerSlider'),
+				'scaletobottom' => __('Scale to bottom', 'LayerSlider'),
+				'scaletoleft' => __('Scale to left', 'LayerSlider'),
+				'scaletoright' => __('Scale to right', 'LayerSlider'),
+				'scale' => __('Scale', 'LayerSlider'),
+				'spin' => __('Spin', 'LayerSlider'),
+				'spinx' => __('Spin horizontally', 'LayerSlider'),
+				'spiny' => __('Spin vertically', 'LayerSlider'),
+				'elastic' => __('Elastic', 'LayerSlider')
+			)
+		),
+
+		// 'popupCustomTransitionIn' => array(
+		// 	'value' => '',
+		// 	'name' => __('Custom opening transition', 'LayerSlider'),
+		// 	'keys' => 'popupCustomTransitionIn',
+		// ),
+
+		// 'popupCustomTransitionOut' => array(
+		// 	'value' => '',
+		// 	'name' => __('Custom closing transition', 'LayerSlider'),
+		// 	'keys' => 'popupCustomTransitionOut',
+		// ),
+
+		'popupOverlayBackground' => array(
+			'value' => 'rgba(0,0,0,.85)',
+			'name' => __('Overlay color', 'LayerSlider'),
+			'keys' => 'popupOverlayBackground',
+			'desc' => __('The overlay color. You can use color names, hexadecimal, RGB or RGBA values.', 'LayerSlider')
+		),
+
+		'popupOverlayDurationIn' => array(
+			'value' => 400,
+			'name' => __('Overlay opening duration', 'LayerSlider'),
+			'keys' => 'popupOverlayDurationIn',
+			'desc' => __('The overlay opening transition duration specified in milliseconds. A second equals to 1000 milliseconds.', 'LayerSlider'),
+			'attrs' => array(
+				'min' => 0,
+				'step' => 100
+			)
+		),
+
+		'popupOverlayDurationOut' => array(
+			'value' => 400,
+			'name' => __('Overlay closing duration', 'LayerSlider'),
+			'keys' => 'popupOverlayDurationOut',
+			'desc' => __('The overlay closing transition duration specified in milliseconds. A second equals to 1000 milliseconds.', 'LayerSlider'),
+			'attrs' => array(
+				'min' => 0,
+				'step' => 100
+			)
+		),
+
+		// 'popupOverlayEaseIn' => array(
+		// 	'value' => 'easeInQuint',
+		// 	'name' => __('Overlay opening easing', 'LayerSlider'),
+		// 	'keys' => 'popupOverlayEaseIn',
+		// 	'desc' => __('The timing function of the animation. With it you can manipulate the movement of animated objects. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider')
+		// ),
+
+		// 'popupOverlayEaseOut' => array(
+		// 	'value' => 'easeInQuint',
+		// 	'name' => __('Overlay closing easing', 'LayerSlider'),
+		// 	'keys' => 'popupOverlayEaseOut',
+		// 	'desc' => __('The timing function of the animation. With it you can manipulate the movement of animated objects. Please click on the link next to this select field to open easings.net for more information and real-time examples.', 'LayerSlider')
+		// ),
+
+		'popupOverlayTransitionIn' => array(
+			'value' => 'fade',
+			'name' => __('Opening transition', 'LayerSlider'),
+			'keys' => 'popupOverlayTransitionIn',
+			'desc' => __('Choose from one of the pre-defined overlay opening transitions.', 'LayerSlider'),
+			'options' => array(
+				'fade' => __('Fade', 'LayerSlider'),
+				'slidefromtop' => __('Slide from top', 'LayerSlider'),
+				'slidefrombottom' => __('Slide from bottom', 'LayerSlider'),
+				'slidefromleft' => __('Slide from left', 'LayerSlider'),
+				'slidefromright' => __('Slide from right', 'LayerSlider'),
+				'fadefromtopright' => __('Fade from top right', 'LayerSlider'),
+				'fadefromtopleft' => __('Fade from top left', 'LayerSlider'),
+				'fadefrombottomright' => __('Fade from bottom right', 'LayerSlider'),
+				'fadefrombottomleft' => __('Fade from bottom left', 'LayerSlider'),
+				'scale' => __('Scale', 'LayerSlider')
+			)
+		),
+
+		'popupOverlayTransitionOut' => array(
+			'value' => 'fade',
+			'name' => __('Closing transition', 'LayerSlider'),
+			'keys' => 'popupOverlayTransitionOut',
+			'desc' => __('Choose from one of the pre-defined overlay closing transitions.', 'LayerSlider'),
+			'options' => array(
+				'fade' => __('Fade', 'LayerSlider'),
+				'slidetotop' => __('Slide to top', 'LayerSlider'),
+				'slidetobottom' => __('Slide to bottom', 'LayerSlider'),
+				'slidetoleft' => __('Slide to left', 'LayerSlider'),
+				'slidetoright' => __('Slide to right', 'LayerSlider'),
+				'fadetotopright' => __('Fade to top right', 'LayerSlider'),
+				'fadetotopleft' => __('Fade to top left', 'LayerSlider'),
+				'fadetobottomright' => __('Fade to bottom right', 'LayerSlider'),
+				'fadetobottomleft' => __('Fade to bottom left', 'LayerSlider'),
+				'scale' => __('Scale', 'LayerSlider')
+			)
+		),
+
+		//----
+
+		'popupPagesAll' => array(
+			'value' => false,
+			'name' => __('All pages', 'LayerSlider'),
+			'keys' => 'popup_pages_all',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'popupPagesHome' => array(
+			'value' => false,
+			'name' => __('Home page', 'LayerSlider'),
+			'keys' => 'popup_pages_home',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'popupPagesPage' => array(
+			'value' => false,
+			'name' => __('Pages', 'LayerSlider'),
+			'keys' => 'popup_pages_page',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'popupPagesPost' => array(
+			'value' => false,
+			'name' => __('Posts', 'LayerSlider'),
+			'keys' => 'popup_pages_post',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'popupPagesCustom' => array(
+			'value' => '',
+			'name' => __('Include custom pages', 'LayerSlider'),
+			'keys' => 'popup_pages_custom',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'popupPagesExclude' => array(
+			'value' => '',
+			'name' => __('Exclude pages', 'LayerSlider'),
+			'keys' => 'popup_pages_exclude',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
+		'popupRolesAdministrator' => array(
+			'value' => true,
+			'name' => __('Administrators', 'LayerSlider'),
+			'keys' => 'popup_roles_administrator',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRolesEditor' => array(
+			'value' => true,
+			'name' => __('Editors', 'LayerSlider'),
+			'keys' => 'popup_roles_editor',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRolesAuthor' => array(
+			'value' => true,
+			'name' => __('Authors', 'LayerSlider'),
+			'keys' => 'popup_roles_author',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRolesContributor' => array(
+			'value' => true,
+			'name' => __('Contributors', 'LayerSlider'),
+			'keys' => 'popup_roles_contributor',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRolesSubscriber' => array(
+			'value' => true,
+			'name' => __('Subscribers', 'LayerSlider'),
+			'keys' => 'popup_roles_subscriber',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRolesVisitor' => array(
+			'value' => true,
+			'name' => __('Visitors', 'LayerSlider'),
+			'keys' => 'popup_roles_visitor',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupFirstTimeVisitor' => array(
+			'value' => false,
+			'name' => __('Show only for first time visitors', 'LayerSlider'),
+			'keys' => 'popup_first_time_visitor',
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRepeat' => array(
+			'value' => true,
+			'name' => __('Repeat Popup', 'LayerSlider'),
+			'keys' => 'popup_repeat',
+			'desc' => __('Enables or disables repeating this Popup to your target audience with the below specified frequency.', 'LayerSlider'),
+			'props' => array( 'meta' => true )
+		),
+
+		'popupRepeatDays' => array(
+			'value' => '',
+			'name' => __('Repeat after', 'LayerSlider'),
+			'keys' => 'popup_repeat_days',
+			'desc' => __('Controls the repeat frequency of this Popup specified in days. Leave this option empty if you want to display the Popup on each page load. Enter 0 to repeat after the end of a browsing session (when the browser closes).', 'LayerSlider'),
+			'props' => array( 'meta' => true ),
+			'attrs' => array(
+				'type' => 'number',
+				'min' => 0,
+				'max' => 365
+			)
+		),
+
+
+
+
+
 		// ========== //
 		// |  Misc  | //
 		// ========== //
@@ -859,6 +1394,19 @@ $lsDefaults = array(
 			'name' => __('Use srcset attribute', 'LayerSlider'),
 			'keys' => 'useSrcset',
 			'desc' => __('The srcset attribute allows loading dynamically scaled images based on screen resolution. It can save bandwidth and allow using retina-ready images on high resolution devices. In some rare edge cases, this option might cause blurry images.', 'LayerSlider')
+		),
+
+
+		'preferBlendMode' => array(
+			'value' => 'disabled',
+			'name' => __('Prefer Blend Mode', 'LayerSlider'),
+			'keys' => 'preferBlendMode',
+			'desc' => __('Enable this option to avoid blend mode issues with slide transitions. Due to technical limitations, this will also clip your slide transitions regardless of your settings.', 'LayerSlider'),
+			'options' => array(
+				'enabled' => __('Enabled', 'LayerSlider'),
+				'disabled' => __('Disabled', 'LayerSlider')
+			),
+			'advanced' => true
 		),
 
 
@@ -1189,24 +1737,27 @@ $lsDefaults = array(
 				'data-options' => '[{
 					"name": "Switch to the next slide",
 					"value": "#next"
-				}, {
+				},{
 					"name": "Switch to the previous slide",
 					"value": "#prev"
-				}, {
+				},{
 					"name": "Stop the slideshow",
 					"value": "#stop"
-				}, {
+				},{
 					"name": "Resume the slideshow",
 					"value": "#start"
-				}, {
+				},{
 					"name": "Replay the slide from the start",
 					"value": "#replay"
-				}, {
+				},{
 					"name": "Reverse the slide, then pause it",
 					"value": "#reverse"
-				}, {
+				},{
 					"name": "Reverse the slide, then replay it",
 					"value": "#reverse-replay"
+				},{
+					"name": "Close the Popup",
+					"value": "#closepopup"
 				}]'
 			),
 			'props' => array(
@@ -3572,24 +4123,27 @@ $lsDefaults = array(
 				'data-options' => '[{
 					"name": "Switch to the next slide",
 					"value": "#next"
-				}, {
+				},{
 					"name": "Switch to the previous slide",
 					"value": "#prev"
-				}, {
+				},{
 					"name": "Stop the slideshow",
 					"value": "#stop"
-				}, {
+				},{
 					"name": "Resume the slideshow",
 					"value": "#start"
-				}, {
+				},{
 					"name": "Replay the slide from the start",
 					"value": "#replay"
-				}, {
+				},{
 					"name": "Reverse the slide, then pause it",
 					"value": "#reverse"
-				}, {
+				},{
 					"name": "Reverse the slide, then replay it",
 					"value": "#reverse-replay"
+				},{
+					"name": "Close the Popup",
+					"value": "#closepopup"
 				}]'
 			),
 			'props' => array(

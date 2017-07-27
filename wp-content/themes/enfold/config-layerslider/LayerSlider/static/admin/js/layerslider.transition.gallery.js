@@ -47,7 +47,7 @@
 		var $el = $( el ),
 
 		// Create popup
-		popup = $('<div class="ls-popup"> \
+		popup = $('<div class="km-ui-popup"> \
 			<div class="inner ls-transition-preview"></div> \
 		</div>').prependTo('body'),
 
@@ -120,7 +120,7 @@
 	window.lsHideTransition = function( $parent ) {
 
 		if( ! $parent || ! $parent.length ) {
-			$parent = $('.ls-popup');
+			$parent = $('.km-ui-popup');
 		}
 
 		// Stop transition

@@ -71,6 +71,7 @@ if(!class_exists('avia_update_helper'))
 			$this->theme_version = $theme->get('Version');
 			$this->option_key = $theme->get('Name').'_version';
 			$this->db_version = get_option($this->option_key, '1');
+			
 		}
 		
 		//provide a hook for update functions and update the version number
@@ -80,7 +81,7 @@ if(!class_exists('avia_update_helper'))
 			{		
 				do_action('ava_trigger_updates', $this->db_version, $this->theme_version);
 				update_option($this->option_key, $this->theme_version);
-				do_action( 'ava_after_theme_update' );
+				do_action('ava_after_theme_update');
 			}
 			
 			// update_option($this->option_key, "1"); // for testing

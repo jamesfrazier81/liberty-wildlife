@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
 
 			// Add to multi-select
 			if( event.ctrlKey || event.metaKey ) {
-				$item.addClass('selected');
+				$item.toggleClass('selected');
 
 			// Single select
 			} else {

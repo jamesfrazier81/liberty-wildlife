@@ -3,14 +3,15 @@
 	
 	global $avia_config;
 
-	$style 				= $avia_config['box_class'];
-	$responsive			= avia_get_option('responsive_active') != "disabled" ? "responsive" : "fixed_layout";
-	$blank 				= isset($avia_config['template']) ? $avia_config['template'] : "";	
-	$av_lightbox		= avia_get_option('lightbox_active') != "disabled" ? 'av-default-lightbox' : 'av-custom-lightbox';
-	$preloader			= avia_get_option('preloader') == "preloader" ? 'av-preloader-active av-preloader-enabled' : 'av-preloader-disabled';
-	$sidebar_styling 	= avia_get_option('sidebar_styling');
-	$filterable_classes = avia_header_class_filter( avia_header_class_string() );
-	$av_classes_manually= "av-no-preview";
+	$style 					= $avia_config['box_class'];
+	$responsive				= avia_get_option('responsive_active') != "disabled" ? "responsive" : "fixed_layout";
+	$blank 					= isset($avia_config['template']) ? $avia_config['template'] : "";	
+	$av_lightbox			= avia_get_option('lightbox_active') != "disabled" ? 'av-default-lightbox' : 'av-custom-lightbox';
+	$preloader				= avia_get_option('preloader') == "preloader" ? 'av-preloader-active av-preloader-enabled' : 'av-preloader-disabled';
+	$sidebar_styling 		= avia_get_option('sidebar_styling');
+	$filterable_classes 	= avia_header_class_filter( avia_header_class_string() );
+	$av_classes_manually	= "av-no-preview"; /*required for live previews*/
+	$av_classes_manually   .= avia_is_burger_menu() ? " html_burger_menu_active" : " html_text_menu_active";
 	
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?> class="<?php echo "html_{$style} ".$responsive." ".$preloader." ".$av_lightbox." ".$filterable_classes." ".$av_classes_manually ?> ">

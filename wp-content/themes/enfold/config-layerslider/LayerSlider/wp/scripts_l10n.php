@@ -35,7 +35,7 @@ $l10n_ls = array(
 	'TSImportWarningTitle' 		=> __('Activate your site to access premium templates.', 'LayerSlider'),
 	'TSImportWarningContent' 	=> sprintf(__('This template is only available for activated sites. Please review the PRODUCT ACTIVATION section on the main LayerSlider screen or %sclick here%s for more information.', 'LayerSlider'), '<a href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation\" target=\"_blank\">', '</a>'),
 	'TSVersionWarningTitle' 	=> __('Plugin update required', 'LayerSlider'),
-	'TSVersionWarningContent' 	=> sprintf(__('This slider template requires a newer version of LayerSlider in order to work properly. This is due to additional features introduced in a later version than you have. For updating instructions, please refer to our %sonline documnetation%s.', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank">', '</a>'),
+	'TSVersionWarningContent' 	=> sprintf(__('This slider template requires a newer version of LayerSlider in order to work properly. This is due to additional features introduced in a later version than you have. For updating instructions, please refer to our %sonline documentation%s.', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank">', '</a>'),
 
 	// Google Fonts
 	'GFEmptyList' 		=> __('You haven’t added any Google Font to your collection yet.', 'LayerSlider'),

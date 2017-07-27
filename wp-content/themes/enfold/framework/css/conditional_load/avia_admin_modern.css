@@ -173,6 +173,11 @@ font-size: 14px;
 	color:#999;
 }
 
+#avia_options_page .avia_sidebar_active .av_full_description .avia_description{
+    padding: 0;
+    width: 100%;	
+}
+
 .avia_section .avia_style_wrap{
 	left:0;
 }

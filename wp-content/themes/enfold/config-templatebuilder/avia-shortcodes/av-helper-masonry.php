@@ -11,6 +11,8 @@ if ( !class_exists( 'avia_masonry' ) )
 		function __construct($atts = array())
 		{
 			self::$element += 1;
+			
+			$this->screen_options = AviaHelper::av_mobile_sizes($atts);
 			$this->atts = shortcode_atts(array(	'ids'	=> false,
 												'action'=> false,
 												'link' 	=> 'category',
@@ -26,6 +28,9 @@ if ( !class_exists( 'avia_masonry' ) )
 												'caption_elements' 	=> 'title excerpt',
 												'caption_display' 	=> 'always',
 												'caption_styling'	=> '',
+												'wc_prod_visible'	=> '',
+												'prod_order_by'		=> '',
+												'prod_order'		=> '',
 												'sort'				=> 'no',
 												'columns'			=> 'automatic',
 												'auto_ratio' 		=> 1.7, //equals a 16:9 ratio
@@ -201,6 +206,8 @@ if ( !class_exists( 'avia_masonry' ) )
 		{
 			if(empty($this->loop)) return;
 			
+			extract($this->screen_options); //return $av_font_classes, $av_title_font_classes, $av_display_classes and $av_column_classes
+			
 			$output 	= "";
 			$items		= "";
 			$size 		= strpos($this->atts['size'], 'fixed') !== false ? 'fixed' : "flex";
@@ -233,7 +240,7 @@ if ( !class_exists( 'avia_masonry' ) )
 			
 			$orientation = $this->atts['size'] == "fixed" ? $this->atts['orientation'] : ""; 
 			
-			$output .= "<div id='av-masonry-".self::$element."' class='av-masonry noHover av-{$size}-size av-{$this->atts['gap']}-gap av-hover-overlay-{$this->atts['overlay_fx']} av-masonry-col-{$this->atts['columns']} av-caption-{$this->atts['caption_display']} av-caption-style-{$this->atts['caption_styling']} {$this->atts['container_class']} {$orientation} ' {$style} >";
+			$output .= "<div id='av-masonry-".self::$element."' class='av-masonry noHover av-{$size}-size av-{$this->atts['gap']}-gap av-hover-overlay-{$this->atts['overlay_fx']} av-masonry-col-{$this->atts['columns']} av-caption-{$this->atts['caption_display']} av-caption-style-{$this->atts['caption_styling']} {$this->atts['container_class']} {$orientation} {$av_display_classes} {$av_column_classes}' {$style} >";
 			
 			$output .= $this->atts['sort'] != "no" ? $this->sort_buttons() : "";
 			
@@ -652,43 +659,66 @@ if ( !class_exists( 'avia_masonry' ) )
 					$this->atts['categories'] = implode(",", $terms);
 				}
 				
-				
-				
-				
-				
-				
-				
-					if(empty($params['post_type'])) $params['post_type'] = get_post_types();
-					if(is_string($params['post_type'])) $params['post_type'] = explode(',', $params['post_type']);
-				
-					
-					//wordpress 4.4 offset fix. only necessary for ajax loading, therefore we ignore the page param
-					if( $params['offset'] == 0 )
-					{
-						$params['offset'] = false;
-					}
+				if(empty($params['post_type'])) $params['post_type'] = get_post_types();
+				if(is_string($params['post_type'])) $params['post_type'] = explode(',', $params['post_type']);
+
+
+				//wordpress 4.4 offset fix. only necessary for ajax loading, therefore we ignore the page param
+				if( $params['offset'] == 0 )
+				{
+					$params['offset'] = false;
+				}
 					 
-					
-									
-					$query = array(	'orderby' 	=> $params['query_orderby'],
-									'order' 	=> $params['query_order'],
-									'paged' 	=> $page,
-									'post_type' => $params['post_type'],
-									'post_status' => 'publish',
-									'offset'	=> $params['offset'],
-									'posts_per_page' => $params['items'],
-									'tax_query' => array( 	array( 	'taxonomy' 	=> $params['taxonomy'],
-																	'field' 	=> 'id',
-																	'terms' 	=> $terms,
-																	'operator' 	=> 'IN')));
+			
 				
+				// Meta query - replaced by Tax query in WC 3.0.0
+				$meta_query = array();
+				$tax_query = array();
+
+				// check if taxonomy are set to product or product attributes
+				$tax = get_taxonomy( $params['taxonomy'] );
+				
+				if( is_object( $tax ) && isset( $tax->object_type ) && in_array( 'product', (array) $tax->object_type ) )
+				{
+					$avia_config['woocommerce']['disable_sorting_options'] = true;
 					
-						
-					if($params['query_orderby'] == 'rand' && isset($_POST['loaded']))
-					{
-						$query['post__not_in'] = $_POST['loaded'];
-						$query['offset'] = false;
-					}											
+					avia_wc_set_out_of_stock_query_params( $meta_query, $tax_query, $params['wc_prod_visible'] );
+					
+						//	sets filter hooks !!
+					$ordering_args = avia_wc_get_product_query_order_args( $params['prod_order_by'], $params['prod_order'] );
+							
+					$params['query_orderby'] = $ordering_args['orderby'];
+					$params['query_order'] = $ordering_args['order'];
+				}
+
+				if( ! empty( $terms ) )
+				{
+					$tax_query[] =  array(
+										'taxonomy' 	=>	$params['taxonomy'],
+										'field' 	=>	'id',
+										'terms' 	=>	$terms,
+										'operator' 	=>	'IN'
+								);
+				}
+
+				$query = array(	'orderby'		=>	$params['query_orderby'],
+								'order'			=>	$params['query_order'],
+								'paged'			=>	$page,
+								'post_type'		=>	$params['post_type'],
+								'post_status'	=>	'publish',
+								'offset'		=>	$params['offset'],
+								'posts_per_page' =>	$params['items'],
+								'meta_query'	=>	$meta_query,
+								'tax_query'		=>	$tax_query
+							);
+
+
+
+				if($params['query_orderby'] == 'rand' && isset($_POST['loaded']))
+				{
+					$query['post__not_in'] = $_POST['loaded'];
+					$query['offset'] = false;
+				}											
 					
 			}
 			else
@@ -701,6 +731,13 @@ if ( !class_exists( 'avia_masonry' ) )
 
 			$this->entries = new WP_Query( $query );
 			$this->prepare_loop_from_entries( $ajax );
+			
+			if( function_exists( 'WC' ) )
+			{
+				avia_wc_clear_catalog_ordering_args_filters();
+				$avia_config['woocommerce']['disable_sorting_options'] = false;
+			}
+
 		}
 		
 		
@@ -742,19 +779,5 @@ if ( !class_exists( 'avia_masonry' ) )
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

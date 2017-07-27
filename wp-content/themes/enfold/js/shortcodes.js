@@ -515,10 +515,48 @@
 			var _self = this,
 				mobile_drag = $.avia_utilities.isMobile ? this.$data.mobile_drag_control : true,
 				zoomValue 	= this.$data.zoom == "auto" ? 10 : this.$data.zoom;
+		
+			var mapTypeControl = false;
+			var mapTypeId = google.maps.MapTypeId.ROADMAP;
+			var mapTypeControlOptions = google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+			
+			switch( this.$data.maptype_control )
+			{
+				case 'dropdown':
+					mapTypeControl = true;
+					mapTypeControlOptions = google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+					break;
+				case 'horizontal':
+					mapTypeControl = true;
+					mapTypeControlOptions = google.maps.MapTypeControlStyle.HORIZONTAL_BAR;
+					break;
+				case 'default':
+					mapTypeControl = true;
+					mapTypeControlOptions = google.maps.MapTypeControlStyle.DEFAULT;
+					break;
+				default:
+					mapTypeControl = false;
+					mapTypeControlOptions = google.maps.MapTypeControlStyle.DROPDOWN_MENU;
+					break;
+			}
+			
+			switch( this.$data.maptype_id )
+			{
+				case 'SATELLITE':
+					mapTypeId = google.maps.MapTypeId.SATELLITE;
+					break;
+				case 'HYBRID':
+					mapTypeId = google.maps.MapTypeId.HYBRID;
+					break;
+				case 'TERRAIN':
+					mapTypeId = google.maps.MapTypeId.TERRAIN;
+					break;
+				default:
+					mapTypeId = google.maps.MapTypeId.ROADMAP;
+			}
 			
 			this.mapVars = {
 				mapMaker: false, //mapmaker tiles are user generated content maps. might hold more info but also be inaccurate
-				mapTypeControl: false,
 				backgroundColor:'transparent',
 				streetViewControl: false,
 				zoomControl: this.$data.zoom_control,
@@ -526,7 +564,9 @@
 				gestureHandling: 'cooperative',
 				scrollwheel: false,
 				zoom: zoomValue,
-				mapTypeId:google.maps.MapTypeId.ROADMAP,
+				mapTypeControl: mapTypeControl,
+				mapTypeControlOptions: {style:mapTypeControlOptions},
+				mapTypeId: mapTypeId,
 				center: new google.maps.LatLng(this.$data.marker[0].lat, this.$data.marker[0].long),
 				styles:[{featureType: "poi", elementType: "labels", stylers: [ { visibility: "off" }] }]
 			};
@@ -2838,7 +2878,7 @@ $.fn.avia_sc_tab_section= function()
 			flexible    	= container.is('.av-tab-content-auto'),
 			current_content = container.find('.__av_init_open'),
 			min_width		= 0,
-			change_tab 		= function(e)
+			change_tab 		= function(e, prevent_hash)
 			{
 				e.preventDefault();
 				
@@ -2860,6 +2900,9 @@ $.fn.avia_sc_tab_section= function()
 				if(new_font !== "") current_tab.css('color', new_font);
 					
 				var new_pos = ((parseInt(tab_nr,10) - 1) * -100 );
+				    if ($('body').hasClass('rtl')) {
+        				new_pos = ((parseInt(tab_nr,10) - 1) * 100 );
+    					}
 				
 				if(cssActive)
 				{
@@ -2876,6 +2919,8 @@ $.fn.avia_sc_tab_section= function()
 				
 				set_tab_titlte_pos();
 				set_slide_height();
+				
+				if(!prevent_hash) location.hash = current_tab.attr('href');
 				
 				setTimeout(function()
 				{
@@ -2906,6 +2951,8 @@ $.fn.avia_sc_tab_section= function()
 					var height = current_content.find('.av-layout-tab-inner').height();
 					inner_content.height(old_height);
 					inner_content.height(height);
+					
+					inner_content.css( 'overflow', 'hidden' );
 					
 					setTimeout(function() { win.trigger('av-height-change'); }, 600);
 				}
@@ -2942,15 +2989,18 @@ $.fn.avia_sc_tab_section= function()
 			
 			get_init_open = function()
 			{
-				if(!hash && window.location.hash) hash = window.location.hash;
-	            		if(!hash) return;
+				if(!hash && window.location.hash) var hash = window.location.hash;
 	            		
-				var open = tabs.filter('[data-tab-section-id="'+hash+'"]');
-	
+				var open = tabs.filter('[href="'+hash+'"]');
+				
 				if(open.length)
 				{
 					if(!open.is('.active_tab')) open.trigger('click');
-					window.scrollTo(0, container.offset().top - 70);
+				}
+				else
+				{
+					//set correct color
+					container.find('.av-active-tab-title').trigger('click', true);
 				}
 			};
 				
@@ -2965,16 +3015,11 @@ $.fn.avia_sc_tab_section= function()
 				win.on('debouncedresize', set_slide_height);	
 				
 				set_min_width();
-				set_slide_height();
-			
+				set_slide_height(); 
+				get_init_open();
 			}
 			
 		});	
-			
-		
-		
-		//force a click on page load to properly set the tab color
-		container.find('.av-active-tab-title').trigger('click');	
 		
 		content_wrap.avia_swipe_trigger({prev:'.av_prev_tab_section', next:'.av_next_tab_section'});
 			

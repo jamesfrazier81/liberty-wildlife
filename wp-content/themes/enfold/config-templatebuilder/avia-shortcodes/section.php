@@ -492,7 +492,56 @@ array(
 							'nodescription' => true
 						),
 
+					array(
+								"type" 	=> "tab",
+								"name"	=> __("Screen Options",'avia_framework' ),
+								'nodescription' => true
+							),
+							
+							
+							array(
+							"name" 	=> __("Element Visibility",'avia_framework' ),
+							"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+							"type" 	=> "heading",
+							"description_class" => "av-builder-note av-neutral",
+							),
+						
+							array(	
+									"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+									"id" 	=> "av-desktop-hide",
+									"std" 	=> "",
+									"container_class" => 'av-multi-checkbox',
+									"type" 	=> "checkbox"),
+							
+							array(	
+								
+									"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+									"id" 	=> "av-medium-hide",
+									"std" 	=> "",
+									"container_class" => 'av-multi-checkbox',
+									"type" 	=> "checkbox"),
+									
+							array(	
+								
+									"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+									"id" 	=> "av-small-hide",
+									"std" 	=> "",
+									"container_class" => 'av-multi-checkbox',
+									"type" 	=> "checkbox"),
+									
+							array(	
+								
+									"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+									"id" 	=> "av-mini-hide",
+									"std" 	=> "",
+									"container_class" => 'av-multi-checkbox',
+									"type" 	=> "checkbox"),
 
+							
+						array(
+								"type" 	=> "close_div",
+								'nodescription' => true
+							),		
 							
 					array(
 							"type" 	=> "close_div",
@@ -518,7 +567,9 @@ array(
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
 				global $avia_config;
-			
+				
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+
 				avia_sc_section::$section_count ++;
 			    $atts = shortcode_atts(array(	'src' => '', 
 			    								'position' => 'top left', 
@@ -689,7 +740,7 @@ array(
 			    
 			    
 				$class .= " avia-bg-style-".$attach;
-			    $params['class'] = $class." ".$meta['el_class'];
+			    $params['class'] = $class." ".$meta['el_class']." ".$av_display_classes;
 			    $params['bg']    = $background;
 				$params['min_height'] = $min_height;
 				$params['min_height_px'] = $min_height_px;

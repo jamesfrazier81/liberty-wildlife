@@ -55,7 +55,51 @@ if ( !class_exists( 'avia_sc_featureimage_slider' ))
 						"multiple"	=> 6,
 						"std" 	=> "category"
 				),
+				
+				array(
+						"name" 	=> __("WooCommerce Product visibility?", 'avia_framework' ),
+						"desc" 	=> __("Select the visibility of WooCommerce products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Inventory -&gt Out of stock visibility", 'avia_framework' ),
+						"id" 	=> "wc_prod_visible",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array( 'link', 'parent_in_array', implode( ' ', get_object_taxonomies( 'product', 'names' ) ) ),
+						"subtype" => array(
+							__('Use default WooCommerce Setting (Settings -&gt; Products -&gt; Out of stock visibility)',  'avia_framework' ) => '',
+							__('Hide products out of stock',  'avia_framework' ) => 'hide',
+							__('Show products out of stock',  'avia_framework' )  => 'show')
+					),
 
+				array(
+						"name" 	=> __( "Sorting Options", 'avia_framework' ),
+						"desc" 	=> __( "Here you can choose how to sort the products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Display -&gt Default product sorting", 'avia_framework' ),
+						"id" 	=> "prod_order_by",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array( 'link', 'parent_in_array', implode( ' ', get_object_taxonomies( 'product', 'names' ) ) ),
+						"subtype" => array( 
+								__('Use defaut (defined at Woocommerce -&gt; Settings -&gt Default product sorting) ', 'avia_framework' ) =>	'',
+								__('Sort alphabetically', 'avia_framework' )			=>	'title',
+								__('Sort by most recent', 'avia_framework' )			=>	'date',
+								__('Sort by price', 'avia_framework' )					=>	'price',
+								__('Sort by popularity', 'avia_framework' )				=>	'popularity',
+								__('Sort randomly', 'avia_framework' )					=>	'rand'
+							)
+					),
+				
+				array(
+						"name" 	=> __( "Sorting Order", 'avia_framework' ),
+						"desc" 	=> __( "Here you can choose the order of the result products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Display -&gt Default product sorting", 'avia_framework' ),
+						"id" 	=> "prod_order",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array( 'link', 'parent_in_array', implode( ' ', get_object_taxonomies( 'product', 'names' ) ) ),
+						"subtype" => array( 
+								__('Use defaut (defined at Woocommerce -&gt Settings -&gt Default product sorting)', 'avia_framework' ) =>	'',
+								__('Ascending', 'avia_framework' )			=>	'ASC',
+								__('Descending', 'avia_framework' )			=>	'DESC'
+							)
+					),
+				
 				array(
 						"name" 	=> __("Entry Number", 'avia_framework' ),
 						"desc" 	=> __("How many items should be displayed?", 'avia_framework' ),
@@ -261,6 +305,108 @@ if ( !class_exists( 'avia_sc_featureimage_slider' ))
 				"type" 	=> "close_div",
 				'nodescription' => true
 				),
+				
+				array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(
+									"name" 	=> __("Caption Title Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the element title, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'' , __("Hidden", 'avia_framework' )=>'hidden' ), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+						            
+						        array(
+									"name" 	=> __("Caption Content Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the element content, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""), 
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
 
 				array(
 				"type" 	=> "close_div",
@@ -338,7 +484,7 @@ if ( !class_exists( 'avia_sc_featureimage_slider' ))
 			// $atts['class'] = $meta['el_class'];
 			
 			
-			
+			extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
 			extract($atts);
 			$output  	= "";
 		    $class = "";
@@ -347,7 +493,7 @@ if ( !class_exists( 'avia_sc_featureimage_slider' ))
 			$skipSecond = false;
 			avia_sc_featureimage_slider::$slide_count++;
 			
-			$params['class'] = "avia-featureimage-slider-wrap main_color  ".$meta['el_class'].$class;
+			$params['class'] = "avia-featureimage-slider-wrap main_color  {$av_display_classes} ".$meta['el_class'].$class;
 			$params['open_structure'] = false;
 
 			$params['custom_markup'] = $atts['custom_markup'] = $meta['custom_markup'];
@@ -413,6 +559,9 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 
 		function __construct($atts = array())
 		{
+			
+			$this->screen_options = AviaHelper::av_mobile_sizes($atts); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+			
 			$this->atts = shortcode_atts(array(	'items' 		=> '16',
 		                                 		'taxonomy'  	=> 'category',
 		                                 		'post_type'		=> get_post_types(),
@@ -426,6 +575,9 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 												'interval'  	=> 5,
 												'class'			=> '',
 		                                 		'categories'	=> array(),
+												'wc_prod_visible'	=>	'',
+												'prod_order_by'		=>	'',
+												'prod_order'		=>	'',
 		                                 		'custom_query'	=> array(),
 		                                 		'lightbox_size' => 'large',
                                                 'offset' 		=> 0,
@@ -479,6 +631,7 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 				$def_height  = "height: {$def_height}px";
 			}
 			
+			extract($this->screen_options);
 			
 			$style = "style='{$def_height}'";
 			if(!empty($this->atts['control_layout'])) $extraClass .= " ".$this->atts['control_layout'];
@@ -487,7 +640,7 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 
 			$data = AviaHelper::create_data_string($this->atts);
 
-			$html .= "<div {$data} class='avia-slideshow avia-featureimage-slideshow avia-animated-caption avia-slideshow-".avia_sc_featureimage_slider::$slide_count." {$extraClass} avia-slideshow-".$this->atts['image_size']."  ".$this->atts['class']." avia-".$this->atts['animation']."-slider ' $markup>";
+			$html .= "<div {$data} class='avia-slideshow avia-featureimage-slideshow avia-animated-caption {$av_display_classes} avia-slideshow-".avia_sc_featureimage_slider::$slide_count." {$extraClass} avia-slideshow-".$this->atts['image_size']."  ".$this->atts['class']." avia-".$this->atts['animation']."-slider ' $markup>";
 			
 			
 			$html .= "<ul class='avia-slideshow-inner avia-slideshow-fixed-height' {$style}>";
@@ -522,8 +675,7 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 			$html = "";
 			$counter = 0;
 			
-			
-				
+			extract($this->screen_options);
 
             $markup_url = avia_markup_helper(array('context' => 'image_url','echo'=>false, 'custom_markup'=>$this->atts['custom_markup']));
 
@@ -534,7 +686,7 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 					$slide_class = "";
 					
 					$img 	 = wp_get_attachment_image_src($thumb_id, $this->atts['image_size']);
-					$link	 = get_permalink( $slide->ID );
+					$link	 = get_post_meta( $slide->ID ,'_portfolio_custom_link', true ) != "" ? get_post_meta( $slide->ID ,'_portfolio_custom_link_url', true ) : get_permalink( $slide->ID );
 					$title	 = get_the_title( $slide->ID );
 					
 					$caption  = "";
@@ -543,14 +695,14 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
 					$caption .= ' <div class="slideshow_caption">';
 					$caption .= ' <div class="slideshow_inner_caption">';
 					$caption .= ' <div class="slideshow_align_caption">';
-					$caption .= ' <h2 class="avia-caption-title"><a href="'.$link.'">'.$title.'</a></h2>';
+					$caption .= ' <h2 class="avia-caption-title '.$av_title_font_classes.'"><a href="'.$link.'">'.$title.'</a></h2>';
 			
 					if(strpos($this->atts['contents'], 'excerpt')  !== false)
 					{
 						$excerpt = !empty($slide->post_excerpt) ? $slide->post_excerpt : avia_backend_truncate($slide->post_content, apply_filters( 'avf_feature_image_slider_excerpt_length' , 320) , apply_filters( 'avf_feature_image_slider_excerpt_delimiter' , " "), "…", true, '');
 						
 						if(!empty($excerpt)){
-							$caption .= ' <div class="avia-caption-content " itemprop="description">';
+							$caption .= ' <div class="avia-caption-content '.$av_font_classes.'" itemprop="description">';
 							$caption .= wpautop($excerpt);
 							$caption .= ' </div>';
 						}
@@ -687,18 +839,51 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
                 if(empty($params['post_type'])) $params['post_type'] = get_post_types();
                 if(is_string($params['post_type'])) $params['post_type'] = explode(',', $params['post_type']);
 
-				$query = array(	'orderby' 	=> 'date',
-								'order' 	=> 'DESC',
-								'paged' 	=> $page,
-								'post_type' => $params['post_type'],
-								'posts_per_page' => $params['items'],
-                                'offset' => $params['offset'],
-                                'post__not_in' => (!empty($no_duplicates)) ? $avia_config['posts_on_current_page'] : array(),
-								'tax_query' => array( 	array( 	'taxonomy' 	=> $params['taxonomy'],
-																'field' 	=> 'id',
-																'terms' 	=> $terms,
-																'operator' 	=> 'IN')));
-																
+				$orderby = 'date';
+				$order = 'DESC';
+				
+				// Meta query - replaced by Tax query in WC 3.0.0
+				$meta_query = array();
+				$tax_query = array();
+
+				// check if taxonomy are set to product or product attributes
+				$tax = get_taxonomy( $params['taxonomy'] );
+				
+				if( is_object( $tax ) && isset( $tax->object_type ) && in_array( 'product', (array) $tax->object_type ) )
+				{
+					$avia_config['woocommerce']['disable_sorting_options'] = true;
+					
+					avia_wc_set_out_of_stock_query_params( $meta_query, $tax_query, $params['wc_prod_visible'] );
+					
+						//	sets filter hooks !!
+					$ordering_args = avia_wc_get_product_query_order_args( $params['prod_order_by'], $params['prod_order'] );
+							
+					$orderby = $ordering_args['orderby'];
+					$order = $ordering_args['order'];
+				}	
+
+				if( ! empty( $terms ) )
+				{
+					$tax_query[] =  array(
+										'taxonomy' 	=>	$params['taxonomy'],
+										'field' 	=>	'id',
+										'terms' 	=>	$terms,
+										'operator' 	=>	'IN'
+								);
+				}				
+				
+				$query = array(	'orderby'		=>	$orderby,
+								'order'			=>	$order,
+								'paged'			=>	$page,
+								'post_type'		=>	$params['post_type'],
+//								'post_status'	=>	'publish',
+								'offset'		=>	$params['offset'],
+								'posts_per_page' =>	$params['items'],
+								'post__not_in'	=>	( ! empty( $no_duplicates ) ) ? $avia_config['posts_on_current_page'] : array(),
+								'meta_query'	=>	$meta_query,
+								'tax_query'		=>	$tax_query
+							);
+				
 			}
 			else
 			{
@@ -721,6 +906,12 @@ if ( !class_exists( 'avia_feature_image_slider' ) )
                     $avia_config['posts_on_current_page'][] = get_the_ID();
                 }
             }
+			
+			if( function_exists( 'WC' ) )
+			{
+				avia_wc_clear_catalog_ordering_args_filters();
+				$avia_config['woocommerce']['disable_sorting_options'] = false;
+			}
 
 		}
 	}

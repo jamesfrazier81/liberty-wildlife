@@ -595,6 +595,9 @@ margin-bottom: 0;
 	font-size: 50px;
 }
 
+#top .iconbox_content_container{
+	line-height: 1.65em;
+}
 
 
 @media only screen and (min-width: 768px) and (max-width: 989px) {
@@ -1573,7 +1576,7 @@ animation:         avia-bg-move 1.2s linear infinite; /* IE 10+ */
 #top .av-centered-form input[type="checkbox"]{float:none;}
 #top .av-centered-form .input_checkbox_label{display: inline-block;}
 
-
+.avia_ajax_form .required{text-decoration: none; }
 
 /*contact form datepicker*/
 
@@ -2337,6 +2340,38 @@ animation:         none;
 	}
 
 
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+
+.responsive.av-no-preview #top #wrap_all .av-medium-columns-4 .grid-entry{width:25%;}
+.responsive.av-no-preview #top #wrap_all .av-medium-columns-3 .grid-entry{width:33.3%;}
+.responsive.av-no-preview #top #wrap_all .av-medium-columns-2 .grid-entry{width:50%;}
+.responsive.av-no-preview #top #wrap_all .av-medium-columns-1 .grid-entry{width:100%;}
+
+}
+
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+.responsive.av-no-preview #top #wrap_all .av-small-columns-4 .grid-entry{width:25%;}
+.responsive.av-no-preview #top #wrap_all .av-small-columns-3 .grid-entry{width:33.3%;}
+.responsive.av-no-preview #top #wrap_all .av-small-columns-2 .grid-entry{width:50%;}
+.responsive.av-no-preview #top #wrap_all .av-small-columns-1 .grid-entry{width:100%;}
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+
+.responsive.av-no-preview #top #wrap_all .av-mini-columns-4 .grid-entry{width:25%;}
+.responsive.av-no-preview #top #wrap_all .av-mini-columns-3 .grid-entry{width:33.3%;}
+.responsive.av-no-preview #top #wrap_all .av-mini-columns-2 .grid-entry{width:50%;}
+.responsive.av-no-preview #top #wrap_all .av-mini-columns-1 .grid-entry{width:100%;}
+
+}
+
+
+
 
 
 /* ======================================================================================================================================================
@@ -2388,6 +2423,38 @@ width:49.80%;
 
 .av-masonry-col-6 .av-masonry-entry{width:16.6%;}
 .av-masonry-col-6 .av-masonry-entry.av-landscape-img{width:33.2%;}
+
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+
+.responsive.av-no-preview #top .av-medium-columns-4 .av-masonry-entry{width:24.90%;}
+.responsive.av-no-preview #top .av-medium-columns-3 .av-masonry-entry{width:33.3%;}
+.responsive.av-no-preview #top .av-medium-columns-2 .av-masonry-entry{width:49.80%;}
+.responsive.av-no-preview .av-no-preview .av-medium-columns-1 .av-masonry-entry{width:100%;}
+}
+
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+
+.responsive.av-no-preview #top .av-small-columns-4 .av-masonry-entry{width:24.90%;}
+.responsive.av-no-preview #top .av-small-columns-3 .av-masonry-entry{width:33.3%;}
+.responsive.av-no-preview #top .av-small-columns-2 .av-masonry-entry{width:49.80%;}
+.responsive.av-no-preview #top .av-small-columns-1 .av-masonry-entry{width:100%;}
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+
+.responsive.av-no-preview #top .av-mini-columns-4 .av-masonry-entry{width:24.90%;}
+.responsive.av-no-preview #top .av-mini-columns-3 .av-masonry-entry{width:33.3%;}
+.responsive.av-no-preview #top .av-mini-columns-2 .av-masonry-entry{width:49.80%;}
+.responsive.av-no-preview #top .av-mini-columns-1 .av-masonry-entry{width:100%;}
+}
+
+
+
+
 
 .av-masonry-outerimage-container{
 overflow: hidden;
@@ -2803,6 +2870,7 @@ Team Member
 .team-social a{text-decoration: none; position: relative; border-radius: 30px; padding: 0 16px; background: #fff;margin: 3px; display: inline-block; height:53px; line-height:54px; width:53px; }
 .team-img-container{ position: relative; overflow: hidden; border-radius: 3px; text-align: center; margin-bottom:10px; }
 .team-img-container img{ display:block; margin:0 auto; width:100%;}
+.team-img-container img.av-team-img-original{ width:auto; max-width:100%; }
 
 .avia-team-member .team-social{
 border: 7px solid rgba(0, 0, 0, 0.1);
@@ -4334,6 +4402,32 @@ background-position: center center;
 	}
 }
 
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+	
+.responsive.av-no-preview #top .av-mdedium-font-size-overwrite.avia-caption-content{display:block;}
+
+}
+
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+.responsive.av-no-preview #top .av-small-font-size-overwrite.avia-caption-content{display:block;}
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+
+.responsive.av-no-preview #top .av-mini-font-size-overwrite.avia-caption-content{display:block;}
+
+}
+
+
+
+
+
+
+
 
 /* ======================================================================================================================================================
 Layer Slider
@@ -4768,7 +4862,7 @@ Countdown
 .av-countdown-cell{display: table-cell; }
 .av-countdown-cell-inner{display: block; margin:1px 1px 0 0; padding:20px;}
 .av-countdown-time{display: block; font-size:40px; line-height: 1em; font-weight:100; color:inherit; text-decoration: none;}
-.av-countdown-time-label{display: block; text-transform: uppercase; color:inherit; overflow: hidden; text-overflow: ellipsis; -moz-hyphens: inherit;}
+.av-countdown-time-label{display: block; text-transform: uppercase; color:inherit; overflow: hidden; text-overflow: ellipsis; -moz-hyphens: inherit; line-height: 1.65em;}
 .av-countdown-timer-title{display: block; font-size:30px; line-height: 1.3em; margin:0 0 15px 0; text-decoration: none; position: relative;  }
 .av-countdown-timer-title:hover{text-decoration: none;}
 .av-countdown-timer-title-bottom{margin:15px 0 0 0;}

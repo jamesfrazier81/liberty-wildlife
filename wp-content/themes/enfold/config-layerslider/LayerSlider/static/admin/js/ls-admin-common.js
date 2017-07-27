@@ -375,9 +375,9 @@ jQuery(function($) {
 		init : function(){
 
 			$(document).on('click', '[data-ls-su]', function() {
-				if( $(this).parent().find('.ls-su').length == 0 ){
-					lsSlideUnder.create($(this));
-				}
+				//if( $(this).parent().find('.ls-su').length == 0 ){
+					lsSlideUnder.open($(this));
+				//}
 			});
 		},
 
@@ -402,12 +402,6 @@ jQuery(function($) {
 			$su.addClass('ls-su');
 			$sui.addClass('ls-su-inner');
 			$suc.addClass('ls-su-content');
-
-			// Creating close function
-
-			$(document).one('click',function(){
-				lsSlideUnder.close($su, $sui);
-			});
 
 			// Appending into the parent of the opener element
 
@@ -455,11 +449,22 @@ jQuery(function($) {
 			// Inserting data to content
 
 			$suc.append( $el.siblings('.ls-su-data').html() );
-
-			lsSlideUnder.open($su, $sui);
 		},
 
-		open : function ($su, $sui){
+		open : function( $el ){
+
+			if( !$el.parent().find( '.ls-su' ).length ){
+				lsSlideUnder.create( $el );
+			}
+
+			$su = $el.parent().find( '.ls-su' );
+			$sui = $el.parent().find( '.ls-su-inner' );
+
+			if( $su.hasClass( 'ls-su-opened') ){
+				return;
+			}
+
+			$su.addClass( 'ls-su-opened' );
 
 			TweenLite.set( $su.parent()[0], {
 					z:100
@@ -475,6 +480,12 @@ jQuery(function($) {
 				}
 			);
 
+			TweenLite.set( $sui[0],
+				{
+					top: 0
+				}
+			);
+
 			TweenLite.to(
 				$su[0],
 				2,
@@ -484,6 +495,12 @@ jQuery(function($) {
 					ease: 'Elastic.easeOut'
 				}
 			);
+
+			// Creating close function
+
+			$(document).one( 'click', function(e){
+				lsSlideUnder.close($su, $sui);
+			});
 		},
 
 		close : function($su, $sui){
@@ -505,7 +522,7 @@ jQuery(function($) {
 					height: 0,
 					ease: 'Quart.easeIn',
 					onComplete : function(){
-						$su.remove();
+						$su.removeClass( 'ls-su-opened' );
 					}
 				}
 			);

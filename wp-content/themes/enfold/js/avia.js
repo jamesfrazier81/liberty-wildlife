@@ -8,6 +8,7 @@
 	     avia_site_preloader();
 	    }
 	});
+
 	
     $(document).ready(function()
     {	    
@@ -24,10 +25,9 @@
     		$.avia_utilities.isMobile =  false;
     	}
 
-    	
-        //check if user uses IE7 - if yes don't execute the function or the menu will break
-        if(aviabodyclasses.indexOf("avia-msie-7") == -1) avia_responsive_menu();
-
+		//activates the hamburger mobile menu
+		avia_hamburger_menu();
+		
         // decreases header size when user scrolls down
         avia_header_size();
         
@@ -37,10 +37,7 @@
         //activates the sticky submenu
 		avia_sticky_submenu();        
 		
-		//activates the sticky submenu
-		avia_hamburger_menu();
-
-        //show scroll top button
+        //show scroll top but1ton
         avia_scroll_top_fade();
         
         //site preloader script
@@ -50,7 +47,7 @@
         aviaCalcContentWidth();
         
         //creates search tooltip
-        new $.AviaTooltip({"class": 'avia-search-tooltip',data: 'avia-search-tooltip', event:'click', position:'bottom', scope: "body", attach:'element'});
+        new $.AviaTooltip({"class": 'avia-search-tooltip',data: 'avia-search-tooltip', event:'click', position:'bottom', scope: "body", attach:'element', within_screen: true});
 
         //creates relate posts tooltip
         new $.AviaTooltip({"class": 'avia-related-tooltip', data: 'avia-related-tooltip', scope: ".related_posts, .av-share-box", attach:'element', delay:0});
@@ -97,7 +94,9 @@
 				$('body').avia_scrollspy('refresh');
 			}
 		}
-
+		
+		
+		
 		//smooth scrooling
 		if($.fn.avia_smoothscroll)
 		$('a[href*="#"]', container).avia_smoothscroll(container);
@@ -461,120 +460,6 @@
         return bodyclass;
     }
 
-
-
-    // -------------------------------------------------------------------------------------------
-	// responsive menu function
-	// -------------------------------------------------------------------------------------------
-
-    function avia_responsive_menu()
-    {
-    	var $html = $('html'), win = $(window), header = $('.responsive #header');
-
-    	if(!header.length) return;
-
-    	var menu 			  	= header.find('.main_menu ul:eq(0)'),
-	    	first_level_items 	= menu.find('>li').length,
-	    	container			= $('#wrap_all'),
-    		show_menu_btn		= $('#advanced_menu_toggle'),
-    		hide_menu_btn		= $('#advanced_menu_hide'),
-    		mobile_advanced 	= menu.clone().attr({id:"mobile-advanced", "class":""}),
-    		sub_hidden			= $html.is('.html_header_mobile_behavior'),
-			insert_menu 		= function()
-			{	
-				if(first_level_items == 0) 
-				{
-					show_menu_btn.remove();
-				}
-				else
-				{
-					var after_menu = $('#header .logo');
-					if(after_menu.length == 0) after_menu = "#main .logo:eq(0)";
-					show_menu_btn.insertAfter(after_menu);
-					mobile_advanced.find('.noMobile').remove();
-					mobile_advanced.prependTo(container);
-					hide_menu_btn.prependTo(container);
-				}
-			},
-			set_height = function()
-			{
-				var height = mobile_advanced.outerHeight(true), win_h  = win.height();
-				
-				if(height < win_h) height = win_h;
-				container.css({'height':height});
-				
-				mobile_advanced.css({position:'absolute', 'min-height':win_h});
-			},
-			hide_menu = function()
-			{	
-				container.removeClass('show_mobile_menu');
-				setTimeout(function(){ 
-					container.css({'height':"auto", 'overflow':'hidden', 'minHeight':0}); 
-					mobile_advanced.css({display:'none'});
-				},600);
-				return false;
-			},
-			autohide = function()
-			{
-				if(container.is('.show_mobile_menu') && hide_menu_btn.css('display') == 'none'){ hide_menu(); }
-			},
-			show_menu = function()
-			{
-				if(container.is('.show_mobile_menu'))
-				{
-					hide_menu();
-				}
-				else
-				{
-					win.scrollTop(0);
-					mobile_advanced.css({display:'block'});
-					setTimeout(function(){container.addClass('show_mobile_menu'); },10);
-					set_height();
-				}
-				return false;
-			};
-		
-		$html.on('click', '#mobile-advanced li a, #mobile-advanced .mega_menu_title', function()
-		{
-			var current = $(this);
-			
-			//if submenu items are hidden do the toggle
-			if(sub_hidden)
-			{
-				var list_item = current.siblings('ul, .avia_mega_div');
-				if ( current.siblings('ul').children('.avia_mega_text_block').length && current.siblings('ul').children('li').length == 1 ) { list_item = ''; }
-				if(list_item.length)
-				{
-					if(list_item.hasClass('visible_sublist'))
-					{
-						list_item.removeClass('visible_sublist');
-					}
-					else
-					{
-						list_item.addClass('visible_sublist');
-					}
-					set_height();
-					return false;
-				}
-			}
-			
-			//when clicked on anchor link remove the menu so the body can scroll to the anchor
-			if(current.filter('[href*="#"]').length)
-			{
-				container.removeClass('show_mobile_menu');
-				container.css({'height':"auto"});
-			}
-			
-		});
-		
-
-		show_menu_btn.click(show_menu);
-		hide_menu_btn.click(hide_menu);
-		win.on( 'debouncedresize',  autohide );
-		insert_menu();
-    }
-
-
     // -------------------------------------------------------------------------------------------
 	// html 5 videos
 	// -------------------------------------------------------------------------------------------
@@ -907,6 +792,8 @@
 								{
 									if(!(cur_offset == 0 && target <= 0 )) // if we are at the top dont try to scroll to top or above
 									{
+										the_win.trigger('avia_smooth_scroll_start'); 
+										
 										// animate to target and set the hash to the window.location after the animation
 										$('html:not(:animated),body:not(:animated)').animate({ scrollTop: target }, duration, easing, function() {
 										
@@ -1759,67 +1646,343 @@
 	
 	function avia_hamburger_menu()
 	{
-		var menu		= $('#avia-menu'),
+		var header		= $('#header'),
+			header_main	= $('#main .av-logo-container'), //check if we got a top menu that is above the header
+			menu		= $('#avia-menu'),
 			burger_wrap = $('.av-burger-menu-main a'),
-			burger 		= burger_wrap.find('.av-hamburger'),
-			htmlEL  	= $('.html_burger_menu'),
+			htmlEL  	= $('html').eq(0),
 			overlay		= $('<div class="av-burger-overlay"></div>'),
-			inner_overlay = $('<div class="av-burger-overlay-inner"></div>').appendTo(overlay),
-			bgColor 	  = $('<div class="av-burger-overlay-bg"></div>').appendTo(overlay),
-			animating 	  = false,
-			first_level	  = {};
+			overlay_scroll	= $('<div class="av-burger-overlay-scroll"></div>').appendTo(overlay),
+			inner_overlay 	= $('<div class="av-burger-overlay-inner"></div>').appendTo(overlay_scroll),
+			bgColor 	  	= $('<div class="av-burger-overlay-bg"></div>').appendTo(overlay),
+			animating 	  	= false,
+			first_level	  	= {},
+			logo_container	= $('.av-logo-container .inner-container'),
+			menu_in_logo_container = logo_container.find('.main_menu'),
+			cloneFirst		= htmlEL.is('.html_av-submenu-display-click.html_av-submenu-clone'),
+			menu_generated 	= false,
+			set_list_container_height = function()
+			{
+				//necessary for ios since the height is usually not 100% but 100% - menu bar which can be requested by window.innerHeight
+				if($.avia_utilities.isMobile)
+				{
+					overlay_scroll.outerHeight(window.innerHeight);
+				}
+			},
+			create_list	  	= function( items , append_to )
+			{
+				if(!items) return;
+				
+				var list, link, current, subitems, megaitems, sub_current, sub_current_list, new_li, new_ul;
+				
+				items.each(function()
+				{
+					current  = $(this);
+					subitems = current.find(' > .sub-menu > li'); //find sublists
+					link   = current.find('>a').clone(true).attr('style','');
+					new_li = $('<li>').append( link );
+					append_to.append(new_li);
+					
+					
+					if(subitems.length)
+					{
+						new_ul = $('<ul class="sub-menu">').appendTo(new_li);
+						
+						if(cloneFirst && ( link.get(0).hash != '#' && link.attr('href') != '#' ))
+						{
+							new_li.clone(true).prependTo(new_ul);
+						}
+						
+						new_li.addClass('av-width-submenu').find('>a').append('<span class="av-submenu-indicator">');
+				
+						create_list( subitems , new_ul);
+					}
+					else
+					{
+						megaitems = current.find('.avia_mega_div > .sub-menu > li > .sub-menu'); //if we got no normal sublists try megamenu sublists
+						
+						if(megaitems.length)
+						{	
+							
+							var new_ul = $('<ul class="sub-menu">').appendTo(new_li);
+							
+							if(cloneFirst && ( link.get(0).hash != '#' && link.attr('href') != '#' ))
+							{
+								new_li.clone(true).prependTo(new_ul);
+							}
+						
+							megaitems.each(function(iteration)
+							{	
+								var mega_current  	= $(this),
+									mega_title 		= mega_current.prev('.mega_menu_title'),
+									mega_title_link = mega_title.find('a').attr('href') || "#",
+									current_megas 	= mega_current.find('>li'),
+									mega_title_set  = false,
+									mega_link 		= new_li.find('>a');
+								
+								
+								
+								if(iteration == 0) new_li.addClass('av-width-submenu').find('>a').append('<span class="av-submenu-indicator">');
+																								
+								//if we got a title split up submenu items into multiple columns
+								if(mega_title.length && mega_title.text() != "")
+								{
+									mega_title_set  = true;
+									
+									//if we are within the first iteration we got a new submenu, otherwise we start a new one
+									if(iteration > 0) 
+									{	
+										var check_li = new_li.parents('li').eq(0);
+										
+										if(check_li.length) new_li = check_li;
+										
+										new_ul = $('<ul class="sub-menu">').appendTo(new_li);
+									}
+									
+									
+									
+									new_li = $('<li>').appendTo(new_ul);
+									new_ul = $('<ul class="sub-menu">').appendTo(new_li);
+									
+									$('<a href="'+mega_title_link+'"><span class="avia-bullet"></span><span class="avia-menu-text">' +mega_title.text()+ '</span></a>').insertBefore(new_ul);
+									mega_link = new_li.find('>a')
+									
+									
+									if(cloneFirst && ( mega_link.length && mega_link.get(0).hash != '#' && mega_link.attr('href') != '#' ))
+									{
+										new_li.clone(true).addClass('av-cloned-title').prependTo(new_ul);
+									}
+									
+																			
+								}
+								
+								
+								if(mega_title_set) new_li.addClass('av-width-submenu').find('>a').append('<span class="av-submenu-indicator">');
+								create_list( current_megas , new_ul);
+							});
+								
+						}
+					}
+					
+				});
+				
+				return list;
+			};
+		
+		var burger_ul, burger;
+		
+		//prevent scrolling of outer window when scrolling inside
+		$('body').on( 'mousewheel DOMMouseScroll touchmove', '.av-burger-overlay-scroll', function (e) { 
+			
+			var height = this.offsetHeight,
+				scrollHeight = this.scrollHeight,
+				direction = e.originalEvent.wheelDelta;
+			
+			if(scrollHeight != this.clientHeight)
+			{
+				if( (this.scrollTop >= (scrollHeight - height) && direction < 0) || (this.scrollTop <= 0 && direction > 0) ) {
+			      e.preventDefault();
+			    }
+		    }
+		    else
+		    {
+				e.preventDefault();
+		    }
+		});
+		
+		//prevent scrolling for the rest of the screen
+		$(document).on( 'mousewheel DOMMouseScroll touchmove', '.av-burger-overlay-bg, .av-burger-overlay-active .av-burger-menu-main', function (e) 
+		{ 
+				e.preventDefault();
+		});
+		
+		//prevent scrolling on mobile devices
+		var touchPos = {};
+		
+		$(document).on('touchstart', '.av-burger-overlay-scroll', function(e)
+		{
+			touchPos.Y = e.originalEvent.touches[0].clientY;
+		});
+
+		$(document).on('touchend', '.av-burger-overlay-scroll', function(e)
+		{
+			touchPos = {};
+		});
+		
+		//prevent rubberband scrolling http://blog.christoffer.me/six-things-i-learnt-about-ios-safaris-rubber-band-scrolling/
+		$(document).on( 'touchmove', '.av-burger-overlay-scroll', function (e) 
+		{ 
+			if(!touchPos.Y)
+			{
+				touchPos.Y = e.originalEvent.touches[0].clientY;
+			}
+
+			var	differenceY = e.originalEvent.touches[0].clientY - touchPos.Y,
+				element 	= this, 
+				top 		= element.scrollTop, 
+				totalScroll = element.scrollHeight, 
+				currentScroll = top + element.offsetHeight,
+				direction	  = differenceY > 0 ? "up" : "down";
+			
+			$('body').get(0).scrollTop = touchPos.body;
+				
+	        if ( top <= 0 ) 
+	        {
+	            if(direction == "up") e.preventDefault();
+	            
+	        } else if ( currentScroll >= totalScroll ) 
+	        {
+	            if(direction == "down") e.preventDefault();
+	        }
+		});
+		
+		$(window).on( 'debouncedresize', function (e) 
+		{ 
+			set_list_container_height();
+		});
+			
+		//close overlay on overlay click
+		$('.html_av-overlay-side').on( 'click', '.av-burger-overlay-bg', function (e) 
+		{ 
+			e.preventDefault();
+			burger.parents('a').eq(0).trigger('click');
+		});
+		
+		 //close overlay when smooth scrollign begins
+		$(window).on('avia_smooth_scroll_start', function()
+		{
+			if(burger && burger.length)
+			{
+				burger.filter(".is-active").parents('a').eq(0).trigger('click');
+			}
+		});
+		 
+		
+		//toogle hide/show for submenu items
+		$('.html_av-submenu-display-hover').on( 'mouseenter touchstart', '.av-width-submenu', function (e) 
+		{ 
+			$(this).children("ul.sub-menu").slideDown('fast');	
+		});
+		
+		$('.html_av-submenu-display-hover').on( 'mouseleave touchstart', '.av-width-submenu', function (e) 
+		{ 
+			$(this).children("ul.sub-menu").slideUp('fast');	
+		});
+		
+		
+		
+		//toogle hide/show for submenu items
+		$('.html_av-submenu-display-click').on( 'click', '.av-width-submenu > a', function (e) 
+		{ 
+			e.preventDefault();
+			e.stopImmediatePropagation();
+			
+			var clicked = $(this), parent  = clicked.parents('li').eq(0);
+					
+			parent.toggleClass('av-show-submenu');
+			
+			if(parent.is('.av-show-submenu'))
+			{
+				parent.children("ul.sub-menu").slideDown('fast');	
+			}
+			else
+			{
+				parent.children("ul.sub-menu").slideUp('fast');	
+			}
+			
+		});
+		
+		
+		
+		
+		
+		
+		(function normalize_layout()
+		{
+			//if we got the menu outside of the main menu container we need to add it to the container as well
+			if(menu_in_logo_container.length) return;
+		
+			var menu2 = $('#header .main_menu').clone(true);
+				menu2.find('.menu-item:not(.menu-item-avia-special)').remove();
+				menu2.insertAfter(logo_container.find('.logo'));
+				
+			//check if we got social icons and append it to the secondary menu	
+			var social = $('#header .social_bookmarks').clone(true);
+			if(!social.length) social = $('.av-logo-container .social_bookmarks').clone(true);
+			
+			if( social.length )
+			{
+				menu2.find('.avia-menu').addClass('av_menu_icon_beside');
+				menu2.append(social);
+			}
+			
+			//re select the burger menu if we added a new one
+			burger_wrap = $('.av-burger-menu-main a');
+		}());
+		
+			
 			
 		burger_wrap.click(function(e)
-		{
+		{	
 			if(animating) return;
+			burger 		= $(this).find('.av-hamburger'),
+			animating 	= true;
 			
-			animating = true;
-			
-			if(!burger.is(".av-inserted-main-menu"))
+			if(!menu_generated)
 			{
-				var new_menu = menu.clone();
-				new_menu.find('.menu-item-avia-special').remove();
-				new_menu.find('ul').attr('style','');
-				new_menu.attr({id:'av-burger-menu-ul', class:''}).appendTo(inner_overlay);
-				
-				new_menu.find('li').hover(function () {
-			        $(this).children("ul.sub-menu").slideDown('fast');
-			    }, function () {
-			        $(this).children("ul.sub-menu").slideUp('fast');
-			    });
-				
-				
+				menu_generated = true;
 				burger.addClass("av-inserted-main-menu");
-				overlay.appendTo('.avia-menu');
+
+				burger_ul = $('<ul>').attr({id:'av-burger-menu-ul', class:''})
+				var first_level_items = menu.find('> li:not(.menu-item-avia-special)'); //select all first level items that are not special items
+				var	list = create_list( first_level_items , burger_ul);
 				
-				if($.fn.avia_smoothscroll)
-				$('a[href*="#"]', overlay).avia_smoothscroll(overlay);
-				$('a[href*="#"]', overlay).click(function(){ burger_wrap.trigger('click'); })
+				burger_ul.find('.noMobile').remove(); //remove any menu items with the class noMobile so user can filter manually if he wants
+				burger_ul.appendTo(inner_overlay);
+				first_level = inner_overlay.find('#av-burger-menu-ul > li');
 				
-				first_level = overlay.find('#av-burger-menu-ul > li');
-				console.log(first_level);
+				if($.fn.avia_smoothscroll){
+					$('a[href*="#"]', overlay).avia_smoothscroll(overlay);
+				}
 			}
 			
 			if(burger.is(".is-active"))
 			{
 				burger.removeClass("is-active");
-				overlay.avia_animate({opacity:0}, function()
+				htmlEL.removeClass("av-burger-overlay-active-delayed");
+
+				overlay.animate({opacity:0}, function()
 	    		{
 	    			overlay.css({display:'none'});
 					htmlEL.removeClass("av-burger-overlay-active");
 					animating = false;
 	    		});
-			}
+	    		
+ 			}
 			else
 			{
+				set_list_container_height();
+				
+				var offsetTop = header_main.length ? header_main.outerHeight() + header_main.position().top : header.outerHeight() + header.position().top;
+				
+				overlay.appendTo($(e.target).parents('.avia-menu'));
+				
+				burger_ul.css({padding:( offsetTop ) + "px 0px"});
+				
 				first_level.removeClass('av-active-burger-items');
 				
 				burger.addClass("is-active");
 				htmlEL.addClass("av-burger-overlay-active");
-				overlay.css({display:'block'}).avia_animate({opacity:1}, function()
+				overlay.css({display:'block'}).animate({opacity:1}, function()
 				{ 
 					animating = false; 
 				});
+				
+				setTimeout(function()
+				{
+					htmlEL.addClass("av-burger-overlay-active-delayed");
+						
+				}, 100);
 				
 				first_level.each(function(i)
 				{
@@ -1836,6 +1999,10 @@
 			
 			e.preventDefault();
 		});
+		
+		
+		
+		
 	}
 
 
@@ -1946,7 +2113,8 @@
             event: 'mouseenter',       	//mousenter and leave or click and leave
             position:'top',             //top or bottom
             extraClass:'avia-tooltip-class', //extra class that is defined by a tooltip element data attribute
-            permanent: false 			// always display the tooltip?
+            permanent: false, 			// always display the tooltip?
+            within_screen: false		// if the tooltip is displayed outside the screen adjust its position
             
         }
 		
@@ -2013,7 +2181,8 @@
 
         display_tooltip: function(e)
         {
-            var target 		= this.options.event == "click" ? e.target : e.currentTarget,
+            var _self		= this,
+            	target 		= this.options.event == "click" ? e.target : e.currentTarget,
             	element 	= $(target),
                 text    	= element.data(this.options.data),
                 newTip  	= element.data('avia-created-tooltip'),
@@ -2074,6 +2243,18 @@
 					case "right": pos2 = offset.left + element.outerWidth() - newTip.outerWidth();  break;
 					default: pos2 = (offset.left + (element.outerWidth() / 2)) - (newTip.outerWidth() / 2); break;
 				}	
+				
+				if(_self.options.within_screen) //used to keep search field inside screen
+				{
+					var boundary = element.offset().left + (element.outerWidth() / 2) - (newTip.outerWidth() / 2) + parseInt(newTip.css('margin-left'),10);
+					if(boundary < 0)
+					{
+						pos2 = pos2 - boundary;
+					}
+					
+				}
+				
+				
 			}
 			else
 			{

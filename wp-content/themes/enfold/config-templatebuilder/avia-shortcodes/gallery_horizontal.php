@@ -1,7 +1,5 @@
 <?php
 
-return; //beta element to be tested
-
 if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 {
 	class avia_sc_gallery_horizontal extends aviaShortcodeTemplate
@@ -35,7 +33,17 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 			function popup_elements()
 			{
 				$this->elements = array(
-
+					
+					array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+					array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
+					
 					array(
 							"name" 	=> __("Edit Gallery",'avia_framework' ),
 							"desc" 	=> __("Create a new Gallery by selecting existing or uploading new images",'avia_framework' ),
@@ -116,6 +124,74 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 						"std" 	=> "",
 						"subtype" => array(__('Default','avia_framework' ) =>'av-control-default',__('Minimal White','avia_framework' ) =>'av-control-minimal', __('Minimal Black','avia_framework' ) =>'av-control-minimal av-control-minimal-dark',__('Hidden','avia_framework' ) =>'av-control-hidden')),
 	                
+	                array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),	
+	                
+	                
+	                
+	                
 
 						);
 
@@ -174,6 +250,8 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 			{
 				$output = "";
 				
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				extract(shortcode_atts(array(
 				'height'      		=> '400',
 				'size' 				=> 'large',
@@ -221,7 +299,7 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
                     	array('context' => 'image','echo'=>false, 'custom_markup'=>$meta['custom_markup'])
                     );
                     
-					$output .= "<div class='av-horizontal-gallery av-horizontal-gallery-{$gap}-gap av-horizontal-gallery-{$active}-effect av-horizontal-gallery-".self::$hor_gallery." ".$meta['el_class']." {$control_layout}' {$markup} {$padding} {$initial}>";
+					$output .= "<div class='av-horizontal-gallery av-horizontal-gallery-{$gap}-gap av-horizontal-gallery-{$active}-effect av-horizontal-gallery-".self::$hor_gallery." ".$meta['el_class']." {$control_layout} {$av_display_classes}' {$markup} {$padding} {$initial}>";
 					
 					$output .= $this->slide_navigation_arrows();
 
@@ -264,7 +342,7 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 
 				if(!ShortcodeHelper::is_top_level()) return $output;
 				$params = array();
-				$params['class'] = "main_color av-horizontal-gallery-fullwidth avia-no-border-styling ".$meta['el_class'];
+				$params['class'] = "main_color av-horizontal-gallery-fullwidth avia-no-border-styling {$av_display_classes} ".$meta['el_class'];
 				$params['open_structure'] = false;
 				$params['id'] = !empty($atts['id']) ? AviaHelper::save_string($atts['id'],'-') : "";
 				$params['custom_markup'] = $meta['custom_markup'];

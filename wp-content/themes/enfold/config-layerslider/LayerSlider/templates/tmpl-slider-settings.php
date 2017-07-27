@@ -57,6 +57,7 @@
 				<i class="dashicons dashicons-video-alt3"></i>
 				<strong><?php _e('Videos', 'LayerSlider') ?></strong>
 			</li>
+			<li data-deeplink="popup"><i class="dashicons dashicons-external"></i><?php _e('Popup', 'LayerSlider') ?><small><?php _e('NEW', 'LayerSlider') ?></small></li>
 			<li data-deeplink="yourlogo">
 				<i class="dashicons dashicons-admin-post"></i>
 				<strong><?php _e('YourLogo', 'LayerSlider') ?></strong>
@@ -114,8 +115,6 @@
 					<tr><th colspan="3"><?php _e('Slider type & dimensions', 'LayerSlider') ?></th></tr>
 					<tr>
 						<td colspan="3" class="ls-slider-dimensions">
-
-							<?php lsGetInput($sDefs['type'], $sProps); ?>
 							<div data-type="fixedsize">
 								<img src="<?php echo LS_ROOT_URL.'/static/admin/img/layout-fixed.png' ?>">
 								<span><?php _e('Fixed size', 'LayerSlider') ?></span>
@@ -135,17 +134,27 @@
 								<img src="<?php echo LS_ROOT_URL.'/static/admin/img/layout-full-screen.png' ?>">
 								<span><?php _e('Full size', 'LayerSlider') ?></span>
 							</div>
+							<div data-type="popup">
+								<img src="<?php echo LS_ROOT_URL.'/static/admin/img/layout-popup.png' ?>">
+								<span><?php _e('Popup', 'LayerSlider') ?></span>
+							</div>
+							<?php lsGetInput($sDefs['type'], $sProps); ?>
 						</td>
 					</tr>
-
+					<tr class="popup-row">
+						<td colspan="3" class="ls-layout-popup-notice">
+							<?php _e('Popup uses different kinds of layout settings than normal sliders. Press the button below to configure your Popup.', 'LayerSlider') ?><br>
+							<a href="#popup" class="button button-hero button-primary"><?php _e('Configure Popup', 'LayerSlider') ?></a>
+						</td>
+					</tr>
 					<?php
-					lsOptionRow('input', $sDefs['width'], $sProps );
-					lsOptionRow('input', $sDefs['height'], $sProps );
-					lsOptionRow('input', $sDefs['maxWidth'], $sProps );
-					lsOptionRow('input', $sDefs['responsiveUnder'], $sProps, array(), 'full-width-row' );
-					lsOptionRow('select', $sDefs['fullSizeMode'], $sProps, array(), 'full-size-row' );
-					lsOptionRow('checkbox', $sDefs['fitScreenWidth'], $sProps, array(), 'full-width-row full-size-row' );
-					lsOptionRow('checkbox', $sDefs['allowFullscreen'], $sProps )
+					lsOptionRow('input', $sDefs['width'], $sProps, array(), 'ls-popup-hide' );
+					lsOptionRow('input', $sDefs['height'], $sProps, array(), 'ls-popup-hide' );
+					lsOptionRow('input', $sDefs['maxWidth'], $sProps, array(), 'ls-popup-hide' );
+					lsOptionRow('input', $sDefs['responsiveUnder'], $sProps, array(), 'full-width-row ls-popup-hide' );
+					lsOptionRow('select', $sDefs['fullSizeMode'], $sProps, array(), 'full-size-row ls-popup-hide' );
+					lsOptionRow('checkbox', $sDefs['fitScreenWidth'], $sProps, array(), 'full-width-row full-size-row ls-popup-hide' );
+					lsOptionRow('checkbox', $sDefs['allowFullscreen'], $sProps, array(), 'ls-popup-hide' )
 					?>
 
 					<tr class="ls-advanced ls-hidden"><th colspan="3"><?php _e('Other settings', 'LayerSlider') ?></th></tr>
@@ -196,6 +205,7 @@
 					lsOptionRow('checkbox', $sDefs['pauseLayers'], $sProps );
 					lsOptionRow('checkbox', $sDefs['startInViewport'], $sProps );
 					lsOptionRow('select', $sDefs['pauseOnHover'], $sProps );
+					lsOptionRow('checkbox', $sDefs['hashChange'], $sProps );
 					?>
 					<tr><th colspan="3"><?php _e('Slideshow navigation', 'LayerSlider') ?></th></tr>
 					<?php
@@ -332,6 +342,331 @@
 				</tbody>
 
 
+
+				<!-- Popup -->
+				<tbody class="ls-settings-popup">
+					<tr class="ls-premium">
+						<td colspan="3">
+							<div class="ls-description">
+								<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+								<?php echo sprintf(__('Instead of embedding sliders at a fixed location on your page, you can display them  on-the-fly at certain actions as a popup. Greet new visitors on your site with a beautifully designed animated banner with newsletter subscription or other offers. Display a message when they become idle. Show them recommended content before leaving the page or when they finished reading an article. There are a lot of possibilities and all of LayerSlider’s content creation and animation capabilities are now available in a popup form as well. This includes dynamic content from your WP posts and any other feature you would use in a slider. %sClick here for more information and live examples%s', 'LayerSlider'), '<a href="https://layerslider.kreaturamedia.com/features/popups/" target="_blank">', '</a>') ?>
+							</div>
+
+							<div id="ls-popup-notifications">
+								<?php if( ! get_option('layerslider-authorized-site', false) ) : ?>
+								<div class="ls-notification">
+									<i class="dashicons dashicons-warning"></i>
+									<?php echo sprintf(__('Popup is a premium feature. You can preview all the options here with the Live Preview button, but you need to activate your copy of LayerSlider in order to use it on your front end pages. %sPurchase a license%s or %sread the documentation%s to learn more. %sGot LayerSlider in a theme?%s', 'LayerSlider'), '<a href="http://codecanyon.net/cart/add_items?ref=kreatura&item_ids=1362246" target="_blank">', '</a>', '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">', '</a>', '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation-bundles" target="_blank">', '</a>') ?>
+								</div>
+								<?php endif ?>
+
+								<div class="ls-popup-layout-notification ls-notification info">
+									<i class="dashicons dashicons-warning"></i>
+									<?php echo sprintf(__('Currently, this slider is not set up as a Popup. You can preview all the options here with the Live Preview button, but you need to select the Popup option under the %sLayout section%s to use it on your front end pages.', 'LayerSlider'), '<a href="#layout">', '</a>') ?>
+								</div>
+
+								<div class="ls-popup-trigger-notification ls-notification info">
+									<i class="dashicons dashicons-warning"></i>
+									<?php _e('Your Popup will not show up until you set a trigger. Check out the Launch Popup section and choose how and when your Popup should be displayed.', 'LayerSlider') ?>
+								</div>
+							</div>
+						</td>
+					</tr>
+					<tr><th colspan="3"><div><?php _e('Publish', 'LayerSlider') ?></div></th></tr>
+					<tr>
+						<td colspan="3" class="center ls-spacer-top ls-spacer-bottom"><?php echo sprintf(__('Check out the %sPublish%s and %sMobile%s sections to set up scheduling, target devices, etc.'), '<a href="#publish">', '</a>', '<a href="#mobile">', '</a>') ?></td>
+					</tr>
+					<tr>
+						<td colspan="3" class="ls-popup-appearance">
+							<table>
+								<tr>
+									<th class="ls-popup-preview"><?php _e('Preview', 'LayerSlider') ?></th>
+									<th char="ls-popup-layout"><?php _e('Layout Settings', 'LayerSlider') ?></th>
+								</tr>
+								<tr>
+									<td class="ls-popup-preview ls-spacer-top" style="padding-bottom: 30px;">
+										<div class="ls-layout-illustration ls-popup-layout-preview">
+											<div class="ls-layout-illustration-inner">
+
+												<div class="ls-popup-layout-example">
+													<div class="ls-popup-layout-padding">
+														<div class="ls-popup-layout-inner ls-popup-right-bottom">
+														</div>
+													</div>
+												</div>
+
+											</div>
+										</div>
+										<button type="button" class="button ls-popup-preview-button">
+											<i class="dashicons dashicons-visibility"></i>
+											<?php _e('Live Preview', 'LayerSlider') ?>
+										</button>
+									</td>
+									<td class="ls-popup-layout ls-spacer-top" style="padding-bottom: 30px;">
+										<div>
+											<button type="button" id="tmpl-popup-presets-button" class="button">
+												<i class="dashicons dashicons-layout"></i>
+												<?php _e('Choose Preset', 'LayerSlider') ?>
+											</button>
+											<?php
+											lsGetInput($sDefs['popupPositionHorizontal'], $sProps, array( 'type' => 'hidden', 'class' => 'popup-prop' ));
+											lsGetInput($sDefs['popupPositionVertical'], $sProps, array( 'type' => 'hidden', 'class' => 'popup-prop' ));
+											?>
+											<button type="button" class="button ls-popup-alignment-button" data-ls-su>
+												<i class="dashicons dashicons-align-right"></i>
+												<?php _e('Align Popup to...', 'LayerSlider') ?>
+											</button>
+											<div class="ls-su-data">
+												<table class="ls-layer-alignment ls-popup-position">
+													<tr>
+														<td data-move="top left"><i><?php _e('top left', 'LayerSlider') ?></i></td>
+														<td data-move="top center"><i><?php _e('top center', 'LayerSlider') ?></i></td>
+														<td data-move="top right"><i><?php _e('top right', 'LayerSlider') ?></i></td>
+													</tr>
+													<tr>
+														<td data-move="middle left"><i><?php _e('middle left', 'LayerSlider') ?></i></td>
+														<td data-move="middle center"><i><?php _e('middle center', 'LayerSlider') ?></i></td>
+														<td data-move="middle right"><i><?php _e('middle right', 'LayerSlider') ?></i></td>
+													</tr>
+													<tr>
+														<td data-move="bottom left"><i><?php _e('bottom left', 'LayerSlider') ?></i></td>
+														<td data-move="bottom center"><i><?php _e('bottom center', 'LayerSlider') ?></i></td>
+														<td data-move="bottom right"><i><?php _e('bottom right', 'LayerSlider') ?></i></td>
+													</tr>
+												</table>
+											</div>
+
+										</div>
+										<table>
+											<tr>
+												<td>
+													<table>
+														<tr>
+															<td>
+																<?php _e('Width', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php
+																	lsGetInput($sDefs['popupWidth'], $sProps, array( 'class' => 'mini ls-popup-width' ));
+																?>
+																px
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<?php _e('Height', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php
+																	lsGetInput($sDefs['popupHeight'], $sProps, array( 'class' => 'mini ls-popup-height' ));
+																?>
+																px
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<?php _e('Fit Screen Width', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php
+																				lsGetCheckbox($sDefs['popupFitWidth'], $sProps, array( 'class' => 'ls-popup-fit-width popup-prop' ));
+																?>
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<?php _e('Fit Screen Height', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php
+																	lsGetCheckbox($sDefs['popupFitHeight'], $sProps, array( 'class' => 'ls-popup-fit-height popup-prop' ));
+																?>
+															</td>
+														</tr>
+													</table>
+												</td>
+												<td>
+													<table>
+														<tr>
+															<td>
+																<?php _e('Distance Left', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php lsGetInput($sDefs['popupDistanceLeft'], $sProps, array( 'class' => 'mini ls-popup-distance-left popup-prop' )); ?>
+																px
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<?php _e('Distance Right', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php lsGetInput($sDefs['popupDistanceRight'], $sProps, array( 'class' => 'mini ls-popup-distance-right popup-prop' )); ?>
+																px
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<?php _e('Distance Top', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php lsGetInput($sDefs['popupDistanceTop'], $sProps, array( 'class' => 'mini ls-popup-distance-top popup-prop' )); ?>
+																px
+															</td>
+														</tr>
+														<tr>
+															<td>
+																<?php _e('Distance Bottom', 'LayerSlider') ?>
+															</td>
+															<td>
+																<?php lsGetInput($sDefs['popupDistanceBottom'], $sProps, array( 'class' => 'mini ls-popup-distance-bottom popup-prop' )); ?>
+																px
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+
+					<tr><th colspan="3"><?php _e('Launch Popup', 'LayerSlider') ?></th></tr>
+					<tr class="ls-popup-triggers">
+						<td><?php echo $sDefs['popupShowOnTimeout']['name'] ?></td>
+						<td><?php lsGetInput($sDefs['popupShowOnTimeout'], $sProps, array( 'class' => 'mini')) ?> <?php _e('seconds') ?></td>
+						<td class="desc"><?php echo $sDefs['popupShowOnTimeout']['desc'] ?></td>
+					</tr>
+					<tr class="ls-popup-triggers">
+						<td><?php echo $sDefs['popupShowOnIdle']['name'] ?></td>
+						<td><?php lsGetInput($sDefs['popupShowOnIdle'], $sProps, array( 'class' => 'mini')) ?> <?php _e('seconds') ?></td>
+						<td class="desc"><?php echo $sDefs['popupShowOnIdle']['desc'] ?></td>
+					</tr>
+					<?php
+					lsOptionRow('input', $sDefs['popupShowOnScroll'], $sProps, array( 'class' => 'mini'), 'ls-popup-triggers' );
+					lsOptionRow('checkbox', $sDefs['popupShowOnLeave'], $sProps, array(), 'ls-popup-triggers' );
+					lsOptionRow('input', $sDefs['popupShowOnClick'], $sProps, array(), 'ls-popup-triggers' );
+					?>
+
+					<tr><th colspan="3"><?php _e('Close Popup', 'LayerSlider') ?></th></tr>
+					<tr>
+						<td><?php echo $sDefs['popupCloseOnTimeout']['name'] ?></td>
+						<td><?php lsGetInput($sDefs['popupCloseOnTimeout'], $sProps, array( 'class' => 'mini')) ?> <?php _e('seconds') ?></td>
+						<td class="desc"><?php echo $sDefs['popupCloseOnTimeout']['desc'] ?></td>
+					</tr>
+					<?php
+					lsOptionRow('input', $sDefs['popupCloseOnScroll'], $sProps, array( 'class' => 'mini') );
+					lsOptionRow('checkbox', $sDefs['popupCloseOnSliderEnd'], $sProps, array( 'class' => 'popup-prop') );
+					?>
+
+					<tr><th colspan="3"><?php _e('Repeat Control', 'LayerSlider') ?></th></tr>
+					<?php lsOptionRow('checkbox', $sDefs['popupRepeat'], $sProps ); ?>
+					<tr>
+						<td><?php echo $sDefs['popupRepeatDays']['name'] ?></td>
+						<td><?php lsGetInput($sDefs['popupRepeatDays'], $sProps, array( 'class' => 'mini')) ?> <?php _e('days') ?></td>
+						<td class="desc"><?php echo $sDefs['popupRepeatDays']['desc'] ?></td>
+					</tr>
+					<?php lsOptionRow('checkbox', $sDefs['popupShowOnce'], $sProps ); ?>
+
+					<tr><th colspan="3"><?php _e('Target Pages', 'LayerSlider') ?></th></tr>
+					<tr class="ls-popup-include-pages">
+						<td><?php _e('Include pages', 'LayerSlider') ?></td>
+						<td colspan="2" class="ls-popup-target">
+							<span>
+								<?php lsGetCheckbox($sDefs['popupPagesAll'], $sProps, array( 'class' => 'ls-popup-include-all-pages' )); ?>
+								<?php echo $sDefs['popupPagesAll']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupPagesHome'], $sProps); ?>
+								<?php echo $sDefs['popupPagesHome']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupPagesPage'], $sProps); ?>
+								<?php echo $sDefs['popupPagesPage']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupPagesPost'], $sProps); ?>
+								<?php echo $sDefs['popupPagesPost']['name'] ?>
+							</span>
+						</td>
+					</tr>
+					<tr class="ls-popup-include-custom-pages">
+						<td><?php _e('Include custom pages', 'LayerSlider') ?></td>
+						<td colspan="2"><?php lsGetInput($sDefs['popupPagesCustom'], $sProps, array( 'placeholder' => __('Comma separated list of page IDs, titles or slugs.') )); ?></td>
+					</tr>
+					<tr class="ls-popup-exclude-pages">
+						<td><?php _e('Exclude pages') ?></td>
+						<td colspan="2"><?php lsGetInput($sDefs['popupPagesExclude'], $sProps, array( 'placeholder' => __('Comma separated list of page IDs, titles or slugs.') )); ?></td>
+					</tr>
+
+
+
+					<tr><th colspan="3"><?php _e('Target Audience', 'LayerSlider') ?></th></tr>
+					<tr>
+						<td><?php _e('Show Popup for users', 'LayerSlider') ?></td>
+						<td colspan="2" class="ls-popup-target">
+							<span>
+								<?php lsGetCheckbox($sDefs['popupRolesAdministrator'], $sProps); ?>
+								<?php echo $sDefs['popupRolesAdministrator']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupRolesEditor'], $sProps); ?>
+								<?php echo $sDefs['popupRolesEditor']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupRolesAuthor'], $sProps); ?>
+								<?php echo $sDefs['popupRolesAuthor']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupRolesContributor'], $sProps); ?>
+								<?php echo $sDefs['popupRolesContributor']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupRolesSubscriber'], $sProps); ?>
+								<?php echo $sDefs['popupRolesSubscriber']['name'] ?>
+							</span>
+							<span>
+								<?php lsGetCheckbox($sDefs['popupRolesVisitor'], $sProps); ?>
+								<?php echo $sDefs['popupRolesVisitor']['name'] ?>
+							</span>
+						</td>
+					</tr>
+					<?php lsOptionRow('checkbox', $sDefs['popupFirstTimeVisitor'], $sProps ); ?>
+
+
+
+					<tr><th colspan="3"><?php _e('Modal Options', 'LayerSlider') ?></th></tr>
+					<?php
+					lsOptionRow('select', $sDefs['popupTransitionIn'], $sProps, array( 'class' => 'popup-prop' ) );
+					lsOptionRow('input', $sDefs['popupDurationIn'], $sProps, array( 'class' => 'popup-prop') );
+					lsOptionRow('input', $sDefs['popupDelayIn'], $sProps, array( 'class' => 'popup-prop') );
+					lsOptionRow('select', $sDefs['popupTransitionOut'], $sProps, array( 'class' => 'popup-prop' ) );
+					lsOptionRow('input', $sDefs['popupDurationOut'], $sProps, array( 'class' => 'popup-prop') );
+					lsOptionRow('checkbox', $sDefs['popupStartSliderImmediately'], $sProps, array( 'class' => 'popup-prop') );
+					lsOptionRow('select', $sDefs['popupResetOnClose'], $sProps, array( 'class' => 'popup-prop'));
+					lsOptionRow('checkbox', $sDefs['popupShowCloseButton'], $sProps, array( 'class' => 'popup-prop') );
+					lsOptionRow('input', $sDefs['popupCloseButtonStyle'], $sProps, array( 'class' => 'popup-prop') );
+					?>
+
+
+					<tr><th colspan="3"><?php _e('Overlay Options', 'LayerSlider') ?></th></tr>
+					<?php
+					lsOptionRow('checkbox', $sDefs['popupDisableOverlay'], $sProps );
+					lsOptionRow('checkbox', $sDefs['popupOverlayClickToClose'], $sProps );
+					lsOptionRow('input', $sDefs['popupOverlayBackground'], $sProps, array( 'class' => 'popup-prop ls-colorpicker minicolors-input' ) );
+					lsOptionRow('select', $sDefs['popupOverlayTransitionIn'], $sProps, array( 'class' => 'popup-prop' ) );
+					lsOptionRow('input', $sDefs['popupOverlayDurationIn'], $sProps, array( 'class' => 'popup-prop' ) );
+					lsOptionRow('select', $sDefs['popupOverlayTransitionOut'], $sProps, array( 'class' => 'popup-prop' ) );
+					lsOptionRow('input', $sDefs['popupOverlayDurationOut'], $sProps, array( 'class' => 'popup-prop' ) );
+
+					?>
+
+				</tbody>
+
+
 				<!-- YourLogo -->
 				<tbody>
 					<tr>
@@ -386,6 +721,7 @@
 					lsOptionRow('checkbox', $sDefs['relativeURLs'], $sProps );
 					lsOptionRow('checkbox', $sDefs['useSrcset'], $sProps );
 					lsOptionRow('checkbox', $sDefs['allowRestartOnResize'], $sProps );
+					lsOptionRow('select', $sDefs['preferBlendMode'], $sProps );
 					?>
 					<tr>
 						<td><?php _e('Slider preview image', 'LayerSlider') ?></td>

@@ -151,9 +151,13 @@
 		</div>
 		
 		<?php
-		//display link to previeous and next portfolio entry
-		echo avia_post_nav();
-
+		
+		if(avia_get_option('disable_post_nav') != "disable_post_nav")
+		{
+			//display link to previous and next portfolio entry
+			echo avia_post_nav();
+		}
+		
 		echo "<!-- end wrap_all --></div>";
 
 

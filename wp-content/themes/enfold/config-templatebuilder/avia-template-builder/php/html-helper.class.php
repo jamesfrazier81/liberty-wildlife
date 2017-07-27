@@ -203,9 +203,22 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 							case 'doesnt_contain': 	if(strpos($value1,$value2) === false) $return = true; break;
 							case 'is_empty_or': 	if(empty($value1) || $value1 == $value2) $return = true; break;
 							case 'not_empty_and': 	if(!empty($value1) && $value1 != $value2) $return = true; break;
-							
-							
-							
+							case 'parent_in_array':			//	$value1 = "value,id"
+										$sep = strpos( $value1, ',' );
+										$val = ( false !== $sep ) ? substr( $value1, 0, $sep ) : '';
+										if( ! empty( $val ) )
+										{
+											$return = in_array( $val, explode( ' ', $value2 ) );
+										}
+										break;
+							case 'parent_not_in_array';		//	$value1 = "value,id"
+										$sep = strpos( $value1, ',' );
+										$val = ( false !== $sep ) ? substr( $value1, 0, $sep ) : '';
+										if( ! empty( $val ) )
+										{
+											$return = ! in_array( $val, explode( ' ', $value2 ) );
+										}
+										break;
 						}
 					}
 				}
@@ -1561,10 +1574,10 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		
 		
 		
-		static function number_array($from = 0, $to = 100, $steps = 1, $array = array(), $label = "")
+		static function number_array($from = 0, $to = 100, $steps = 1, $array = array(), $label = "", $value_prefix = "")
 		{
 			for ($i = $from; $i <= $to; $i += $steps) {
-			    $array[$i.$label] = $i;
+			    $array[$i.$label] = $value_prefix.$i;
 			}
 		
 			return $array;

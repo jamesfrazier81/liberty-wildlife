@@ -167,6 +167,63 @@ if( ! function_exists( 'avia_woocommerce_product_gallery_support_setup' ) )
 	}
 }
 
+######################################################################
+# Allow to add WC structured data on template builder page
+######################################################################
+#
+
+add_action( 'get_footer', 'avia_activate_wc_structured_data', 10, 1 );
+
+
+if( ! function_exists( 'avia_activate_wc_structured_data' ) )
+{
+	/**
+	 * 
+	 * @param type $name
+	 */
+	function avia_activate_wc_structured_data( $name )
+	{
+		global $product;
+		
+		if( ! avia_woocommerce_version_check( '3.0.0') )
+		{
+			return;
+		}
+		
+		//	Currently only on single product page with template builder required
+		if( ! is_product() ||  ! $product instanceof WC_Product )
+		{
+			return;
+		}
+		
+		/**
+		 * Check necessary data in \woocommerce\includes\class-wc-structured-data.php	 
+		 */
+		if( ! did_action( 'woocommerce_before_main_content' ) )
+		{
+			WC()->structured_data->generate_website_data();
+		}
+		
+		if( ! ( did_action( 'woocommerce_shop_loop' ) || did_action( 'woocommerce_single_product_summary' ) ) )
+		{
+			WC()->structured_data->generate_product_data();
+		}
+		
+			//	not needed on single product page
+		if( ! did_action( 'woocommerce_breadcrumb' ) )
+		{
+//			WC()->structured_data->generate_breadcrumblist_data();
+		}
+		if( ! did_action( 'woocommerce_review_meta' ) )
+		{
+//			WC()->structured_data->generate_review_data();
+		}
+		if( ! did_action( 'woocommerce_email_order_details' ) )
+		{
+//			WC()->structured_data->generate_order_data();
+		}
+	}
+}
 
 ######################################################################
 # Create the correct template html structure
@@ -200,6 +257,7 @@ remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 ); /*remove woocommerce ordering dropdown*/
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_rating', 5 ); //remove rating
 remove_action( 'woocommerce_after_shop_loop', 'woocommerce_pagination', 10 ); //remove woo pagination
+
 
 
 ######################################################################
@@ -530,7 +588,7 @@ if(!function_exists('avia_woocommerce_breadcrumb'))
 		if(is_woocommerce())
 		{
 
-			$home 		= $trail[0];
+			$home 		= isset( $trail[0] ) ? $trail[0] : '';
 			$last 		= array_pop($trail);
 			$shop_id 	= function_exists( 'wc_get_page_id' ) ? wc_get_page_id( 'shop' ) : woocommerce_get_page_id( 'shop' );
 			$taxonomy 	= "product_cat";
@@ -572,7 +630,7 @@ if(!function_exists('avia_woocommerce_breadcrumb'))
 				//unset the trail and build our own
 				unset($trail);
 
-				$trail[0] = $home;
+				$trail = ( empty( $home ) ) ? array() : array( 0 => $home );
 				if(!empty($shop_id) && $shop_id  != -1)    $trail = array_merge( $trail, avia_breadcrumbs_get_parents( $shop_id ) );
 				if(!empty($parent_cat)) $trail = array_merge( $trail, avia_breadcrumbs_get_term_parents( $parent_cat[0] , $taxonomy ) );
 				if(!empty($product_category)) $trail[] = '<a href="' . get_term_link( $product_category[0]->slug, $taxonomy ) . '" title="' . esc_attr( $product_category[0]->name ) . '">' . $product_category[0]->name . '</a>';
@@ -1852,3 +1910,175 @@ function avia_woocommerce_set_pages()
 		}
 	}		
 }
+
+/**
+ * Helper functions for template builder elements - Product grids, slideshows, ......
+ * ==================================================================================
+ * 
+ */
+if( ! function_exists( 'avia_wc_set_out_of_stock_query_params' ) )
+{
+	
+	/**
+	 * Returns the query parameters for the "product out of stock" feature for selecting the products
+	 * 
+	 * @param array $meta_query
+	 * @param array $tax_query
+	 * @param string $products_visibility					'show'|'hide'|'' for WC default
+	 */
+	function avia_wc_set_out_of_stock_query_params( array &$meta_query, array &$tax_query, $products_visibility = '' )
+	{
+		/**
+		 * Backwards compatibility WC < 3.0.0
+		 */
+		if( ! avia_woocommerce_version_check( '3.0.0') )
+		{
+			$meta_query[] = WC()->query->visibility_meta_query();
+			$meta_query[] = WC()->query->stock_status_meta_query();
+			$meta_query   = array_filter( $meta_query );
+		}
+		else
+		{
+			switch( $products_visibility )
+			{
+				case 'show':
+					$hide = 'no';
+					break;
+				case 'hide':
+					$hide = 'yes';
+					break;
+				default:
+					$hide = get_option( 'woocommerce_hide_out_of_stock_items', 'no' );
+			}
+
+			if( 'yes' == $hide )
+			{
+				$outofstock_term = get_term_by( 'name', 'outofstock', 'product_visibility' );
+				if( $outofstock_term instanceof WP_Term )
+				{
+					$tax_query[] = array(
+									'taxonomy'	=>	'product_visibility',
+									'field'		=>	'term_taxonomy_id',
+									'terms'		=>	array( $outofstock_term->term_taxonomy_id ),
+									'operator'	=>	'NOT IN'
+								);
+				}
+			}
+		}
+	}
+}
+
+if( ! function_exists( 'avia_wc_get_product_query_order_args' ) )
+{
+	/**
+	 * Returns the ordering args, either the default catalog settings or the user selected
+	 *  
+	 * @param string $order_by
+	 * @param string $order
+	 * @return array
+	 */
+	function avia_wc_get_product_query_order_args( $order_by = '', $order = '' )
+	{
+		$def_orderby = avia_wc_get_default_catalog_order_by();
+					
+		$order_by = empty( $order_by ) ? $def_orderby['orderby'] : $order_by;
+		$order = empty( $order ) ? $def_orderby['order'] : $order;
+					
+				//	sets filter hooks !!
+		$ordering_args = WC()->query->get_catalog_ordering_args( $order_by, $order );
+		
+		$ordering_args['orderby'] = $order_by;
+		$ordering_args['order'] = $order;
+		
+		return $ordering_args;
+	}
+}
+
+
+if( ! function_exists( 'avia_wc_get_default_catalog_order_by' ) )
+{
+	/**
+	 * Returns the default settings for catalog order by and clears any set filter hook by this function
+	 * 
+	 * @return array
+	 */
+	function avia_wc_get_default_catalog_order_by()
+	{
+		//	does not always return correct values !!!
+//		$args = WC()->query->get_catalog_ordering_args();
+		
+		$orderby_value = apply_filters( 'woocommerce_default_catalog_orderby', get_option( 'woocommerce_default_catalog_orderby' ) );
+
+			// Get order + orderby args from string
+		$orderby_value = explode( '-', $orderby_value );
+		$orderby       = esc_attr( $orderby_value[0] );
+		$order         = ! empty( $orderby_value[1] ) ? $orderby_value[1] : 'ASC';
+		
+		$args    = array();
+
+		$args['orderby']  = strtolower( $orderby );
+		$args['order']    = ( 'DESC' === strtoupper( $order ) ) ? 'DESC' : 'ASC';
+		$args['meta_key'] = '';		
+
+		return $args;
+	}
+}
+
+
+if( ! function_exists( 'avia_wc_clear_catalog_ordering_args_filters' ) )
+{
+	/**
+	 * Remove all filters set by a call to WC()->query->get_catalog_ordering_args();
+	 */
+	function avia_wc_clear_catalog_ordering_args_filters()
+	{
+		remove_filter( 'posts_clauses', array( WC()->query, 'order_by_price_desc_post_clauses' ) );
+		remove_filter( 'posts_clauses', array( WC()->query, 'order_by_price_asc_post_clauses' ) );
+		remove_filter( 'posts_clauses', array( WC()->query, 'order_by_popularity_post_clauses' ) );
+		remove_filter( 'posts_clauses', array( WC()->query, 'order_by_rating_post_clauses' ) );
+	}
+}
+
+
+
+add_filter( 'woocommerce_product_is_visible', 'avia_wc_product_is_visible', 10, 2 );
+if( ! function_exists( 'avia_wc_product_is_visible' ) )
+{
+	/**
+	 * Allows to change the default visibility for products in catalog.
+	 * 
+	 * WC checks this in the loop when showing products on a catalog page - as we allow user to show/hide products out of stock in various
+	 * builder elements we have to force the display even if visibility is false
+	 * 
+	 * @param boolean $visible
+	 * @param int $product_id
+	 * @return boolean
+	 */
+	function avia_wc_product_is_visible( $visible, $product_id )
+	{
+		global $avia_config;
+		
+		if( ! isset( $avia_config['woocommerce']['catalog_product_visibility'] ) )
+		{
+			return $visible;
+		}
+		
+		switch( $avia_config['woocommerce']['catalog_product_visibility'] )
+		{
+			case 'show_all':
+				return true;
+			case 'hide_out_of_stock':
+				$product = wc_get_product( $product_id );
+				if( ! $product instanceof WC_Product )
+				{
+					return $visible;
+				}
+				return $product->is_in_stock();
+			case 'use_default':
+			default:
+				return $visible;
+		}
+	}
+}
+
+

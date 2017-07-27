@@ -22,7 +22,7 @@ class LS_Revisions {
 	/**
 	 * Private constructor to prevent instantiate static class
 	 *
-	 * @since 5.0.0
+	 * @since 6.3.0
 	 * @access private
 	 * @return void
 	 */

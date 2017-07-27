@@ -152,7 +152,7 @@ function avia_woocommerce_product_options($boxes)
 	$counter = 0;
 	foreach($boxes as $box)
 	{
-		if($box['title'] == 'Layout') $boxes[$counter]['page'][] = 'product';
+		if( $box['id'] == 'layout' ) $boxes[$counter]['page'][] = 'product';
 		$counter++;
 	}
 	return $boxes;

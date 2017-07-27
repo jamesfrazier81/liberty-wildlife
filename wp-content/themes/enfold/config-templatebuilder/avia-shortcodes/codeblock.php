@@ -38,6 +38,16 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
         function popup_elements()
         {
             $this->elements =  array(
+	            
+	            array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+				array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true),
+	            
                 array(
                     "name"  => __("Code Block Content. Add your own HTML/CSS/Javascript here", 'avia_framework'),
                     "desc"  => __("Enter some text/code. You can also add plugin shortcodes here. (Adding theme shortcodes is not recommended though)", 'avia_framework'),
@@ -82,6 +92,74 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
                     "id"    => "deactivate_wrapper",
                     "std"   => false,
                     "type"  => "checkbox"),
+                    
+                array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),
+                
+                
+                
             );
 
         }
@@ -112,6 +190,9 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
          */
         function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
         {
+	        
+	        extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+
             $custom_class = !empty($meta['custom_class']) ? $meta['custom_class'] : "";
 
             $atts = shortcode_atts(array(
@@ -129,7 +210,7 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
                 $markup = avia_markup_helper(array('context' => 'entry', 'echo' => false, 'custom_markup'=>$meta['custom_markup']));
                 $markup_text = avia_markup_helper(array('context' => 'entry_content', 'echo' => false, 'custom_markup'=>$meta['custom_markup']));
 
-                $output .= '<section class="avia_codeblock_section avia_code_block_' . avia_sc_codeblock::$codeblock_id . '" ' . $markup . '>';
+                $output .= '<section class="avia_codeblock_section '.$av_display_classes.' avia_code_block_' . avia_sc_codeblock::$codeblock_id . '" ' . $markup . '>';
                 $output .= "<div class='avia_codeblock {$custom_class}' $markup_text>" . $content . "</div>";
                 $output .= '</section>';
                 $content = $output;

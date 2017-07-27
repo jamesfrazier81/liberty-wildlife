@@ -454,11 +454,24 @@ if ( !class_exists( 'avia_sc_tab_sub_section' ) )
 								
 				$avia_config['current_column'] = $shortcodename;
 				
-				$tab_nr = isset(avia_sc_tab_sub_section::$attr['initial']) ? avia_sc_tab_sub_section::$attr['initial'] : 1;
-				$active_tab = avia_sc_tab_section::$tab == $tab_nr ? "av-active-tab-content __av_init_open" : "";
+				if( ! isset( avia_sc_tab_sub_section::$attr['initial'] ) )
+				{
+					avia_sc_tab_sub_section::$attr['initial'] = 1;
+				}
+				else if( avia_sc_tab_sub_section::$attr['initial'] <= 0 )
+				{
+					avia_sc_tab_sub_section::$attr['initial'] = 1;
+				}
+				else if( avia_sc_tab_sub_section::$attr['initial'] > avia_sc_tab_section::$tab ) 
+				{
+					avia_sc_tab_sub_section::$attr['initial'] = avia_sc_tab_section::$tab;
+				}
 				
+				$active_tab = avia_sc_tab_section::$tab == avia_sc_tab_sub_section::$attr['initial'] ? "av-active-tab-content __av_init_open" : "";
 				
-				$output   = '<div data-av-tab-section-content="'.avia_sc_tab_section::$tab.'" class="av-layout-tab av-animation-delay-container '.$active_tab.' '.$meta['el_class'].' '.$extraClass.' '.avia_sc_tab_sub_section::$extraClass.'" '.$outer_style.' '.$data.' data-tab-section-id="'.$atts['tab_title'].'">';
+				$tab_link = AviaHelper::save_string($atts['tab_title'],'-');
+				
+				$output   = '<div data-av-tab-section-content="'.avia_sc_tab_section::$tab.'" class="av-layout-tab av-animation-delay-container '.$active_tab.' '.$meta['el_class'].' '.$extraClass.' '.avia_sc_tab_sub_section::$extraClass.'" '.$outer_style.' '.$data.' data-tab-section-id="'.$tab_link.'">';
 				$output  .= "<div class='av-layout-tab-inner'>";
 				$output  .= "<div class='container'>";
 				//if the user uses the column shortcode without the layout builder make sure that paragraphs are applied to the text

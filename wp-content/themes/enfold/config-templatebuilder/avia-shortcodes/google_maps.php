@@ -63,6 +63,16 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 				$this->elements = array(
 			
 					array(
+							"type" 	=> "tab_container", 'nodescription' => true
+						),
+						
+					array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
+			
+					array(
 							"name" => __("Add/Edit Map Locations", 'avia_framework' ),
 							"desc" => __("Here you can add, remove and edit the map locations for your Google Map.", 'avia_framework' )."<br/>",
 							"type" 			=> "modal_group",
@@ -172,19 +182,105 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 						
 						array(	
 							"name" 	=> __("Display Zoom Control?", 'avia_framework' ),
-							"desc" 	=> __("Check to display the controls at the left side of the map", 'avia_framework' ) ,
+							"desc" 	=> __("Check to display the controls at the right side of the map", 'avia_framework' ) ,
 							"id" 	=> "zoom_control",
 							"std" 	=> "active",
 							"type" 	=> "checkbox"),
+
+					
+						array(
+							"name" 	=> __("Display Map Type Selector", 'avia_framework' ),
+							"desc" 	=> __("Choose to display the map type selector dropdown at the left of your map", 'avia_framework' ),
+							"id" 	=> "maptype_control",
+							"type" 	=> "select",
+							"std" 	=> '',
+							"subtype" => array(
+									__( 'Hide',  'avia_framework' )									=>	'',
+									__( 'Dropdown',  'avia_framework' )								=>	'dropdown',
+									__( 'Horizontal buttons',  'avia_framework' )					=>	'horizontal',
+									__( 'Responsive (choosen by Google API)',  'avia_framework' )	=>	'default',
+								)
+							),
+					
+						array(
+							"name" 	=> __( "Choose initial map view", 'avia_framework' ),
+							"desc" 	=> __( "Choose the initial map view after loading the map", 'avia_framework' ),
+							"id" 	=> "maptype_id",
+							"type" 	=> "select",
+							"std" 	=> '',
+							"subtype" => array(
+									__( 'Roadmap',  'avia_framework' )		=>	'',
+									__( 'Satellite',  'avia_framework' )	=>	'SATELLITE',
+									__( 'Hybrid',  'avia_framework' )		=>	'HYBRID',
+									__( 'Terrain',  'avia_framework' )		=>	'TERRAIN',
+								)
+							),
+		
+						array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
 						
-/*
-						array(	
-							"name" 	=> __("Map dragging on mobile", 'avia_framework' ),
-							"desc" 	=> __("Check to disable the users ability to drag the map on mobile devices. This ensures that the user can scroll down the page, even if the map fills the whole viewport of the mobile device", 'avia_framework' )  ,
-							"id" 	=> "mobile_drag_control",
-							"std" 	=> "",
-							"type" 	=> "checkbox"),
-*/
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),
+
 				);
 
 			}
@@ -242,16 +338,20 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+		       	extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$atts = shortcode_atts(array(
-				'id'    	 	=> '',
-				'height'		=> '',
-				'hue'			=> '',
-				'saturation'	=> '',
-				'zoom'			=> '',
-				'zoom_control'  => '',
-				'mobile_drag_control' =>'',
-				'handle'		=> $shortcodename,
-				'content'		=> ShortcodeHelper::shortcode2array($content, 1)
+					'id'    	 	=> '',
+					'height'		=> '',
+					'hue'			=> '',
+					'saturation'	=> '',
+					'zoom'			=> '',
+					'zoom_control'  => '',
+					'mobile_drag_control'	=> '',
+					'maptype_control'		=> '',
+					'maptype_id'	=> '',
+					'handle'		=> $shortcodename,
+					'content'		=> ShortcodeHelper::shortcode2array($content, 1)
 				
 				), $atts, $this->config['shortcode']);
 				
@@ -265,9 +365,9 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 				$skipSecond 	= false;
 				avia_sc_gmaps::$map_count++;
 				
-				$params['class'] 							= "avia-google-maps avia-google-maps-section main_color ".$meta['el_class'].$class;
-				$params['open_structure'] 					= false;
-				$params['id'] 								= empty($id) ? "avia-google-map-nr-".avia_sc_gmaps::$map_count : $id;
+				$params['class'] 				= "avia-google-maps avia-google-maps-section main_color {$av_display_classes} ".$meta['el_class'].$class;
+				$params['open_structure'] 		= false;
+				$params['id'] 					= empty($id) ? "avia-google-map-nr-".avia_sc_gmaps::$map_count : $id;
 
 				
 				//we dont need a closing structure if the element is the first one or if a previous fullwidth element was displayed before
@@ -281,7 +381,7 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 				
 				
 				//create the map div that will be used to insert the google map
-				$map = "<div id='av_gmap_".avia_sc_gmaps::$map_count."' class='avia-google-map-container' data-mapid='".avia_sc_gmaps::$map_count."' ".$this->define_height($height)."></div>";
+				$map = "<div id='av_gmap_".avia_sc_gmaps::$map_count."' class='avia-google-map-container {$av_display_classes}' data-mapid='".avia_sc_gmaps::$map_count."' ".$this->define_height($height)."></div>";
 				
 				
 				//if the element is nested within a section or a column dont create the section shortcode around it
@@ -370,7 +470,7 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 					}
 				}
 				
-				$first_level = array('hue', 'zoom', 'saturation', 'zoom_control' , 'pan_control', 'mobile_drag_control');
+				$first_level = array( 'hue', 'zoom', 'saturation', 'zoom_control' , 'pan_control', 'mobile_drag_control', 'maptype_control', 'maptype_id' );
 				foreach($first_level as $var)
 				{
 					self::$js_vars[$this->config['shortcode']][$index][$var] = $atts[$var];

@@ -6,6 +6,8 @@ function lsOptionRow( $type, $default, $current, $attrs = array(), $trClasses = 
 	$wrapperEnd = '';
 	$control = '';
 
+	$default['desc'] = ! empty( $default['desc'] ) ? $default['desc'] : '';
+
 
 	if( ! empty($default['advanced']) ) {
 		$trClasses .= ' ls-advanced ls-hidden';

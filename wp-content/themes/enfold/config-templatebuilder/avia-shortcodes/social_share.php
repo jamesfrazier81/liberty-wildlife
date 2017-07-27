@@ -34,6 +34,15 @@ if ( !class_exists( 'avia_sc_social_share' ) )
 			function popup_elements()
 			{
 				$this->elements = array(
+					array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+					array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
 					
 					array(
 		                    "name"  => __("Small title", 'avia_framework' ),
@@ -147,8 +156,66 @@ if ( !class_exists( 'avia_sc_social_share' ) )
 							"container_class" => 'av_third ',
 							"required" => array("buttons",'equals','custom'),
 							"type" 	=> "checkbox"),
-					
-					
+					array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
+								
+					array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
+								
+							array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),	
 					
 				);
 
@@ -165,6 +232,8 @@ if ( !class_exists( 'avia_sc_social_share' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$atts = shortcode_atts(array( 
 				
 				'buttons' => "",
@@ -203,7 +272,7 @@ if ( !class_exists( 'avia_sc_social_share' ) )
 				}
 				
 				
-                $output .= "<div class='av-social-sharing-box {$custom_class}'>";
+                $output .= "<div class='av-social-sharing-box {$custom_class} {$av_display_classes}'>";
                 $output .= avia_social_share_links($args, $options, $title, $echo);
                 $output .= "</div>";
 

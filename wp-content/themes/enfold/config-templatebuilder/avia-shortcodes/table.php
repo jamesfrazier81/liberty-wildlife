@@ -152,7 +152,56 @@ if ( !class_exists( 'avia_sc_table' ) )
 						array(
 							"type" 	=> "close_div", 'nodescription' => true
 						),
-						
+						array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
 						array(
 							"type" 	=> "close_div", 'nodescription' => true
 						),
@@ -207,7 +256,9 @@ if ( !class_exists( 'avia_sc_table' ) )
 			 * @return string $output returns the modified html string 
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
-			{
+			{	
+				$this->screen_options = AviaHelper::av_mobile_sizes($atts);
+				
 				$atts 		= shortcode_atts(array('purpose' => 'pricing', 'caption' => '', 'responsive_styling' => 'avia_responsive_table', 'pricing_hidden_cells' => '', 'pricing_table_design' => 'avia_pricing_default'), $atts, $this->config['shortcode']);
 				$depth		= 2;
 				$table_rows = ShortcodeHelper::shortcode2array($content, $depth);
@@ -250,8 +301,11 @@ if ( !class_exists( 'avia_sc_table' ) )
 			pricing table uses unordered lists to display the table structure
 			*/
 			function pricing_table($table_rows, $atts, $meta)
-			{
-				$class = $atts['pricing_hidden_cells']." ".$atts['pricing_table_design'];
+			{	
+				extract($this->screen_options);
+				
+				
+				$class = $atts['pricing_hidden_cells']." ".$atts['pricing_table_design']." ".$av_display_classes;
 				$sorted_rows = $this->list_sort_array($table_rows);
                 $markup = avia_markup_helper(array('context' => 'table','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
 				$output  =	"";		
@@ -319,8 +373,10 @@ if ( !class_exists( 'avia_sc_table' ) )
 			*/
 			function data_table($table_rows, $atts, $meta)
 			{	
+				extract($this->screen_options);
+				
 				$responsive_style = "";
-				$class = $meta['el_class']." ".$atts['pricing_table_design'];
+				$class = $meta['el_class']." ".$atts['pricing_table_design']." ".$av_display_classes;
 				
                 $markup = avia_markup_helper(array('context' => 'table','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
 
@@ -358,7 +414,7 @@ if ( !class_exists( 'avia_sc_table' ) )
 						
 						if($rk == 0 && $tag == "th")
 						{
-							$responsive_style .= ".avia-table-".self::$table_count." td:nth-of-type(".($counter + $responsive_style_nth_modifier)."):before { content: '".html_entity_decode($row['content'][$counter]['content'])."'; } ";
+							$responsive_style .= ".avia-table-".self::$table_count." td:nth-of-type(".($counter + $responsive_style_nth_modifier)."):before { content: '".strip_tags(html_entity_decode($row['content'][$counter]['content']))."'; } ";
 							$counter ++;
 						}
 						

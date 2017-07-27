@@ -39,7 +39,17 @@ if ( !class_exists( 'avia_sc_gallery' ) )
 			function popup_elements()
 			{
 				$this->elements = array(
-
+					array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+					array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
+					
+					
 					array(
 							"name" 	=> __("Edit Gallery",'avia_framework' ),
 							"desc" 	=> __("Create a new Gallery by selecting existing or uploading new images",'avia_framework' ),
@@ -126,6 +136,71 @@ if ( !class_exists( 'avia_sc_gallery' ) )
 		                            __('Show the animation when user scrolls to the gallery',  'avia_framework' ) =>'avia_lazyload',
 		                            __('Activate animation on page load (might be preferable on large galleries)', 'avia_framework' ) =>'deactivate_avia_lazyload')
 		                    ),
+		                    
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+		                	array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+						array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),	
+		                
 
 						);
 
@@ -158,6 +233,9 @@ if ( !class_exists( 'avia_sc_gallery' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				
+	        	extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$output  = "";
 				$first   = true;
 				
@@ -212,7 +290,7 @@ if ( !class_exists( 'avia_sc_gallery' ) )
 					$thumb_width = round(100 / $columns, 4);
 
                     $markup = avia_markup_helper(array('context' => 'image','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-					$output .= "<div class='avia-gallery avia-gallery-".self::$gallery." ".$lazyload." avia_animate_when_visible ".$meta['el_class']."' $markup>";
+					$output .= "<div class='avia-gallery {$av_display_classes} avia-gallery-".self::$gallery." ".$lazyload." avia_animate_when_visible ".$meta['el_class']."' $markup>";
 					$thumbs = "";
 					$counter = 0;
 

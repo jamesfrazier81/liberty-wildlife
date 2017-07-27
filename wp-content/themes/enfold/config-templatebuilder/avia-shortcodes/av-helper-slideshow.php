@@ -280,6 +280,8 @@ if ( !class_exists( 'avia_slideshow' ) )
 
 										), $this->subslides[$key]['attr']);
 				
+				//return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				extract(AviaHelper::av_mobile_sizes($this->subslides[$key]['attr'])); 
 				extract($meta);
 				
 				if(isset($this->slides[$id]) || $slide_type == 'video')
@@ -422,10 +424,10 @@ if ( !class_exists( 'avia_slideshow' ) )
 					//check if we got a caption
                     $markup_description = avia_markup_helper(array('context' => 'description','echo'=>false, 'id'=>$attachment_id, 'custom_markup'=>$custom_markup));
                     $markup_name = avia_markup_helper(array('context' => 'name','echo'=>false, 'id'=>$attachment_id, 'custom_markup'=>$custom_markup));
-					if(trim($title) != "")   $title 	= "<h2 {$title_styling} class='avia-caption-title' $markup_name>".trim(apply_filters('avf_slideshow_title', $title))."</h2>";
+					if(trim($title) != "")   $title 	= "<h2 {$title_styling} class='avia-caption-title {$av_title_font_classes}' $markup_name>".trim(apply_filters('avf_slideshow_title', $title))."</h2>";
 					
 					if(is_array($content)) $content = implode(' ',$content); //temp fix for trim() expects string warning until I can actually reproduce the problem
-					if(trim($content) != "") $content 	= "<div class='avia-caption-content {$content_class}' {$markup_description} {$content_styling}>".ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop(trim($content)))."</div>";
+					if(trim($content) != "") $content 	= "<div class='avia-caption-content {$av_font_classes} {$content_class}' {$markup_description} {$content_styling}>".ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop(trim($content)))."</div>";
 
 					if(trim($title.$content.$button_html) != "")
 					{

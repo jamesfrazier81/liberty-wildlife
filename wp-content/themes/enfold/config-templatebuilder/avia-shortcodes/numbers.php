@@ -165,6 +165,57 @@ if ( !class_exists( 'avia_sc_animated_numbers' ) )
 						),
 						
 					array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+						
+					array(
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
@@ -214,6 +265,8 @@ if ( !class_exists( 'avia_sc_animated_numbers' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				
+	        	extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
 				extract(shortcode_atts(array(	'number' 		=> '100', 
 											 	'icon' 			=> '1', 
 											 	'position' 		=> 'left', 
@@ -269,7 +322,7 @@ if ( !class_exists( 'avia_sc_animated_numbers' ) )
 				}
 				
         		// add blockquotes to the content
-        		$output  = '<'.$tags[0].' '.$style.' class="avia-animated-number av-force-default-color avia-color-'.$color.' '.$meta['el_class'].' avia_animate_when_visible" '.$style.'>';
+        		$output  = '<'.$tags[0].' '.$style.' class="avia-animated-number av-force-default-color '.$av_display_classes.' avia-color-'.$color.' '.$meta['el_class'].' avia_animate_when_visible" '.$style.'>';
         		$output .= 		'<strong class="heading avia-animated-number-title" '.$font_style.'>';
         		$output .= 		$before.$this->extract_numbers($number).$after;
         		$output .= 		"</strong>";

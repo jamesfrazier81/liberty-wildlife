@@ -91,6 +91,24 @@ body .unit.alpha, body .units.alpha {
 }
 
 
+
+/* All Tablets and smaller */
+@media only screen and (max-width: 989px) {
+
+.responsive #top #wrap_all .flex_column.av-break-at-tablet, .responsive #top #wrap_all .av-break-at-tablet .flex_cell {
+    margin: 0;
+    margin-bottom: 20px;
+    width: 100%;
+    display: block;
+  }
+  
+.responsive #top #wrap_all .av-break-at-tablet-flextable, .responsive .av-layout-grid-container.av-break-at-tablet {
+	display: block;	
+  }
+
+}
+
+
 /*  #Mobile (Portrait)
 ================================================== */
 

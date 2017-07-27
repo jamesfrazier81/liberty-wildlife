@@ -113,7 +113,7 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 						'fixed masonry' => __('Perfect Automatic Masonry: Display a grid where most images get the same size, only very wide images get twice the width and very high images get twice the height. To qualify for "very wide" or "very high" the image must have a aspect ratio of 16:9 or higher',  'avia_framework' ),
 					)),
 					
-/*
+
 				array(
 					"name" 	=> __("Orientation", 'avia_framework' ),
 					"desc" 	=> __("Set the orientation of the cropped preview images", 'avia_framework' ),
@@ -129,7 +129,7 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 						__('High Portrait',  'avia_framework' ) =>'av-orientation-portrait-large',
 					)),	
 					
-*/
+
 					
 				array(
 					"name" 	=> __("Gap between elements", 'avia_framework' ),
@@ -267,6 +267,85 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 					),
 					
 				array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								array(
+								"name" 	=> __("Element Columns",'avia_framework' ),
+								"desc" 	=> 
+								__("Set the column count for this element, based on the device screensize.", 'avia_framework' )."<br/><small>".
+								__("Please note that changing the default will overwrite any individual 'landscape' width settings. Each item will have the same width", 'avia_framework' )."</small>"
+								,
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+							
+								array(	"name" 	=> __("Column count for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Column count for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Column count for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),  	
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+					
+				array(
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
@@ -341,6 +420,8 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 			
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$output  = "";
 				
 				$skipSecond = false;
@@ -348,7 +429,7 @@ if ( !class_exists( 'avia_sc_masonry_gallery' ) )
 				//check if we got a layerslider
 				global $wpdb;
 				
-				$params['class'] = "main_color ".$meta['el_class'];
+				$params['class'] = "main_color {$av_display_classes} ".$meta['el_class'];
 				$params['open_structure'] = false;
 				$params['id'] = !empty($atts['id']) ? AviaHelper::save_string($atts['id'],'-') : "";
 				

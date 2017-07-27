@@ -9,14 +9,13 @@
  * @package 	AviaFramework
  */
  
-
-
 jQuery(function($) {
     
     $('#avia_options_page').avia_framework_option_pages();
     $('#avia_options_page').avia_create_option_navigation();
     $('#avia_options_page .avia_tab_container').avia_media_advanced_plugin();
     $('body').avia_popups();
+	$('body').trigger('avia_options_page_loaded');
   });
 
 
@@ -133,6 +132,7 @@ jQuery(function($) {
 			resetButtons.bind('click', {set: saveData}, methods.reset); 	//resets the option page
 			importButton.bind('click', {set: saveData}, methods.do_import); //imports dummy daa
 			importParentSettingsButton.bind('click', {set: saveData}, methods.do_parent_import); //imports parent theme data
+			//
 			//add "form listener"
 			methods.activateSaveButton(container);
 			
@@ -667,7 +667,4 @@ jQuery(function($) {
 	
 	
 })(jQuery);	
-
-
-
 

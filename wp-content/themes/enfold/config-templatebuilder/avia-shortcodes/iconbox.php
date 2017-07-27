@@ -238,6 +238,116 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
+					
+					
+					
+					array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+									
+								array(
+									"name" 	=> __("Heading Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the heading, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default", 'avia_framework' )=>'' , __("Hidden", 'avia_framework' )=>'hidden' ), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+						            
+						        array(
+									"name" 	=> __("Content Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the content, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),    
+				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
+					
+					
+					
 						
 					array(
 							"type" 	=> "close_div",
@@ -288,6 +398,8 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				extract(shortcode_atts(array('title' => 'Title', 'icon' => 'ue800', 'position' => 'left', 'link' =>'', 'linktarget' => 'no', 
 				'linkelement' =>'', 'font' =>'', 'boxed' => '',
 				
@@ -374,11 +486,11 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
 				$meta['el_class'] .= " ".$icon_style;
 				
 				
-				$icon_html = '<'.$display_char_wrapper['start'].' class="iconbox_icon heading-color" '.$display_char.' '.$icon_html_styling.' ></'.$display_char_wrapper['end'].'>';
+				$icon_html = '<'.$display_char_wrapper['start'].' class="iconbox_icon heading-color '.$av_title_font_classes.'" '.$display_char.' '.$icon_html_styling.' ></'.$display_char_wrapper['end'].'>';
 				
                 // add blockquotes to the content
                 $markup = avia_markup_helper(array('context' => 'entry','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-        		$output  = '<article class="iconbox iconbox_'.$position.' '.$boxed.' '.$meta['el_class'].'" '.$markup.'>';
+        		$output  = '<article class="iconbox iconbox_'.$position.' '.$boxed.' '.$av_display_classes.' '.$meta['el_class'].'" '.$markup.'>';
         		
         		if($position == 'left_content' || $position == 'right_content')
         		{
@@ -389,11 +501,11 @@ if ( !class_exists( 'avia_sc_icon_box' ) )
                 $output .= 			'<header class="entry-content-header">';
         		$output .= 			$icon_html;
                 $markup = avia_markup_helper(array('context' => 'entry_title','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-        		if($title) $output .= 			"<h3 class='iconbox_content_title' {$markup} {$title_styling}>".$title."</h3>";
+        		if($title) $output .= 			"<h3 class='iconbox_content_title {$av_title_font_classes}' {$markup} {$title_styling}>".$title."</h3>";
                 $output .= 			'</header>';
 
                 $markup = avia_markup_helper(array('context' => 'entry_content','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-                $output .= 			"<div class='iconbox_content_container {$content_class}' {$markup} {$content_styling}>";
+                $output .= 			"<div class='iconbox_content_container {$content_class} {$av_font_classes}' {$markup} {$content_styling}>";
                 $output .=              ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop($content));
                 $output .= 			'</div>';
 

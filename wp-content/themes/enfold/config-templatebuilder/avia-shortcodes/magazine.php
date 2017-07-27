@@ -37,7 +37,16 @@ if ( !class_exists( 'avia_sc_magazine' ))
 		function popup_elements()
 		{
 			$this->elements = array(
-
+				array(
+							"type" 	=> "tab_container", 'nodescription' => true
+						),
+						
+				array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
+					
 				array(
 						"name" 	=> __("Which Entries?", 'avia_framework' ),
 						"desc" 	=> __("Select which entries should be displayed by selecting a taxonomy", 'avia_framework' ),
@@ -161,6 +170,77 @@ if ( !class_exists( 'avia_sc_magazine' ))
 											__('Display the first entry beside the others','avia_framework' ) =>'left')),
 				
 				
+				
+				array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+							  
+				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),
+				
+				
 
 
 				);
@@ -221,7 +301,9 @@ if ( !class_exists( 'avia_magazine' ) )
 		protected $entries;
 		
 		function __construct($atts = array())
-		{
+		{	
+			$this->screen_options = AviaHelper::av_mobile_sizes($atts);
+			
 			self::$magazine += 1;
 			$this->atts = shortcode_atts(array(	'class'					=> '',
 												'custom_markup' 		=> "",
@@ -414,7 +496,11 @@ if ( !class_exists( 'avia_magazine' ) )
 			$class	.= " ".$this->atts['top_bar'];
 			if(!empty($this->atts['tabs'])) $class	.= " av-magazine-tabs-active";
 			
-			$output .= "<div id='av-magazine-".self::$magazine."' class='av-magazine ".$this->atts['class']." {$class}' >";
+			
+			extract($this->screen_options); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+			
+			
+			$output .= "<div id='av-magazine-".self::$magazine."' class='av-magazine {$av_display_classes} ".$this->atts['class']." {$class}' >";
 			
 			if($this->atts['top_bar'])
 			{	
@@ -525,7 +611,7 @@ if ( !class_exists( 'avia_magazine' ) )
 				
 			$output			= "";
 			$image	 		= get_the_post_thumbnail( $entry->ID, $this->atts['image_size'][$style] );
-			$link			= get_permalink($entry->ID);
+			$link			= get_post_meta( $entry->ID ,'_portfolio_custom_link', true ) != "" ? get_post_meta( $entry->ID ,'_portfolio_custom_link_url', true ) : get_permalink( $entry->ID );
 			$titleAttr		= "title='".__('Link to:','avia_framework')." ".the_title_attribute(array('echo' => 0, 'post' => $entry->ID))."'";
 			$title	 		= "<a href='{$link}' {$titleAttr}>". apply_filters( 'avf_magazine_title', get_the_title( $entry->ID ), $entry ) ."</a>";
 			$titleTag		= "h3";

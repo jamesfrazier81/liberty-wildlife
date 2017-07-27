@@ -15,6 +15,11 @@ if( ( !empty($slides['properties']['attrs']['type']) && $slides['properties']['a
 	$init[] = 'height: '.$slides['properties']['props']['height'].'';
 }
 
+// Popup
+if( !empty($slides['properties']['attrs']['type']) && $slides['properties']['attrs']['type'] === 'popup' ) {
+	$lsPlugins[] = 'popup';
+}
+
 if( ! empty( $lsPlugins ) ) {
 	$init[] = 'plugins: ' . json_encode( array_unique( $lsPlugins ) );
 }

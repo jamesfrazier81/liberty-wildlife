@@ -186,14 +186,6 @@ function ls_register_form_actions() {
 		}
 
 
-		// Create Debug Account
-		if(isset($_GET['page']) && $_GET['page'] == 'ls-system-status' && isset($_GET['action']) && $_GET['action'] == 'debug_account') {
-			if(check_admin_referer('debug_account')) {
-				add_action('admin_init', 'ls_create_debug_account');
-			}
-		}
-
-
 		// Erase Plugin Data
 		if( isset( $_POST['ls-erase-plugin-data'] ) ) {
 			if(check_admin_referer('erase_data')) {
@@ -461,6 +453,7 @@ function ls_save_slider() {
 	}
 
 
+	// Revisions handling
 	if( LS_Revisions::$active ) {
 
 		$lastRevision = LS_Revisions::last( $id );
@@ -472,6 +465,38 @@ function ls_save_slider() {
 				LS_Revisions::shift( $id );
 			}
 		}
+	}
+
+
+	// Popup Index
+	if( $data['properties']['type'] === 'popup' ) {
+		$props = $data['properties'];
+		LS_Popups::addIndex(array(
+			'id' => $id,
+			'first_time_visitor' => ! empty($props['popup_first_time_visitor']),
+			'repeat' => ! empty( $props['popup_repeat'] ),
+			'repeat_days' => $props['popup_repeat_days'],
+			'roles' => array(
+				'administrator' => ! empty($props['popup_roles_administrator']),
+				'editor' 		=> ! empty($props['popup_roles_editor']),
+				'author' 		=> ! empty($props['popup_roles_author']),
+				'contributor' 	=> ! empty($props['popup_roles_contributor']),
+				'subscriber' 	=> ! empty($props['popup_roles_subscriber']),
+				'visitor' 		=> ! empty($props['popup_roles_visitor'])
+			),
+
+			'pages' => array(
+				'all'  		=> ! empty($props['popup_pages_all']),
+				'home' 		=> ! empty($props['popup_pages_home']),
+				'post' 		=> ! empty($props['popup_pages_post']),
+				'page' 		=> ! empty($props['popup_pages_page']),
+				'custom' 	=> $props['popup_pages_custom'],
+				'exclude' 	=> $props['popup_pages_exclude']
+			)
+		));
+
+	} else {
+		LS_Popups::removeIndex( $id );
 	}
 
 	die(json_encode(array('status' => 'ok')));

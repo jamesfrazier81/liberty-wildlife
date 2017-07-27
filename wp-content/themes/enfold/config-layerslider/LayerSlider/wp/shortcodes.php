@@ -1,8 +1,10 @@
 <?php
 
 
-function layerslider($id = 0, $filters = '') {
-	echo LS_Shortcode::handleShortcode(array('id' => $id, 'filters' => $filters));
+function layerslider( $id = 0, $filters = '', $options = array() ) {
+	echo LS_Shortcode::handleShortcode(
+		array_merge( array('id' => $id, 'filters' => $filters), $options)
+	);
 }
 
 class LS_Shortcode {
@@ -42,12 +44,12 @@ class LS_Shortcode {
 	 * @return bool True on successful validation, false otherwise
 	 */
 
-	public static function handleShortcode($atts = array()) {
+	public static function handleShortcode( $atts = array() ) {
 
 		if(self::validateFilters($atts)) {
 
 			$output = '';
-			$item = self::validateShortcode($atts);
+			$item = self::validateShortcode( $atts );
 
 			// Show error messages (if any)
 			if( ! empty( $item['error'] ) ) {
@@ -56,6 +58,12 @@ class LS_Shortcode {
 				if( ! current_user_can(get_option('layerslider_custom_capability', 'manage_options')) ) {
 					return '';
 				}
+
+				// Prevent showing errors for Popups
+				if( ! empty($atts['popup']) || ! empty( $item['data']['flag_popup'] ) ) {
+					return '';
+				}
+
 
 				$output .= $item['error'];
 			}
@@ -136,7 +144,7 @@ class LS_Shortcode {
 		$data = false;
 
 		// Has ID attribute
-		if(!empty($atts['id'])) {
+		if( ! empty( $atts['id'] ) ) {
 
 			// Attempt to retrieve the pre-generated markup
 			// set via the Transients API
@@ -285,8 +293,10 @@ class LS_Shortcode {
 
 	public static function generateSliderMarkup( $slider = null, $embed = array() ) {
 
-		// Bail out early if no params received
-		if(!$slider) { return array('init' => '', 'container' => '', 'markup' => ''); }
+		// Bail out early if no params received or using Popup on unactivated sites
+		if( ! $slider || ( (int)$slider['flag_popup'] && ! get_option('layerslider-authorized-site', false) ) ) {
+			return array('init' => '', 'container' => '', 'markup' => '');
+		}
 
 		// Slider and markup data
 		$id = $slider['id'];

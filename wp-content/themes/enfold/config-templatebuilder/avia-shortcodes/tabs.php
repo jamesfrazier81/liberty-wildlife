@@ -49,7 +49,17 @@ if ( !class_exists( 'avia_sc_tab' ) )
         function popup_elements()
         {
             $this->elements = array(
-
+				
+				array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+				array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
+				
                 array(
                     "name" 	=> __("Tab Position", 'avia_framework' ),
                     "desc" 	=> __("Where should the tabs be displayed", 'avia_framework' ),
@@ -140,19 +150,85 @@ if ( !class_exists( 'avia_sc_tab' ) )
                     "std" 	=> "1",
                     "type" 	=> "input"),
 
-            );
+            
 
 
-            if(current_theme_supports('avia_template_builder_custom_tab_toogle_id'))
+           
+			array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),	
+			);
+			
+			if(current_theme_supports('avia_template_builder_custom_tab_toogle_id'))
             {
-                $this->elements[2]['subelements'][] = array(
+                $this->elements[4]['subelements'][] = array(
                     "name" 	=> __("For Developers: Custom Tab ID",'avia_framework' ),
                     "desc" 	=> __("Insert a custom ID for the element here. Make sure to only use allowed characters.",'avia_framework' ),
                     "id" 	=> "custom_id",
                     "type" 	=> "input",
                     "std" 	=> "");
             }
-
 
         }
 
@@ -198,11 +274,13 @@ if ( !class_exists( 'avia_sc_tab' ) )
          */
         function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
         {
+	        extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+	        
             $atts =  shortcode_atts(array('initial' => '1', 'position' => 'top_tab', 'boxed'=>'border_tabs'), $atts, $this->config['shortcode']);
             extract($atts);
 
             $boxed   = $position != "top_tab" ? $boxed : "";
-            $output  = '<div class="tabcontainer  '.$position.' '.$boxed.' '.$meta['el_class'].'">'."\n";
+            $output  = '<div class="tabcontainer  '.$av_display_classes.' '.$position.' '.$boxed.' '.$meta['el_class'].'">'."\n";
             $counter = 1;
 
             avia_sc_tab::$counter = 1;

@@ -307,7 +307,7 @@ array(
     array(
         "slug"  => "hierarchy",
         "name"  => __("Breadcrumb parent page",'avia_framework'),
-        "desc"  => __("Select a parent page for this entry. If no page is selected the them will use session data to build the breadcrumb.",'avia_framework'),
+        "desc"  => __("Select a parent page for this entry. If no page is selected the theme will use session data to build the breadcrumb.",'avia_framework'),
         "id"    => "breadcrumb_parent",
         "type"  => "select",
         "subtype" => 'page',

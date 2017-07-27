@@ -226,7 +226,12 @@ if(is_admin())
 	*/
 	require( AVIA_PHP.'auto-updates/auto-updates.php' );
 	
+	/**
+	* The google maps api key check
+	*/
+	require( AVIA_PHP.'class-gmaps.php' );
 	
+		
 	
 	/**
 	* This file loads the option set class to create new backend options on the fly

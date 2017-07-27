@@ -512,7 +512,15 @@ if ( !class_exists( 'AviaBuilder' ) ) {
                 if(isset($_POST['aviaLayoutBuilder_active'])) 
                 {
                     update_post_meta((int) $_POST['post_ID'], '_aviaLayoutBuilder_active', $_POST['aviaLayoutBuilder_active']);
-                    $_POST['content'] = ShortcodeHelper::clean_up_shortcode($_POST['content']);
+					
+					if( isset( $_POST['_aviaLayoutBuilderCleanData'] ) )
+					{
+						$_POST['content'] = ShortcodeHelper::clean_up_shortcode( $_POST['_aviaLayoutBuilderCleanData'] );
+					}
+					else
+					{
+						$_POST['content'] = ShortcodeHelper::clean_up_shortcode( $_POST['content'] );
+					}
                 }
                 
                 //save the hidden container with unmodified shortcode

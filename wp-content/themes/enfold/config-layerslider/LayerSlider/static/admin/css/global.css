@@ -207,7 +207,8 @@ span.mce_layerslider_button:before,
     left: 0;
     right: 0;
     padding: 30px;
-    background: #f3f3f3; }
+    background: #f3f3f3;
+    overflow: auto; }
   .mce-layerslider-window .footer {
     position: absolute;
     left: 0;

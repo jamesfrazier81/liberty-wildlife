@@ -154,6 +154,115 @@ if ( !class_exists( 'avia_sc_heading' ) )
 							'nodescription' => true
 						),
 						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+									
+								array(
+									"name" 	=> __("Heading Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the heading, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'' , __("Hidden", 'avia_framework' )=>'hidden' ), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size-title",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+						            
+						        array(
+									"name" 	=> __("Subheading Font Size",'avia_framework' ),
+									"desc" 	=> __("Set the font size for the subheading, based on the device screensize.", 'avia_framework' ),
+									"type" 	=> "heading",
+									"description_class" => "av-builder-note av-neutral",
+									),
+										
+									array(	"name" 	=> __("Font Size for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Font Size for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Font Size for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-font-size",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(10,120,1, array( __("Default", 'avia_framework' )=>'', __("Hidden", 'avia_framework' )=>'hidden'), "px"),
+						            "std" => ""),    
+				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
 					array(
 						"type" 	=> "close_div",
 						'nodescription' => true
@@ -177,7 +286,20 @@ if ( !class_exists( 'avia_sc_heading' ) )
 			function editor_element($params)
 			{
 				
-				$params['args'] = shortcode_atts(array('tag' => 'h3', 'padding' => '5', 'heading'=>'', 'color'=>'', 'style'=>'', 'custom_font'=>'', 'size'=>'', 'subheading_active' => '', 'subheading_size'=>'', 'custom_class'=>'', 'admin_preview_bg'=>''), $params['args'], $this->config['shortcode']);
+				$params['args'] = shortcode_atts(array('tag' => 'h3', 'padding' => '5', 'heading'=>'', 'color'=>'', 'style'=>'', 'custom_font'=>'', 'size'=>'', 'subheading_active' => '', 'subheading_size'=>'', 'custom_class'=>'', 'admin_preview_bg'=>'',
+				'av-desktop-hide'=>'',
+				'av-medium-hide'=>'',
+				'av-small-hide'=>'',
+				'av-mini-hide'=>'',
+				'av-medium-font-size-title'=>'',
+				'av-small-font-size-title'=>'',
+				'av-mini-font-size-title'=>'',
+				'av-medium-font-size'=>'',
+				'av-small-font-size'=>'',
+				'av-mini-font-size'=>'',
+				
+				
+				), $params['args'], $this->config['shortcode']);
 				
 				$templateNAME  	= $this->update_template("name", "{{name}}");
 				
@@ -207,6 +329,9 @@ if ( !class_exists( 'avia_sc_heading' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 			    extract(shortcode_atts(array('tag' => 'h3', 'padding' => '5', 'heading'=>'', 'color'=>'', 'style'=>'', 'custom_font'=>'', 'size'=>'', 'subheading_active' => '', 'subheading_size'=>''), $atts, $this->config['shortcode']));
 			
         		$output  = "";
@@ -249,7 +374,7 @@ if ( !class_exists( 'avia_sc_heading' ) )
 	        		if( !empty( $style ) && !empty( $subheading_active ) && !empty( $content ) )
 	        		{
 	        			
-	        			$content = "<div class ='av-subheading av-{$subheading_active} {$subheading_extra}' style='font-size:{$subheading_size}px;'>".ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop($content) )."</div>";
+	        			$content = "<div class ='av-subheading av-{$subheading_active} {$subheading_extra} {$av_font_classes}' style='font-size:{$subheading_size}px;'>".ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop($content) )."</div>";
 	        		
 	        			if($subheading_active == "subheading_above")
 	        			{
@@ -262,9 +387,9 @@ if ( !class_exists( 'avia_sc_heading' ) )
 	        		}
 	        	
 	        		//html markup
-	        		$output .= "<div {$styling} class='av-special-heading av-special-heading-{$tag} {$color} {$style} {$class}'>";
+	        		$output .= "<div {$styling} class='av-special-heading av-special-heading-{$tag} {$color} {$style} {$class} {$av_display_classes}'>";
 	        		$output .= 		$before;
-	        		$output .= 		"<{$tag} class='av-special-heading-tag' $markup >{$heading}</{$tag}>";
+	        		$output .= 		"<{$tag} class='av-special-heading-tag {$av_title_font_classes}' $markup >{$heading}</{$tag}>";
 	        		$output .= 		$after;
 	        		$output .= 		"<div class='special-heading-border'><div class='special-heading-inner-border' {$border_styling}></div></div>";
 	        		$output .= "</div>";

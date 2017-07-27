@@ -462,10 +462,40 @@ border-bottom:none;
 
 
 
-/*multi input*/
+/*multi input for tables*/
 .av-multi-input-table{display: table;}
 .av-multi-input-cell{display: table-cell;}
 .av-multi-input-label{font-size: 10px; color: #999;}
+
+
+/*multi checkbox*/
+.avia-modal .av-multi-checkbox {
+    border: none;
+    padding: 4px 20px;
+    font-weight: bold;
+}
+
+.avia-modal  .av-multi-checkbox .avia-form-element{
+	top:3px;
+}
+.avia-modal .av-multi-checkbox .avia-name-description > label{
+	padding-left:30px;
+	color: #454545;
+}
+
+.av-builder-note.av-neutral{
+	border: 1px solid #e1e1e1;
+    background-color: #f8f8f8;
+}
+
+#wpwrap .av-neutral strong, #wpwrap .av-neutral div{
+	color:#333;
+}
+
+div .av-builder-note > div{
+	margin:0;
+}
+
 
 
 /*datepicker*/

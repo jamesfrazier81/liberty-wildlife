@@ -482,3 +482,38 @@ padding: 3px;
 
 
 
+
+@media only screen and (min-width: 990px){
+
+.responsive.av-no-preview #top #wrap_all .av-desktop-hide,
+.responsive.av-no-preview #top #wrap_all .av-desktop-font-size-hidden,
+.responsive.av-no-preview #top #wrap_all .av-desktop-font-size-title-hidden{display:none;}
+
+}
+
+/* Tablet Portrait size to standard 960 (devices and browsers) */
+@media only screen and (min-width: 768px) and (max-width: 989px) {
+	
+.responsive.av-no-preview #top #wrap_all .av-medium-hide,
+.responsive.av-no-preview #top #wrap_all .av-medium-font-size-hidden,
+.responsive.av-no-preview #top #wrap_all .av-medium-font-size-title-hidden{display:none;}	
+
+}
+
+
+/* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+.responsive.av-no-preview #top #wrap_all .av-small-hide,
+.responsive.av-no-preview #top #wrap_all .av-small-font-size-hidden,
+.responsive.av-no-preview #top #wrap_all .av-small-font-size-title-hidden{display:none;}	
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 479px) {
+
+.responsive.av-no-preview #top #wrap_all .av-mini-hide,
+.responsive.av-no-preview #top #wrap_all .av-mini-font-size-hidden,
+.responsive.av-no-preview #top #wrap_all .av-mini-font-size-title-hidden{display:none;}
+
+}
+

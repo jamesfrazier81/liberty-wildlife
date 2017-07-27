@@ -34,7 +34,17 @@ if ( !class_exists( 'avia_sc_blog' ) )
 			function popup_elements()
 			{
 				$this->elements = array(
-
+					
+					array(
+							"type" 	=> "tab_container", 'nodescription' => true
+						),
+						
+					array(
+							"type" 	=> "tab",
+							"name"  => __("Content" , 'avia_framework'),
+							'nodescription' => true
+						),
+					
                     array(	"name" 		=> __("Do you want to display blog posts?", 'avia_framework' ),
                         "desc" 		=> __("Do you want to display blog posts or entries from a custom taxonomy?", 'avia_framework' ),
                         "id" 		=> "blog_type",
@@ -174,7 +184,73 @@ if ( !class_exists( 'avia_sc_blog' ) )
 							"subtype" => array(
 								__('Always display the element',  'avia_framework' ) =>'',
 								__('Remove element if the user navigated away from page 1 to page 2,3,4 etc ',  'avia_framework' ) =>'is_subpage')),
-
+					
+					array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+			
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),
+					
+					
 				);
 				
 				
@@ -195,7 +271,7 @@ if ( !class_exists( 'avia_sc_blog' ) )
                         "subtype" => AviaHtmlHelper::get_registered_post_type_array()
                     );
 
-                    array_splice($this->elements, 2, 0, array($element));
+                    array_splice($this->elements, 4, 0, array($element));
                 }
 
 			}
@@ -233,7 +309,10 @@ if ( !class_exists( 'avia_sc_blog' ) )
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
 				global $avia_config, $more;
-
+				
+				$screen_sizes = AviaHelper::av_mobile_sizes($atts);
+				extract($screen_sizes); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				if(empty($atts['categories'])) $atts['categories'] = "";
                 if(isset($atts['link']) && isset($atts['blog_type']) && $atts['blog_type'] == 'taxonomy')
                 {
@@ -277,7 +356,7 @@ if ( !class_exists( 'avia_sc_blog' ) )
 				{
 					$atts['class'] = $meta['el_class'];
 					$atts['type']  = 'grid';
-
+					$atts = array_merge($atts, $screen_sizes);
 					//using the post slider with inactive js will result in displaying a nice post grid
 					$slider = new avia_post_slider($atts);
 					$slider->query_entries();
@@ -311,7 +390,7 @@ if ( !class_exists( 'avia_sc_blog' ) )
 				{
 					$extraclass = function_exists('avia_blog_class_string') ? avia_blog_class_string() : "";
                     $markup = avia_markup_helper(array('context' => 'blog','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-					$output = "<div class='template-blog {$extraclass}' {$markup}>{$output}</div>";
+					$output = "<div class='template-blog {$extraclass} {$av_display_classes}' {$markup}>{$output}</div>";
 				}
 
 				if($atts['conditional'] && $page != 1) 

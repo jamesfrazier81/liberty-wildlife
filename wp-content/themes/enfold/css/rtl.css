@@ -166,8 +166,6 @@ body .av-special-heading.blockquote > * {float: none;}
 #socket .sub_menu_socket {float: left;}
 #top .social_bookmarks li{float: right;}
 #top .avia_ajax_form input[type="checkbox"]{float: right;}
-#advanced_menu_toggle, #advanced_menu_hide{right:auto; left:0; }
-#mobile-advanced li > a:before, .html_header_mobile_behavior #mobile-advanced span > a:before, #mobile-advanced .mega_menu_title:before{left:0; margin-left: 10px;}
 
 .rtl .title_container .breadcrumb { left: 45px; }
 .rtl .avia-menu.av_menu_icon_beside { border-right: none; border-left: solid 1px #e2e2e2;
@@ -191,4 +189,26 @@ left: 0!important;
 .avia-multi-slideshow-button.avia-slideshow-button {
     margin-right: 0;
     margin-left: 20px;
+}
+.html_modern-blog #top .post-entry .post-title, .html_modern-blog .avia-content-slider .slide-entry-title {
+    text-align: right;
+}
+
+/*	Fix	from https://github.com/KriesiMedia/wp-themes/issues/1194	*/
+#top.rtl .av-subnav-menu > li:first-child a {
+    border-left-style: solid;
+    border-left-width: 1px;
+}
+
+#top.rtl .av-subnav-menu > li:last-child a {
+    border-left: none;
+}
+
+/*	End fix	from https://github.com/KriesiMedia/wp-themes/issues/1194	*/
+
+.html_av-overlay-side-classic #top #wrap_all .av-burger-overlay #av-burger-menu-ul li a {
+    text-align: right;
+}
+.html_av-overlay-side #top #wrap_all .av-burger-overlay li li a {
+    padding-right: 70px;
 }

@@ -38,7 +38,18 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
 			function popup_elements()
 			{
 				$this->elements = array(
+					
+				array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+				array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
 
+					
 					array(	"name" 		=> __("Which categories should be used for the portfolio?", 'avia_framework' ),
 							"desc" 		=> __("You can select multiple categories here. The Page will then show posts from only those categories.", 'avia_framework' ),
 				            "id" 		=> "categories",
@@ -179,6 +190,101 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
               			      __('Ascending Order',  'avia_framework' ) =>'ASC',
               			      __('Descending Order',  'avia_framework' ) =>'DESC')
               			),	
+              			
+              			array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+							array(
+								"name" 	=> __("Element Columns",'avia_framework' ),
+								"desc" 	=> 
+								__("Set the column count for this element, based on the device screensize.", 'avia_framework' )
+								,
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+							
+								array(	"name" 	=> __("Column count for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Column count for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Column count for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),  	
+							  
+				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),
 					
 
 				);
@@ -186,7 +292,7 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
 				
 			        if(current_theme_supports('avia_template_builder_custom_post_type_grid'))
 			        {
-			            $this->elements[0] = array(
+			            $this->elements[2] = array(
 			                    "name" 	=> __("Which Entries?", 'avia_framework' ),
 			                    "desc" 	=> __("Select which entries should be displayed by selecting a taxonomy", 'avia_framework' ),
 			                    "id" 	=> "link",
@@ -199,7 +305,7 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
 
 			            if(current_theme_supports('add_avia_builder_post_type_option'))
 						{
-						    $element = array(
+						   $element = array(
 						        "name" 	=> __("Select Post Type", 'avia_framework' ),
 						        "desc" 	=> __("Select which post types should be used. Note that your taxonomy will be ignored if you do not select an assign post type.
 						                      If yo don't select post type all registered post types will be used", 'avia_framework' ),
@@ -209,8 +315,9 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
 						        "std" 	=> "",
 						        "subtype" => AviaHtmlHelper::get_registered_post_type_array()
 						    );
-
-						    array_unshift($this->elements, $element);
+									
+							array_splice($this->elements, 2, 0, array($element));
+							
 						}
 			        }
 
@@ -258,6 +365,8 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$atts['class'] = !empty($meta['custom_class']) ? $meta['custom_class'] : "";
 				
 				if(current_theme_supports('avia_template_builder_custom_post_type_grid'))
@@ -291,7 +400,7 @@ if ( !class_exists( 'avia_sc_portfolio' ) )
 				return $portfolio_html;
 				
 				
-				$params['class'] = "main_color avia-no-border-styling avia-fullwidth-portfolio ".$meta['el_class'];
+				$params['class'] = "main_color avia-no-border-styling avia-fullwidth-portfolio {$av_display_classes} ".$meta['el_class'];
 				$params['open_structure'] = false;
 				$params['id'] = !empty($atts['id']) ? AviaHelper::save_string($atts['id'],'-') : "";
 				$params['custom_markup'] = $meta['custom_markup'];
@@ -323,6 +432,8 @@ if ( !class_exists( 'avia_post_grid' ) )
 
 		function __construct($atts = array())
 		{
+			$this->screen_options = AviaHelper::av_mobile_sizes($atts);
+			
 			$this->atts = shortcode_atts(array(	'style'		=> '',
 										 		'linking' 	=> '',
 										 		'columns' 	=> '4',
@@ -357,7 +468,8 @@ if ( !class_exists( 'avia_post_grid' ) )
 
 			avia_post_grid::$grid ++;
 			extract($this->atts);
-
+			extract($this->screen_options); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+			
 			$container_id 		= avia_post_grid::$grid;
 			$extraClass 		= 'first';
 			$grid 				= 'one_fourth';
@@ -402,7 +514,7 @@ if ( !class_exists( 'avia_post_grid' ) )
 								<div class='portfolio-details-inner'></div>
 							</div>";
 			}
-			$output .= "<div class='{$class} grid-sort-container isotope {$style_class}-container with-{$contents}-container grid-total-{$total} grid-col-{$columns} grid-links-{$linking}' data-portfolio-id='{$container_id}'>";
+			$output .= "<div class='{$class} grid-sort-container isotope {$av_display_classes} {$av_column_classes} {$style_class}-container with-{$contents}-container grid-total-{$total} grid-col-{$columns} grid-links-{$linking}' data-portfolio-id='{$container_id}'>";
 
 			foreach ($this->entries->posts as $entry)
 			{
@@ -586,8 +698,10 @@ if ( !class_exists( 'avia_post_grid' ) )
 					}
 				}
 			}
+			
+			extract($this->screen_options); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
 
-			$output = "<div class='sort_width_container av-sort-".$this->atts['sort']."' data-portfolio-id='".avia_post_grid::$grid."' ><div id='js_sort_items' >";
+			$output = "<div class='sort_width_container {$av_display_classes} av-sort-".$this->atts['sort']."' data-portfolio-id='".avia_post_grid::$grid."' ><div id='js_sort_items' >";
 			$hide 	= count($current_page_cats) <= 1 ? "hidden" : "";
 
 

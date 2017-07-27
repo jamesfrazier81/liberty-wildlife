@@ -58,15 +58,56 @@ jQuery(document).ready(function($) {
 	
 	//if the cart gets updated via ajax (woocommerce 2.6 and higher) we need to re apply the +/- buttons
 	$( document ).on( 'updated_cart_totals', avia_apply_quant_btn );
-
+	
 	setTimeout(first_load_amount, 10);
-	$('body').on( 'added_to_cart', update_cart_dropdown);
+	$('body').on( 'added_to_cart', update_cart_dropdown );
+	$('body').on( 'wc_fragments_refreshed', avia_cart_dropdown_changed );
+	
 		
 	// small fix for the hover menu for woocommerce sort buttons since it does no seem to work on mobile devices. 
 	// even if no event is actually bound the css dropdown works. if the binding is removed dropdown does no longer work.
 	jQuery('.avia_mobile .sort-param').on('touchstart', function(){});	
 		
 });
+
+
+/**
+ * The ajax cart dropdown counter needs to be changed on cart page when user removes items or changes amount - 
+ * we have to check for changed amount of products in cart dropdown to update the cart counter
+ * (reacts on remove items and changes to quantity)
+ */
+function avia_cart_dropdown_changed()
+{
+	var the_html		= jQuery('html'),
+	    cart			= jQuery('body').is('.woocommerce-cart'),
+		cart_counter	= jQuery('.cart_dropdown .av-cart-counter'),
+	    menu_cart		= jQuery('.cart_dropdown'),
+		counter			= 0;
+
+	if( ! cart )
+	{
+		return;
+	}
+	
+	menu_cart.find('.cart_list li .quantity').each(function(){
+							counter += parseInt(jQuery(this).text(),10);
+						});
+						
+	if( counter === 0 )
+	{
+		cart_counter.removeClass('av-active-counter').text(counter); 
+		setTimeout( function() { the_html.removeClass('html_visible_cart'); }, 200);
+	}
+	else if( (cart_counter.length > 0 ) && ( counter > 0 ) )
+	{
+		setTimeout(function(){ 
+				cart_counter.addClass('av-active-counter').text(counter); 
+				the_html.addClass('html_visible_cart');
+					}, 10); 
+	}
+	
+	return;
+}
 
 
 //updates the shopping cart in the sidebar, hooks into the added_to_cart event whcih is triggered by woocommerce

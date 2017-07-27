@@ -1371,7 +1371,6 @@ if(!function_exists('avia_clean_string'))
 }
 
 
-
 if(!function_exists('kriesi_backlink'))
 {
 	function kriesi_backlink($frontpage_only = false, $theme_name_passed = false)

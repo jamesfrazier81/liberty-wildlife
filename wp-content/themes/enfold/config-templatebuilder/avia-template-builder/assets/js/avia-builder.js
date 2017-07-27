@@ -819,14 +819,25 @@ function avia_nl2br (str, is_xhtml)
 		        $('.avia_layout_builder').find('.avia_layout_section').each(function()
 		        {
 		        	var col_in_section 	= $(this).find('>.avia_inner_shortcode > div > .avia_inner_shortcode'),
-		        		coll_in_cell	= $(this).find(' .avia_layout_cell .avia_layout_column_no_cell > .avia_inner_shortcode'),
-		        		coll_in_tab		= $(this).find(' .avia_layout_tab .avia_layout_column_no_cell > .avia_inner_shortcode');
+		        		coll_in_cell	= $(this).find(' .avia_layout_cell .avia_layout_column_no_cell > .avia_inner_shortcode');
+						
+						// bugfix: section tabs do not recognise single tabs and add columns across tabs -> breaks layout
+					var single_section_tabs = $(this).find('.avia_layout_tab');
+					single_section_tabs.each( function(){
+									var tab_area = $(this);
+									var cells = tab_area.find('.avia_layout_column_no_cell > .avia_inner_shortcode');
+									obj.updateTextarea( cells );
+							});
+						
+//		        	var	coll_in_tab		= $(this).find(' .avia_layout_tab .avia_layout_column_no_cell > .avia_inner_shortcode');
 		        	
-		        	if(coll_in_tab.length)
-		        	{
-                    	obj.updateTextarea(coll_in_tab);
-		        	}
+//		        	if(coll_in_tab.length)
+//		        	{
+//                    	obj.updateTextarea(coll_in_tab);
+//		        	}
 		        	
+						// -----> END bugfix: section tabs do not recognise 
+
 		        	if(coll_in_cell.length)
 		        	{
                     	obj.updateTextarea(coll_in_cell);

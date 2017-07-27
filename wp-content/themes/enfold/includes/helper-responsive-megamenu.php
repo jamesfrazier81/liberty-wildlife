@@ -103,8 +103,8 @@ if( !class_exists( 'avia_responsive_mega_menu' ) )
 				6 => "twelve units"
 			);
 			
-			$this->top_menu = avia_get_option('header_position','header_top') == 'header_top' ? true : false;
-			$this->icon_menu = avia_is_burger_menu();
+			$this->top_menu 	= avia_get_option('header_position','header_top') == 'header_top' ? true : false;
+			$this->icon_menu 	= avia_is_burger_menu();
 			
 			if(avia_get_option('frontpage') && avia_get_option('blogpage'))
 			{
@@ -115,8 +115,8 @@ if( !class_exists( 'avia_responsive_mega_menu' ) )
 			
 			if($this->icon_menu)
 			{
-				$this->mega_active = false;
-				$this->mega_allowed = false;
+				//$this->mega_active = false;
+				//$this->mega_allowed = false;
 			}
 		}
 
@@ -273,7 +273,7 @@ if( !class_exists( 'avia_responsive_mega_menu' ) )
 				$item_output .= $args->link_before .'<span class="avia-menu-text">'. do_shortcode(apply_filters('the_title', $item->title, $item->ID)) ."</span>". $args->link_after;
 				if($depth === 0) 
 				{
-					if((!$this->top_menu || $this->icon_menu) && !empty($item->description))
+					if(!empty($item->description))
 					{
 						$item_output .= '<span class="avia-menu-subtext">'. do_shortcode($item->description) ."</span>";
 					}

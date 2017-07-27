@@ -101,6 +101,8 @@ include LS_ROOT_PATH . '/templates/tmpl-layer-item.php';
 include LS_ROOT_PATH . '/templates/tmpl-static-layer-item.php';
 include LS_ROOT_PATH . '/templates/tmpl-layer.php';
 include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
+include LS_ROOT_PATH . '/templates/tmpl-popup-presets-window.php';
+include LS_ROOT_PATH . '/templates/tmpl-popup-example-slider.php';
 
 ?>
 
@@ -342,7 +344,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 
 		<!-- Main menu bar -->
 		<div id="ls-main-nav-bar">
-			<a href="#" class="settings <?php echo $settingsTabClass ?>">
+			<a href="#slider-settings" data-deeplink="slider-settings" class="settings <?php echo $settingsTabClass ?>">
 				<i class="dashicons dashicons-admin-tools"></i>
 				<?php _e('Slider Settings', 'LayerSlider') ?>
 			</a>
@@ -350,7 +352,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 				<i class="dashicons dashicons-images-alt"></i>
 				<?php _e('Slides', 'LayerSlider') ?>
 			</a>
-			<a href="#" class="callbacks">
+			<a href="#callbacks" data-deeplink="callbacks" class="callbacks">
 				<i class="dashicons dashicons-redo"></i>
 				<?php _e('Event Callbacks', 'LayerSlider') ?>
 			</a>
@@ -392,7 +394,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 					$bgImageId = !empty($layer['properties']['backgroundId']) ? $layer['properties']['backgroundId'] : null;
 					$image = apply_filters('ls_get_image', $bgImageId, $bgImage, true);
 				?>
-				<a href="#" class="<?php echo $active ?>" data-help="<div style='background-image: url(<?php echo $image?>);'></div>" data-help-class="ls-slide-preview-tooltip popover-light ls-popup" data-help-delay="1" data-help-transition="false">
+				<a href="#" class="<?php echo $active ?>" data-help="<div style='background-image: url(<?php echo $image?>);'></div>" data-help-class="ls-slide-preview-tooltip popover-light km-ui-popup" data-help-delay="1" data-help-transition="false">
 					<span><?php echo $name ?></span>
 					<span class="dashicons dashicons-dismiss"></span>
 				</a>
@@ -416,7 +418,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			</div>
 
 
-			<div class="ls-callback-separator">Init Events</div>
+			<div class="ls-callback-separator"><?php _e('Init Events', 'LayerSlider') ?></div>
 
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
@@ -442,7 +444,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 				</div>
 			</div>
 
-			<div class="ls-callback-separator">Resize Events</div>
+			<div class="ls-callback-separator"><?php _e('Resize Events', 'LayerSlider') ?></div>
 
 
 			<div class="ls-box ls-callback-box side">
@@ -469,7 +471,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 				</div>
 			</div>
 
-			<div class="ls-callback-separator">Slideshow Events</div>
+			<div class="ls-callback-separator"><?php _e('Slideshow Events', 'LayerSlider') ?></div>
 
 
 			<div class="ls-box ls-callback-box">
@@ -509,7 +511,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			</div>
 
 
-			<div class="ls-callback-separator">Slide Change Event</div>
+			<div class="ls-callback-separator"><?php _e('Slide Change Events', 'LayerSlider') ?></div>
 
 
 			<div class="ls-box ls-callback-box">
@@ -561,7 +563,7 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 			</div>
 
 
-			<div class="ls-callback-separator">Slide Timeline Events</div>
+			<div class="ls-callback-separator"><?php _e('Slide Timeline Events', 'LayerSlider') ?></div>
 
 			<div class="ls-box ls-callback-box">
 				<h3 class="header">
@@ -625,8 +627,58 @@ include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 				</div>
 			</div>
 
+			<div class="ls-callback-separator"><?php _e('Popup Events', 'LayerSlider') ?></div>
 
-			<div class="ls-callback-separator">Destroy Events</div>
+			<div class="ls-box ls-callback-box">
+				<h3 class="header">
+					popupWillOpen
+					<figure><span>|</span> <?php _e('Fires when the Popup starts its opening transition and becomes visible.', 'LayerSlider') ?></figure>
+				</h3>
+				<div>
+					<textarea name="popupWillOpen" data-event-data="false" cols="20" rows="5" class="ls-codemirror">function( event ) {
+
+}</textarea>
+				</div>
+			</div>
+
+			<div class="ls-box ls-callback-box">
+				<h3 class="header">
+					popupDidOpen
+					<figure><span>|</span> <?php _e('Fires when the Popup completed its opening transition.', 'LayerSlider') ?></figure>
+				</h3>
+				<div>
+					<textarea name="popupDidOpen" data-event-data="false" cols="20" rows="5" class="ls-codemirror">function( event ) {
+
+}</textarea>
+				</div>
+			</div>
+
+			<div class="ls-box ls-callback-box">
+				<h3 class="header">
+					popupWillClose
+					<figure><span>|</span> <?php _e('Fires when the Popup stars its closing transition.', 'LayerSlider') ?></figure>
+				</h3>
+				<div>
+					<textarea name="popupWillClose" data-event-data="false" cols="20" rows="5" class="ls-codemirror">function( event ) {
+
+}</textarea>
+				</div>
+			</div>
+
+			<div class="ls-box ls-callback-box">
+				<h3 class="header">
+					popupDidClose
+					<figure><span>|</span> <?php _e('Fires when the Popup completed its closing transition and became hidden.', 'LayerSlider') ?></figure>
+				</h3>
+				<div>
+					<textarea name="popupDidClose" data-event-data="false" cols="20" rows="5" class="ls-codemirror">function( event ) {
+
+}</textarea>
+				</div>
+			</div>
+
+
+			<div class="ls-callback-separator"><?php _e('Destroy Events', 'LayerSlider') ?></div>
 
 
 			<div class="ls-box ls-callback-box">

@@ -254,7 +254,7 @@ border-color:$border;
 
 @media only screen and (max-width: 767px) { 
 
-#top #wrap_all .av_header_transparency, .av_header_transparency #advanced_menu_toggle{
+#top #wrap_all .av_header_transparency{
 	background-color:$bg;
 	color: $color;
 	border-color: $border;
@@ -647,19 +647,6 @@ background-color:$bg2;
 			#main, .avia-msie-8 .av_header_sticky_disabled#header{
 			background-color:$bg;
 			}
-
-			#advanced_menu_toggle, #advanced_menu_hide{
-			background-color:$bg;
-			color: $color;
-			border-color: $border;
-			}
-
-			.avia_desktop #advanced_menu_toggle:hover, .avia_desktop #advanced_menu_hide:hover{
-			background-color: $primary; color: $constant_font; border-color:$primary;
-			}
-
-			#mobile-advanced  a:before {color:$primary;}
-			#mobile-advanced  a:hover:before, #mobile-advanced  span:hover a:before {color:$constant_font;}
 			
 			.html_header_sidebar #header .av-main-nav > li > a .avia-menu-text{color:$heading;}
 			.html_header_sidebar #header .av-main-nav > li > a .avia-menu-subtext{color:$meta;}
@@ -681,20 +668,88 @@ background-color:$bg2;
 			}
 			
 			
+			.html_av-overlay-side #top .av-burger-overlay-scroll{background:$bg}
+			
+			.html_av-overlay-side #top #wrap_all div .av-burger-overlay-scroll #av-burger-menu-ul a:hover{background-color:$bg2;}
+			
+			
+			.html_av-overlay-side-classic #top #wrap_all .av-burger-overlay #av-burger-menu-ul li a{ border-color: $border; }
+			
+			.html_av-overlay-side #top #wrap_all .av-burger-overlay-scroll #av-burger-menu-ul a{color:$color}
+			
+			.html_av-overlay-side.av-burger-overlay-active #top #wrap_all #header .menu-item-search-dropdown a{ color:$color }
+			.html_av-overlay-side-classic #top .av-burger-overlay li li .avia-bullet,
+			.html_av-overlay-side.av-burger-overlay-active #top .av-hamburger-inner, 
+			.html_av-overlay-side.av-burger-overlay-active #top .av-hamburger-inner::before, 
+			.html_av-overlay-side.av-burger-overlay-active #top .av-hamburger-inner::after{
+				background-color:$color;
+			}
+			
+			
+			
+			
 			";
+		
+		if(!empty($avia_config['backend_colors']['burger_color']))
+		{
+			$output .= "
+			$key .av-hamburger-inner, $key .av-hamburger-inner::before, $key .av-hamburger-inner::after{
+				background-color:".$avia_config['backend_colors']['burger_color'].";
+			}
+			";
+			
+			$output .= " @media only screen and (max-width: 767px) {
+				#top $key .av-hamburger-inner, #top $key .av-hamburger-inner::before, #top $key .av-hamburger-inner::after{
+					background-color:".$avia_config['backend_colors']['burger_color'].";
+				}
+			}
+			";
+		}
 			
 		if(!empty($avia_config['backend_colors']['menu_transparent']))
 		{
 			$output .= "
+			#top #wrap_all .av_header_transparency .main_menu ul:first-child > li > a, #top #wrap_all .av_header_transparency .sub_menu > ul > li > a, #top .av_header_transparency #header_main_alternate, .av_header_transparency #header_main .social_bookmarks li a{ color:inherit; border-color: transparent; background: transparent;}
+
+			
 			#top #wrap_all {$key}.av_header_transparency, #top #wrap_all {$key}.av_header_transparency .phone-info.with_nav span,
 			#top #header{$key}.av_header_transparency .av-main-nav > li > a .avia-menu-text, #top #header{$key}.av_header_transparency .av-main-nav > li > a .avia-menu-subtext{
 				color: ".$avia_config['backend_colors']['menu_transparent']."
 			}
 			
 			#top {$key}.av_header_transparency .avia-menu-fx, 
-			.av_header_transparency .av-hamburger-inner, .av_header_transparency .av-hamburger-inner::before, .av_header_transparency .av-hamburger-inner::after{background:".$avia_config['backend_colors']['menu_transparent'].";}
+			.av_header_transparency div .av-hamburger-inner, .av_header_transparency div .av-hamburger-inner::before, .av_header_transparency div .av-hamburger-inner::after{background:".$avia_config['backend_colors']['menu_transparent'].";}
+			";
+			
+			$output .= " @media only screen and (max-width: 767px) {
+				#top #wrap_all {$key}.av_header_transparency, #top #wrap_all {$key}.av_header_transparency .phone-info.with_nav span,
+				#top #header{$key}.av_header_transparency .av-main-nav > li > a .avia-menu-text, #top #header{$key}.av_header_transparency .av-main-nav > li > a .avia-menu-subtex{ color: $meta }
+				
+				$key div .av-hamburger-inner, $key div .av-hamburger-inner::before, $key div .av-hamburger-inner::after{
+					background-color:$meta;
+				}
+				
+				#top .av_header_with_border.av_header_transparency .avia-menu.av_menu_icon_beside{
+					border-color:$border;
+				}
+			}
 			";
 		}
+		
+		if(!empty($avia_config['backend_colors']['burger_flyout_width']))
+		{
+			$output .= "
+			
+			.html_av-overlay-side .av-burger-overlay-scroll{width:".$avia_config['backend_colors']['burger_flyout_width']."; 
+			 -webkit-transform: translateX(".$avia_config['backend_colors']['burger_flyout_width']."); transform: translateX(".$avia_config['backend_colors']['burger_flyout_width']."); 
+			}
+			
+			
+			
+			";
+		}
+		
+		
 
 		break;
 
@@ -707,11 +762,6 @@ background-color:$bg2;
 			
 			#scroll-top-link:hover{ background-color: $bg2; color: $primary; border:1px solid $border; }
 
-
-			/*mobile menu*/
-			#mobile-advanced  { background-color: $bg; color: $primary; }
-			#mobile-advanced, #mobile-advanced  a, #mobile-advanced .mega_menu_title{color: $color; border-color:$border; }
-			#mobile-advanced li > a:hover, .html_header_mobile_behavior #mobile-advanced span:hover, .html_header_mobile_behavior #mobile-advanced span:hover a{ background-color: $primary; color: $constant_font; }
 			";
 
 			/*contact form picker*/

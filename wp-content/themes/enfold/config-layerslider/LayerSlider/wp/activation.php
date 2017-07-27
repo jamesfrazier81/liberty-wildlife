@@ -121,6 +121,7 @@ function layerslider_create_db_table() {
 			  schedule_end int(10) NOT NULL DEFAULT 0,
 			  flag_hidden tinyint(1) NOT NULL DEFAULT 0,
 			  flag_deleted tinyint(1) NOT NULL DEFAULT 0,
+			  flag_popup tinyint(1) NOT NULL DEFAULT 0,
 			  PRIMARY KEY  (id)
 			) $charset_collate;");
 

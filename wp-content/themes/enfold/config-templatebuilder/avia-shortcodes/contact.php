@@ -287,6 +287,61 @@ if ( !class_exists( 'avia_sc_contact' ) )
 						),
 						
 					array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+							  
+				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
+						
+					array(
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
@@ -329,6 +384,9 @@ if ( !class_exists( 'avia_sc_contact' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$atts =  shortcode_atts(
 							apply_filters( 'avf_sc_contact_default_atts', 
 										array('email' 		=> get_option('admin_email'),
@@ -363,12 +421,12 @@ if ( !class_exists( 'avia_sc_contact' ) )
 					"autoresponder_subject" => __('Thank you for your Message!','avia_framework' ),
 					"autoresponder_email" 	=> $email,
 					"subject"				=> $subject,
-					"form_class" 			=> $meta['el_class']." ".$color,
+					"form_class" 			=> $meta['el_class']." ".$color." ".$av_display_classes,
 					"multiform"  			=> true, //allows creation of multiple forms without id collision
 					"label_first"  			=> true,
 					"redirect"				=> $redirect,
 					"placeholder"			=> $hide_labels,
-					"numeric_names"			=> true
+					"numeric_names"			=> true,
 				);
 				
 				if(trim($form_args['myemail']) == '') $form_args['myemail'] = get_option('admin_email');

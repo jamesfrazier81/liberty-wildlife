@@ -41,7 +41,15 @@ if ( !class_exists( 'avia_sc_productlist' ) )
 		function popup_elements()
 		{
 			$this->elements = array(
-
+				array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+				array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
 				array(
 						"name" 	=> __("Which Entries?", 'avia_framework' ),
 						"desc" 	=> __("Select which entries should be displayed by selecting a taxonomy", 'avia_framework' ),
@@ -70,6 +78,18 @@ if ( !class_exists( 'avia_sc_productlist' ) )
 						"type" 	=> "select",
 						"std" 	=> "9",
 						"subtype" => AviaHtmlHelper::number_array(1,100,1, array('All'=>'-1'))),
+				
+				array(
+						"name" 	=> __("WooCommerce Product visibility?", 'avia_framework' ),
+						"desc" 	=> __("Select the visibility of WooCommerce products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Inventory -&gt Out of stock visibility", 'avia_framework' ),
+						"id" 	=> "wc_prod_visible",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"subtype" => array(
+							__('Use default WooCommerce Setting (Settings -&gt; Products -&gt; Out of stock visibility)',  'avia_framework' ) => '',
+							__('Hide products out of stock',  'avia_framework' ) => 'hide',
+							__('Show products out of stock',  'avia_framework' )  => 'show')
+					),
 
                 array(
                     "name" 	=> __("Offset Number", 'avia_framework' ),
@@ -81,12 +101,12 @@ if ( !class_exists( 'avia_sc_productlist' ) )
 
 				array(
 						"name" 	=> __("Sorting Options", 'avia_framework' ),
-						"desc" 	=> __("Here you can choose how to sort the products", 'avia_framework' ),
+						"desc" 	=> __("Here you can choose how to sort the products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Display -&gt Default product sorting", 'avia_framework' ),
 						"id" 	=> "sort",
 						"type" 	=> "select",
 						"std" 	=> "dropdown",
 						"no_first"=>true,
-						"subtype" => array( __('Use defaut (defined at Woocommerce -> Settings -> Catalog) ', 'avia_framework' ) =>'0',
+						"subtype" => array( __('Use defaut (defined at Woocommerce -&gt; Settings -&gt Default product sorting) ', 'avia_framework' ) =>'0',
 											__('Sort alphabetically', 'avia_framework' ) =>'title',
 											__('Sort by most recent', 'avia_framework' ) =>'date',
 											__('Sort by price', 'avia_framework' ) =>'price',
@@ -122,6 +142,74 @@ if ( !class_exists( 'avia_sc_productlist' ) )
 								__('yes',  'avia_framework' ) =>'yes',
 								__('no',  'avia_framework' ) =>'no')),
 
+				array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),				
+
+
+
+
 				);
 		}
 
@@ -153,18 +241,29 @@ if ( !class_exists( 'avia_sc_productlist' ) )
 		 * @return string $output returns the modified html string
 		 */
 		function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
-		{
+		{	
+			global $avia_config, $woocommerce;
+			
+			$screen_sizes = AviaHelper::av_mobile_sizes($atts);
 			$atts['class'] = $meta['el_class'];
 			$atts['autoplay'] = "no";
 			$atts['type'] = "list";
 			
-			//fix for seo plugins which execute the do_shortcode() function before the WooCommerce plugin is loaded
-			global $woocommerce;
+			//	fix for seo plugins which execute the do_shortcode() function before the WooCommerce plugin is loaded
 			if(!is_object($woocommerce) || !is_object($woocommerce->query)) return;
-
+			
+			$atts = array_merge($atts, $screen_sizes);
 			$slider = new avia_product_slider($atts);
 			$slider->query_entries();
-			return $slider->html_list();
+			
+				//	force to ignore WC default setting - see hooked function avia_wc_product_is_visible
+			$avia_config['woocommerce']['catalog_product_visibility'] = 'show_all';
+			$html = $slider->html_list();
+			
+				//	reset again
+			$avia_config['woocommerce']['catalog_product_visibility'] = 'use_default';
+			
+			return $html;
 		}
 	}
 }

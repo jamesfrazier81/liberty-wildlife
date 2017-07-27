@@ -280,11 +280,21 @@ if ( !class_exists( 'avia_sc_cell' ) )
 				  
 				  array(
 						"type" 	=> "tab",
-						"name"  => __("Mobile" , 'avia_framework'),
+						"name"  => __("Screen Options" , 'avia_framework'),
 						'nodescription' => true
 					),
 				
-				
+				array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> 
+								__("Set the visibility for this element, based on the device screensize.", 'avia_framework' )."<br><small>".
+								__("In order to prevent breaking the layout it is only possible to change the visibility settings for cells once they take up the full screen width, which means only on mobile devices", 'avia_framework' )."</small>",
+								
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+					),
+					
+					
 				array(	
 						"name" 	=> __("Mobile display", 'avia_framework' ),
 						"desc" 	=> __("Display settings for this element when viewed on smaller screens", 'avia_framework' ),

@@ -542,10 +542,19 @@ body #ls-layers table.noborder td {
 	font
 }
 
-
 .ls-real-time-preview {
 	display: none;
 	transform-origin: 0 0;
+}
+
+#ls-popup-preview {
+	/*background: url(../img/checkerboardpattern.png);*/
+	transform-origin: 0 0;
+}
+
+#ls-popup-preview a:focus {
+	color: transparent;
+	box-shadow: none;
 }
 
 

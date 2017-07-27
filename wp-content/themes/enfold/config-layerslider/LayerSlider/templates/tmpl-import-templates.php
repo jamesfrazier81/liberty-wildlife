@@ -43,9 +43,9 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 					<?php if( count($demoSliders) ) : ?>
 					<li class="uppercase" data-group="bundled"><?php _e('Bundled', 'LayerSlider') ?></li>
 					<?php endif; ?>
-					<li class="uppercase" data-group="packs"><?php _e('SLIDER PACKS', 'LayerSlider') ?></li>
-					<li class="uppercase separator" data-group="new"><?php _e('New', 'LayerSlider') ?></li>
+					<li class="uppercase separator" data-group="packs"><?php _e('SLIDER PACKS', 'LayerSlider') ?></li>
 
+					<li data-group="popup"><?php _e('Popup', 'LayerSlider') ?></li>
 					<li data-group="fullwidth"><?php _e('Full Width', 'LayerSlider') ?></li>
 					<li data-group="fullsize"><?php _e('Full Size', 'LayerSlider') ?></li>
 
@@ -73,6 +73,7 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 					if( ! empty($lsStoreData) && ! empty($lsStoreData['sliders']) ) {
 						$demoSliders = array_merge($demoSliders, $lsStoreData['sliders']);
 					}
+					$now = time();
 					foreach($demoSliders as $handle => $item) :
 				?>
 				<figure class="item" data-groups="<?php echo $item['groups'] ?>" data-handle="<?php echo $handle; ?>" data-bundled="<?php echo ! empty($item['bundled']) ? 'true' : 'false' ?>" data-premium="<?php echo ( ! empty($item['premium']) ) ? 'true' : 'false' ?>" data-version-warning="<?php echo version_compare($item['requires'], LS_PLUGIN_VERSION, '>') ? 'true' : 'false' ?>">
@@ -84,6 +85,12 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 						</figcaption>
 						<a class="item-preview" target="_blank" href="<?php echo ! empty($item['url']) ? $item['url'] : '#' ?>" ><b class="dashicons dashicons-format-image"></b><?php _e('preview', 'LayerSlider') ?></a>
 						<a class="item-import" href="#"><?php _e('import', 'LayerSlider') ?><b class="dashicons dashicons-download"></b></a>
+
+						<?php if( ! empty( $item['released'] ) ) : ?>
+							<?php if( strtotime($item['released']) + MONTH_IN_SECONDS > $now ) :  ?>
+							<span class="badge-new"><?php _ex('NEW', 'Template Store', 'LayerSlider') ?>
+							<?php endif ?>
+						<?php endif ?>
 					</div>
 				</figure>
 				<?php endforeach ?>

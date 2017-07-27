@@ -514,7 +514,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 			$data['dragdrop-level']		= $this->config['drag-level'];
 			$data['allowed-shortcodes'] = $this->config['shortcode'];
 			$data['preview'] 			= !empty($this->config['preview']) ? $this->config['preview'] : 0;
-
+			
 			if(isset($this->config['shortcode_nested']))
 			{
 				$data['allowed-shortcodes']	= $this->config['shortcode_nested'];
@@ -527,6 +527,7 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 				$data['modal_on_load'] 	= $this->config['modal_on_load'];
 			}
 
+			$data		 = apply_filters('avb_backend_editor_element_data_filter', $data);
 			$dataString  = AviaHelper::create_data_string($data);
 
 			$output  = "<div class='avia_sortable_element avia_pop_class ".$class." ".$this->config['shortcode']." av_drag' ".$dataString.">";

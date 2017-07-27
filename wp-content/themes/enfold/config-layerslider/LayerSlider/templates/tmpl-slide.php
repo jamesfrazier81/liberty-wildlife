@@ -275,7 +275,7 @@
 							<?php _e('Align Layer to...', 'LayerSlider') ?>
 						</button>
 						<div class="ls-su-data">
-							<table id="ls-layer-alignment">
+							<table id="ls-layer-alignment" class="ls-layer-alignment">
 								<tr>
 									<td data-move="top left"><i><?php _e('top left', 'LayerSlider') ?></i></td>
 									<td data-move="top center"><i><?php _e('top center', 'LayerSlider') ?></i></td>

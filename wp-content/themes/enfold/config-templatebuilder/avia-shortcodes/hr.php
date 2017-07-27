@@ -43,6 +43,18 @@ if ( !class_exists( 'avia_sc_hr' ) )
 			{
 				$this->elements = array(
 			
+			
+					array(
+							"type" 	=> "tab_container", 'nodescription' => true
+						),
+						
+					array(
+							"type" 	=> "tab",
+							"name"  => __("Content" , 'avia_framework'),
+							'nodescription' => true
+						),
+			
+			
 					array(	
 							"name" 	=> __("Horizontal Ruler Styling", 'avia_framework' ),
 							"desc" 	=> __("Here you can set the styling and size of the HR element", 'avia_framework' ),
@@ -176,7 +188,74 @@ if ( !class_exists( 'avia_sc_hr' ) )
 							"std" 	=> "ue808",
 							"required" => array('icon_select','not_empty_and','no')
 							),
+				array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+							  
 				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),
 				      
 				);
 
@@ -210,7 +289,9 @@ if ( !class_exists( 'avia_sc_hr' ) )
 			 * @return string $output returns the modified html string 
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
-			{
+			{	
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 			    extract(shortcode_atts(array(
 			    
 			    'class' 	=> 'default', 
@@ -273,7 +354,7 @@ if ( !class_exists( 'avia_sc_hr' ) )
         		}
 				
 				
-        		$output 		.= "<div {$style} class='hr hr-{$class} ".$meta['el_class']."'>";
+        		$output 		.= "<div {$style} class='hr hr-{$class} {$av_display_classes} ".$meta['el_class']."'>";
         		$outputInner  	.= "<span class='hr-inner {$inner_class}' {$inner_style}><span class='hr-inner-style'></span></span>";
         		$output 		.= $outputInner;
         		if($display_char)

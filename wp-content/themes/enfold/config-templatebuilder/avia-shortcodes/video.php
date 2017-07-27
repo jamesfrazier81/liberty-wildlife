@@ -34,7 +34,17 @@ if ( !class_exists( 'avia_sc_video' ) )
 			function popup_elements()
 			{
 				$this->elements = array(
-			
+					
+					array(
+						"type" 	=> "tab_container", 'nodescription' => true
+					),
+					
+					array(
+						"type" 	=> "tab",
+						"name"  => __("Content" , 'avia_framework'),
+						'nodescription' => true
+					),
+					
 					array(	
 							"name" 	=> __("Choose Video",'avia_framework' ),
 							"desc" 	=> __("Either upload a new video, choose an existing video from your media library or link to a video by URL",'avia_framework' )."<br/><br/>".
@@ -80,20 +90,87 @@ if ( !class_exists( 'avia_sc_video' ) )
 							"type" 	=> "input",
 							"std" 	=> "9",
 							"required" => array('format','equals','custom')
-						)
+						),
+						
+						array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+						),
+						
+						
+								array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),	
+						
+						
 						);
 
                     if(current_theme_supports('avia_template_builder_custom_html5_video_urls'))
                     {
                         for ($i = 2; $i > 0; $i--)
                         {
-                            $element = $this->elements[0];
+                            $element = $this->elements[2];
                             $element['id'] = 'src_'.$i;
                             $element['name'] =  __("Choose Another Video (HTML5 Only)",'avia_framework');
                             $element['desc'] = __("Either upload a new video, choose an existing video from your media library or link to a video by URL.
                                                    If you want to make sure that all browser can display your video upload a mp4, an ogv and a webm version of your video.",'avia_framework' );
 
-                            array_splice($this->elements, 1, 0, array($element));
+                            array_splice($this->elements, 3, 0, array($element));
                         }
                     }
 			}
@@ -130,6 +207,9 @@ if ( !class_exists( 'avia_sc_video' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				extract(shortcode_atts(array('src' => '', 'src_1' => '', 'src_2' => '', 'autoplay' => '', 'format' => '', 'height'=>'9', 'width'=>'16'), $atts, $this->config['shortcode']));
 				$custom_class = !empty($meta['custom_class']) ? $meta['custom_class'] : '';
 				$style = '';
@@ -205,7 +285,7 @@ if ( !class_exists( 'avia_sc_video' ) )
 				if(!empty($output))
 				{
                     $markup = avia_markup_helper(array('context' => 'video','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-					$output = "<div {$style} class='avia-video avia-video-{$format} {$html} {$custom_class}' {$markup}>{$output}</div>";
+					$output = "<div {$style} class='avia-video avia-video-{$format} {$html} {$custom_class} {$av_display_classes}' {$markup}>{$output}</div>";
 				}
 				
 				

@@ -249,6 +249,10 @@ z-index: 300;
 right: -2px;
 }
 
+.html_visible_cart .av-burger-menu-main{
+	padding-right: 25px;
+}
+
 .cart_dropdown_first{
 line-height: 38px;
 padding:0;
@@ -261,7 +265,7 @@ text-decoration: none;
 line-height: 44px;
 font-size: 15px;
 position: absolute;
-z-index: 10;
+z-index: 2;
 width:100%;
 height:100%;
 }
@@ -2669,6 +2673,22 @@ margin:0;
 	=============================================
 */
 
+
+/*enfold 4.2*/
+.html_top_nav_header .cart_dropdown {
+    margin: -24px 0 0 0;
+}
+
+.html_top_nav_header.html_cart_at_menu #menu-item-shop{
+    right: 0;
+    position: absolute;
+    top: 50%;
+    margin-top: -45px;
+}
+
+
+
+
 /* #Media Queries
 ================================================== */
 
@@ -2699,10 +2719,14 @@ margin:0;
 			.responsive .added_to_cart_notification{width:200px;}
 			
 			.responsive .av_mobile_menu_tablet .cart_dropdown { position: absolute; top: 50%; margin: -23px 0px 0 0;}
-			.responsive.html_mobile_menu_tablet.html_visible_cart #top .cart_dropdown{right: 40px;}
-			.responsive.html_mobile_menu_tablet #menu-item-shop{border-right:none;}
+			.responsive.html_mobile_menu_tablet.html_visible_cart #top .avia-menu + #menu-item-shop{border-left:none;}
+			/*.responsive.html_mobile_menu_tablet #menu-item-shop{border-right:none;}*/
 			.responsive.html_mobile_menu_tablet.html_header_top.html_header_topbar_active.html_header_sticky.html_bottom_nav_header #top #main{padding-top:119px;}
-
+			.responsive.html_mobile_menu_tablet.html_top_nav_header .cart_dropdown {top: 45px; }
+			.responsive.html_mobile_menu_tablet.html_top_nav_header.html_cart_at_menu #menu-item-shop{ right:85px;}
+			.responsive.html_mobile_menu_tablet.html_cart_at_menu.html_bottom_nav_header #top #wrap_all .main_menu{right:40px;}
+			.responsive.html_mobile_menu_tablet.html_cart_at_menu.html_bottom_nav_header.html_logo_right #menu-item-shop{left:60px;}
+			.responsive.html_mobile_menu_tablet.html_cart_at_menu #top .main_menu .menu>li:last-child{padding-right:13px; margin-right:20px;}
 	}
 
 	/* All Mobile Sizes (devices and browser) */
@@ -2797,11 +2821,10 @@ margin:0;
 		.responsive #top .cart_dropdown {
 		position: absolute;
 		top: 50%;
-		right: 7.5%;
-		margin: -23px 50px 0 0;
+		margin-top: -23px;
 		}
 		
-		.responsive.html_visible_cart .cart_dropdown{right: 7.5%;}
+		
 		
 		.responsive #top #menu-item-shop.cart_dropdown{
 		margin:0;
@@ -2810,7 +2833,22 @@ margin:0;
 		height:100%;
 		width: auto;
 		line-height: 80px;
+		position: static;
+		margin-left: -39px;
 		}
+		
+		.responsive.html_bottom_nav_header #top #menu-item-shop.cart_dropdown{
+			position: absolute;
+			right: 0;
+		}
+		
+		.responsive.html_bottom_nav_header.html_cart_at_menu #top #wrap_all .main_menu{
+			right: 64px;
+			z-index: 102;
+		}
+		
+		
+		
 		
 		.responsive #top #menu-item-shop .cart_dropdown_link{line-height: 80px;}
 		.responsive.html_cart_at_menu.html_header_sidebar #top #menu-item-shop .dropdown_widget.dropdown_widget_cart { width: 300px; }
@@ -2833,7 +2871,10 @@ margin:0;
 			margin:0 0 20px 0;
 		}
 		
-
+		.responsive.html_top_nav_header #top .cart_dropdown {top: 40px; }
+		.responsive.html_top_nav_header.html_cart_at_menu #top #menu-item-shop{ right:85px; position: absolute; }
+		.responsive.html_header_sidebar.html_visible_cart .cart_dropdown{    right: 62px;}
+		.responsive.html_cart_at_menu #top .main_menu .menu>li:last-child{padding-right:13px; margin-right:20px;}
 	}
 
 	/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */

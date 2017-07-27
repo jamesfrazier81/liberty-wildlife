@@ -1798,7 +1798,7 @@ right:0;
 bottom:0;
 background: rgba(255,255,255,0.8);
 text-align: center;
-z-index: 100;
+z-index: 1100;
 color:#fff;
 }
 
@@ -2377,12 +2377,12 @@ min-height: 171px;
 .av-wizard-form-elements{margin-top:5px;}
 .av-wizard-element .avia_color_picker_div { top: 6px; right: 4px; }
 
-#avia_options_page .av-wizard-element .avia_style_wrap{margin-right:5px; max-width: 95%; left:0; background: transparent; padding:0;}
+#avia_options_page .av-wizard-element .avia_style_wrap{margin:0 5px 0px 0; max-width: 95%; left:0; background: transparent; padding:0;}
 #avia_options_page .av-wizard-subcontainer .avia_style_wrap .avia_select_unify{border-radius: 1px; }
 #avia_options_page .av-wizard-subcontainer .avia_style_wrap .avia_select_fake_val{top: 2px;}
-#avia_options_page .av-wizard-subcontainer{ float: left;}
+#avia_options_page .av-wizard-subcontainer{ float: left; margin-bottom:6px;}
 #avia_options_page .av-wizard-subcontainer select{width:78px; height: 34px}
-#avia_options_page .av-wizard-subcontainer-colorpicker{width:108px;}
+#avia_options_page .av-wizard-subcontainer-colorpicker{width:108px; }
 
 #avia_options_page .av-wizard-subcontainer-bottom-box{clear:both; width:100%; margin-bottom:6px;  color:#888; font-size: 11px; }
 #avia_options_page .av-wizard-subcontainer-bottom-box label {margin-right:16px;}
@@ -2392,7 +2392,9 @@ min-height: 171px;
 .av-wizard-element .avia_select_fake_val{width: 55%; white-space: pre;}
 #wpwrap .av-wizard-element .avia_style_wrap .avia_color_picker{font-size: 13px;}
 
-
+#avia_options_page .av-wizard-subcontainer.av-wizard-subcontainer-hr{
+	float:none; clear:both;
+}
 
 
 
@@ -2408,9 +2410,4 @@ min-height: 171px;
 .av-media-frame-image-only .media-sidebar .setting{display:none;}
 .av-media-frame-image-only .media-sidebar .attachment-display-settings > *{display:none;}
 .av-media-frame-image-only .media-sidebar .attachment-display-settings > label:last-child{display:block;}
-
-
-
-
-
 

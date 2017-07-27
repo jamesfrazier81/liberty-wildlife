@@ -44,6 +44,7 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 			 */
 			function popup_elements()
 			{
+
 				$this->elements = array(
 
 				array(
@@ -57,7 +58,7 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 					),
 					
 					
-                   array(
+				array(
 						"name" 	=> __("Which Entries?", 'avia_framework' ),
 						"desc" 	=> __("Select which entries should be displayed by selecting a taxonomy", 'avia_framework' ),
 						"id" 	=> "link",
@@ -66,8 +67,52 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 						"subtype"  => array( __('Display Entries from:',  'avia_framework' )=>'taxonomy'),
 						"multiple"	=> 6,
 						"std" 	=> "category"
-				),
+					),
 				
+				array(
+						"name" 	=> __("WooCommerce Product visibility?", 'avia_framework' ),
+						"desc" 	=> __("Select the visibility of WooCommerce products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Inventory -&gt Out of stock visibility", 'avia_framework' ),
+						"id" 	=> "wc_prod_visible",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array( 'link', 'parent_in_array', implode( ' ', get_object_taxonomies( 'product', 'names' ) ) ),
+						"subtype" => array(
+							__('Use default WooCommerce Setting (Settings -&gt; Products -&gt; Out of stock visibility)',  'avia_framework' ) => '',
+							__('Hide products out of stock',  'avia_framework' )	=> 'hide',
+							__('Show products out of stock',  'avia_framework' )	=> 'show')
+					),
+					
+				array(
+						"name" 	=> __( "Sorting Options", 'avia_framework' ),
+						"desc" 	=> __( "Here you can choose how to sort the products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Display -&gt Default product sorting", 'avia_framework' ),
+						"id" 	=> "prod_order_by",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array( 'link', 'parent_in_array', implode( ' ', get_object_taxonomies( 'product', 'names' ) ) ),
+						"subtype" => array( 
+								__('Use defaut (defined at Woocommerce -&gt; Settings -&gt Default product sorting) ', 'avia_framework' ) =>	'',
+								__('Sort alphabetically', 'avia_framework' )			=>	'title',
+								__('Sort by most recent', 'avia_framework' )			=>	'date',
+								__('Sort by price', 'avia_framework' )					=>	'price',
+								__('Sort by popularity', 'avia_framework' )				=>	'popularity',
+								__('Sort randomly', 'avia_framework' )					=>	'rand'
+							)
+					),
+				
+				array(
+						"name" 	=> __( "Sorting Order", 'avia_framework' ),
+						"desc" 	=> __( "Here you can choose the order of the result products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Display -&gt Default product sorting", 'avia_framework' ),
+						"id" 	=> "prod_order",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array( 'link', 'parent_in_array', implode( ' ', get_object_taxonomies( 'product', 'names' ) ) ),
+						"subtype" => array( 
+								__('Use defaut (defined at Woocommerce -&gt Settings -&gt Default product sorting)', 'avia_framework' ) =>	'',
+								__('Ascending', 'avia_framework' )			=>	'ASC',
+								__('Descending', 'avia_framework' )			=>	'DESC'
+							)
+					),
+					
 				array(
 						"name" 	=> __("Sortable?", 'avia_framework' ),
 						"desc" 	=> __("Should sorting options based on the taxonomies above be displayed?", 'avia_framework' ),
@@ -159,7 +204,7 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 						'fixed manually' => __('Perfect Manual Masonry: Manually control the height and width of entries by adding either a "landscape" or "portrait" tag when creating the entry. Elements with no such tag use a fixed default size, elements with both tags will display extra large',  'avia_framework' ),
 					)),
 					
-/*
+
 				array(
 					"name" 	=> __("Orientation", 'avia_framework' ),
 					"desc" 	=> __("Set the orientation of the cropped preview images", 'avia_framework' ),
@@ -175,7 +220,7 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 						__('High Portrait',  'avia_framework' ) =>'av-orientation-portrait-large',
 					)),	
 					
-*/
+
 						
 				array(
 					"name" 	=> __("Gap between elements", 'avia_framework' ),
@@ -300,6 +345,89 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 						"type" 	=> "close_div",
 						'nodescription' => true
 					),
+					
+				array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+									
+								
+								array(
+								"name" 	=> __("Element Columns",'avia_framework' ),
+								"desc" 	=> 
+								__("Set the column count for this element, based on the device screensize.", 'avia_framework' )."<br/><small>".
+								__("Please note that changing the default will overwrite any individual 'landscape' width settings. Each item will have the same width", 'avia_framework' )."</small>"
+								,
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+							
+								array(	"name" 	=> __("Column count for medium sized screens", 'avia_framework' ),
+						            "id" 	=> "av-medium-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),
+						            
+						            array(	"name" 	=> __("Column count for small screens", 'avia_framework' ),
+						            "id" 	=> "av-small-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),
+						            
+									array(	"name" 	=> __("Column count for very small screens", 'avia_framework' ),
+						            "id" 	=> "av-mini-columns",
+						            "type" 	=> "select",
+						            "subtype" => AviaHtmlHelper::number_array(1,4,1, array( __("Default", 'avia_framework' )=>'')),
+						            "std" => ""),  
+							  
+				
+							
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
 				
 						
 				array(
@@ -315,15 +443,15 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
                     $element = array(
                         "name" 	=> __("Select Post Type", 'avia_framework' ),
                         "desc" 	=> __("Select which post types should be used. Note that your taxonomy will be ignored if you do not select an assign post type.
-                                      If yo don't select post type all registered post types will be used", 'avia_framework' ),
+                                      If you don't select post type all registered post types will be used", 'avia_framework' ),
                         "id" 	=> "post_type",
                         "type" 	=> "select",
                         "multiple"	=> 6,
                         "std" 	=> "",
                         "subtype" => AviaHtmlHelper::get_registered_post_type_array()
                     );
-
-                    array_unshift($this->elements, $element);
+                    
+                    array_splice($this->elements, 2, 0, array($element));
                 }
 
 			}
@@ -395,9 +523,11 @@ if ( !class_exists( 'avia_sc_masonry_entries' ) )
 			
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				$output  = "";
 				
-				$params['class'] = "main_color ".$meta['el_class'];
+				$params['class'] = "main_color {$av_display_classes} ".$meta['el_class'];
 				$params['open_structure'] = false;
 				$params['id'] = !empty($atts['id']) ? AviaHelper::save_string($atts['id'],'-') : "";
 				$params['custom_markup'] = $meta['custom_markup'];

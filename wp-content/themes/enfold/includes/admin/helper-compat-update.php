@@ -3,6 +3,7 @@
 //activate the update script
 add_action('admin_init', array(new avia_update_helper(), 'update_version'));
 
+/*all the functions that keep compatibility between theme versions: */
 
 /*
  *
@@ -478,14 +479,75 @@ function avia_update_layerslider_data_structure($prev_version, $new_version)
  
  
  
+  /*
+ *
+ * update for version 4.1: update the main menu icon and move the scale and color from advanced editor to a normal option
+ *
+ */
+ 
+add_action('ava_trigger_updates', 'avia_update_menu_icon_advanced',15,2);
+
+function avia_update_menu_icon_advanced($prev_version, $new_version)
+{	
+	//if the previous theme version is equal or bigger to 4.1 we don't need to update
+	if(version_compare($prev_version, '4.1', ">=")) return; 
+	
+	//fetch advanced data
+	global $avia;
+	$theme_options = $avia->options['avia'];
+	$advanced = avia_get_option('advanced_styling');
+	
+	
+	if(isset($theme_options['menu_display']) && $theme_options['menu_display'] == 'burger_menu')
+	{
+		$theme_options['overlay_style'] = 'av-overlay-full';
+		$theme_options['submenu_clone'] = 'av-submenu-noclone';
+		$theme_options['submenu_visibility'] = 'av-submenu-hidden av-submenu-display-hover';
+	}
+	else
+	{
+		$theme_options['overlay_style'] = 'av-overlay-side av-overlay-side-classic';
+		
+		if(isset($theme_options['header_mobile_behavior']) && $theme_options['header_mobile_behavior'] != "")
+		{
+			$theme_options['submenu_visibility'] = 'av-submenu-hidden av-submenu-display-click';
+		}
+		else
+		{
+			$theme_options['submenu_visibility'] = '';
+		}
+		
+		$theme_options['submenu_clone'] = 'av-submenu-noclone';
+		
+	}
+
+	
+	
+	if(!empty($advanced))
+	{
+		foreach($advanced as $rule)
+		{
+			if(isset($rule) && $rule['id'] == 'main_menu_icon_style')
+			{
+				if(!empty($rule['color'])) $theme_options['burger_color'] = $rule['color'];
+				if(!empty($rule['size']))  $theme_options['burger_size'] = 'av-small-burger-icon';
+
+				break;
+			}
+		}
+	}
+	
+	
+	//replace existing options with the new options
+	$avia->options['avia'] = $theme_options;
+	update_option($avia->option_prefix, $avia->options);
+	
+}
+
  
  
  
  
  
  
- 
- 
- 
- 
- 
+

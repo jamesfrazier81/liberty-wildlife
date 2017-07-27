@@ -12,6 +12,7 @@ if ( !class_exists( 'AviaHelper' ) ) {
 	{
 		static $cache = array(); 		//holds database requests or results of complex functions
 		static $templates = array(); 	//an array that holds all the templates that should be created when the print_media_templates hook is called
+		static $mobile_styles = array(); 		//an array that holds mobile styling rules that are appened to the end of the page
 		
 		/**
     	 * get_url - Returns a url based on a string that holds either post type and id or taxonomy and id
@@ -444,8 +445,102 @@ if ( !class_exists( 'AviaHelper' ) ) {
 		
 		return $posttype;	
 	}
+	
+	
+	
+	static function av_mobile_sizes($atts = array())
+	{
+		$result		= array('av_font_classes'=>'', 'av_title_font_classes'=>'', 'av_display_classes' => '', 'av_column_classes' => '');
+		$fonts 		= array('av-medium-font-size', 'av-small-font-size', 'av-mini-font-size'); 
+		$title_fonts= array('av-medium-font-size-title', 'av-small-font-size-title', 'av-mini-font-size-title'); 
+		$displays	= array('av-desktop-hide', 'av-medium-hide', 'av-small-hide', 'av-mini-hide');
+		$columns	= array('av-medium-columns', 'av-small-columns', 'av-mini-columns');
 		
 		
+		if(empty($atts)) $atts = array();
+		
+		foreach($atts as $key => $attribute)
+		{
+			if(in_array($key, $fonts) && $attribute != "")
+			{
+				$result['av_font_classes'] .= " ".$key."-overwrite";
+				$result['av_font_classes'] .= " ".$key."-".$attribute;
+				
+				if($attribute != "hidden") self::$mobile_styles['av_font_classes'][$key][$attribute] = $attribute;
+			}
+			
+			if(in_array($key, $title_fonts) && $attribute != "")
+			{
+				$newkey = str_ireplace('-title', "", $key);
+				
+				$result['av_title_font_classes'] .= " ".$newkey."-overwrite";
+				$result['av_title_font_classes'] .= " ".$newkey."-".$attribute;
+				
+				
+				if($attribute != "hidden") 
+				{ 
+					self::$mobile_styles['av_font_classes'][$newkey][$attribute] = $attribute;
+				}
+			}
+			
+			if(in_array($key, $displays) && $attribute != "")
+			{
+				$result['av_display_classes'] .= " ".$key;
+			}
+			
+			if(in_array($key, $columns) && $attribute != "")
+			{
+				$result['av_column_classes'] .= " ".$key."-overwrite";
+				$result['av_column_classes'] .= " ".$key."-".$attribute;
+			}
+		}
+
+		return $result;
+	}
+	
+	
+	
+	static function av_print_mobile_sizes()
+	{
+		$print 			= "";
+		
+		//rules are created dynamically, otherwise we would need to predefine more than 500 csss rules of which probably only 2-3 would be used per page
+		$media_queries 	= apply_filters('avf_mobile_font_size_queries' , array(
+			
+			"av-medium-font-size" 	=> "only screen and (min-width: 768px) and (max-width: 989px)",
+			"av-small-font-size" 	=> "only screen and (min-width: 480px) and (max-width: 767px)",
+			"av-mini-font-size" 	=> "only screen and (max-width: 479px)",  
+
+ 		));
+		
+
+		if(isset(self::$mobile_styles['av_font_classes']) && is_array(self::$mobile_styles['av_font_classes']))
+		{
+			$print .="<style type='text/css'>\n";
+			
+			foreach($media_queries as $key => $query)
+			{
+				if( isset(self::$mobile_styles['av_font_classes'][$key]) )
+				{
+					$print .="@media {$query} { \n";
+					
+					if( isset(self::$mobile_styles['av_font_classes'][$key]))
+					{
+						foreach(self::$mobile_styles['av_font_classes'][$key] as $size)
+						{
+							$print .= ".responsive #top #wrap_all .{$key}-{$size}{font-size:{$size}px !important;} \n";
+						}
+					}
+					
+					$print .= "} \n";
+				}
+			}
+			
+			$print .="</style>";
+		}
+		
+		return $print; 
+	}
 		
 		
 		

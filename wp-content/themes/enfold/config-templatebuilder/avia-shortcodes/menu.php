@@ -72,8 +72,8 @@ if ( !class_exists( 'avia_sc_submenu' ) )
 							),
 							
 					array(
-							"name" => __("Add/Edit rotating text", 'avia_framework' ),
-							"desc" => __("Here you can add, remove and edit the rotating text", 'avia_framework' ),
+							"name" => __("Add/Edit submenu item text", 'avia_framework' ),
+							"desc" => __("Here you can add, remove and edit the submenu item text", 'avia_framework' ),
 							"type" 			=> "modal_group",
 							"id" 			=> "content",
 							"required" 		=> array('which_menu', 'equals', 'custom'),

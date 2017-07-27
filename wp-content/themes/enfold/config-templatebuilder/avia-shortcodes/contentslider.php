@@ -205,7 +205,60 @@ if ( !class_exists( 'avia_sc_content_slider' ) )
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
-						
+					
+					
+					array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),
+					
+					
 					array(
 							"type" 	=> "close_div",
 							'nodescription' => true
@@ -283,7 +336,11 @@ if ( !class_exists( 'avia_sc_content_slider' ) )
                 'custom_markup' => $meta['custom_markup'],
                 'font_color' 	=> '',
                 'color' 		=> '',
-                'styling'		=> ''
+                'styling'		=> '',
+                'av-desktop-hide'=>'',
+                'av-medium-hide'=>'',
+                'av-small-hide'=>'',
+                'av-mini-hide'=>'',
                 
 				), $atts, $this->config['shortcode']);
 				
@@ -349,7 +406,8 @@ if ( !class_exists( 'avia_content_slider' ) )
 			if(empty($this->config['content'])) return $output;
 
             //$html .= empty($this->subslides) ? $this->default_slide() : $this->advanced_slide();
-
+			
+			extract(AviaHelper::av_mobile_sizes($this->config)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
             extract($this->config);
 
             $extraClass 		= 'first';
@@ -373,7 +431,7 @@ if ( !class_exists( 'avia_content_slider' ) )
             $data = AviaHelper::create_data_string(array('autoplay'=>$autoplay, 'interval'=>$interval, 'animation' => $animation, 'show_slide_delay'=>30));
 
             $thumb_fallback = "";
-            $output .= "<div {$data} class='avia-content-slider-element-container avia-content-slider-element-{$type} avia-content-slider avia-smallarrow-slider avia-content-{$type}-active avia-content-slider".avia_content_slider::$slider." avia-content-slider-{$total} {$class}' {$styling}>";
+            $output .= "<div {$data} class='avia-content-slider-element-container avia-content-slider-element-{$type} avia-content-slider avia-smallarrow-slider avia-content-{$type}-active avia-content-slider".avia_content_slider::$slider." avia-content-slider-{$total} {$class} {$av_display_classes}' {$styling}>";
 
                 $heading_class = '';
                 if($navigation == 'no') $heading_class .= ' no-content-slider-navigation ';

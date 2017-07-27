@@ -191,7 +191,7 @@ class LS_Sliders {
 		// Slider data
 		$data = !empty($data) ? $data : array(
 			'properties' => array(
-				'sliderVersion' => LS_DB_VERSION,
+				'sliderVersion' => LS_PLUGIN_VERSION,
 				'title' => $title,
 				'new' => true,
 			),
@@ -204,6 +204,12 @@ class LS_Sliders {
 			$title = substr($title, 0, (99-strlen($title)) );
 		}
 
+		// Popup?
+		$popup = 0;
+		if( ! empty($data['properties']['type']) && $data['properties']['type'] == 'popup') {
+			$popup = 1;
+		}
+
 		// Insert slider, WPDB will escape data automatically
 		$wpdb->insert($wpdb->prefix.LS_DB_TABLE, array(
 			'author' => get_current_user_id(),
@@ -211,9 +217,10 @@ class LS_Sliders {
 			'slug' => $slug,
 			'data' => json_encode($data),
 			'date_c' => time(),
-			'date_m' => time()
+			'date_m' => time(),
+			'flag_popup' => $popup
 		), array(
-			'%d', '%s', '%s', '%s', '%d', '%d'
+			'%d', '%s', '%s', '%s', '%d', '%d', '%d'
 		));
 
 		// Return insert database ID
@@ -269,7 +276,11 @@ class LS_Sliders {
 			}
 		}
 
-
+		// Popup?
+		$popup = 0;
+		if( ! empty($data['properties']['type']) && $data['properties']['type'] == 'popup') {
+			$popup = 1;
+		}
 
 		// Insert slider, WPDB will escape data automatically
 		$wpdb->update($wpdb->prefix.LS_DB_TABLE, array(
@@ -279,10 +290,11 @@ class LS_Sliders {
 				'schedule_start' => $schedule['schedule_start'],
 				'schedule_end' => $schedule['schedule_end'],
 				'date_m' => time(),
-				'flag_hidden' => $status
+				'flag_hidden' => $status,
+				'flag_popup' => $popup
 			),
 			array('id' => $id),
-			array('%s', '%s', '%s', '%d', '%d', '%d', '%d')
+			array('%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d')
 		);
 
 		// Return insert database ID

@@ -56,7 +56,21 @@ if ( !class_exists( 'avia_sc_product_upsells' ) )
 							"type" 	=> "select",
 							"std" 	=> "4",
 							"subtype" => array(
-								'1' =>'1','2' =>'2','3' =>'3','4' =>'4','5' =>'5'))
+								'1' =>'1','2' =>'2','3' =>'3','4' =>'4','5' =>'5')),
+								
+					array(
+						"name" 	=> __("WooCommerce Product visibility?", 'avia_framework' ),
+						"desc" 	=> __("Select the visibility of WooCommerce products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Inventory -&gt Out of stock visibility. Currently it is only possible to hide products out of stock.", 'avia_framework' ),
+						"id" 	=> "wc_prod_visible",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"subtype" => array(
+							__('Use default WooCommerce Setting (Settings -&gt; Products -&gt; Out of stock visibility)',  'avia_framework' ) => '',
+							__('Hide products out of stock',  'avia_framework' ) => 'hide',
+//							__('Show products out of stock',  'avia_framework' )  => 'show'
+								)
+					)
+					
 				);
 			}
 
@@ -90,22 +104,41 @@ if ( !class_exists( 'avia_sc_product_upsells' ) )
 		 */
 		function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 		{
+			global $avia_config, $woocommerce, $product;
 			
-			extract(shortcode_atts(array('display' => 'upsells related', 'count' => 4)
-											 , $atts));
+			extract(shortcode_atts( array(
+										'display'			=>	'upsells related', 
+										'count'				=>	4,
+										'wc_prod_visible'	=>	''	
+									), $atts));
 			
 			$output = "";
-			$meta['el_class'];
 			
-			global $woocommerce, $product;
+			//	fix for seo plugins which execute the do_shortcode() function before the WooCommerce plugin is loaded
 			if(!is_object($woocommerce) || !is_object($woocommerce->query) || empty($product)) return;
 			
+			
+			//	force to ignore WC default setting - see hooked function avia_wc_product_is_visible
+			switch( $wc_prod_visible )
+			{
+				case 'show':
+					$avia_config['woocommerce']['catalog_product_visibility'] = 'show_all';
+					break;
+				case 'hide':
+					$avia_config['woocommerce']['catalog_product_visibility'] = 'hide_out_of_stock';
+					break;
+				default:
+					$avia_config['woocommerce']['catalog_product_visibility'] = 'use_default';
+			}
 			
 			// $product = wc_get_product();
 			$output .= "<div class='av-woo-product-related-upsells  ".$meta['el_class']."'>";
 			if(strpos($display, 'upsells') !== false) $output .= avia_woocommerce_output_upsells($count,$count);
 			if(strpos($display, 'related') !== false) $output .= avia_woocommerce_output_related_products($count,$count);
 			$output .= "</div>";
+			
+				//	reset
+			$avia_config['woocommerce']['catalog_product_visibility'] = 'use_default';
 			
 			return $output;
 		}

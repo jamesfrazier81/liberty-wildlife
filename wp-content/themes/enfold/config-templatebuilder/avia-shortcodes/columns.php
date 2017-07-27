@@ -269,8 +269,7 @@ if ( !class_exists( 'avia_sc_columns' ) )
 											'bottom'=> __('Margin-Bottom','avia_framework'),
 											)
 						),
-					
-					
+						
 					array(
 							"type" 	=> "close_div",
 							'nodescription' => true
@@ -484,11 +483,42 @@ array(
 				
 				array(
 						"type" 	=> "tab",
-						"name"  => __("Mobile" , 'avia_framework'),
+						"name"  => __("Screen Options" , 'avia_framework'),
 						'nodescription' => true
 					),
-				
-				
+					
+				array(
+							"name" 	=> __("ROW SETTING: Mobile Breaking Point",'avia_framework' ),
+							"desc" 	=> __("Set the screen width when columns in this row should switch to full width", 'avia_framework' ),
+							"type" 	=> "heading",
+							"description_class" => "av-builder-note av-notice",
+							"required" => array('0','not',''),
+					),
+					
+					
+				array(	
+						"name" 	=> __("Fullwidth Break Point", 'avia_framework' ),
+						"desc" 	=> __("The columns in this row will switch to fullwidth at this screen width ", 'avia_framework' ),
+						"id" 	=> "mobile_breaking",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"required" => array('0','not',''),
+						"subtype" => array(	
+								__('On mobile devices (at a screen width of 767px or lower)','avia_framework' ) =>'',
+								__('On tablets (at a screen width of 989px or lower)',  'avia_framework' ) =>'av-break-at-tablet',
+									)
+					),	
+					
+				array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> 
+								__("Set the visibility for this element, based on the device screensize.", 'avia_framework' )."<br><small>".
+								__("In order to prevent breaking the layout it is only possible to change the visibility settings for columns once they take up the full screen width, which means only on mobile devices", 'avia_framework' )."</small>",
+								
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+					),
+								
 				array(	
 						"name" 	=> __("Mobile display", 'avia_framework' ),
 						"desc" 	=> __("Display settings for this element when viewed on smaller screens", 'avia_framework' ),
@@ -497,7 +527,6 @@ array(
 						"std" 	=> "",
 						"subtype" => array(	
 								__('Always display','avia_framework' ) =>'',
-								//__('Hide on tablet and smaller devices',  'avia_framework' ) =>'av-hide-on-tablet',
 								__('Hide on mobile devices',  'avia_framework' ) =>'av-hide-on-mobile',
 									)
 					),
@@ -507,6 +536,8 @@ array(
 							"type" 	=> "close_div",
 							'nodescription' => true
 						),
+						
+				
 					
 				array(
 							"type" 	=> "close_div",
@@ -560,7 +591,8 @@ array(
 					'min_height'			=> '',
 					'vertical_alignment'	=> 'av-align-top',
 					'animation'				=> '',
-					'mobile_display'		=> ''
+					'mobile_display'		=> '',
+					'mobile_breaking'		=> ''
 					
 				
 				), $atts, $this->config['shortcode']);
@@ -577,6 +609,7 @@ array(
 				$inner_style = "";
 				$margin_style= "";
 				$output		 = "";
+				$extra_table_class = "";
 				$anim_class  = empty($atts['animation']) ? "" : " av-animated-generic ".$atts['animation']." ";
 				$extraClass .= $anim_class;
 				$extraClass .= empty($atts['mobile_display']) ? "" : " ".$atts['mobile_display']." ";
@@ -604,6 +637,13 @@ array(
 				{
 					$extraClass .= " ".avia_sc_columns::$first_atts['space'];
 				}
+				
+				if( !empty( avia_sc_columns::$first_atts['mobile_breaking'] ) )
+				{
+					$extraClass .= " ".avia_sc_columns::$first_atts['mobile_breaking'];
+					$extra_table_class = " av-break-at-tablet-table";
+				}
+				
 				
 				if( !empty( avia_sc_columns::$first_atts['min_height'] ) )
 				{
@@ -724,7 +764,7 @@ array(
 
 				if(!empty( avia_sc_columns::$first_atts['min_height'] ) && avia_sc_columns::$calculated_size == 0)
 				{
-					$output .= "<div class='flex_column_table ".avia_sc_columns::$first_atts['min_height']."-flextable' {$margin_style}>";
+					$output .= "<div class='flex_column_table ".avia_sc_columns::$first_atts['min_height']."-flextable ".avia_sc_columns::$first_atts['mobile_breaking']."-flextable' {$margin_style}>";
 				}	
 				
 				if(!$first && empty( avia_sc_columns::$first_atts['space'] ) && !empty( avia_sc_columns::$first_atts['min_height'] ))

@@ -315,6 +315,7 @@ $advanced['top_bar'] = array(
 
 
 
+/*
 $scale 	= array(__('Default','avia_framework') => '' , __('Small','avia_framework') =>'0.6');
 
 $advanced['main_menu_icon_style'] = array(
@@ -323,6 +324,7 @@ $advanced['main_menu_icon_style'] = array(
 	"group" 		=> __("Main Menu (Icon)",'avia_framework'),
 	"description"	=> __("Change the styling for your main menu links once they are displayed in the page overlay",'avia_framework'),
 	"selector"		=> array( 
+		"#top .av-burger-menu-main>a" => array("size"=>"padding:0;"),
 		"#header .av-hamburger" => array("size"=>"-ms-transform: scale(%size%); transform: scale(%size%); transform-origin: right;"),
 		".header_color .av-hamburger-inner, .header_color .av-hamburger-inner::before, .header_color .av-hamburger-inner::after" => array("color"=>"background-color: %color%")
 	
@@ -334,48 +336,68 @@ $advanced['main_menu_icon_style'] = array(
 		'size' 		=> array('type' => 'select', 'name'=> __("Icon Size",'avia_framework'), 'options' => $scale),
 							)
 );
+*/
 
 
 
 $advanced['main_menu_icon'] = array(
 	"id"			=> "main_menu_icon", //needs to match array key
-	"name"			=> __("Menu Links in overlay",'avia_framework'),
+	"name"			=> __("Menu Links in overlay/slide out",'avia_framework'),
 	"group" 		=> __("Main Menu (Icon)",'avia_framework'),
-	"description"	=> __("Change the styling for your main menu links once they are displayed in the page overlay",'avia_framework'),
+	"description"	=> __("Change the styling for your main menu links once they are displayed in the page overlay/slide out",'avia_framework'),
 	"selector"		=> array(
-		"#top #wrap_all #av-burger-menu-ul li a" => array(
+		"#top #wrap_all .av-burger-overlay .av-burger-overlay-scroll #av-burger-menu-ul li a" => array(
 								'color' 		=> "color:%color%;",
 								"font_family" 	=> "font-family: %font_family% ,'Helvetica Neue', Helvetica, Arial, sans-serif;", 
 								"font_weight" 	=> "font-weight: %font_weight%;",
 								"letter_spacing" => "letter-spacing: %letter_spacing%;",
 								"text_transform" => "text-transform: %text_transform%;",
+								"line_height" 	=> "line-height: %line_height%;",
 								),
 		"#top #wrap_all #av-burger-menu-ul li" => array(
 								'font_size' 	=> "font-size:%font_size%;",
 								"line_height" 	=> "line-height: %line_height% !important;",
 								),
-		".av-burger-overlay-active #top .av-hamburger-inner, .av-burger-overlay-active #top .av-hamburger-inner::before, .av-burger-overlay-active #top .av-hamburger-inner::after" => array(
+		".av-burger-overlay-active #top #wrap_all .av-hamburger-inner, .av-burger-overlay-active #top #wrap_all .av-hamburger-inner::before, .av-burger-overlay-active #top #wrap_all .av-hamburger-inner::after, .html_av-overlay-side-classic #top div .av-burger-overlay li li .avia-bullet" => array(
 			'color'=> "background-color:%color%;",
 		),
 		"div.av-burger-overlay-bg" => array(
 			'background_color' => "background-color:%background_color%;",
 		),
-		".av-burger-overlay-active #top #wrap_all #menu-item-search a, .av-burger-overlay-active #top #wrap_all #menu-item-search a:hover" => array(
+		".av-burger-overlay-active #top #wrap_all #header #menu-item-search a, .av-burger-overlay-active #top #wrap_all #main #menu-item-search a, .av-burger-overlay-active #top #wrap_all #menu-item-search a:hover" => array(
 			'color' => "color:%color%;",
+		),
+		"#top #wrap_all .av-burger-overlay-scroll" => array(
+			'menu_bg' => "background-color:%menu_bg%;",
+		),
+		".html_av-overlay-side #top #wrap_all div .av-burger-overlay-scroll #av-burger-menu-ul a:hover" => array(
+			'menu_bg_hover' => "background-color:%menu_bg_hover%;",
+		),
+		".html_av-overlay-side-classic #top #wrap_all .av-burger-overlay #av-burger-menu-ul li a" => array(
+			'border_color' => "border-color:%border_color%;",
 		),
 		
 	
 	),
 	"sections"		=> false,
 	"hover"			=> false,
-	"edit"			=> array(	'color' 			=> array('type' => 'colorpicker', 'name'=> __("Font Color",'avia_framework')), 
+	"edit"			=> array(	
+								'color' 			=> array('type' => 'colorpicker', 'name'=> __("Font Color",'avia_framework')), 
+								'background_color' 	=> array('type' => 'colorpicker', 'name'=> __("Overlay Color",'avia_framework')), 
+								'menu_bg' 			=> array('type' => 'colorpicker', 'name'=> __("Menu Background",'avia_framework')), 
+								'menu_bg_hover' 	=> array('type' => 'colorpicker', 'name'=> __("Menu Hover BG",'avia_framework')), 
+								'border_color' 		=> array('type' => 'colorpicker', 'name'=> __("Border Color",'avia_framework')), 
+								
+								'hr1' 				=> array('type' => 'hr'), 
+		
 								'font_size' 		=> array('type' => 'size', 'range' => '10-120', 'name'=> __("Font Size",'avia_framework')),
 								'line_height' 		=> array('type' => 'size', 'range' => '0.7-3', 'increment' => 0.1, 'unit' => 'em',  'name'=> __("Line Height",'avia_framework')),
 								'font_family' 		=> array('type' => 'font', 'name'=> __("Font Family",'avia_framework'), 'options' => $google_fonts),
 								'font_weight' 		=> array('type' => 'select', 'name'=> __("Font Weight",'avia_framework'), 'options' => $weight),
 								'letter_spacing' 	=> array('type' => 'size', 'range' => array(-10,20), 'increment' => 1, 'unit' => 'px',  'name'=> __("Letter Spacing",'avia_framework')),
 								'text_transform' 	=> array('type' => 'select', 'name'=> __("Text Transform",'avia_framework'), 'options' => $transform ),
-								'background_color' 	=> array('type' => 'colorpicker', 'name'=> __("Overlay Color",'avia_framework')), 
+								
+								
 							)
 													
 );

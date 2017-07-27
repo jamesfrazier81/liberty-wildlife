@@ -19,8 +19,9 @@
 	// $curPage = ($curPage >= $maxPage) ? $maxPage : $curPage;
 
 	// Set filters
-	$userFilters = false;
-	$showAllSlider = false;
+	$userFilters 	= false;
+	$showPopupSlider= false;
+	$showAllSlider 	= false;
 
 	$urlParamFilter = 'published';
 	$urlParamOrder 	= 'date_c';
@@ -38,6 +39,14 @@
 		$showAllSlider = true;
 		$urlParamFilter = htmlentities($_GET['filter']);
 		$filters['exclude'] = array();
+	}
+
+	if( ! empty($_GET['filter']) && $_GET['filter'] === 'popup') {
+		$userFilters = true;
+		$showPopupSlider = true;
+		$urlParamFilter = htmlentities($_GET['filter']);
+		$filters['exclude'] = array();
+		$filters['where'] = "flag_popup = '1'";
 	}
 
 	if( ! empty($_GET['order']) ) {
@@ -240,6 +249,7 @@
 			<?php _e('Show', 'LayerSlider') ?>
 			<select name="filter">
 				<option value="published"><?php _e('published', 'LayerSlider') ?></option>
+				<option value="popup" <?php echo $showPopupSlider ? 'selected' : '' ?>><?php _e('popup') ?></option>
 				<option value="all" <?php echo $showAllSlider ? 'selected' : '' ?>><?php _e('all', 'LayerSlider') ?></option>
 			</select>
 			<?php _e('sliders', 'LayerSlider') ?>

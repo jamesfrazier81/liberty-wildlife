@@ -14,13 +14,6 @@ if(isset($headerS['disabled'])) return;
 
 <?php
 
-if($responsive)
-{
-	echo '<a id="advanced_menu_toggle" href="#" '.av_icon_string('mobile_menu').'></a>';
-	echo '<a id="advanced_menu_hide" href="#" 	'.av_icon_string('close').'></a>';
-}
-
-
 //subheader, only display when the user chooses a social header
 if($headerS['header_topbar'] == true)
 {

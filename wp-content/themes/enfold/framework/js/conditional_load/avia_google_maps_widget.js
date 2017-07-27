@@ -24,7 +24,7 @@
 
             var widget_id_base = 'avia_google_maps';
 
-            if(typeof(settings.data) !== 'undefined' && settings.data.search('action=save-widget') != -1 && settings.data.search('id_base=' + widget_id_base) != -1)
+            if(typeof(settings.data) !== 'undefined' && settings.data.search('action=save-widget') !== -1 && settings.data.search('id_base=' + widget_id_base) !== -1)
             {
                 $('body').avia_google_maps_options();
             }
@@ -35,7 +35,7 @@
     {
         $('.avia-find-coordinates-wrapper,.avia-loading-coordinates').hide();
 
-        $(".avia-coordinates-help-link").on('click', function() {
+        $(".avia-coordinates-help-link").on('click', function( event ) {
             event.preventDefault();
 
             avia_google_maps_widget_container = jQuery(this).parents('.widget-content');
@@ -44,7 +44,7 @@
             avia_google_maps_widget_container.find(".avia-find-coordinates-wrapper").show();
         });
 
-        $(".avia-populate-coordinates").click(function() {
+        $(".avia-populate-coordinates").click(function( event ) {
             event.preventDefault();
 
             avia_google_maps_widget_container = jQuery(this).parents('.widget-content');
@@ -68,7 +68,7 @@
             {
                 var errormessage = '';
 
-                if (status == google.maps.GeocoderStatus.OK)
+                if (status === google.maps.GeocoderStatus.OK)
                 {
                     /*console.log(results);
                      console.log(results[0].geometry.location.lat() );
@@ -78,7 +78,7 @@
 
                     avia_print_coordinates(latitude,longitude);
                 }
-                else if (status == google.maps.GeocoderStatus.ZERO_RESULTS)
+                else if (status === google.maps.GeocoderStatus.ZERO_RESULTS)
                 {
                     if (!addressGeo.replace(/\s/g, '').length)
                     {
@@ -89,12 +89,12 @@
                         errormessage = AviaMapTranslation.latitude + ' ' + addressGeo + ' ' + AviaMapTranslation.notfound;
                     }
                 }
-                else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+                else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
                 {
                     errormessage = AviaMapTranslation.toomanyrequests;
                 }
 
-                if(errormessage != '') alert(errormessage);
+                if(errormessage !== '') alert(errormessage);
 
                 avia_google_maps_widget_container.find(".avia-coordinates-help-link").show();
                 avia_google_maps_widget_container.find(".avia-find-coordinates-wrapper").fadeOut("fast");
@@ -108,5 +108,5 @@
             avia_google_maps_widget_container.find(".avia-map-lat").val(latitude);
             avia_google_maps_widget_container.find(".avia-map-lng").val(longitude);
         }
-    }
+    };
 })(jQuery);

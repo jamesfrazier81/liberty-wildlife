@@ -5,6 +5,12 @@ if(!defined('LS_ROOT_FILE')) {
 	exit;
 }
 
+// Popup
+if( !empty($slides['properties']['attrs']['type']) && $slides['properties']['attrs']['type'] === 'popup' ) {
+	$slides['properties']['props']['width']  = ! empty( $slides['properties']['attrs']['popupWidth'] ) ? $slides['properties']['attrs']['popupWidth'] : 640;
+	$slides['properties']['props']['height'] = ! empty( $slides['properties']['attrs']['popupHeight']) ? $slides['properties']['attrs']['popupHeight'] : 360;
+}
+
 // Get slider style
 $sliderStyleAttr[] = 'width:'.layerslider_check_unit($slides['properties']['props']['width']).';';
 
@@ -26,6 +32,11 @@ if(isset($slides['properties']['props']['sliderStyle'])) {
 // Before slider content hook
 if(has_action('layerslider_before_slider_content')) {
 	do_action('layerslider_before_slider_content');
+}
+
+// Wrap Popups
+if( !empty($slides['properties']['attrs']['type']) && $slides['properties']['attrs']['type'] === 'popup' ) {
+	$lsContainer[] = '<div class="ls-popup">';
 }
 
 // Start of slider container
@@ -351,6 +362,11 @@ if(!empty($slider['slides']) && is_array($slider['slides'])) {
 
 // End of slider container
 $lsMarkup[] = '</div>';
+
+// End of Popup wrapper
+if( !empty($slides['properties']['attrs']['type']) && $slides['properties']['attrs']['type'] === 'popup' ) {
+	$lsMarkup[] = '</div>';
+}
 
 // After slider content hook
 if(has_action('layerslider_after_slider_content')) {

@@ -347,6 +347,7 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 		function verification_field( $element )
 		{
 			$callback 			= $element['ajax'];
+			$js_callback 		= isset($element['js_callback']) ? $element['js_callback'] : "";
 			$element['simple'] 	= true;
 			$output  			= "";
 			$ajax				= false;
@@ -358,7 +359,7 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			
 			$output .= '<span class="avia_style_wrap avia_verify_input avia_upload_style_wrap">';
 			$output .= $this->text($element);
-			$output .= '<a href="#" data-av-verification-callback="'.$callback.'" class="avia_button avia_verify_button" id="avia_check'.$element['id'].'">'.$element['button-label'].'</a>';
+			$output .= '<a href="#" data-av-verification-callback="'.$callback.'" data-av-verification-callback-javascript="'.$js_callback.'" class="avia_button avia_verify_button" id="avia_check'.$element['id'].'">'.$element['button-label'].'</a>';
 			$output .= '</span>';
 			$output .= isset($element['help']) ? "<small>".$element['help']."</small>" : "";
 			
@@ -1113,10 +1114,11 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 				$required = '<input type="hidden" value="'.$element['required'][0].'::'.$element['required'][1].'" class="avia_required" />';  
 				$extraclass = ' avia_hidden avia_required_container';
 			} 
-			
-			if(isset($element['name'])) $data = "data-group-name='".$element['name']."'";
+			$data = "";
+			if(isset($element['name'])) 		$data .= " data-group-name='".$element['name']."'";
+			if(isset($element['global_class'])) $data .= " data-av_set_global_tab_active='".$element['global_class']."'";
 			if(isset($element['inactive'])) { $data .= " data-group-inactive='".htmlspecialchars($element['inactive'], ENT_QUOTES)."'"; $extraclass .= " inactive_visible";}
-
+			
 		
 			$output  = '<div class="avia_visual_set avia_'.$element['type'].$extraclass.' '.$element['class'].'" id="'.$element['id'].'" '.$data.'>';
 			$output .= $required;
@@ -1234,9 +1236,8 @@ if( ! class_exists( 'avia_htmlhelper' ) )
             $output .= '<span class="avia_style_wrap"><a href="'.$url.'" class="avia_button avia_theme_settings_export_button">'.__('Export Theme Settings File','avia_framework').'</a></span>';
             return $output;
         }
-		
-		
-		
+
+
 		/**
          * 
          * The heading method renders a fullwidth extra description or title
@@ -1738,6 +1739,15 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 		return $output;
 	}
 	
+	
+	function styling_wizard_hr($element)
+	{
+		$output  = "";
+		$output .= "<div class='av-wizard-hr'></div>";
+		
+		return $output;
+
+	}
 	
 	
 	function styling_wizard_checkbox($element)

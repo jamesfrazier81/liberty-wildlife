@@ -290,6 +290,67 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 					),
 					
 				array(
+									"type" 	=> "tab",
+									"name"	=> __("Screen Options",'avia_framework' ),
+									'nodescription' => true
+								),
+								
+								
+								array(
+								"name" 	=> __("Element Visibility",'avia_framework' ),
+								"desc" 	=> __("Set the visibility for this element, based on the device screensize.", 'avia_framework' ),
+								"type" 	=> "heading",
+								"description_class" => "av-builder-note av-neutral",
+								),
+							
+								array(	
+										"desc" 	=> __("Hide on large screens (wider than 990px - eg: Desktop)", 'avia_framework'),
+										"id" 	=> "av-desktop-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+								
+								array(	
+									
+										"desc" 	=> __("Hide on medium sized screens (between 768px and 989px - eg: Tablet Landscape)", 'avia_framework'),
+										"id" 	=> "av-medium-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on small screens (between 480px and 767px - eg: Tablet Portrait)", 'avia_framework'),
+										"id" 	=> "av-small-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+										
+								array(	
+									
+										"desc" 	=> __("Hide on very small screens (smaller than 479px - eg: Smartphone Portrait)", 'avia_framework'),
+										"id" 	=> "av-mini-hide",
+										"std" 	=> "",
+										"container_class" => 'av-multi-checkbox',
+										"type" 	=> "checkbox"),
+	
+								
+							array(
+									"type" 	=> "close_div",
+									'nodescription' => true
+								),	
+								
+								
+						
+						
+					array(
+						"type" 	=> "close_div",
+						'nodescription' => true
+					),		
+					
+					
+					
+				array(
 						"type" 	=> "close_div",
 						'nodescription' => true
 					),       
@@ -307,7 +368,8 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 			 */
 			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
 			{
-			
+				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
+				
 				avia_sc_tab_section::$tab = 0;
 				avia_sc_tab_section::$tab_titles = array();
 				avia_sc_tab_section::$tab_icons = array();
@@ -334,7 +396,7 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 				$output  	= "";
 				
 				
-				$params['class'] = "av-tab-section-container entry-content-wrapper main_color {$transition} {$content_height} {$tab_pos} ".$meta['el_class'];
+				$params['class'] = "av-tab-section-container entry-content-wrapper main_color {$transition} {$content_height} {$av_display_classes} {$tab_pos} ".$meta['el_class'];
 				$params['open_structure'] = false; 
 				$params['id'] = !empty($id) ? AviaHelper::save_string($id,'-') : "av-tab-section-".avia_sc_tab_section::$count;
 				$params['custom_markup'] = $meta['custom_markup'];
@@ -355,7 +417,14 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 				$custom_tab_color = "";
 				$arrow = "<span class='av-tab-arrow-container'><span></span></span>";
 				
-				if($atts['initial'] > avia_sc_tab_section::$tab) $atts['initial'] = avia_sc_tab_section::$tab;
+				if( $atts['initial'] <= 0 )
+				{
+					$atts['initial'] = 1;
+				}
+				else if( $atts['initial'] > avia_sc_tab_section::$tab ) 
+				{
+					$atts['initial'] = avia_sc_tab_section::$tab;
+				}
 				
 				for($i = 1; $i <= avia_sc_tab_section::$tab; $i ++)
 				{
@@ -379,8 +448,8 @@ if ( !class_exists( 'avia_sc_tab_section' ) )
 						$extraClass .= " av-tab-without-text ";
 					}
 					
-					
-					$tabs  .= "<a href='#{$tab_title}' data-av-tab-section-title='{$i}' class='av-section-tab-title {$active_tab} {$extraClass} '>{$icon}{$image}<span class='av-outer-tab-title'><span class='av-inner-tab-title'>{$tab_title}</span></span>{$arrow}</a>";
+					$tab_link = AviaHelper::save_string($tab_title,'-');
+					$tabs  .= "<a href='#{$tab_link}' data-av-tab-section-title='{$i}' class='av-section-tab-title {$active_tab} {$extraClass} '>{$icon}{$image}<span class='av-outer-tab-title'><span class='av-inner-tab-title'>{$tab_title}</span></span>{$arrow}</a>";
 				}
 				
 				

@@ -80,7 +80,7 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 			$url = $this->api_url . $url ;
 		
 			$response = wp_remote_get( $url, array(
-					'body' 		=> json_encode($data),
+					'body' 		=> $data,
 					'timeout' 	=> 20,
 					'headers' 	=> $this->get_headers(),
 					'sslverify'	=> false 
@@ -443,9 +443,11 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 
 if (!function_exists('av_mailchimp_check_ajax'))
 {
-	function av_mailchimp_check_ajax($value, $ajax = true)
+	function av_mailchimp_check_ajax($value, $ajax = true, $js_callback = false)
 	{
-		return av_mailchimp_api::backend_html($value, $ajax);
+		
+		return av_mailchimp_api::backend_html($value, $ajax);	
+		
 	}
 }
 
