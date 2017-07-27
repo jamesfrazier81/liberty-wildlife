@@ -95,32 +95,32 @@
         }
     }
 
-    #main {
-        .av-section-bottom-logo {
-            display: none;
-        }
-    }
+    // #main {
+    //     .av-section-bottom-logo {
+    //         display: none;
+    //     }
+    // }
 
-    #mobile-advanced {
-        background-color: $color-gray-dark;
+    // #mobile-advanced {
+    //     background-color: $color-gray-dark;
 
-        li {
-            a {
-                font-weight: $font-bold;
-                color: white;
+    //     li {
+    //         a {
+    //             font-weight: $font-bold;
+    //             color: white;
 
-                &:before {
-                    color: $color-orange;
-                }
-            }
+    //             &:before {
+    //                 color: $color-orange;
+    //             }
+    //         }
 
-            .sub-menu {
-                li a {
-                    background-color: #292929;
-                }
-            }
-        }
-    }
+    //         .sub-menu {
+    //             li a {
+    //                 background-color: #292929;
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 @media screen and (max-width: $media-navswitch) {
@@ -130,6 +130,63 @@
         }
 
         #main {
+            // Hamburger menu
+            #avia-menu {
+                .av-burger-menu-main a {
+                    height: 70px;
+                    line-height: 70px;
+
+                    .av-hamburger {
+                        .av-hamburger-box {
+                            span {
+                                background-color: white;
+
+                                &:before, &:after {
+                                    background-color: white;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Flyout
+            .av-burger-overlay {
+                display: none;
+
+                #av-burger-menu-ul {
+                    background-color: $color-gray-dark;
+
+                    li {
+                        a {
+                            font-weight: $font-bold;
+                            color: white;
+                            padding: 15px 30px;
+
+                            &:before {
+                                content: '\f0da';
+                                font-family: $font-awesome;
+                                color: $color-orange;
+                                margin-right: 6px;
+                            }
+                        }
+
+                        .sub-menu {
+                            li a {
+                                background-color: #292929;
+                                padding: 15px 50px;
+                                font-size: 0.85rem;
+                            }
+                        }
+
+                        // Hide home button
+                        &:nth-child(5) {
+                            display: none;
+                        }
+                    }
+                }
+            }
+
             .av-section-bottom-logo {
                 // position: fixed;
                 z-index: 999;

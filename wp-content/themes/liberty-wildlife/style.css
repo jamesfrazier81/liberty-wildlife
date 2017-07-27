@@ -143,6 +143,33 @@ html, body {
     #top #wrap_all #main .togglecontainer .single_toggle .toggle_wrap .toggle_content p {
       color: white; }
 
+#top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggler {
+  border-color: #da5834;
+  color: #da5834;
+  font-weight: 700; }
+  #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggler .toggle_icon {
+    border-color: #da5834; }
+    #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggler .toggle_icon span {
+      border-color: #da5834; }
+  #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggler.activeTitle {
+    background-color: #da5834;
+    color: white; }
+    #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggler.activeTitle .toggle_icon {
+      border-color: white; }
+      #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggler.activeTitle .toggle_icon span {
+        border-color: white; }
+
+#top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggle_wrap {
+  border-color: #da5834; }
+  #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggle_wrap .toggle_content {
+    border-color: #da5834;
+    background-color: transparent;
+    color: #333333;
+    padding-top: 20px;
+    margin: 0; }
+    #top #wrap_all #main .accordion-white .togglecontainer .single_toggle .toggle_wrap .toggle_content p {
+      color: #333333; }
+
 #top #wrap_all #main .avia-button-wrap .avia-button {
   background-color: #da5834;
   border-color: #bd5032;
@@ -241,22 +268,35 @@ html, body {
           background-position: center center;
           color: transparent; }
 
-#top #wrap_all #main .av-section-bottom-logo {
-  display: none; }
-
-#top #wrap_all #mobile-advanced {
-  background-color: #333333; }
-  #top #wrap_all #mobile-advanced li a {
-    font-weight: 700;
-    color: white; }
-    #top #wrap_all #mobile-advanced li a:before {
-      color: #da5834; }
-  #top #wrap_all #mobile-advanced li .sub-menu li a {
-    background-color: #292929; }
-
 @media screen and (max-width: 989px) {
   #top #wrap_all #header {
     position: relative; }
+  #top #wrap_all #main #avia-menu .av-burger-menu-main a {
+    height: 70px;
+    line-height: 70px; }
+    #top #wrap_all #main #avia-menu .av-burger-menu-main a .av-hamburger .av-hamburger-box span {
+      background-color: white; }
+      #top #wrap_all #main #avia-menu .av-burger-menu-main a .av-hamburger .av-hamburger-box span:before, #top #wrap_all #main #avia-menu .av-burger-menu-main a .av-hamburger .av-hamburger-box span:after {
+        background-color: white; }
+  #top #wrap_all #main .av-burger-overlay {
+    display: none; }
+    #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul {
+      background-color: #333333; }
+      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li a {
+        font-weight: 700;
+        color: white;
+        padding: 15px 30px; }
+        #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li a:before {
+          content: '\f0da';
+          font-family: FontAwesome;
+          color: #da5834;
+          margin-right: 6px; }
+      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li .sub-menu li a {
+        background-color: #292929;
+        padding: 15px 50px;
+        font-size: 0.85rem; }
+      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li:nth-child(5) {
+        display: none; }
   #top #wrap_all #main .av-section-bottom-logo {
     z-index: 999;
     width: 100%;
@@ -566,3 +606,11 @@ html, body {
       .responsive #top #wrap_all #main .wpcf7-form p:nth-child(8) {
         width: 100%;
         margin: 0; } }
+
+#top #wrap_all #main .white-popup {
+  position: relative;
+  background: #FFF;
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto; }

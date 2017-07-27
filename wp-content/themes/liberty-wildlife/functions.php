@@ -93,4 +93,5 @@ function avia_register_meta_boxes($boxes) {
 	return $boxes;
 }
 
-?>
+// CSS to all ALB elements
+add_theme_support('avia_template_builder_custom_css');
