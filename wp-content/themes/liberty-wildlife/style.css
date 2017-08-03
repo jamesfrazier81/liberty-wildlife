@@ -291,25 +291,23 @@ html, body {
       background-color: white; }
       #top #wrap_all #main #avia-menu .av-burger-menu-main a .av-hamburger .av-hamburger-box span:before, #top #wrap_all #main #avia-menu .av-burger-menu-main a .av-hamburger .av-hamburger-box span:after {
         background-color: white; }
-  #top #wrap_all #main .av-burger-overlay {
-    display: none; }
-    #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul {
-      background-color: #333333; }
-      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li a {
-        font-weight: 700;
-        color: white;
-        padding: 15px 30px; }
-        #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li a:before {
-          content: '\f0da';
-          font-family: FontAwesome;
-          color: #da5834;
-          margin-right: 6px; }
-      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li .sub-menu li a {
-        background-color: #292929;
-        padding: 15px 50px;
-        font-size: 0.85rem; }
-      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li:nth-child(5) {
-        display: none; }
+  #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul {
+    background-color: #333333; }
+    #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li a {
+      font-weight: 700;
+      color: white;
+      padding: 15px 30px; }
+      #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li a:before {
+        content: '\f0da';
+        font-family: FontAwesome;
+        color: #da5834;
+        margin-right: 6px; }
+    #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li .sub-menu li a {
+      background-color: #292929;
+      padding: 15px 50px;
+      font-size: 0.85rem; }
+    #top #wrap_all #main .av-burger-overlay #av-burger-menu-ul li:nth-child(5) {
+      display: none; }
   #top #wrap_all #main .av-section-bottom-logo {
     z-index: 999;
     width: 100%;
@@ -571,37 +569,114 @@ html, body {
 #top #wrap_all #main .avia_ajax_form .form_element label abbr.required {
   color: red; }
 
-.wpcf7-form {
+#wpcf7-f946-o1 .wpcf7-form {
   display: flex;
   flex-wrap: wrap; }
-  .wpcf7-form p {
-    width: 100%;
-    margin: 0; }
-    .wpcf7-form p:nth-child(6) {
-      width: 39%;
-      margin: 0 1% 0 0; }
-    .wpcf7-form p:nth-child(7) {
-      width: 39%;
-      margin: 0 1% 0 0; }
-    .wpcf7-form p:nth-child(8) {
-      width: 20%;
-      margin: 0; }
-    .wpcf7-form p label > sup {
+  #wpcf7-f946-o1 .wpcf7-form p {
+    width: 49%;
+    margin: 0 1% 0 0; }
+    #wpcf7-f946-o1 .wpcf7-form p label > sup {
       color: red; }
-    .wpcf7-form p .wpcf7-form-control-wrap .wpcf7-radio {
+    #wpcf7-f946-o1 .wpcf7-form p .wpcf7-radio {
       display: block;
       margin-bottom: 20px; }
-    .wpcf7-form p .wpcf7-form-control-wrap .wpcf7-checkbox .wpcf7-list-item {
+    #wpcf7-f946-o1 .wpcf7-form p .wpcf7-checkbox .wpcf7-list-item {
       width: 100%;
       margin: 0; }
-    .wpcf7-form p input[type="submit"] {
+    #wpcf7-f946-o1 .wpcf7-form p input[type="submit"] {
       margin-top: 20px;
       font-family: "Open Sans", sans-serif;
       font-size: 0.85rem;
       font-weight: bold;
       background-color: #da5834; }
-  .wpcf7-form .wpcf7-form-control-wrap {
-    width: 100%; }
+    #wpcf7-f946-o1 .wpcf7-form p:nth-child(16), #wpcf7-f946-o1 .wpcf7-form p:nth-child(17), #wpcf7-f946-o1 .wpcf7-form p:nth-child(22), #wpcf7-f946-o1 .wpcf7-form p:nth-child(23) {
+      width: 100%;
+      margin: 0; }
+
+#wpcf7-f946-o1 .wpcf7-form-control-wrap {
+  width: 100%;
+  margin: 20px 0 0 0; }
+
+#wpcf7-f1071-o1 .wpcf7-form {
+  display: flex;
+  flex-wrap: wrap; }
+  #wpcf7-f1071-o1 .wpcf7-form p {
+    width: 49%;
+    margin: 0 1% 0 0; }
+    #wpcf7-f1071-o1 .wpcf7-form p label > sup {
+      color: red; }
+    #wpcf7-f1071-o1 .wpcf7-form p .wpcf7-radio {
+      display: block;
+      margin-bottom: 20px; }
+    #wpcf7-f1071-o1 .wpcf7-form p .wpcf7-checkbox .wpcf7-list-item {
+      width: 100%;
+      margin: 0; }
+    #wpcf7-f1071-o1 .wpcf7-form p input[type="submit"] {
+      margin-top: 20px;
+      font-family: "Open Sans", sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      background-color: #da5834; }
+    #wpcf7-f1071-o1 .wpcf7-form p:nth-child(6), #wpcf7-f1071-o1 .wpcf7-form p:nth-child(7) {
+      width: 100%;
+      margin: 0; }
+
+#wpcf7-f1071-o1 .wpcf7-form-control-wrap {
+  width: 100%; }
+
+#wpcf7-f1314-o1 .wpcf7-form {
+  display: flex;
+  flex-wrap: wrap; }
+  #wpcf7-f1314-o1 .wpcf7-form p {
+    width: 49%;
+    margin: 0 1% 0 0; }
+    #wpcf7-f1314-o1 .wpcf7-form p label > sup {
+      color: red; }
+    #wpcf7-f1314-o1 .wpcf7-form p .wpcf7-radio {
+      display: block;
+      margin-bottom: 20px; }
+    #wpcf7-f1314-o1 .wpcf7-form p .wpcf7-checkbox .wpcf7-list-item {
+      width: 100%;
+      margin: 0; }
+    #wpcf7-f1314-o1 .wpcf7-form p input[type="submit"] {
+      margin-top: 20px;
+      font-family: "Open Sans", sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      background-color: #da5834; }
+    #wpcf7-f1314-o1 .wpcf7-form p:nth-child(18) {
+      width: 100%;
+      margin: 0; }
+
+#wpcf7-f1314-o1 .wpcf7-form-control-wrap {
+  width: 100%; }
+
+#wpcf7-f953-o1 .wpcf7-form, #wpcf7-f961-o2 .wpcf7-form {
+  display: flex;
+  flex-wrap: wrap; }
+  #wpcf7-f953-o1 .wpcf7-form p, #wpcf7-f961-o2 .wpcf7-form p {
+    width: 49%;
+    margin: 0 1% 0 0; }
+    #wpcf7-f953-o1 .wpcf7-form p label > sup, #wpcf7-f961-o2 .wpcf7-form p label > sup {
+      color: red; }
+    #wpcf7-f953-o1 .wpcf7-form p .wpcf7-radio, #wpcf7-f961-o2 .wpcf7-form p .wpcf7-radio {
+      display: block;
+      margin-bottom: 20px; }
+    #wpcf7-f953-o1 .wpcf7-form p .wpcf7-checkbox .wpcf7-list-item, #wpcf7-f961-o2 .wpcf7-form p .wpcf7-checkbox .wpcf7-list-item {
+      width: 100%;
+      margin: 0; }
+    #wpcf7-f953-o1 .wpcf7-form p input[type="submit"], #wpcf7-f961-o2 .wpcf7-form p input[type="submit"] {
+      margin-top: 20px;
+      font-family: "Open Sans", sans-serif;
+      font-size: 0.85rem;
+      font-weight: bold;
+      background-color: #da5834; }
+    #wpcf7-f953-o1 .wpcf7-form p:nth-child(4), #wpcf7-f953-o1 .wpcf7-form p:nth-child(5), #wpcf7-f961-o2 .wpcf7-form p:nth-child(4), #wpcf7-f961-o2 .wpcf7-form p:nth-child(5) {
+      width: 100%;
+      margin: 0; }
+
+#wpcf7-f953-o1 .wpcf7-form-control-wrap, #wpcf7-f961-o2 .wpcf7-form-control-wrap {
+  width: 100%; }
 
 @media screen and (max-width: 767px) {
   .responsive #top #wrap_all #main .wpcf7-form {
