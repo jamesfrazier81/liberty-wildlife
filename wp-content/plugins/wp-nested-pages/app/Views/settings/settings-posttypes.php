@@ -4,14 +4,14 @@ $thumbnail_sizes = get_intermediate_image_sizes();
 settings_fields( 'nestedpages-posttypes' ); 
 ?>
 
-<h3><?php _e('Enable Nested Pages for:', 'wp-nested-pages'); ?></h3>
+<h3><?php _e('Enable Post Types:', 'wp-nested-pages'); ?></h3>
 
-<div class="nestedpages-settings-posttypes">
+<div class="nestedpages-settings-table">
 	<?php foreach ($types as $type) : ?>
-	<div class="post-type">
+	<div class="row-container">
 		<div class="head">
 			<div class="checkbox">
-				<input type="checkbox" name="nestedpages_posttypes[<?php echo esc_attr($type->name); ?>]" value="<?php echo esc_attr($type->name); ?>" <?php if ( $type->np_enabled ) echo 'checked'; ?> data-nestedpages-pt-checkbox id="post-type-<?php echo esc_attr($type->name); ?>" />
+				<input type="checkbox" name="nestedpages_posttypes[<?php echo esc_attr($type->name); ?>]" value="<?php echo esc_attr($type->name); ?>" <?php if ( $type->np_enabled ) echo 'checked'; ?> data-nestedpages-settings-row-checkbox id="post-type-<?php echo esc_attr($type->name); ?>" />
 			</div>
 			<label for="post-type-<?php echo $type->name; ?>">
 				<?php 
@@ -22,7 +22,7 @@ settings_fields( 'nestedpages-posttypes' );
 			<a href="#" class="button" data-toggle-nestedpages-pt-settings><?php _e('Settings', 'wp-nested-pages'); ?></a>
 		</div><!-- .head -->
 		<div class="body">
-			<ul class="post-type-settings">
+			<ul class="settings-details">
 				<li>
 					<div class="row">
 						<div class="description">
@@ -235,7 +235,46 @@ settings_fields( 'nestedpages-posttypes' );
 						</div><!-- .field -->
 					</div><!-- .row -->
 				</li>
-			<?php  endif; ?>
+			<?php endif; ?>
+			<?php 
+			if ( $type->name !== 'page' ) : 
+			$h_taxonomies = $this->post_type_repo->getTaxonomies($type->name, true); 
+			$f_taxonomies = $this->post_type_repo->getTaxonomies($type->name, false);
+			$taxonomies = array_merge($h_taxonomies, $f_taxonomies);
+			?>
+			<li>
+				<div class="row">
+					<div class="description">
+						<p><strong><?php _e('Sort Options', 'wp-nested-pages'); ?></strong><br />
+						<?php _e('Add and remove sort options.', 'wp-nested-pages'); ?></p>
+					</div>
+					<div class="field">
+						<div class="nestedpages-sort-options-selection">
+							<label>
+								<input type="checkbox" name="nestedpages_posttypes[<?php echo esc_attr($type->name); ?>][sort_options][author]" value="true" <?php if ( $this->post_type_repo->sortOptionEnabled($type->name, 'author') ) echo 'checked'; ?> />
+								<?php _e('Author') ?>
+							</label>
+							<label>
+								<input type="checkbox" name="nestedpages_posttypes[<?php echo esc_attr($type->name); ?>][sort_options][orderby]" value="true" <?php if ( $this->post_type_repo->sortOptionEnabled($type->name, 'orderby') ) echo 'checked'; ?> />
+								<?php _e('Order By') ?>
+							</label>
+							<label>
+								<input type="checkbox" name="nestedpages_posttypes[<?php echo esc_attr($type->name); ?>][sort_options][order]" value="true" <?php if ( $this->post_type_repo->sortOptionEnabled($type->name, 'order') ) echo 'checked'; ?> />
+								<?php _e('Order') ?>
+							</label>
+
+							<?php if ( !empty($taxonomies) ) : foreach ( $taxonomies as $tax ) : ?>
+							<label>
+								<input type="checkbox" name="nestedpages_posttypes[<?php echo esc_attr($type->name); ?>][sort_options][taxonomies][<?php echo $tax->name; ?>]" value="true" <?php if ( $this->post_type_repo->sortOptionEnabled($type->name, $tax->name, true) ) echo 'checked'; ?> />
+								<?php echo $tax->label; ?>
+							</label>
+							<?php endforeach; endif; ?>
+							
+						<!-- .nestedpages-sort-options-selection -->
+					</div><!-- .field -->
+				</div><!-- .row -->
+			</li>
+			<?php endif; ?>
 			</ul>
 		</div><!-- .body -->
 	</div><!-- .post-type -->

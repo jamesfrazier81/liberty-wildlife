@@ -63,13 +63,13 @@ class CFdb7_Form_Details
                                     $key_val = str_replace('your-', '', $key); 
                                     $key_val = ucfirst( $key_val );
                                     $arr_str_data =  implode(', ',$data);
-                                    echo '<p><b>'.$key_val.'</b>: '. $arr_str_data .'</p>';
+                                    echo '<p><b>'.$key_val.'</b>: '. nl2br($arr_str_data) .'</p>';
 
                                 }else{
 
                                     $key_val = str_replace('your-', '', $key); 
                                     $key_val = ucfirst( $key_val );
-                                    echo '<p><b>'.$key_val.'</b>: '.$data.'</p>';
+                                    echo '<p><b>'.$key_val.'</b>: '.nl2br($data).'</p>';
                                 }
                             }
 

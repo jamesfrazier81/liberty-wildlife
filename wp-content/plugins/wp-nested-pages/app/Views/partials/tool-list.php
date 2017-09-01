@@ -1,4 +1,12 @@
-<?php $trashedCount = $this->post_repo->trashedCount($this->post_type->name); ?>
+<?php 
+$trashedCount = $this->post_repo->trashedCount($this->post_type->name); 
+$searchLabel = esc_attr($this->post_type->labels->search_items);
+
+// WPML
+$wpml = $this->integrations->plugins->wpml->installed;
+if ( $wpml ) $current_lang = $this->integrations->plugins->wpml->getCurrentLanguage('name');
+if ( $wpml && $current_lang ) $searchLabel .= ' (' . $this->integrations->plugins->wpml->getCurrentLanguage('name') . ')';
+?>
 <div class="nestedpages-tools">
 
 	<ul class="subsubsub">
@@ -15,7 +23,7 @@
 		</li>
 
 		<li> |
-			<?php if ( !$this->isSearch() ) : ?>
+			<?php if ( !$this->listing_repo->isSearch() ) : ?>
 			<a href="#hide" class="np-toggle-hidden"><?php _e('Show Hidden', 'wp-nested-pages'); ?> </a>
 			<?php else : ?>
 			<a href="#show" class="np-toggle-hidden"><?php _e('Hide Hidden', 'wp-nested-pages'); ?> </a>
@@ -41,11 +49,19 @@
 		<?php endif; ?>
 	</ul>
 
-	<?php if ( !$this->post_type->hierarchical ) : ?>
+	<?php
+	if ( $this->integrations->plugins->wpml->installed ) 
+		if ( $this->post_type->name !== 'post' ) echo $this->integrations->plugins->wpml->languageToolLinks(esc_attr($this->post_type->name));
+	?>
+
+	<?php 
+	if ( $this->post_type->name !== 'page' && $this->post_type_repo->hasSortOptions($this->post_type->name) ) : ?>
 	<div class="np-tools-primary">
 		<form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="np-tools-sort">
 			<input type="hidden" name="action" value="npListingSort">
 			<input type="hidden" name="page" value="<?php echo $this->pageURL(); ?>">
+			<input type="hidden" name="post_type" value="<?php echo esc_attr($this->post_type->name); ?>">
+			<?php if ( $this->post_type_repo->sortOptionEnabled($this->post_type->name, 'author') ) : ?>
 			<div class="select first">
 				<select id="np_sortauthor" name="np_author" class="nestedpages-sort">
 					<?php
@@ -60,6 +76,8 @@
 					?>
 				</select>
 			</div>
+			<?php endif; ?>
+			<?php if ( $this->post_type_repo->sortOptionEnabled($this->post_type->name, 'orderby') ) : ?>
 			<div class="select">
 				<select id="np_orderby" name="np_orderby" class="nestedpages-sort">
 					<?php
@@ -78,6 +96,8 @@
 					?>
 				</select>
 			</div>
+			<?php endif; ?>
+			<?php if ( $this->post_type_repo->sortOptionEnabled($this->post_type->name, 'order') ) : ?>
 			<div class="select">
 				<select id="np_order" name="np_order" class="nestedpages-sort">
 					<?php
@@ -95,6 +115,27 @@
 					?>
 				</select>
 			</div>
+			<?php endif; ?>
+			<?php 
+				// Taxonomies
+				$taxonomies = array_merge($this->h_taxonomies, $this->f_taxonomies);
+				foreach ( $taxonomies as $tax ) :
+					if ( $this->post_type_repo->sortOptionEnabled($this->post_type->name, $tax->name, true) ) :
+						$terms = get_terms($tax->name);
+						$out = '<div class="select">';
+						$out .= '<select id="np_taxonomy_' . $tax->name . '" name="' . $tax->name . '" class="nestedpages-sort">';
+						$out .= '<option value="all">' . $tax->labels->all_items . '</option>';
+						foreach ( $terms as $term ) :
+							$out .= '<option value="' . $term->term_id . '"';
+							if ( isset($_GET[$tax->name]) && $_GET[$tax->name] == $term->term_id ) $out .= ' selected';
+							$out .= '>' . $term->name . '</option>';
+						endforeach;
+						$out .= '</select>';
+						$out .= '</div>';
+						echo $out;
+					endif;
+				endforeach;
+			?>
 			<div class="select">
 				<input type="submit" id="nestedpages-sort" class="button" value="Apply">
 			</div>
@@ -136,8 +177,8 @@
 			<input type="hidden" name="posttype" value="<?php echo esc_attr($this->post_type->name); ?>">
 			<input type="hidden" name="page" value="<?php echo esc_url($this->pageURL()); ?>">
 			<?php wp_nonce_field('nestedpages-nonce', 'nonce'); ?>
-			<input type="search" name="search_term" id="nestedpages-search" placeholder="<?php echo esc_attr($this->post_type->labels->search_items); ?>" <?php if ( $this->isSearch() ) echo ' value="' . esc_url(sanitize_text_field($_GET['search'])) . '"'; ?>>
-			<input type="submit" name="" class="button" value="<?php echo esc_attr($this->post_type->labels->search_items);?>">
+			<input type="search" name="search_term" id="nestedpages-search" placeholder="<?php echo esc_attr($this->post_type->labels->search_items); ?>" <?php if ( $this->listing_repo->isSearch() ) echo ' value="' . esc_attr(sanitize_text_field($_GET['search'])) . '"'; ?>>
+			<input type="submit" name="" class="button" value="<?php echo $searchLabel;?>">
 		</form>
 	</div><!-- .np-tools-search -->
 

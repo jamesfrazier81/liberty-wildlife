@@ -4,6 +4,8 @@
 	*/
 	$post_type_object = get_post_type_object( 'page' );
 	$can_publish = current_user_can( $post_type_object->cap->publish_posts );
+	$wpml_pages = ( $this->integrations->plugins->wpml->installed && $this->integrations->plugins->wpml->isDefaultLanguage()) ? true : false;
+	if ( !$this->integrations->plugins->wpml->installed ) $wpml_pages = true;
 ?>
 
 <form method="get" action="">
@@ -136,14 +138,23 @@
 		<?php if ( current_user_can('edit_theme_options') && !array_key_exists('hide_in_np', $this->disabled_standard_fields) ) : ?>
 		<div class="comments">
 			<label>
-				<input type="checkbox" name="nested_pages_status" class="np_status" value="hide" />
+				<input type="checkbox" name="nested_pages_status" class="nested_pages_status" value="hide" />
 				<span class="checkbox-title"><?php _e( 'Hide in Nested Pages', 'wp-nested-pages' ); ?></span>
 			</label>
 		</div>
 		<?php endif; // Edit theme options ?>
+
+		<?php if ( !$this->post_type->hierarchical ) : ?>
+		<div class="comments">
+			<label>
+				<input type="checkbox" name="sticky" class="np-sticky" value="sticky" />
+				<span class="checkbox-title"><?php _e( 'Make Sticky', 'wp-nested-pages' ); ?></span>
+			</label>
+		</div>
+		<?php endif; ?>
 		
 		<div class="form-control np-toggle-options">
-			<?php if ( $this->user->canSortPages() && $this->post_type->name == 'page' && !$this->isSearch() && !array_key_exists('menu_options', $this->disabled_standard_fields) ) : ?>
+			<?php if ( $this->user->canSortPages() && $this->post_type->name == 'page' && !$this->listing_repo->isSearch() && !array_key_exists('menu_options', $this->disabled_standard_fields) && $wpml_pages ) : ?>
 			<a href="#" class="np-btn np-btn-half np-toggle-menuoptions"><?php _e('Menu Options', 'wp-nested-pages'); ?></a>
 			<?php endif; ?>
 
@@ -190,7 +201,7 @@
 	<?php endif; // if taxonomies ?>
 
 
-	<?php if ( $this->user->canSortPages() && !$this->isSearch() ) : ?>
+	<?php if ( $this->user->canSortPages() && !$this->listing_repo->isSearch() ) : ?>
 	<div class="np-menuoptions">
 		<div class="menuoptions-left">
 			<div class="form-control">

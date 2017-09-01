@@ -1,18 +1,17 @@
 <?php 
-
 namespace NestedPages\Form\Listeners;
 
 use NestedPages\Entities\NavMenu\NavMenuSyncListing;
 use NestedPages\Entities\Post\PostRepository;
 use NestedPages\Entities\Post\PostUpdateRepository;
 use NestedPages\Entities\User\UserRepository;
+use NestedPages\Entities\PluginIntegration\IntegrationFactory;
 
 /**
 * Base Form Handler Class
 */
 abstract class BaseHandler 
 {
-
 	/**
 	* Nonce
 	* @var string
@@ -48,12 +47,19 @@ abstract class BaseHandler
 	*/
 	protected $response;
 
+	/**
+	* Plugin Integrations
+	* @var object;
+	*/
+	protected $integrations;
+
 
 	public function __construct()
 	{
 		$this->post_repo = new PostRepository;
 		$this->post_update_repo = new PostUpdateRepository;
 		$this->user = new UserRepository;
+		$this->integrations = new IntegrationFactory;
 		$this->setData();
 		$this->validateNonce();
 	}
@@ -136,5 +142,4 @@ abstract class BaseHandler
 	{
 		return wp_send_json($this->response);
 	}
-
 }

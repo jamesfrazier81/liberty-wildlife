@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=H5F3Z6S3
 Tags: cf7, contact form 7, contact form 7 db, contact form db, contact form seven, contact form storage, export contact form, save contact form, wpcf7 
 Requires at least: 3.5
 Tested up to: 4.8 
-Stable tag: 1.1.2
+Stable tag: 1.1.4
 License: GPLv2 
 
 Save and manage Contact Form 7 messages. Never lose important data. It is lightweight contact form 7 db plugin

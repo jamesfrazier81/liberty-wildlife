@@ -1,15 +1,14 @@
 <?php 
-
 namespace NestedPages\Entities\NavMenu;
 
 use NestedPages\Entities\NavMenu\NavMenuRepository;
+use NestedPages\Entities\PluginIntegration\IntegrationFactory;
 
 /**
 * Base Nav Menu Sync class
 */
 abstract class NavMenuSync 
 {
-
 	/**
 	* Nav Menu Repository
 	* @var object NavMenuRepository
@@ -22,9 +21,16 @@ abstract class NavMenuSync
 	*/
 	protected $id;
 
+	/**
+	* Plugin Integrations
+	* @var object
+	*/
+	protected $integrations;
+
 	public function __construct()
 	{
 		$this->nav_menu_repo = new NavMenuRepository;
+		$this->integrations = new IntegrationFactory;
 		$this->setMenuID();
 	}
 
@@ -45,5 +51,4 @@ abstract class NavMenuSync
 	{
 		wp_delete_post($id, true);
 	}
-
 }

@@ -3,8 +3,8 @@ Contributors: kylephillips
 Donate link: http://nestedpages.com/
 Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
 Requires at least: 3.8
-Tested up to: 4.7
-Stable tag: 1.7.0
+Tested up to: 4.8
+Stable tag: 1.7.1
 
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -98,6 +98,17 @@ As of version 1.6, yes. Visit Settings > Nested Pages > Post Types to configure 
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 2.0.1 =
+* WPML compatibility added (Limited support, see the "More Information" section for important notes on support).
+* Important upgrade note: Custom links within the Nested Pages interface are disabled if WPML is installed and enabled. This is a potential breaking change, so please remove all custom links before updating. Links may be added back to menus by using the default WordPress Appearance > Menus editor.
+* Sort/Order options on non-page post type listings may now be added/removed. All options are hidden by default. To enable these, visit Settings > Nested Pages > Post Types. Under the desired post type, options may be enabled under the "Sort Options" row.
+* Bug fix where pages hidden from the Nested Pages view where displaying.
+* "Sticky" checkbox added to quick edit form under non-hierarchical post types.
+* Adds query optimizations to the listing view, reducing the overall number of queries made.
+
+= 2.0.0 =
+* WPML beta release
 
 = 1.7.1 =
 * Bug fix where saving post type options was enabling all post types
@@ -421,6 +432,16 @@ After installing Nested Pages, a new menu will be available with the name `Neste
 **Editing the generated menu:** Any manual changes made to the menu outside of the Nested Pages interface will be overwritten after the synchronization runs.
 
 **Hiding Pages in the Menu:** To hide a page from the Nested Pages menu, click “Quick Edit” on it’s row, select “Hide in Nav Menu”, and click “update”. If menu sync is disabled, enable it now to sync the setting. Hidden pages are marked “(Hidden)”. If a page with child pages is hidden from the menu, all of it’s child pages will also be hidden. 
+
+
+= WPML Compatibility =
+
+As of version 2.0.1, some features of Nested Pages are compatible with WPML. There are some important exceptions to take note of before upgrading to version 2 if WPML is installed, or if installing WPML on an existing Nested Pages enabled site.
+
+**WPML and menu support:** Certain features within Nested Pages are disabled if WPML is installed and enabled. This is due to the complexity of menu synchronization across languages. While automatic menu sync remains available for the site's primary language, additional languages must be synchronized using WPML's menu synchronization methods. If menu sync is enabled within Nested Pages, a "Sync WPML Menus" link is available on non-primary language screens for convenience.
+
+**Custom Links:** Custom links within Nested Pages are disabled on installs with WPML. Custom links may be added through the traditional Appearance > Menus interface. This ensures that WPML menus synchronize successfully across languages.
+
 
 = Filters =
 

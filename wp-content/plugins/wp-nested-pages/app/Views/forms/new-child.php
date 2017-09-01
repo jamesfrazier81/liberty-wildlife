@@ -54,7 +54,8 @@
 				'id' => 'post_author',
 				'class'=> 'authors',
 				'multi' => 1,
-				'echo' => 0
+				'echo' => 0,
+				'selected' => get_current_user_id()
 			);
 
 			if ( $authors = wp_dropdown_users( $users_opt ) ) :
@@ -76,7 +77,7 @@
 		</div>
 		<?php endif; ?>
 
-		<?php if ( $this->post_type->name == 'page' && $this->user->canSortPages() && !$this->isSearch() ) : ?>
+		<?php if ( $this->post_type->name == 'page' && $this->user->canSortPages() && !$this->listing_repo->isSearch() ) : ?>
 		<div class="form-control full checkbox">
 			<label>
 				<input type="checkbox" name="nav_status" class="np_nav_status" value="hide" />

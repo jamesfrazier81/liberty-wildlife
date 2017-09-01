@@ -1,5 +1,4 @@
 <?php 
-
 namespace NestedPages\Activation;
 
 use NestedPages\Entities\PostType\PostTypeRepository;
@@ -12,7 +11,6 @@ use NestedPages\Helpers;
 */
 class Dependencies 
 {
-
 	/**
 	* Plugin Directory
 	*/
@@ -109,7 +107,7 @@ class Dependencies
 			if ( $np_env == 'dev' ){
 				wp_enqueue_script(
 					'nestedpages', 
-					$this->plugin_dir . '/assets/js/lib/nestedpages.js', 
+					$this->plugin_dir . '/assets/js/nestedpages.js', 
 					array('jquery'), 
 					$this->plugin_version
 				);
@@ -151,7 +149,10 @@ class Dependencies
 				'manual_order_sync' => $this->settings->autoPageOrderDisabled(),
 				'currently_assigned_to' => __('Currently assigned to:', 'wp-nested-pages'),
 				'remove' => __('Remove', 'wp-nested-pages'),
-				'settings_page' => $settings_page
+				'settings_page' => $settings_page,
+				'wpml' => ( $this->integrations->plugins->wpml->installed ) ? true : false,
+				'add_translation' => __('Add Translation', 'wp-nested-pages'),
+				'edit' => __('Edit', 'wp-nested-pages')
 			);
 			$syncmenu = ( get_option('nestedpages_menusync') == 'sync' ) ? true : false;
 			$localized_data['syncmenu'] = $syncmenu;
@@ -183,5 +184,4 @@ class Dependencies
 			);
 		endif;
 	}
-
 }

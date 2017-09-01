@@ -1,6 +1,7 @@
 <?php
-
 namespace NestedPages\Entities\User;
+
+use NestedPages\Entities\PluginIntegration\IntegrationFactory;
 
 /**
 * User Repository
@@ -8,6 +9,16 @@ namespace NestedPages\Entities\User;
 */
 class UserRepository
 {
+	/**
+	* Plugin Integrations
+	* @var object
+	*/
+	private $integrations;
+
+	public function __construct()
+	{
+		$this->integrations = new IntegrationFactory;
+	}
 
 	/**
 	* Return Current User's Roles
@@ -31,13 +42,13 @@ class UserRepository
 	* @return array
 	* @since 1.1.7
 	*/
-	public function allRoles()
+	public function allRoles($exclude = array('Administrator', 'Contributor', 'Subscriber', 'Author') )
 	{
 		global $wp_roles;
 		$all_roles = $wp_roles->roles;
 		$editable_roles = apply_filters('editable_roles', $all_roles);
 		$roles = array();
-		$exclude = array('Administrator', 'Contributor', 'Subscriber', 'Author');
+		if ( !is_array($exclude) ) $exclude = array();
 		foreach($editable_roles as $key=>$editable_role){
 			if ( !in_array($editable_role['name'], $exclude) ){
 				$role = array(
@@ -48,6 +59,17 @@ class UserRepository
 			}
 		}
 		return $roles;
+	}
+
+	/**
+	* Get a single role
+	* @since 3.0
+	*/
+	public function getSingleRole($role = 'administrator')
+	{
+		global $wp_roles;
+		if ( isset($wp_roles->roles[$role]) ) return $wp_roles->roles[$role];
+		return false;
 	}
 
 	/**
@@ -97,6 +119,7 @@ class UserRepository
 	public function updateVisiblePages($post_type, $ids)
 	{
 		$visible = $this->getVisiblePages();
+		if ( $this->integrations->plugins->wpml->installed ) $ids = $this->integrations->plugins->wpml->getAllTranslatedIds($ids);
 		$visible[$post_type] = $ids;
 		update_user_meta(
 			get_current_user_id(),
@@ -104,5 +127,4 @@ class UserRepository
 			serialize($visible)
 		);
 	}
-
 }

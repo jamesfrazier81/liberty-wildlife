@@ -1,5 +1,4 @@
-<?php 
-
+<?php
 namespace NestedPages\Entities\NavMenu;
 
 use NestedPages\Entities\NavMenu\NavMenuSync;
@@ -13,7 +12,6 @@ use NestedPages\Entities\NavMenu\NavMenuRepository;
 */
 class NavMenuSyncMenu extends NavMenuSync 
 {
-
 	/**
 	* Menu Items
 	* @var array of objects
@@ -37,7 +35,6 @@ class NavMenuSyncMenu extends NavMenuSync
 	* @var object
 	*/
 	private $post_repo;
-
 
 	public function __construct()
 	{
@@ -124,6 +121,7 @@ class NavMenuSyncMenu extends NavMenuSync
 	*/
 	private function syncNewLink($item, $parent_id)
 	{
+		if ( $this->integrations->plugins->wpml->installed ) return;
 		$post_data = array(
 			'menuTitle' => $item->title,
 			'np_link_title' => $item->title,
@@ -160,5 +158,4 @@ class NavMenuSyncMenu extends NavMenuSync
 			}
 		}
 	}
-
 }

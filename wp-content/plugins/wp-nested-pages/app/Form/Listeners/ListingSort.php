@@ -1,21 +1,34 @@
 <?php 
-
 namespace NestedPages\Form\Listeners;
+
+use NestedPages\Entities\PostType\PostTypeRepository;
 
 /**
 * Redirect to Listing with Specified Sorting Options Applied
 */
 class ListingSort 
 {
-
 	/**
 	* URL to redirect to
 	* @var string
 	*/
 	private $url;
 
+	/**
+	* The Post Type
+	* @var string
+	*/
+	private $post_type;
+
+	/**
+	* Post Type Repository
+	* @var object
+	*/
+	private $post_type_repo;
+
 	public function __construct()
 	{
+		$this->post_type_repo = new PostTypeRepository;
 		$this->setURL();
 		$this->redirect();
 	}
@@ -26,9 +39,11 @@ class ListingSort
 	private function setURL()
 	{
 		$this->url = sanitize_text_field($_POST['page']);
+		$this->post_type = sanitize_text_field($_POST['post_type']);
 		$this->setOrderBy();
 		$this->setOrder();
 		$this->setAuthor();
+		$this->setTaxonomies();
 	}
 
 	/**
@@ -37,8 +52,7 @@ class ListingSort
 	private function setOrderBy()
 	{
 		$allowed = array('menu_order', 'date', 'title'); // prevent tomfoolery
-		if ( ($_POST['np_orderby'] !== "") && (!in_array($_POST['np_orderby'], $allowed)) ) $this->url .= '&orderby=menu_order';
-		$this->url .= '&orderby=' . sanitize_text_field($_POST['np_orderby']);
+		if ( isset($_POST['np_orderby']) && $_POST['np_orderby'] !== "" && in_array($_POST['np_orderby'], $allowed) ) $this->url .= '&orderby=' . sanitize_text_field($_POST['np_orderby']);
 	}
 
 	/**
@@ -47,8 +61,7 @@ class ListingSort
 	private function setOrder()
 	{
 		$allowed = array('ASC', 'DESC'); // prevent tomfoolery
-		if ( !in_array($_POST['np_order'], $allowed) ) $this->url .= '&order=DESC';
-		$this->url .= '&order=' . sanitize_text_field($_POST['np_order']);
+		if ( isset($_POST['np_order']) && in_array($_POST['np_order'], $allowed) ) $this->url .= '&order=' . sanitize_text_field($_POST['np_order']);
 	}
 
 	/**
@@ -56,9 +69,22 @@ class ListingSort
 	*/
 	private function setAuthor()
 	{
-		if ( (isset($_POST['np_author'])) && ($_POST['np_author'] !== "") ){
-			$this->url .= '&author=' . sanitize_text_field($_POST['np_author']);
-		}
+		if ( (isset($_POST['np_author'])) && ($_POST['np_author'] !== "") )	$this->url .= '&author=' . sanitize_text_field($_POST['np_author']);
+	}
+
+	/**
+	* Set Taxonomy Parameters
+	*/
+	private function setTaxonomies()
+	{
+		$h_taxonomies = $this->post_type_repo->getTaxonomies($this->post_type, true);
+		$f_taxonomies = $this->post_type_repo->getTaxonomies($this->post_type, false);
+		$taxonomies = array_merge($h_taxonomies, $f_taxonomies);
+		foreach ( $taxonomies as $tax ) :
+			if ( $this->post_type_repo->sortOptionEnabled($this->post_type, $tax->name, true) ) :
+				if ( isset($_POST[$tax->name]) && $_POST[$tax->name] !== 'all' ) $this->url .= '&' . $tax->name . '=' . sanitize_text_field($_POST[$tax->name]);
+			endif;
+		endforeach;
 	}
 
 	/**
@@ -68,5 +94,4 @@ class ListingSort
 	{
 		header('Location:' . $this->url);
 	}
-
 }

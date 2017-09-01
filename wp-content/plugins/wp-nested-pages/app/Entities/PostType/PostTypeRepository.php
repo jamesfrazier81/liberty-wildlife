@@ -1,10 +1,8 @@
 <?php 
-
 namespace NestedPages\Entities\PostType;
 
 class PostTypeRepository 
 {
-
 	/**
 	* Enabled Post Types
 	* @var array – the posttype setting
@@ -80,6 +78,7 @@ class PostTypeRepository
 			$post_types[$type->name]->page_assignment = $this->configuredFields($type->name, 'post_type_page_assignment');
 			$post_types[$type->name]->page_assignment_id = $this->configuredFields($type->name, 'post_type_page_assignment_page_id');
 			$post_types[$type->name]->page_assignment_title = $this->configuredFields($type->name, 'post_type_page_assignment_page_title');
+			$post_types[$type->name]->sort_options = $this->configuredFields($type->name, 'sort_options');
 		}
 		return $post_types;
 	}
@@ -153,6 +152,37 @@ class PostTypeRepository
 			}
 		}
 		return $enabled;
+	}
+
+	/**
+	* Is a sort option enabled?
+	* @param $post_type - post type name
+	* @param $sort_option - option to search for
+	* @param $taxonomy - boolean, is the sort option a taxonomy name
+	* @return boolean
+	*/
+	public function sortOptionEnabled($post_type, $sort_option, $taxonomy = false)
+	{
+		$enabled = false;
+		$options = $this->configuredFields($post_type, 'sort_options');
+		if ( !is_array($options) ) return $enabled;
+		if ( empty($options) ) return $enabled;
+		foreach ( $options as $option => $value ){
+			if ( $option == $sort_option && $value == 'true' ) $enabled = true;
+		}
+		if ( $taxonomy && !isset($options['taxonomies']) ) $enabled = false;
+		if ( $taxonomy && isset($options['taxonomies'][$sort_option]) && $options['taxonomies'][$sort_option] == 'true' ) $enabled = true;
+		return $enabled;
+	}
+
+	/**
+	* Does the post type have any sort options
+	* @return boolean
+	*/
+	public function hasSortOptions($post_type)
+	{
+		$options = $this->configuredFields($post_type, 'sort_options');
+		return ( empty($options) ) ? false : true;
 	}
 
 	/**
@@ -383,5 +413,4 @@ class PostTypeRepository
 		}
 		return $array;
 	}
-
 }

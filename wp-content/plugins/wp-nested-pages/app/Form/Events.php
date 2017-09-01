@@ -1,5 +1,4 @@
 <?php 
-
 namespace NestedPages\Form;
 
 /**
@@ -7,7 +6,6 @@ namespace NestedPages\Form;
 */
 class Events 
 {
-
 	/**
 	* Actions
 	* @var array
@@ -48,7 +46,8 @@ class Events
 			'admin_post_npBulkActions',
 			'wp_ajax_npmanualMenuSync',
 			'admin_post_npBulkEdit',
-			'wp_ajax_nppostSearch'
+			'wp_ajax_nppostSearch',
+			'wp_ajax_npWpmlTranslations'
 		);
 		$this->setHandlers();
 	}
@@ -79,5 +78,4 @@ class Events
 			});
 		}
 	}
-
 }
