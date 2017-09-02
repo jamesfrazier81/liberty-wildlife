@@ -173,6 +173,7 @@ html, body {
 #top #wrap_all #main .avia-button-wrap .avia-button {
   background-color: #da5834;
   border-color: #bd5032;
+  -moz-border-radius: 0;
   border-radius: 0;
   font-weight: bold; }
 
@@ -210,6 +211,8 @@ html, body {
 
 #top #wrap_all #header_main_alternate {
   background-color: #da5834;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
   #top #wrap_all #header_main_alternate .container {
     width: 100%;
@@ -218,11 +221,23 @@ html, body {
     #top #wrap_all #header_main_alternate .container .main_menu .avia-menu {
       height: 70px; }
   #top #wrap_all #header_main_alternate #avia-menu {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
     align-items: center;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
     justify-content: center;
     height: 70px; }
     #top #wrap_all #header_main_alternate #avia-menu li {
+      -webkit-box-flex: 1;
+      -moz-box-flex: 1;
+      -ms-flex: 1;
       flex: 1;
       text-align: center;
       padding: 0; }
@@ -264,6 +279,7 @@ html, body {
           text-indent: -9999px;
           background-image: url(/wp-content/uploads/2017/02/icon-liberty-wildlife-white.png);
           background-repeat: no-repeat;
+          -moz-background-size: 50px;
           background-size: 50px;
           background-position: center center;
           color: transparent; }
@@ -314,6 +330,8 @@ html, body {
     border: none;
     display: block;
     background-color: #da5834;
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); }
     #top #wrap_all #main .av-section-bottom-logo .container {
       max-width: 95%;
@@ -458,6 +476,9 @@ html, body {
           left: 0;
           padding: 0; }
           .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-bar #tribe-bar-form .tribe-bar-filters .tribe-bar-filters-inner {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
             display: flex; }
             .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-bar #tribe-bar-form .tribe-bar-filters .tribe-bar-filters-inner > div {
               padding: 20px 5px;
@@ -485,6 +506,11 @@ html, body {
     .post-type-archive-tribe_events #wrap_all #main .container_wrap:nth-child(1) .container .template-page #tribe-events-bar #tribe-bar-collapse-toggle.tribe-bar-filters-open .tribe-bar-toggle-arrow:after {
       top: 10px; }
   .post-type-archive-tribe_events #wrap_all #main .container_wrap:nth-child(1) .container .template-page #tribe-events-bar .tribe-bar-filters .tribe-bar-filters-inner {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column; }
     .post-type-archive-tribe_events #wrap_all #main .container_wrap:nth-child(1) .container .template-page #tribe-events-bar .tribe-bar-filters .tribe-bar-filters-inner .tribe-bar-date-filter, .post-type-archive-tribe_events #wrap_all #main .container_wrap:nth-child(1) .container .template-page #tribe-events-bar .tribe-bar-filters .tribe-bar-filters-inner .tribe-bar-search-filter {
       margin: 20px 0 0 0; }
@@ -554,8 +580,14 @@ html, body {
     width: 100%;
     max-width: 100%;
     padding: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex; }
     #top #wrap_all #main #footer .container .flex_column {
+      -webkit-box-flex: 1;
+      -moz-box-flex: 1;
+      -ms-flex: 1;
       flex: 1;
       margin: 0;
       padding: 30px; }
@@ -569,6 +601,7 @@ html, body {
         #top #wrap_all #main #footer .container .flex_column .widget .textwidget p [class^="btn-"] {
           display: inline-block;
           padding: 6px 12px;
+          -moz-border-radius: 3px;
           border-radius: 3px;
           margin-top: 20px; }
           #top #wrap_all #main #footer .container .flex_column .widget .textwidget p [class^="btn-"]:hover {
@@ -620,6 +653,11 @@ html, body {
 
 @media screen and (max-width: 767px) {
   .responsive #top #wrap_all #main #footer .container {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -moz-box-orient: vertical;
+    -moz-box-direction: normal;
+    -ms-flex-direction: column;
     flex-direction: column; } }
 
 #top #wrap_all #main #home-1-3 .av_one_third {
@@ -667,9 +705,16 @@ html, body {
   max-width: 100%;
   padding: 0; }
   #top #wrap_all #main #home-events .container .entry-content-wrapper {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: wrap;
     flex-wrap: wrap; }
     #top #wrap_all #main #home-events .container .entry-content-wrapper .av-upcoming-events {
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
       display: flex;
       width: 100%;
       background-color: #333333; }
@@ -720,7 +765,13 @@ html, body {
     .responsive #top #wrap_all #main #home-events .container .template-page {
       margin: 0; }
       .responsive #top #wrap_all #main #home-events .container .template-page .entry-content-wrapper {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -moz-box-orient: vertical;
+        -moz-box-direction: normal;
+        -ms-flex-direction: column;
         flex-direction: column;
+        -ms-flex-wrap: no-wrap;
         flex-wrap: no-wrap; }
         .responsive #top #wrap_all #main #home-events .container .template-page .entry-content-wrapper .av_one_third {
           width: 100%;
@@ -736,7 +787,11 @@ html, body {
   color: red; }
 
 #wpcf7-f946-o1 .wpcf7-form {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
   #wpcf7-f946-o1 .wpcf7-form p {
     width: 49%;
@@ -764,7 +819,11 @@ html, body {
   margin: 20px 0 0 0; }
 
 #wpcf7-f1071-o1 .wpcf7-form {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
   #wpcf7-f1071-o1 .wpcf7-form p {
     width: 49%;
@@ -791,7 +850,11 @@ html, body {
   width: 100%; }
 
 #wpcf7-f1314-o1 .wpcf7-form {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
   #wpcf7-f1314-o1 .wpcf7-form p {
     width: 49%;
@@ -818,7 +881,11 @@ html, body {
   width: 100%; }
 
 #wpcf7-f953-o1 .wpcf7-form, #wpcf7-f961-o2 .wpcf7-form {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap; }
   #wpcf7-f953-o1 .wpcf7-form p, #wpcf7-f961-o2 .wpcf7-form p {
     width: 49%;
@@ -846,7 +913,11 @@ html, body {
 
 @media screen and (max-width: 767px) {
   .responsive #top #wrap_all #main .wpcf7-form {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
     display: flex;
+    -ms-flex-wrap: none;
     flex-wrap: none; }
     .responsive #top #wrap_all #main .wpcf7-form p {
       width: 100%;

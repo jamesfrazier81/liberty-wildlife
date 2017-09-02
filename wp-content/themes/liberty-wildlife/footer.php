@@ -88,7 +88,7 @@
 			//you can also remove the kriesi.at backlink by adding [nolink] to your custom copyright field in the admin area
 			if($copyright && strpos($copyright, '[nolink]') !== false)
 			{
-				$kriesi_at_backlink = "";
+				// $kriesi_at_backlink = "";
 				$copyright = str_replace("[nolink]","",$copyright);
 			}
 
@@ -100,7 +100,7 @@
 				<footer class='container_wrap socket_color' id='socket' <?php avia_markup_helper(array('context' => 'footer')); ?>>
                     <div class='container'>
 
-                        <span class='copyright'><?php echo $copyright . $kriesi_at_backlink; ?></span>
+                        <span class='copyright'><?php echo $copyright; ?></span>
 
                         <?php
                         	if(avia_get_option('footer_social', 'disabled') != "disabled")
@@ -190,5 +190,8 @@
 <a href='#top' title='<?php _e('Scroll to top','avia_framework'); ?>' id='scroll-top-link' <?php echo av_icon_string( 'scrolltop' ); ?>><span class="avia_hidden_link_text"><?php _e('Scroll to top','avia_framework'); ?></span></a>
 
 <div id="fb-root"></div>
+<!--Google Maps JavaScript API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCegtG6MfDdOVZevLmoMhsJUOUnBAVBhdU"
+  type="text/javascript"></script>
 </body>
 </html>
