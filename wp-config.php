@@ -52,7 +52,8 @@ if ( WP_ENV == 'local' ) {
 	define('DB_USER', 'libwild_stg_adm'); // staging_db_user
 
 	/** MySQL database password */
-	define('DB_PASSWORD', '}*#Z%vH&utLw'); // staging_db_password
+	// define('DB_PASSWORD', '}*#Z%vH&utLw');
+	define('DB_PASSWORD', 'rbX6As&EuaOufD'); // staging_db_password
 
 	/** MySQL hostname */
 	define('DB_HOST', '107.180.51.25'); // staging_db_host
@@ -70,7 +71,8 @@ if ( WP_ENV == 'local' ) {
 	define('DB_USER', 'libwild_prd_adm'); // production_db_user
 
 	/** MySQL database password */
-	define('DB_PASSWORD', 'ngJGa,rvMLLr'); // production_db_password
+	// define('DB_PASSWORD', 'ngJGa,rvMLLr');
+	define('DB_PASSWORD', 'rbX6As&EuaOufD'); // production_db_password
 
 	/** MySQL hostname */
 	define('DB_HOST', '107.180.51.25'); // production_db_host
