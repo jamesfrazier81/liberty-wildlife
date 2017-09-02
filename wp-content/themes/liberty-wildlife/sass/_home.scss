@@ -24,7 +24,7 @@
 
         .av_two_third {
             background-color: $color-gray-dark;
-            
+
             .avia-image-container-inner {
                 max-width: 150px;
             }
@@ -62,7 +62,7 @@
 
                 .av-special-heading {
                     margin-top: 0;
-                    
+
                     .av-subheading p {
                         color: $color-gray-dark;
                     }
@@ -102,6 +102,42 @@
                 display: flex;
                 flex-wrap: wrap;
 
+                // Events Calendar
+                .av-upcoming-events {
+                    display: flex;
+                    width: 100%;
+                    background-color: $color-gray-dark;
+
+                    .av-upcoming-event-entry {
+                        width: 33.3%;
+                        padding: 30px;
+                        border-right: 2px solid white;
+                        border-bottom: 2px solid white;
+                        text-align: center;
+
+                        span {
+                            font-size: 1rem;
+                            color: white;
+
+                            h4 {
+                                display: block;
+                                text-align: center;
+                                padding-bottom: 10px;
+                                font-family: $font-shadows;
+                                font-size: 1.25rem;
+                                font-weight: $font-normal;
+                                line-height: 1.75rem;
+                                color: $color-orange;
+                            }
+                        }
+
+                        &:last-child {
+                            border: none;
+                            border-bottom: 2px solid white;
+                        }
+                    }
+                }
+
                 .av_one_full {
                     width: 100%;
                     padding: 30px;
@@ -111,7 +147,6 @@
                     width: 33.3%;
                     padding: 40px;
                     margin: 0;
-
                     background-color: $color-gray-dark;
                     border-left: 1px solid white;
                     border-bottom: 1px solid white;

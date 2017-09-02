@@ -95,3 +95,25 @@ function avia_register_meta_boxes($boxes) {
 
 // CSS to all ALB elements
 add_theme_support('avia_template_builder_custom_css');
+
+// Change "Events" for The Events Plugin word
+// Singular
+add_filter( 'tribe_event_label_singular', 'event_display_name' );
+function event_display_name() {
+    return 'Calendar';
+}
+add_filter( 'tribe_event_label_singular_lowercase', 'event_display_name_lowercase' );
+function event_display_name_lowercase() {
+    return 'calendar';
+}
+// Plural
+add_filter( 'tribe_event_label_plural', 'event_display_name_plural' );
+function event_display_name_plural() {
+    return 'Calendar';
+}
+add_filter( 'tribe_event_label_plural_lowercase', 'event_display_name_plural_lowercase' );
+function event_display_name_plural_lowercase() {
+    return 'calendar';
+}
+
+?>
