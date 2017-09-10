@@ -432,8 +432,22 @@ html, body {
   .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page {
     padding-top: 50px;
     margin-top: -50px; }
+    .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-page-title {
+      display: block;
+      width: 100%;
+      float: left;
+      margin: 20px 0; }
     .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-calendar .type-tribe_events {
       background-color: #da5834; }
+    .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-loop .type-tribe_events {
+      background-color: transparent; }
+      .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-loop .type-tribe_events .av-tribe-events-content-wrap .av-tribe-events-outer-content-wrap .tribe-events-event-meta {
+        color: #333333;
+        vertical-align: top; }
+      .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-loop .type-tribe_events .av-tribe-events-content-wrap .av-tribe-events-outer-content-wrap .av-tribe-events-inner-content-wrap .tribe-events-list-event-description {
+        color: #333333; }
+        .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-loop .type-tribe_events .av-tribe-events-content-wrap .av-tribe-events-outer-content-wrap .av-tribe-events-inner-content-wrap .tribe-events-list-event-description a {
+          color: #da5834; }
     .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-pg-template {
       margin-top: -1px; }
     .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content-wrapper {

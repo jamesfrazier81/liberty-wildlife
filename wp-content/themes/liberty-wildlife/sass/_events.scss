@@ -31,11 +31,47 @@
                 padding-top: 50px;
                 margin-top: -50px;
 
-                // Content in Calendar
+                
                 #tribe-events-content {
+
+                    // Title
+                    .tribe-events-page-title {
+                        display: block;
+                        width: 100%;
+                        float: left;
+                        margin: 20px 0;
+                    }
+
+                    // Content in Calendar
                     .tribe-events-calendar {
                         .type-tribe_events {
                             background-color: $color-orange;
+                        }
+                    }
+
+                    // List view
+                    .tribe-events-loop {
+                        .type-tribe_events {
+                            background-color: transparent;
+
+                            .av-tribe-events-content-wrap {
+                                .av-tribe-events-outer-content-wrap {
+                                    .tribe-events-event-meta {
+                                        color: $color-gray-dark;
+                                        vertical-align: top;
+                                    }
+
+                                    .av-tribe-events-inner-content-wrap {
+                                        .tribe-events-list-event-description {
+                                            color: $color-gray-dark;
+
+                                            a {
+                                                color: $color-orange;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
