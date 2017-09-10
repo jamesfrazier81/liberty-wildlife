@@ -437,7 +437,7 @@ html, body {
       width: 100%;
       float: left;
       margin: 20px 0; }
-    .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-calendar .type-tribe_events {
+    .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-calendar .tribe-event-featured {
       background-color: #da5834; }
     .post-type-archive-tribe_events #wrap_all #main .container_wrap_first .container > .template-page #tribe-events-content .tribe-events-loop .type-tribe_events {
       background-color: transparent; }

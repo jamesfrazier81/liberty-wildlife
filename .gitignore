@@ -2,6 +2,4 @@
 .obiignore
 _resources
 /wp-content/themes/liberty-wildlife/node_modules
-/wp-content/uploads_resources/
-.obi
-.obiignore
+/wp-content/uploads
