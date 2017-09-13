@@ -159,6 +159,59 @@
     }
 }
 
+// Education Field Trip
+#wpcf7-f1548-o1 {
+    .wpcf7-form {
+        display: flex;
+        flex-wrap: wrap;
+
+        p {
+            width: 49%;
+            margin: 0 1% 0 0;
+
+            label > sup {
+                color: red;
+            }
+
+            // Radio
+            .wpcf7-radio {
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            // Checkboxes
+            .wpcf7-checkbox {
+                .wpcf7-list-item {
+                    width: 100%;
+                    margin: 0;
+                }
+            }
+
+            input[type="submit"] {
+                margin-top: 20px;
+                font-family: $font-main;
+                font-size: 0.85rem;
+                font-weight: bold;
+                background-color: $color-orange;
+            }
+
+            &:nth-child(2), &:nth-child(3), &:nth-child(9), &:nth-child(14), &:nth-child(15), &:nth-child(16), &:nth-child(17), &:nth-child(18), &:nth-child(19) {
+                width: 100%;
+                margin: 0;
+            }
+
+             &:nth-child(4), &:nth-child(5) {
+                width: 32%;
+            }
+
+            &:nth-child(6) {
+                width: 34%;
+                margin: 0;
+            }
+        }
+    }
+}
+
 // Register for Nature News AND Tell us what you think about Nature News
 #wpcf7-f953-o1, #wpcf7-f961-o2 {
     .wpcf7-form {
