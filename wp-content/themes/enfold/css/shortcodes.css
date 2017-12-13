@@ -326,7 +326,8 @@ transform: translateX(-50%) rotate(45deg);
 top: -39px;
 }
 
-.av-section-color-overlay + .container + .border-extra-diagonal {
+.av-section-color-overlay + .container + .border-extra-diagonal,
+.av-section-color-overlay + .scroll-down-link + .container + .border-extra-diagonal{
     z-index: 1;
 }
 
@@ -365,7 +366,8 @@ top: -39px;
 
 div .av-section-color-overlay-wrap{position: relative; width:100%; }
 .html_header_sidebar .av-section-color-overlay-wrap{float:left;}
-div .av-section-color-overlay{position: absolute; top:0; left: 0; height: 100%; width:100%; }
+div .av-section-color-overlay{position: absolute; top:0; left: 0; bottom: 0; width:100%; }
+div .av-arrow-down-section .av-section-color-overlay{bottom: 24px; }
 div .av-section-color-overlay{z-index: 1;}
 div .av-video-service-html5 .av-section-color-overlay{z-index: 8;}
 
@@ -422,6 +424,7 @@ padding:30px;
 color: inherit;
 border-color: inherit;
 position: relative;
+overflow:hidden;
 }
 
 .av_icon_caption{font-size: 16px; text-transform: uppercase; line-height: 1.3em; display: block; text-align: center; margin-top:8px; font-weight: 400;}
@@ -1197,6 +1200,7 @@ position: relative;
 top: 1px;
 border-style:solid;
 border-width:1px;
+line-height: 1.65em;
 -webkit-touch-callout: none;
 -webkit-user-select: none;
 -khtml-user-select: none;
@@ -1238,12 +1242,13 @@ overflow: hidden;
 
 .toggle_icon{
 position: absolute;
-width:15px;
-height:15px;
-border-style:solid;
-border-width:1px;
-top:12px;
-left:10px;
+width: 15px;
+height: 15px;
+border-style: solid;
+border-width: 1px;
+top: 50%;
+left: 10px;
+margin-top: -8px;
 }
 
 .toggle_icon .vert_icon{
@@ -1268,9 +1273,13 @@ width:11px;
 border:none;
 }
 
+/* removed, otherwise opening animation does not work
 .active_tc.toggle_wrap{
 display:block;
 }
+*/
+#top .av_toggle_section .av-inherit-border-color *{border-color: inherit;}
+#top .av_toggle_section .av-inherit-font-color *{color: inherit;}
 
 
 /*sorting*/
@@ -1278,6 +1287,14 @@ display:block;
 .taglist .tag-seperator:last-child{display:none;}
 .taglist .tag-seperator{padding:0px 4px;}
 .single_toggle{ width:100%; float:left; display: block; margin: 0 0 -2px 0; padding-bottom: 1px; overflow: hidden; position: relative;}
+
+/*minimal toggle*/
+.av-minimal-toggle.togglecontainer .single_toggle .toggler{border-radius:0; border-left:none; border-right:none; border-top:none; font-size: 1.1em; }
+.av-minimal-toggle .toggle_content{ border-radius:0;border:none; padding:12px 35px 11px 35px;}
+.av-minimal-toggle .single_toggle{    margin: 0 0 7px 0; padding-bottom: 0px;}
+.av-minimal-toggle .toggle_icon { margin-top: -7px; border: none;}
+.av-minimal-toggle .toggler:hover { opacity: 0.8; }
+.av-minimal-toggle .activeTitle.toggler:hover { opacity: 1; }
 
 
 /* ======================================================================================================================================================
@@ -1920,7 +1937,7 @@ Post Slider
 }
 
 #top #wrap_all .mejs-controls a.mejs-horizontal-volume-slider{
-	width:56px;
+	width:60px;
 }
 
 /*fix blur on content slider in safari*/
@@ -3774,6 +3791,7 @@ Horizontal Gallery
 /* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
 	@media only screen and (max-width: 767px) {
 		.responsive #top .avia-slideshow-controls a{display:none;}
+		.responsive #top .av-horizontal-gallery .avia-slideshow-controls a{display:block;}
 		.responsive .av-horizontal-gallery-inner{position: static; min-height:180px;}
 		.responsive .av-horizontal-gallery-enlarge-effect .av-horizontal-gallery-wrap.av-active-gal-item{
 		-webkit-transform: 	scale(1);
@@ -3887,7 +3905,7 @@ text-indent: 0px;
 #top .av-control-minimal-dark .avia-slideshow-dots a.active{background: #000;}
 
 #top .scroll-down-link.av-control-minimal-dark{color:#000;}
-
+#top .scroll-down-link.av-custom-scroll-down-color{ text-shadow: none; }
 
 
 /*avia-small-width-slider*/
@@ -4323,7 +4341,7 @@ width: 80px;
 margin: 0px 0 0 -40px;
 line-height: 60px;
 position: absolute;
-left: 50%;
+left: 49.85%;
 bottom: 0px;
 color: #FFF;
 text-align: center;
@@ -5143,6 +5161,72 @@ margin-bottom: 15px;
 	transition: 		height 0.4s ease-in-out;  
 }
 
+
+/* ======================================================================================================================================================
+AVIA PLAYER
+====================================================================================================================================================== */
+
+/*playlist shortcode*/
+
+.avia_textblock .wp-playlist{margin:0;}
+.wp-playlist-light .wp-playlist-item.wp-playlist-playing{background: transparent;}
+.wp-playlist-current-item img{border-radius: 3px;}
+.wp-playlist-current-item img[src$="media/audio.png"]{border-radius: 0px; background: #fff;}
+.wp-playlist-item-meta.wp-playlist-item-title{font-weight: bold;}
+.wp-playlist-tracks .wp-playlist-item{padding: 4px 3px;}
+.wp-playlist-tracks .wp-playlist-item-length{top: 4px;}
+div .mejs-controls .mejs-time-rail .mejs-time-loaded, div .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current{background:#9c9c9c;}
+div .mejs-controls .mejs-time-rail span, div .mejs-controls .mejs-time-rail a,
+div .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current,
+div .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total{height:7px;}
+div .mejs-controls div.mejs-time-rail{padding-top: 7px;}
+div .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total,
+div .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current{top:12px;}
+div .mejs-container, div .mejs-embed, div .mejs-embed body, div .mejs-container div .mejs-controls{background:transparent;}
+div .mejs-container{border-radius:2px;background:#313131}
+div .mejs-time-total.mejs-time-slider { outline: 0; }
+div .wp-playlist-item-album{font-style: normal; }
+div .mejs-controls .mejs-play button{left:2px;}
+#top .mejs-container .mejs-controls .mejs-time, #top .mejs-time-rail .mejs-time-float{color:#fff;}
+
+/*audio player*/
+
+
+.av-player.av-player-container .wp-playlist{
+margin:0;
+}
+
+.av-player.av-player-container .av-player-cover-container .av-player-cover img{
+	display: block;
+	max-width: 100%;
+    max-height: 100%;
+}
+
+.avia-playlist-hide-cover .wp-playlist-current-item{
+	height:auto;
+}
+
+#top .avia-playlist-custom-background-color .wp-playlist{ background: transparent; }
+#top .avia-playlist-custom-font-color *{ color:inherit; }
+#top .avia-playlist-custom-font-color .wp-playlist-item > *{ opacity: 0.8; }
+#top .avia-playlist-custom-font-color .wp-playlist-item.wp-playlist-playing > *{ opacity: 1; }
+
+#top .avia-playlist-custom-border-color .wp-playlist{ border: none; }
+#top .avia-playlist-custom-border-color{border-width:1px; border-style:solid;}
+
+#top .avia-playerstyle-minimal .wp-playlist{
+	padding:0;
+	border-color:transparent;
+	background: transparent;
+}
+
+#top .avia-playerstyle-minimal .wp-playlist .wp-playlist-item{
+	border-color:transparent;
+}
+
+#top .avia-playerstyle-minimal.avia-playlist-custom-background-color .wp-playlist{
+	padding:10px;
+}
 
 /* ======================================================================================================================================================
 ANIMATIONS

@@ -25,13 +25,52 @@
 	{
 		var $body = $("body"), file_frame = [], media = wp.media, 
 		
-		//fetch preExisting selection of galleries. change the gallery state based on wheter we got a selection or not to "Edit gallery" or "AAdd gallery"
-		fetch_selection = function(ids, options)
+		/**
+		 * Fetch preExisting selection depending on options.save_to and change the state of popup depending whether we have a selection or not
+		 * to Add Gallery / Edit Gallery resp. Add Audio Playlist / Edit Audio Playlist
+		 * 
+		 * @param {string} ids
+		 * @param {jQuery} html_ids
+		 * @param {object} options		
+		 * @returns {undefined|avia-mediaL#16.wp_media_advanced.fetch_selection.selection|wp.media.model.Selection|.$.AviaElementBehavior.wp_media_advanced.fetch_selection.selection}
+		 */
+		fetch_selection = function(ids, html_ids, options)
 		{
-			if(typeof ids == 'undefined') return; //<--happens on multi_image insert for modal group
+			
+			var id_array = [],
+				media_type = 'image';
+			
+			if( options.save_to == 'html' )
+			{
+				html_ids.each( function(){
+								var id = $(this).html();
+								if( ! isNaN( parseInt( id, 10 ) ) )
+								{
+									id_array.push( id );
+								}
+							});
+			}
+			else	//	'hidden' | 'input'
+			{
+				if( ( typeof ids == 'undefined' ) )	 //<--happens on multi_image insert for modal group
+				{
+					return;
+				}
+				
+				id_array = ids.split(',');
+			}
+			
+			if( id_array.length == 0 || isNaN( parseInt( id_array[0], 10 ) ) )
+			{
+				return;
+			}
+			
+			if( 'undefined' != typeof options.media_type )
+			{
+				media_type = options.media_type;
+			}
 		
-			var id_array = ids.split(','),
-				args = {orderby: "post__in", order: "ASC", type: "image", perPage: -1, post__in:id_array},
+			var	args = {orderby: "post__in", order: "ASC", type: media_type, perPage: -1, post__in: id_array},
 				attachments = wp.media.query( args ),
 				selection = new wp.media.model.Selection( attachments.models, 
 			    {
@@ -39,11 +78,12 @@
 			        multiple: true
 			    });
 			    
-			    
-		    if(options.state == 'gallery-library' && id_array.length &&  !isNaN(parseInt(id_array[0],10)))
-		    {
-		    	options.state = 'gallery-edit';
-		    }
+			//	Change popup to "Edit" if we have existing elements
+			if( ( 'undefined' != typeof options.state_edit )  && ( id_array.length > 0 ) )
+			{
+				options.state = options.state_edit;
+			}
+			   
 		    return selection;
 		};
 		
@@ -102,7 +142,7 @@
  				template = parent.find(".avia-tmpl-modal-element").html(),
  				modal_group = parent.find('.avia-modal-group'),
  				del_btn	= parent.find('.avia-delete-image'),
- 				prefill = fetch_selection(target.val(), options),
+ 				prefill = fetch_selection( target.val(), hidde_attachment_id, options ),
  				frame_key = _.random(0, 999999999999999999);
 				//set vars so we know that an editor is open
 				$.AviaElementBehavior.wp_media.unshift(this);
@@ -113,7 +153,6 @@
 					file_frame[frame_key].open();
 					return;
 				}
-				
 				
 				// Create the media frame.
 				file_frame[frame_key]  = wp.media(
@@ -175,6 +214,51 @@
 						filterable: 'uploaded',
 						library:    media.query( {type: "video", orderby: "date", query: true} ),
 						multiple:   false,
+						editable:   true,
+						displayUserSettings: false, 
+						displaySettings: true,
+						allowLocalEdits: true
+						// AttachmentView: media.view.Attachment.Library
+					}),
+					
+					new media.controller.Library({
+						id:         'avia_insert_multi_video',
+						title: clicked.data( 'title' ),
+						priority:   20,
+						toolbar:    'select',
+						filterable: 'uploaded',
+						library:    media.query( {type: "video", orderby: "date", query: true} ),
+						multiple:   'add',
+						editable:   true,
+						displayUserSettings: false, 
+						displaySettings: true,
+						allowLocalEdits: true
+						// AttachmentView: media.view.Attachment.Library
+					}),
+					
+					new media.controller.Library({
+						id:         'avia_insert_audio',
+						title: clicked.data( 'title' ),
+						priority:   20,
+						toolbar:    'select',
+						filterable: 'uploaded',
+						library:    media.query( {type: "audio", orderby: "date", query: true} ),
+						multiple:   false,
+						editable:   true,
+						displayUserSettings: false, 
+						displaySettings: true,
+						allowLocalEdits: true
+						// AttachmentView: media.view.Attachment.Library
+					}),
+					
+					new media.controller.Library({
+						id:         'avia_insert_multi_audio',
+						title: clicked.data( 'title' ),
+						priority:   20,
+						toolbar:    'select',
+						filterable: 'uploaded',
+						library:    media.query( {type: "audio", orderby: "date", query: true} ),
+						multiple:   'add',
 						editable:   true,
 						displayUserSettings: false, 
 						displaySettings: true,
@@ -253,8 +337,6 @@
 							var new_template = $(template),
 								values		 = {id: element.id, img_fakeArg:""};
 							
-							
-							
 							//check if a thumbnail image exists and insert it
 							if(element.sizes && element.sizes.thumbnail)
 							{
@@ -274,10 +356,51 @@
 							
 							final_template.append(new_template);
 						}
+						else if(options.fetch == 'template_audio')
+						{
+							//	Clear existing playlist to replace with new one
+							modal_group.html('');
+							
+							display = state.display( attachment ).toJSON();
+
+							var new_template = $(template),
+								values		 = {
+													id:				element.id, 
+													title:			element.title,
+													artist:			element.artist,
+													album:			element.album,
+													description:	element.description,
+													filelength:		element.fileLength,
+													url:			element.url,
+													filename:		element.filename,
+													icon:			element.icon,
+													img_fakeArg:	element.icon,
+													title_info:		''
+												};
+
+							values.img_fakeArg = '<img src="'+values.img_fakeArg +'" title="' + values.title + '" alt="" />';
+
+							if( 'undefined' !== typeof( values.title ) )
+							{
+								values.title_info += '<span class="avia-known-title">' + values.title;
+							}
+							else
+							{
+								values.title_info += '<span class="avia-unknown-title">' + values.title;
+							}
+							
+							values.title_info += '</span>';
+							
+							var htmlVal 	 = $.avia_builder.update_builder_html(new_template, values, true),
+								saveTo 		 = new_template.find($.avia_builder.datastorage + ":eq(0)");
+					
+							saveTo[0].innerHTML = htmlVal.output;
+							
+							final_template.append(new_template);
+						}
 						
 					});
 					
-										
 					if(target.length)
 						target.val( values.join(',') ).trigger('change');	
 					
@@ -300,57 +423,10 @@
 			    // Finally, open the modal
 			    file_frame[frame_key].open();
 		});
-	}	
+	};
 
 	
 })(jQuery);	 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -361,7 +437,8 @@ options:
 library:   {type: 'audio, image'} 				//describes which media types are allowed 
 multiple:   false, // false, 'add', 'reset'		//how to handle multiple items
 frame:     'select', //post, select				//predefined windows, only post and select available, select is the default that lets you create your own windows
-state:     'gallery-library', //based on the ids
+state:     'gallery-library',	//	playlist-library, video-playlist-library			//based on the ids
+								//	gallery-edit, playlist-edit, video-playlist-edit
 file_frame.on( 'select update', function() 
 displaySettings: true, <- adds attachment
 displayUserSettings: false, <- disables left sidebar

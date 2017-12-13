@@ -40,3 +40,138 @@ if(!function_exists('avia_wpseo_change_title_adjustment'))
 
     add_filter('avf_title_tag', 'avia_wpseo_change_title_adjustment', 10, 2);
 }
+
+/*
+ * Enable Yoast SEO to index ALB elements that contains images.
+ * https://github.com/KriesiMedia/wp-themes/issues/1361
+ */
+
+if(!function_exists('avia_extract_shortcodes_attachment_ids'))
+{
+	function avia_extract_shortcodes_attachment_ids($elements, $content) {
+		$container = array();
+		if(!empty($elements)) {
+			foreach ($elements as $key => $element)
+			{
+				preg_match_all($element['pattern'], $content, $shortcodes);
+				foreach($shortcodes[0] as $shortcode)
+				{
+					//$src = $element['source'] == 'ids' ? '/ids=\\\'(\d+(,\d+)*)\\\'/' : '/attachment=\\\'(\d+)\\\'/';
+					switch ($element['source']) {
+					case 'ids':
+							$src = '/ids=\\\'(\d+(,\d+)*)\\\'/';
+							break;
+					case 'attachment':
+							$src = '/attachment=\\\'(\d+)\\\'/';
+							break;
+					case 'sid':
+							$src = '/id=\\\'(\d+)\\\'/sim';
+							break;
+					default:
+							return;
+					}
+
+					$sid = array();
+
+
+					preg_match_all($src, $shortcode, $id);
+
+					if($src = 'sid') {
+						foreach($id[1] as $key => $value) {
+							$sid[] = $value;
+						}
+
+						$sid = implode(',', $sid);
+						$id[1] = $sid;
+					}
+
+					$container[] = $id[1];
+				}
+			}
+		}
+
+		if(!empty($container)) {
+			foreach($container as $key => $value) {
+				$container[$key] = explode(',', $value);
+			}
+		}
+
+		if (count($container) > 0) {
+			$container = call_user_func_array('array_merge', $container);
+		}
+
+		return $container;
+	}
+}
+
+if(!function_exists('avia_filter_wpseo_sitemap_urlimages'))
+{
+	add_filter('wpseo_sitemap_urlimages', 'avia_filter_wpseo_sitemap_urlimages', 10, 2);
+
+	function avia_filter_wpseo_sitemap_urlimages($images, $post_id)
+	{
+	  $post = get_post($post_id);
+	  if (is_object($post)) {
+			$content = $post->post_content;
+			$elements = apply_filters('avf_add_elements_wpseo_sitemap',
+			 array(
+				'masonry' => array(
+					'pattern' => '/\[av_masonry_gallery [^]]*]/',
+					'source' => 'ids'
+				),
+				'gallery' => array(
+					'pattern' => '/\[av_gallery [^]]*]/',
+					'source' => 'ids'
+				),
+				'horizontal' => array(
+					'pattern' => '/\[av_horizontal_gallery [^]]*]/',
+					'source' => 'ids'
+				)
+				 /*
+				'accordion' => array(
+					'pattern' => '/\[av_slideshow_accordion(.+?)?\](?:(.+?)?\[\/av_slideshow_accordion\])?/sim',
+					'source' => 'sid'
+				),
+				'slideshow' => array(
+					'pattern' => '/\[av_slideshow(.+?)?\](?:(.+?)?\[\/av_slideshow\])?/sim',
+					'source' => 'sid'
+				),
+				'slideshow_full' => array(
+					'pattern' => '/\[av_slideshow_full(.+?)?\](?:(.+?)?\[\/av_slideshow_full\])?/sim',
+					'source' => 'sid'
+				),
+				'slideshow_fullscreen' => array(
+					'pattern' => '/\[av_fullscreen(.+?)?\](?:(.+?)?\[\/av_fullscreen\])?/sim',
+					'source' => 'sid'
+				)
+				*/
+			), $elements, $post_id);
+
+			$ids = avia_extract_shortcodes_attachment_ids($elements, $content);
+
+			foreach ($ids as $id)
+			{
+				$title = get_the_title($id);
+				$alt   = get_post_meta($id, '_wp_attachment_image_alt', true);
+				$src   = wp_get_attachment_url($id);
+				$images[] = array('src' => $src, 'title' => $title, 'alt' => $alt);
+			}
+	  }
+
+	  return $images;
+	}
+}
+
+/*
+// include more image elements to be indexed
+// https://kriesi.at/support/topic/how-to-make-images-in-masonry-gallery-to-be-indexed-in-seo-yoast-sitemap/
+add_filter('avf_add_elements_wpseo_sitemap', function($elements, $postid) {
+	$image = array(
+		'image' => array(
+			'pattern' => '/\[av_image [^]]*]/',
+			'source' => 'src')
+	);
+
+	return array_merge($image, $elements);
+}, 10, 2);
+*/

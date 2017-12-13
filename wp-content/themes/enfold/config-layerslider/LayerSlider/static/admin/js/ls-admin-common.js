@@ -594,6 +594,11 @@ jQuery(function($) {
 		LS_CodeMirror.init();
 	}
 
+	// About page
+	if( document.location.href.indexOf('page=ls-about') ) {
+		lsLogo.append( '.layerslider-logo', true );
+	}
+
 
 	// Skin/CSS Editor
 	if(document.location.href.indexOf('ls-skin-editor') != -1 ||
@@ -614,12 +619,12 @@ jQuery(function($) {
 		// Disabled, exit quietly
 		if( el.disabled ) { return; }
 
-		if( $(el).is(':checked') ) {
+		if( $(el).is(':checked') && ! $(this).is('.indeterminate') ) {
 			$(el).prop('checked', false);
-			$(this).removeClass('on').addClass('off');
+			$(this).removeClass('on indeterminate').addClass('off');
 		} else {
 			$(el).prop('checked', true);
-			$(this).removeClass('off').addClass('on');
+			$(this).removeClass('off indeterminate').addClass('on');
 		}
 
 		// Trigger events

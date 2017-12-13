@@ -472,15 +472,6 @@ padding: 3px;
 }
 
 
-/*playlist shortcode*/
-
-.avia_textblock .wp-playlist{margin:0;}
-.wp-playlist-light .wp-playlist-item.wp-playlist-playing{background: transparent;}
-.wp-playlist-current-item img{border-radius: 500px;}
-.wp-playlist-current-item img[src$="media/audio.png"]{border-radius: 0px; background: #fff;}
-.wp-playlist-item-meta.wp-playlist-item-title{font-weight: bold;}
-
-
 
 
 @media only screen and (min-width: 990px){

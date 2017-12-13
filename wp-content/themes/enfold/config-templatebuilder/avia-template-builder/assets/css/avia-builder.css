@@ -2492,7 +2492,25 @@ span.av-tab-title-text-wrap-full {
     text-overflow: ellipsis;
 }
 
+/*	Avia Player	*/
+.avia_inner_shortcode .av-player{
+	margin-bottom: 5px;
+	display: inline-block;
+}
 
+.avia_inner_shortcode .av-player .av-player-manual .av-play-manual,
+.avia_inner_shortcode .av-player .av-player-autoplay .av-play-autoplay{
+	display: inline-block;
+}
+
+.avia_inner_shortcode .av-player .av-player-manual  .av-play-autoplay,
+.avia_inner_shortcode .av-player .av-player-autoplay .av-play-manual{
+	display: none;
+}
+
+.avia_inner_shortcode .av-player .av-player-autoplay .av-play-autoplay{
+	color: #0085ba;
+}
 
 
 

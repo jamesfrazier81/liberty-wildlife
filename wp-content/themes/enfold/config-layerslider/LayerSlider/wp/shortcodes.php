@@ -1,6 +1,6 @@
 <?php
 
-
+$GLOBALS['lsLoadPlugins'] = array();
 function layerslider( $id = 0, $filters = '', $options = array() ) {
 	echo LS_Shortcode::handleShortcode(
 		array_merge( array('id' => $id, 'filters' => $filters), $options)
@@ -70,15 +70,7 @@ class LS_Shortcode {
 
 
 			if( $item['data'] ) {
-
-				// Print cached markup
-				if( is_string($item['data']) ) {
-					$output .= $item['data'];
-
-				// Otherwise continue processing the shortcode
-				} else {
-					$output .= self::processShortcode( $item['data'], $atts );
-				}
+				$output .= self::processShortcode( $item['data'], $atts );
 			}
 
 			return $output;
@@ -141,28 +133,26 @@ class LS_Shortcode {
 	public static function validateShortcode($atts = array()) {
 
 		$error = false;
-		$data = false;
+		$slider = false;
 
 		// Has ID attribute
 		if( ! empty( $atts['id'] ) ) {
 
-			// Attempt to retrieve the pre-generated markup
-			// set via the Transients API
-			if(get_option('ls_use_cache', true)) {
-				if($markup = get_transient('ls-slider-data-'.intval($atts['id']))) {
-					$markup['id'] = intval($atts['id']);
-					$markup['_cached'] = true;
-					$data = $markup;
+			$sliderID 	= $atts['id'];
+			$slider 	= self::cacheForSlider( $sliderID );
+
+			if( empty( $slider ) ) {
+				$slider = LS_Sliders::find( $sliderID );
+
+				// Second attempt to retrieve cache (if any)
+				// based on the actual slider ID instead of alias
+				if( $cache = self::cacheForSlider( $slider['id'] ) ) {
+					$slider = $cache;
 				}
 			}
 
-			// Slider exists and isn't deleted
-			if( $slider = LS_Sliders::find($atts['id']) ) {
-				$data =  $slider;
-			}
-
 			// ERROR: No slider with ID was found
-			if( empty($slider) ) {
+			if( empty( $slider ) ) {
 				$error = self::generateErrorMarkup(
 					__('The slider cannot be found', 'LayerSlider'),
 					null
@@ -215,11 +205,28 @@ class LS_Shortcode {
 
 		return array(
 			'error' => $error,
-			'data' => $data
+			'data' => $slider
 		);
 	}
 
 
+
+	public static function cacheForSlider( $sliderID ) {
+
+		// Attempt to retrieve the pre-generated markup
+		// set via the Transients API
+		if( get_option('ls_use_cache', true) ) {
+
+			if( $slider = get_transient('ls-slider-data-'.$sliderID) ) {
+				$slider['id'] = $sliderID;
+				$slider['_cached'] = true;
+
+				return $slider;
+			}
+		}
+
+		return false;
+	}
 
 
 
@@ -233,13 +240,31 @@ class LS_Shortcode {
 		$footer = get_option('ls_include_at_footer', false) ? true : false;
 		$footer = $condsc ? true : $footer;
 
-		// Check if the returned data is a string,
+		// Check for the '_cached' key in data,
 		// indicating that it's a pre-generated
 		// slider markup retrieved via Transients
-		if(!empty($slider['_cached'])) { $output = $slider;}
-		else {
+		if( ! empty( $slider['_cached'] ) ) {
+			$output = $slider;
+
+		// No cached copy, generate new markup.
+		// Make sure to include some database related
+		// data, since we rely on those to display
+		// notifications for admins.
+		} else {
+
 			$output = self::generateSliderMarkup( $slider, $embed );
-			set_transient('ls-slider-data-'.$slider['id'], $output, HOUR_IN_SECONDS * 6);
+
+			$output['id'] 				= $slider['id'];
+			$output['schedule_start'] 	= $slider['schedule_start'];
+			$output['schedule_end'] 	= $slider['schedule_end'];
+			$output['flag_hidden'] 		= $slider['flag_hidden'];
+			$output['flag_deleted'] 	= $slider['flag_deleted'];
+
+
+			// Save generated markup if caching is enabled
+			if( get_option('ls_use_cache', true) ) {
+				set_transient('ls-slider-data-'.$slider['id'], $output, HOUR_IN_SECONDS * 6);
+			}
 		}
 
 		// Replace slider ID to avoid issues with enabled caching when
@@ -278,7 +303,8 @@ class LS_Shortcode {
 
 		// Origami
 		if( !empty( $output['plugins'] ) ) {
-			$GLOBALS['lsLoadPlugins'] = $output['plugins'];
+			$GLOBALS['lsLoadPlugins'] = array_merge($GLOBALS['lsLoadPlugins'], $output['plugins']);
+
 		}
 
 		if($footer) {

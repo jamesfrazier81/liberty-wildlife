@@ -82,15 +82,39 @@ if ( !class_exists( 'avia_sc_productgrid' ) )
 						"subtype" => AviaHtmlHelper::number_array(1,100,1, array('All'=>'-1'))),
 
 				array(
-						"name" 	=> __("WooCommerce Product visibility?", 'avia_framework' ),
+						"name" 	=> __("WooCommerce Out of Stock Products visibility", 'avia_framework' ),
 						"desc" 	=> __("Select the visibility of WooCommerce products. Default setting can be set at Woocommerce -&gt Settings -&gt Products -&gt Inventory -&gt Out of stock visibility", 'avia_framework' ),
 						"id" 	=> "wc_prod_visible",
 						"type" 	=> "select",
 						"std" 	=> "",
 						"subtype" => array(
-							__('Use default WooCommerce Setting (Settings -&gt; Products -&gt; Out of stock visibility)',  'avia_framework' ) => '',
-							__('Hide products out of stock',  'avia_framework' ) => 'hide',
-							__('Show products out of stock',  'avia_framework' )  => 'show')
+							__('Use default WooCommerce Setting (Settings -&gt; Products -&gt; Out of stock visibility)', 'avia_framework' ) => '',
+							__('Hide products out of stock', 'avia_framework' )		=> 'hide',
+							__('Show products out of stock', 'avia_framework' )		=> 'show')
+					),
+				
+				array(
+						"name" 	=> __("WooCommerce Hidden Products visibility", 'avia_framework' ),
+						"desc" 	=> __("Select the visibility of WooCommerce products depending on catalog visibility. Can be set independently for each product: Edit Product -&gt Publish panel -&gt Catalog visibility", 'avia_framework' ),
+						"id" 	=> "wc_prod_hidden",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"subtype" => array(
+							__('Show all products', 'avia_framework' )			=> '',
+							__('Hide hidden products', 'avia_framework' )		=> 'hide',
+							__('Show hidden products only', 'avia_framework' )	=> 'show')
+					),
+				
+				array(
+						"name" 	=> __("WooCommerce Featured Products visibility", 'avia_framework' ),
+						"desc" 	=> __("Select the visibility of WooCommerce products depending on checkbox &quot;This is a featured product&quot; in catalog visibility. Can be set independently for each product: Edit Product -&gt Publish panel -&gt Catalog visibility", 'avia_framework' ),
+						"id" 	=> "wc_prod_featured",
+						"type" 	=> "select",
+						"std" 	=> "",
+						"subtype" => array(
+							__('Show all products', 'avia_framework' )				=> '',
+							__('Hide featured products', 'avia_framework' )			=> 'hide',
+							__('Show featured products only', 'avia_framework' )	=> 'show')
 					),
 				
                 array(

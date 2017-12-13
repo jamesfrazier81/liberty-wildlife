@@ -259,8 +259,19 @@ function avia_nl2br (str, is_xhtml)
 			//edit item in modal window via sub modal window
 			$body.on('click', '.avia-modal-group-element-inner', function() 
 			{
+				
 				var parent				= $(this).parents('.avia-modal-group-element:eq(0)'),
-					params				= parent.data(), modal;
+					params				= parent.data();
+					
+					if( ( 'undefined' !== typeof parent.data('modal_open') ) && ( 'no' == parent.data('modal_open') ) )
+					{
+						//	reroute click event to another button/element in this modal group
+						if( ( 'undefined' !== typeof parent.data('trigger_button') ) && ( '' != parent.data('trigger_button').trim() ) )
+						{
+							parent.closest( '.avia-modal-group-wrapper ' ).find('.' + parent.data('trigger_button').trim() ).trigger( 'click' );
+						}
+						return false;
+					}
 					
 					params.scope		= obj;
 					params.on_load		= parent.data('modal_on_load');
@@ -730,7 +741,7 @@ function avia_nl2br (str, is_xhtml)
                     content_fields	= container.find('>.avia_inner_shortcode > div ' +this.datastorage + ':not(.avia_layout_column .avia_sortable_element '+this.datastorage+', .avia_layout_cell .avia_layout_column ' +this.datastorage +' , .avia_layout_tab .avia_layout_column ' +this.datastorage +' )'),
                     content			= "",
 				    currentName		= container.data('shortcodehandler'),
-				    open_tag        = main_storage.val().match(new RegExp("\\["+currentName+".*?\\]"));
+				    open_tag        = main_storage.val().match(new RegExp("\\["+currentName+"[^]*?\\]"));
 				    
 				    
 				    
@@ -750,7 +761,7 @@ function avia_nl2br (str, is_xhtml)
                     content_fields	= container.find('>.avia_inner_shortcode > div ' +this.datastorage + ':not(.avia_layout_column_no_cell .avia_sortable_element '+this.datastorage+')'),
                     content			= "",
 				    currentSize		= container.data('width'),
-				    open_tag        = main_storage.val().match(new RegExp("\\["+currentSize+".*?\\]"));
+				    open_tag        = main_storage.val().match(new RegExp("\\["+currentSize+"[^]*?\\]"));
 				 
 				for (var i = 0; i < content_fields.length; i++) 
     			{
@@ -767,7 +778,7 @@ function avia_nl2br (str, is_xhtml)
                     content_fields	= container.find('>.avia_inner_shortcode > div ' +this.datastorage + ':not(.avia_layout_column_no_cell .avia_sortable_element '+this.datastorage+')'),
                     content			= "",
 				    currentTag		= "av_tab_sub_section",
-				    open_tag        = main_storage.val().match(new RegExp("\\["+currentTag+".*?\\]"));
+				    open_tag        = main_storage.val().match(new RegExp("\\["+currentTag+"[^]*?\\]"));
 				 
 				for (var i = 0; i < content_fields.length; i++) 
     			{
@@ -786,7 +797,7 @@ function avia_nl2br (str, is_xhtml)
                     content			= "",
 				    currentSize		= container.data('width'),
 				    currentFirst	= container.is('.avia-first-col') ? " first" : "",
-				    open_tag        = main_storage.val().match(new RegExp("\\["+currentSize+".*?\\]"));
+				    open_tag        = main_storage.val().match(new RegExp("\\["+currentSize+"[^]*?\\]"));
 				    
 				for (var i = 0; i < content_fields.length; i++) 
     			{

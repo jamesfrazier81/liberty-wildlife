@@ -84,7 +84,7 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 					'timeout' 	=> 20,
 					'headers' 	=> $this->get_headers(),
 					'sslverify'	=> false 
-					// disable ssl verify: http://www.kriesi.at/support/topic/mailchimp-api-not-connecting/page/2/#post-596342
+					// disable ssl verify: https://kriesi.at/support/topic/mailchimp-api-not-connecting/page/2/#post-596342
 				)
 			);
 			

@@ -407,7 +407,7 @@ if ( !class_exists( 'avia_sc_table' ) )
 						if($row_attributes['row_style'] == 'avia-heading-row' && $cell_attributes['col_style'] == 'avia-desc-col')
 						{
 							//fixes issues like
-							//http://www.kriesi.at/support/topic/display-of-a-table-displays-wron-headlines-on-mobile/.
+							//https://kriesi.at/support/topic/display-of-a-table-displays-wron-headlines-on-mobile/.
 							
 							$responsive_style_nth_modifier = 0;
 						}

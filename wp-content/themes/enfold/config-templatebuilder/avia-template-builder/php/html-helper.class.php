@@ -345,6 +345,8 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			extract($params);
 			
 			$data['modal_title'] 		= $element['modal_title'];
+			$data['modal_open']			= isset( $element['modal_open'] ) ? $element['modal_open'] : 'yes';
+			$data['trigger_button']			= isset( $element['trigger_button'] ) ? $element['trigger_button'] : '';
 			$data['shortcodehandler'] 	= $parent_class->config['shortcode_nested'][0];
 			$data['modal_ajax_hook'] 	= $parent_class->config['shortcode_nested'][0];
 			$data['modal_on_load'] 		= array();
@@ -736,7 +738,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
          */
 		static function linkpicker($element)
 		{	
-			//fallback for previous default input link elements: convert a http://www.kriesi.at value to a manually entry
+			//fallback for previous default input link elements: convert a https://kriesi.at value to a manually entry
 			if(strpos($element['std'], 'http://') === 0) $element['std'] = 'manually,'.$element['std'];
 			
 		
@@ -948,9 +950,10 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 											'title'  => $element['title'], 
 											'type'   => $element['type'], 
 											'button' => $element['button'],
-											'class'  => 'media-frame avia-media-gallery-insert '.$element['container_class'] ,
-											'state'  => 'gallery-library',
+											'class'  => 'media-frame avia-media-gallery-insert '.$element['container_class'],
 											'frame'  => 'post',
+											'state'  => 'gallery-library',
+											'state_edit' => 'gallery-edit',
 											'fetch'  => 'id',
 											'save_to'=> 'hidden'
 										);
@@ -983,6 +986,47 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 
 			return AviaHtmlHelper::image($element);
 		}
+		
+		/**
+         * The audio method renders an audio upload button that allows the user to select one or more audio files from the media uploader 
+		 * and insert it
+		 * 
+         * @param array $element		the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+         * @return string				the string returned contains the html code generated within the method
+         */
+		public static function audio_player( $element )
+		{
+			if( empty($element['data'] ) )
+			{			
+				$fetch = isset($element['fetch']) ? $element['fetch'] : "template_audio";
+				$state = isset($element['state']) ? $element['state'] : "avia_insert_multi_audio";
+				
+				$class = $fetch == "template" ? "avia-media-img-only-no-sidebars" : "avia-media-img-only";
+				
+				$element['data'] =  array(	
+									'target'		=> $element['id'], 
+									'title'			=> $element['title'], 
+									'type'			=> $element['type'], 
+									'button'		=> $element['button'],
+									'class'			=> 'media-frame avia-media-audio-insert ' . $element['container_class'],
+									'frame'			=> 'post',
+									'state'			=> 'playlist-library',
+									'state_edit'	=> 'playlist-edit',
+									'fetch'			=> $fetch,
+									'save_to'		=> 'html',
+									'media_type'	=> 'audio'
+									);
+			}
+			
+			$data 	= AviaHelper::create_data_string($element['data']);
+			$class 	= 'button aviabuilder-image-upload avia-builder-image-insert avia-builder-audio-edit '.$element['class'];
+			$output = '	<a href="#" class="'.$class.'" '.$data.' title="'.esc_attr($element['title']).'">
+						<span class="wp-media-buttons-icon"></span>'.$element['title'].'</a>';
+						
+			return $output;
+		}
+		
+		
 		
 		
 		/**

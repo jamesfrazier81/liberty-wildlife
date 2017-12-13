@@ -116,7 +116,7 @@ jQuery(document).ready(function($) {
 							});
 						}
 
-						$('.name', $item).text( item.name );
+						$('.name', $item).html( item.name );
 
 						$item.appendTo( $inner );
 					});

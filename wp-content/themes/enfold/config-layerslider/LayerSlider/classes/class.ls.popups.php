@@ -35,6 +35,11 @@ class LS_Popups {
 		self::$index = get_option( self::$optionKey, array());
 		self::$popups = array();
 
+		// Make sure that the Popup Index is an array
+		if( ! is_array( self::$index ) ) {
+			self::$index = array();
+		}
+
 		// Examine the Popup Index, see if there are popups
 		// that needs to be automatically included on page
 		// based on the user settings.
@@ -50,11 +55,21 @@ class LS_Popups {
 
 		self::autoinclude();
 		self::display();
+
+		add_action('get_footer', array(__CLASS__, 'render'));
 	}
 
 
 
 	public static function addIndex( $data ) {
+
+		if( empty( $data ) || empty( $data['id'] ) ) {
+			return false;
+		}
+
+		if( ! is_array( self::$index ) ) {
+			self::$index = array();
+		}
 
 		self::$index[ $data['id'] ] = $data;
 		update_option(self::$optionKey, self::$index);
@@ -63,6 +78,15 @@ class LS_Popups {
 
 
 	public static function removeIndex( $id ) {
+
+		if( ! is_array( self::$index ) ) {
+			self::$index = array();
+		}
+
+		if( empty( $id ) || empty( self::$index[ $id ] ) ) {
+			return false;
+		}
+
 		unset( self::$index[ $id ] );
 		update_option(self::$optionKey, self::$index);
 	}
@@ -89,7 +113,7 @@ class LS_Popups {
 							continue;
 						}
 
-					} elseif( $_COOKIE['ls-popup-'.$popup['id']] > time() - 60 * 60 * 24 * (int)$popup['repeat_days'] ) {
+					} elseif( ! empty($_COOKIE['ls-popup-'.$popup['id']]) && $_COOKIE['ls-popup-'.$popup['id']] > time() - 60 * 60 * 24 * (int)$popup['repeat_days'] ) {
 						continue;
 					}
 				}
@@ -168,15 +192,19 @@ class LS_Popups {
 				// for the purpose of serving a repeat control.
 				$expires = ( (int)$popup['repeat_days'] === 0 ) ? 0 : time() + 60*60*24*365;
 				setcookie('ls-popup-'.$popup['id'], time(), $expires );
-
-				// Print slider markup
-				add_action('get_footer', function( ) use ( $popup ) {
-					layerslider( $popup['id'], '', array( 'popup' => true ) );
-				});
 			}
 		}
 	}
 
 
+	public static function render( $popup ) {
+
+		if( ! empty(self::$popups) && is_array(self::$popups) ) {
+			foreach( self::$popups as $popup ) {
+				layerslider( $popup['id'], '', array( 'popup' => true ) );
+			}
+
+		}
+	}
 
 }

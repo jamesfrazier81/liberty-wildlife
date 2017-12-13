@@ -696,7 +696,7 @@
 			});
 			
 			
-	}
+	};
    	
    	
 
@@ -730,7 +730,7 @@
 			QTags._buttonsInit(); //workaround since dom ready was triggered already and there would be no initialization
 			
 			// modify behavior for html editor
-			switch_btn.bind('click', function()
+			switch_btn.on('click', function()
 			{
 				var button = $(this);
 				
@@ -738,7 +738,19 @@
 				{
 					parent.removeClass('html-active').addClass('tmce-active');
 					window.tinyMCE.execCommand(executeAdd, true, el_id);
-					window.tinyMCE.get(el_id).setContent(window.switchEditors.wpautop(textarea.val()), {format:'raw'});
+				
+					/**
+					 * fixes problem with caption shortcode that manipulates the HTML and adds some custom temp structure on adding content to editor
+					 * see  wp-includes\js\tinymce\plugins\wpeditimage\plugin.js function parseShortcode 
+					 * 
+					 * Check in future releases, that tinyMCE events "beforeGetContent" and "BeforeSetContent" and "PostProcess" do not require some special format to execute. 
+					 * Currently  event.format !== 'raw' is used
+					 */
+					var text = textarea.val();
+					var result = text.match( /\[caption /i );
+					var format = ( result ) ? 'wpeditimage' : 'raw';
+					
+					window.tinyMCE.get(el_id).setContent(window.switchEditors.wpautop(text), {format: format });
 					
 					//trigger updates for preview window
 					tinymce.activeEditor.on('keyup change', function(e) 
@@ -777,7 +789,7 @@
 			switch_btn.filter('.switch-tmce').trigger('click');
 			
 			//make sure that when the save button is pressed the textarea gets updated and sent to the editor
-			save_btn.bind('click', function()
+			save_btn.on('click', function()
 			{
 				switch_btn.filter('.switch-html').trigger('click');
 			});
@@ -785,17 +797,17 @@
 			
 
 			//make sure that the instance is removed if the modal was closed in any way
-			$doc.bind('avia_modal_before_close' + _self.namespace + "tiny_close", function(e, modal)
+			$doc.on('avia_modal_before_close' + _self.namespace + "tiny_close", function(e, modal)
 			{
 				if(_self.namespace == modal.namespace)
 				{
 					if(window.tinyMCE) window.tinyMCE.execCommand(executeRem, true, el_id); 
-					$doc.unbind('avia_modal_before_close'  + _self.namespace + "tiny_close"); 
+					$doc.off('avia_modal_before_close'  + _self.namespace + "tiny_close"); 
 				}
 			});
 			
 		});
-	}
+	};
 	
 	
 	

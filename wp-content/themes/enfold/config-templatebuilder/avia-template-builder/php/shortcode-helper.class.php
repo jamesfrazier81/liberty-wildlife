@@ -19,7 +19,8 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
         static $tree = array();
         static $shortcode_index = 0; //tells us which index the currently rendered shortcode has
         
-        
+		static $direct_calls = 0;			//	adds direct calls to theme shortcodes (e.g. from codeblocks to update $shortcode_index correctly)
+        static $is_direct_call = false;		//	set to true if shortcodes are eecuted inside elements and removed from final code to execute like in codeblocks (shortcode tree is incorrect in that case) 
         
         /**
 		 *Converts a shortcode into an array
@@ -148,35 +149,56 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
 		 **/
 		static function build_shortcode_tree($matches)
         { 
-            if(is_array($matches[0])) $matches = $matches[0];
-            $open = array();
-            $modify_key = 1;
+            if( is_array( $matches[0] ) ) 
+			{
+				$matches = $matches[0];
+			}
             
-            $new = array();
-            $counter = 0;
+            $matches = explode( ',', str_replace( ']', '', implode( ',', $matches ) ) );
             
-            $matches = explode(',',str_replace(']','', implode(",", $matches)));
-            
-            //close all elements that are not self closing to generate a valid xml string
-            foreach($matches as $key => $match)
-            {
-            	$match = trim(str_replace(']', '', $match));
-            
-                if(strpos($match, '/') === false)
-                {
-                    $closing = trim(str_replace('[','[/',$match));
-                    
-                    if( ! in_array($closing, $matches) ) //if we got no closing tag add a temp one
-                    {
-                        array_splice($matches, $key + $modify_key, 0, array($closing.'--')); //add random characters so we dont run into false detection when having mulitple unclosed tags of the same type
-                        $modify_key++;
-                    }
-                }
-            }
+            //	close all elements that are not self closing to generate a valid xml string			
+			$current = 0;
+			
+			while ( $current < count( $matches ) )
+			{
+				$match = $matches[ $current ];
+				
+				if( strpos( $match, '/' ) !== false )
+				{
+					$current ++;
+					continue;
+				}
+				
+				$closing = trim(str_replace('[','[/',$match));
+				
+				$search = $current + 1;
+				$auto_close = true;
+				
+				while ( $search < count( $matches ) )
+				{
+					if( strpos( $match, $matches[ $search ] ) !== false )
+					{
+						break;
+					}
+					
+					if( strpos( $closing, $matches[ $search ] ) !== false )
+					{
+						$auto_close = false;
+						break;
+					}
+					
+					$search ++;
+				}
+				
+				if( $auto_close ) //if we got no closing tag add a temp one
+				{
+					array_splice( $matches, $current + 1, 0, array( $closing ) ); 
+				}
+				
+				$current ++;
+			}
 
-
-            $matches = str_replace('[','', implode(",", $matches));
-            $matches = explode(',' , str_replace('--','', $matches)); //remove fake tag addition 
+            $matches = explode( ',', str_replace( '[', '', implode( ',', $matches ) ) );
 
             $temp_index = 0;
             $tree       = array('content' => array());

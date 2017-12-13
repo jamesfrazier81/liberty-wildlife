@@ -1385,7 +1385,7 @@ if(!function_exists('kriesi_backlink'))
 		if($random_number % 3 == 2) $theme_string = "powered by ".$theme_name." WordPress Theme";
 		if(!empty($frontpage_only) && !is_front_page()) $no = "rel='nofollow'";
 		
-		$link = " - <a {$no} href='http://www.kriesi.at'>{$theme_string}</a>";
+		$link = " - <a {$no} href='https://kriesi.at'>{$theme_string}</a>";
 	
 		$link = apply_filters("kriesi_backlink", $link);
 		return $link;

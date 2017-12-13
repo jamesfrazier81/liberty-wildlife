@@ -32,14 +32,9 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 			{
 				if(is_admin() && isset($_POST['action']) && $_POST['action'] == "avia_ajax_av_google_map" )
 				{
-					$prefix  = is_ssl() ? "https" : "http";
-		            $api_key = avia_get_option('gmap_api');
-		            $api_url = $prefix.'://maps.google.com/maps/api/js?v=3.27';
-		            
-		            if($api_key != ""){
-			           $api_url .= "&key=" .$api_key;
-		            }
-		            
+					$api_key = avia_get_option('gmap_api');
+					$api_url = av_google_maps::api_url( $api_key );
+					
 		            wp_register_script( 'avia-google-maps-api', $api_url, array('jquery'), NULL, true);
 					
 					$load_google_map_api = apply_filters('avf_load_google_map_api', true, 'av_google_map');
@@ -379,16 +374,11 @@ if ( !class_exists( 'avia_sc_gmaps' ) )
 				$this->generate_js_vars($content, $atts);
 				add_action('wp_footer', array($this, 'send_var_to_frontend'), 2, 100000);
 				
-				
-				//create the map div that will be used to insert the google map
 				$map = "<div id='av_gmap_".avia_sc_gmaps::$map_count."' class='avia-google-map-container {$av_display_classes}' data-mapid='".avia_sc_gmaps::$map_count."' ".$this->define_height($height)."></div>";
-				
+								
 				
 				//if the element is nested within a section or a column dont create the section shortcode around it
 				if(!ShortcodeHelper::is_top_level()) return $map;
-				
-				
-				
 				
 				
 				$output .=  avia_new_section($params);

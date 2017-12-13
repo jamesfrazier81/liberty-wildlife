@@ -12,6 +12,7 @@ if ( !class_exists( 'avia_sc_toggle' ) )
         static $counter = 1;
         static $initial = 0;
         static $tags = array();
+        static $atts = array();
 
         /**
          * Create the config array for the shortcode button
@@ -70,7 +71,6 @@ if ( !class_exists( 'avia_sc_toggle' ) )
 
                         array('title'=>__('Toggle 1', 'avia_framework' ), 'tags'=>''),
                         array('title'=>__('Toggle 2', 'avia_framework' ), 'tags'=>''),
-
                     ),
 
 
@@ -131,8 +131,73 @@ if ( !class_exists( 'avia_sc_toggle' ) )
                 array(
 							"type" 	=> "close_div",
 							'nodescription' => true
-						),
-						
+				),
+				
+				array(
+					"type" 	=> "tab",
+					"name"  => __("Styling" , 'avia_framework'),
+					'nodescription' => true
+				),
+				
+				
+				 array(
+                    "name" 	=> __("Styling", 'avia_framework' ),
+                    "desc" 	=> __("Select the styling of the toggles", 'avia_framework' ),
+                    "id" 	=> "styling",
+                    "type" 	=> "select",
+                    "std" 	=> "",
+                    "subtype" => array( __('Default', 'avia_framework' ) =>'', __("Minimal", 'avia_framework' ) => 'av-minimal-toggle')
+                ),
+                
+                
+                array(
+					"name" 	=> __("Colors", 'avia_framework' ),
+					"desc" 	=> __("Either use the themes default colors or apply some custom ones", 'avia_framework' ),
+					"id" 	=> "colors",
+					"type" 	=> "select",
+					"std" 	=> "",
+					"subtype" => array( __('Default', 'avia_framework' )=>'',
+										__('Define Custom Colors', 'avia_framework' )=>'custom'),
+				),
+			
+				array(	
+					"name" 	=> __("Custom Font Color", 'avia_framework' ),
+					"desc" 	=> __("Select a custom font color. Leave empty to use the default", 'avia_framework' ),
+					"id" 	=> "font_color",
+					"type" 	=> "colorpicker",
+					"std" 	=> "",
+					"rgba" 	=> true,
+					"container_class" => 'av_third av_third_first',
+					"required" => array('colors','equals','custom')
+				),	
+					
+				array(	
+					"name" 	=> __("Custom Background Color", 'avia_framework' ),
+					"desc" 	=> __("Select a custom background color. Leave empty to use the default", 'avia_framework' ),
+					"id" 	=> "background_color",
+					"type" 	=> "colorpicker",
+					"std" 	=> "",
+					"rgba" 	=> true,
+					"container_class" => 'av_third',
+					"required" => array('colors','equals','custom')
+				),	
+				
+				array(	
+					"name" 	=> __("Custom Border Color", 'avia_framework' ),
+					"desc" 	=> __("Select a custom border color. Leave empty to use the default", 'avia_framework' ),
+					"id" 	=> "border_color",
+					"type" 	=> "colorpicker",
+					"std" 	=> "",
+					"rgba" 	=> true,
+					"container_class" => 'av_third',
+					"required" => array('colors','equals','custom')
+				),	
+				
+				
+				array(
+							"type" 	=> "close_div",
+							'nodescription' => true
+				),		
 						
 								array(
 									"type" 	=> "tab",
@@ -244,17 +309,18 @@ if ( !class_exists( 'avia_sc_toggle' ) )
         {
 	        extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
 	        
-            $atts =  shortcode_atts(array('initial' => '0', 'mode' => 'accordion', 'sort'=>''), $atts, $this->config['shortcode']);
+            $atts =  shortcode_atts(array('initial' => '0', 'mode' => 'accordion', 'sort'=>'', 'styling'=>'', 'colors'=>'', 'border_color'=>'', 'font_color'=>'', 'background_color'=>''), $atts, $this->config['shortcode']);
             extract($atts);
 
             $output = "";
             $addClass = '';
             if($mode == 'accordion') $addClass = 'toggle_close_all ';
-
-            $output  = '<div class="togglecontainer '.$av_display_classes.' '.$addClass.$meta['el_class'].'">';
+			
+            $output  = '<div class="togglecontainer '.$av_display_classes.' '.$styling.' '.$addClass.$meta['el_class'].'" >';
             avia_sc_toggle::$counter = 1;
             avia_sc_toggle::$initial = $initial;
             avia_sc_toggle::$tags 	 = array();
+            avia_sc_toggle::$atts 	 = $atts;
 
             $content  = ShortcodeHelper::avia_remove_autop($content, true);
             $sortlist = !empty($sort) ? $this->sort_list($atts) : "";
@@ -269,11 +335,13 @@ if ( !class_exists( 'avia_sc_toggle' ) )
         {
             $output = $titleClass = $contentClass = "";
             $toggle_atts = shortcode_atts(array('title' => '', 'tags' => '', 'custom_id' => '', 'custom_markup' =>''), $atts, 'av_toggle');
-
+			$toggle_init_open_style = "";
+			
             if(is_numeric(avia_sc_toggle::$initial) && avia_sc_toggle::$counter == avia_sc_toggle::$initial)
             {
                 $titleClass   = "activeTitle";
                 $contentClass = "active_tc";
+                $toggle_init_open_style = "style='display:block;'";
             }
 
             if(empty($toggle_atts['title']))
@@ -285,17 +353,46 @@ if ( !class_exists( 'avia_sc_toggle' ) )
             {
                 $toggle_atts['custom_id'] = 'toggle-id-'.avia_sc_toggle::$toggle_id++;
             }
+            
+            //custom colors
+            $colors = $inherit = $icon_color = "";
+            if(!empty(avia_sc_toggle::$atts['colors']) && avia_sc_toggle::$atts['colors'] == "custom")
+            {
+	            if(!empty(avia_sc_toggle::$atts['background_color']))
+	            {
+		            $colors = "background-color: ".avia_sc_toggle::$atts['background_color']."; ";
+	            }
+	            
+	            if(!empty(avia_sc_toggle::$atts['font_color']))
+	            {
+		            $colors .= "color: ".avia_sc_toggle::$atts['font_color']."; ";
+		            $icon_color = "style='border-color:".avia_sc_toggle::$atts['font_color'].";'";
+		            $inherit .= " av-inherit-font-color ";
+	            }
+	            
+	            if(!empty(avia_sc_toggle::$atts['border_color']))
+	            {
+		            $colors .= "border-color: ".avia_sc_toggle::$atts['border_color']."; ";
+		            $inherit .= " av-inherit-border-color ";
+	            }
+            }
+            
+            if(!empty($colors))
+            {
+	            $colors = "style='{$colors}'";
+            }
+            
 
             $markup_tab = avia_markup_helper(array('context' => 'entry','echo'=>false, 'custom_markup'=>$toggle_atts['custom_markup']));
             $markup_title = avia_markup_helper(array('context' => 'entry_title','echo'=>false, 'custom_markup'=>$toggle_atts['custom_markup']));
             $markup_text = avia_markup_helper(array('context' => 'entry_content','echo'=>false, 'custom_markup'=>$toggle_atts['custom_markup']));
 
-            $output .= '<section class="av_toggle_section" '.$markup_tab.'>';
-            $output .= '    <div class="single_toggle" '.$this->create_tag_string($toggle_atts['tags'], $toggle_atts).' >';
-            $output .= '        <p data-fake-id="#'.$toggle_atts['custom_id'].'" class="toggler '.$titleClass.'" '.$markup_title.'>'.$toggle_atts['title'].'<span class="toggle_icon">';
+            $output .= '<section class="av_toggle_section" '.$markup_tab.' >';
+            $output .= '    <div class="single_toggle" '.$this->create_tag_string($toggle_atts['tags'], $toggle_atts).'  >';
+            $output .= '        <p data-fake-id="#'.$toggle_atts['custom_id'].'" class="toggler '.$titleClass.$inherit.'" '.$markup_title.' '.$colors.'>'.$toggle_atts['title'].'<span class="toggle_icon" '.$icon_color.'>';
             $output .= '        <span class="vert_icon"></span><span class="hor_icon"></span></span></p>';
-            $output .= '        <div id="'.$toggle_atts['custom_id'].'-container" class="toggle_wrap '.$contentClass.'" >';
-            $output .= '            <div class="toggle_content invers-color" '.$markup_text.'>';
+            $output .= '        <div id="'.$toggle_atts['custom_id'].'-container" class="toggle_wrap '.$contentClass.'"  '.$toggle_init_open_style.'>';
+            $output .= '            <div class="toggle_content invers-color '.$inherit.'" '.$markup_text.' '.$colors.' >';
             $output .= ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop($content));
             $output .= '            </div>';
             $output .= '        </div>';

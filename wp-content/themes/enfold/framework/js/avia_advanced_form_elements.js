@@ -64,12 +64,18 @@ var av_backend_maps_loaded, gm_authFailure;
 	
 	avia_callback.av_maps_js_api_check = function(value, callback)
 	{
-		var src			= 'https://maps.googleapis.com/maps/api/js?v=3.27&callback=av_backend_maps_loaded&key='+value,
-			script 		= document.createElement('script');
-			
+								//	this is only a fallback setting 
+		var src			= 'https://maps.googleapis.com/maps/api/js?v=3.30&callback=av_backend_maps_loaded&key=' + value;
+		
+		if( 'undefined' != typeof avia_framework_globals.gmap_backend_maps_loaded && avia_framework_globals.gmap_backend_maps_loaded != '' )
+		{
+			src = avia_framework_globals.gmap_backend_maps_loaded + '&key=' + value;
+		}		
+
+		var	script 		= document.createElement('script');
 			script.type = 'text/javascript';	
 			script.src 	= src;
-		
+			
 			avia_callback.gmaps_values = {
 				
 				callback: callback,
@@ -81,8 +87,7 @@ var av_backend_maps_loaded, gm_authFailure;
 			google.maps = false;
 			
 			document.body.appendChild(script);
-
-	}
+	};
 	
 	
 	av_backend_maps_loaded = function()
@@ -95,7 +100,7 @@ var av_backend_maps_loaded, gm_authFailure;
         {
 			if (status === google.maps.GeocoderStatus.OK)
 			{
-				valid_key = true
+				valid_key = true;
             }
 			else if (status === google.maps.GeocoderStatus.REQUEST_DENIED)
 			{
@@ -108,8 +113,7 @@ var av_backend_maps_loaded, gm_authFailure;
 			
 			avia_callback.gmaps_values.callback.call(this, valid_key);
 		});
-	}
-	
+	};
 	
 	gm_authFailure = function()
 	{	
@@ -117,9 +121,7 @@ var av_backend_maps_loaded, gm_authFailure;
 		{
 			avia_callback.gmaps_values.callback.call(this, false);
 		}
-	}
-	
-	
+	};
 	
 })(jQuery);	
 
@@ -677,11 +679,24 @@ divs with elements get hidden or shown depending on the value of other elements
 				}
 				else
 				{
+					var array_check = false;
+					if( basicData.required[1].indexOf( '{contains_array}' ) !== -1 )
+					{
+						var to_check = basicData.required[1].replace('{contains_array}','').split(';');
+						$.each( to_check, function( i, val ) {
+									if( elementToWatch.val().indexOf( val ) !== -1 )
+									{
+										array_check = true;
+										return false;
+									}
+								});
+					}
+					
 					if(elementToWatch.val() == basicData.required[1] || 
 					  (elementToWatch.val() != "" && basicData.required[1] == "{true}") || (elementToWatch.val() == "" && basicData.required[1] == "{false}") ||
 					  (basicData.required[1].indexOf('{contains}') !== -1 && elementToWatch.val().indexOf(basicData.required[1].replace('{contains}','')) !== -1) ||
-					  (basicData.required[1].indexOf('{higher_than}') !== -1 && parseInt(elementToWatch.val()) >= parseInt((basicData.required[1].replace('{higher_than}',''))))
-					
+					  (basicData.required[1].indexOf('{higher_than}') !== -1 && parseInt(elementToWatch.val()) >= parseInt((basicData.required[1].replace('{higher_than}','')))) ||
+					  array_check
 					) 
 					{ 
 						if(container.is('.inactive_visible'))
@@ -713,15 +728,29 @@ divs with elements get hidden or shown depending on the value of other elements
 			
 			var data 		= passed.data.set,
 				elToCheck 	= $(this),
-				elVal		= elToCheck.val();
+				elVal		= elToCheck.val(),
+				array_check = false;
 			
 			if(elToCheck.is(':checkbox')) elVal = "";
+			
+			if( data.required[1].indexOf( '{contains_array}' ) !== -1 )
+			{
+				var to_check = data.required[1].replace('{contains_array}','').split(';');
+				$.each( to_check, function( i, val ) {
+						if( elVal.indexOf( val ) !== -1 )
+						{
+							array_check = true;
+							return false;
+						}
+					});
+			}
 					
 			if(elVal == data.required[1] ||
-			(elVal != "" && data.required[1] == "{true}") || (elVal == "" && data.required[1] == "{false}") ||
-			(elToCheck.is(':checkbox') && (elToCheck.attr('checked') && data.required[1] || !elToCheck.attr('checked') && !data.required[1])) ||
-			(data.required[1].indexOf('{contains}') !== -1 && elVal.indexOf(data.required[1].replace('{contains}','')) !== -1) ||
-			(data.required[1].indexOf('{higher_than}') !== -1 && parseInt(elVal) >= parseInt((data.required[1].replace('{higher_than}',''))))
+				(elVal != "" && data.required[1] == "{true}") || (elVal == "" && data.required[1] == "{false}") ||
+				(elToCheck.is(':checkbox') && (elToCheck.attr('checked') && data.required[1] || !elToCheck.attr('checked') && !data.required[1])) ||
+				(data.required[1].indexOf('{contains}') !== -1 && elVal.indexOf(data.required[1].replace('{contains}','')) !== -1) ||
+				(data.required[1].indexOf('{higher_than}') !== -1 && parseInt(elVal) >= parseInt((data.required[1].replace('{higher_than}','')))) ||
+				array_check
 			)
 			{
 				if(data.el.is('.inactive_visible'))

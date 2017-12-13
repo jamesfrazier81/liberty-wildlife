@@ -40,6 +40,7 @@ if ( !class_exists( 'avia_sc_layerslider' ))
 				//fetch all registered slides and save them to the slides array
 				$slides = avia_find_layersliders(true);
 				if(empty($params['args']['id']) && is_array($slides)) $params['args']['id'] = reset($slides);				
+				if(empty($params['args']['id'])) $params['args']['id'] = "";				
 				
 				$element = array(
 					'subtype' => $slides, 

@@ -736,7 +736,7 @@
 	</div>
 
 
-
+	<?php if( LS_WP_ADMIN ) : ?>
 	<div class="km-tabs ls-plugin-settings-tabs">
 		<a href="#" class="active"><?php _e('Permissions', 'LayerSlider') ?></a>
 		<a href="#"><?php _e('Google Fonts', 'LayerSlider') ?></a>
@@ -978,6 +978,7 @@
 			</div>
 		</div>
 	</div>
+	<?php endif ?>
 
 
 	<div class="ls-box ls-news">

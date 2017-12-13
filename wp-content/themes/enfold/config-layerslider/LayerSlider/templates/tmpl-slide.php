@@ -95,12 +95,35 @@
 					<h3 class="subheader"><?php _e('Slide Linking', 'LayerSlider') ?></h3>
 					<div class="inner">
 						<div class="row-helper">
-							<?php lsGetInput($lsDefaults['slides']['linkUrl'], null, array('class' => 'slideprop', 'placeholder' => $lsDefaults['slides']['linkUrl']['name'] )) ?>
-							<span><a href="#"><?php _e('use post URL', 'LayerSlider') ?></a></span>
+							<?php lsGetInput($lsDefaults['slides']['linkUrl'], null, array('class' => 'slideprop url', 'placeholder' => $lsDefaults['slides']['linkUrl']['name'] )) ?>
+							<input type="hidden" name="linkId">
+							<input type="hidden" name="linkName">
+							<input type="hidden" name="linkType">
+							<div class="ls-insert-link ls-pointer ls-box ls-hidden">
+								<ul class="inner">
+									<li>
+										<a href="#" class="post">
+											<?php _e('Choose Post or Page', 'LayerSlider') ?>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="dyn">
+											<?php _e('Use Dynamic post URL', 'LayerSlider') ?>
+										</a>
+									</li>
+								</ul>
+							</div>
+							<span>
+								<a href="#" class="ls-insert-link-button"><?php _e('insert ...', 'LayerSlider') ?></a>
+							</span>
+							<a href="#" class="change">
+								<i class="dashicons dashicons-editor-unlink"></i>
+								<?php _e('change', 'LayerSlider') ?>
+							</a>
 						</div>
 						<div class="row-helper">
 							<?php lsGetSelect($lsDefaults['slides']['linkTarget'], null, array('class' => 'slideprop')) ?>
-							<?php lsGetSelect($lsDefaults['slides']['linkType'], null, array('class' => 'slideprop')) ?>
+							<?php lsGetSelect($lsDefaults['slides']['linkPosition'], null, array('class' => 'slideprop')) ?>
 						</div>
 					</div>
 				</td>
@@ -275,23 +298,77 @@
 							<?php _e('Align Layer to...', 'LayerSlider') ?>
 						</button>
 						<div class="ls-su-data">
-							<table id="ls-layer-alignment" class="ls-layer-alignment">
-								<tr>
-									<td data-move="top left"><i><?php _e('top left', 'LayerSlider') ?></i></td>
-									<td data-move="top center"><i><?php _e('top center', 'LayerSlider') ?></i></td>
-									<td data-move="top right"><i><?php _e('top right', 'LayerSlider') ?></i></td>
-								</tr>
-								<tr>
-									<td data-move="middle left"><i><?php _e('middle left', 'LayerSlider') ?></i></td>
-									<td data-move="middle center"><i><?php _e('middle center', 'LayerSlider') ?></i></td>
-									<td data-move="middle right"><i><?php _e('middle right', 'LayerSlider') ?></i></td>
-								</tr>
-								<tr>
-									<td data-move="bottom left"><i><?php _e('bottom left', 'LayerSlider') ?></i></td>
-									<td data-move="bottom center"><i><?php _e('bottom center', 'LayerSlider') ?></i></td>
-									<td data-move="bottom right"><i><?php _e('bottom right', 'LayerSlider') ?></i></td>
-								</tr>
-							</table>
+							<div id="ls-layer-alignment" class="ls-layer-alignment">
+
+								<table class="ls-grid">
+									<tr>
+										<td data-move="top left">
+											<i><?php _e('top left', 'LayerSlider') ?></i>
+										</td>
+										<td data-move="top center">
+											<i><?php _e('top center', 'LayerSlider') ?></i>
+										</td>
+										<td data-move="top right">
+											<i><?php _e('top right', 'LayerSlider') ?></i>
+										</td>
+									</tr>
+									<tr>
+										<td data-move="middle left">
+											<i><?php _e('center left', 'LayerSlider') ?></i>
+										</td>
+										<td data-move="middle center">
+											<i><?php _e('center center', 'LayerSlider') ?></i>
+										</td>
+										<td data-move="middle right">
+											<i><?php _e('center right', 'LayerSlider') ?></i>
+										</td>
+									</tr>
+									<tr>
+										<td data-move="bottom left">
+											<i><?php _e('bottom left', 'LayerSlider') ?></i>
+										</td>
+										<td data-move="bottom center">
+											<i><?php _e('bottom center', 'LayerSlider') ?></i>
+										</td>
+										<td data-move="bottom right">
+											<i><?php _e('bottom right', 'LayerSlider') ?></i>
+										</td>
+									</tr>
+								</table>
+
+
+								<table class="ls-edges">
+									<tr>
+										<td data-move="left" class="ls-align-left">
+											<i><?php _e('Left Edge', 'LayerSlider') ?></i>
+											<span class="dashicons dashicons-align-left"></span>
+										</td>
+										<td data-move="center" class="ls-align-center">
+											<i><?php _e('H. Center', 'LayerSlider') ?></i>
+											<span class="dashicons dashicons-align-center"></span>
+										</td>
+										<td data-move="right" class="ls-align-right">
+											<i><?php _e('Right Edge', 'LayerSlider') ?></i>
+											<span class="dashicons dashicons-align-right"></span>
+										</td>
+									</tr>
+									<tr>
+										<td data-move="top" class="ls-align-top">
+											<i><?php _e('Top Edge', 'LayerSlider') ?></i>
+											<span class="dashicons dashicons-align-left"></span>
+										</td>
+										<td data-move="middle" class="ls-align-middle">
+											<i><?php _e('V. Center', 'LayerSlider') ?></i>
+											<span class="dashicons dashicons-align-center"></span>
+										</td>
+										<td data-move="bottom" class="ls-align-bottom">
+											<i><?php _e('Bottom Edge', 'LayerSlider') ?></i>
+											<span class="dashicons dashicons-align-right"></span>
+										</td>
+									</tr>
+								</table>
+
+							</div>
 						</div>
 					</div>
 					<div class="ls-editor-undo-redo">
@@ -349,6 +426,53 @@
 			<a href="#" class="ls-add-sublayer">
 				<span class="dashicons dashicons-plus"></span><?php _e('Add New', 'LayerSlider') ?>
 			</a>
+			<div class="ls-layer-types-wrapper">
+				<div class="ls-box ls-layer-types">
+					<div>
+						<!-- <div class="subheader"><?php _e('Choose a layer type', 'LayerSlider') ?></div> -->
+						<ul class="inner">
+							<li data-type="img">
+								<i class="dashicons dashicons-format-image"></i>
+								<?php _e('Image', 'LayerSlider') ?>
+							</li>
+							<li data-type="icon">
+								<i class="dashicons dashicons-flag"></i>
+								<?php _e('Icon', 'LayerSlider') ?>
+							</li>
+							<li data-type="text">
+								<i class="dashicons dashicons-text"></i>
+								<?php _e('Text', 'LayerSlider') ?>
+							</li>
+							<li data-type="button">
+								<i class="dashicons dashicons-marker"></i>
+								<?php _e('Button', 'LayerSlider') ?>
+							</li>
+							<li data-type="media">
+								<i class="dashicons dashicons-video-alt3"></i>
+								<?php _e('Video / Audio', 'LayerSlider') ?>
+							</li>
+							<li data-type="html">
+								<i class="dashicons dashicons-editor-code"></i>
+								<?php _e('HTML', 'LayerSlider') ?>
+							</li>
+							<li data-type="post">
+								<i class="dashicons dashicons-admin-post"></i>
+								<?php _e('Dynamic Layer', 'LayerSlider') ?>
+							</li>
+							<li data-type="import">
+								<i class="dashicons dashicons-upload"></i>
+								<?php _e('Import Layer', 'LayerSlider') ?>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="ls-empty-layer-notification">
+				<div class="ls-line"></div>
+				<div class="ls-spot"></div>
+				<h3><?php _e('This slide has no layers') ?></h3>
+				<h5><?php printf(__('Click %sAdd New%s to add your first layer.', 'LayerSlider'), '<span><span class="dashicons dashicons-plus"></span>', '</span>') ?></h5>
+			</div>
 			<div class="ls-timeline-switch filters">
 				<ul>
 					<li class="active"><?php _e('Layer options', 'LayerSlider') ?></li>
@@ -382,9 +506,14 @@
 							</b>
 						</div>
 
-						<div class="ls-multiple-selection ls-hidden">
-							<h5><?php _e('Multiple selection', 'LayerSlider') ?></h5>
-							<span><?php _e('Editing multiple layers feature is coming soon.', 'LayerSlider') ?></span>
+						<div class="ls-multi-select-notice">
+							<h5>
+								<span class="dashicons dashicons-info"></span>
+								<?php _e('Multiple Selection Mode', 'LayerSlider') ?>
+								<sup><?php _e('BETA', 'LayerSlider') ?></sup>
+							</h5>
+							<span><?php _e('In Multiple Selection Mode you can override specific options on all selected layers. Each option field has been reset, only the options you change will be updated on the selected layers. This feature is currently in beta phase, use it cautiously.', 'LayerSlider') ?></span>
+							<small><?php _e('Changes will be applied on all selected layers.', 'LayerSlider') ?></small>
 						</div>
 						<div class="ls-sublayer-pages-wrapper">
 							<div class="ls-sublayer-nav">

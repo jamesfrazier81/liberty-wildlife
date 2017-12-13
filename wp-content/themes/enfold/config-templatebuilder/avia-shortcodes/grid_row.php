@@ -361,9 +361,9 @@ if ( !class_exists( 'avia_sc_grid_row' ) )
 				avia_sc_cell::$attr = $atts;
 				$output .=  avia_new_section($params);
 				$output .=  ShortcodeHelper::avia_remove_autop($content,true) ;
-				$output .= avia_section_after_element_content( $meta , 'after_submenu', false);
+				$output .= avia_section_after_element_content( $meta , 'after_submenu_' . avia_sc_grid_row::$count, false);
 				
-				// added to fix http://www.kriesi.at/support/topic/footer-disseapearing/#post-427764
+				// added to fix https://kriesi.at/support/topic/footer-disseapearing/#post-427764
 				avia_sc_section::$close_overlay = "";
 				
 				

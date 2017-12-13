@@ -770,6 +770,8 @@ if(!function_exists('avia_import_config_file'))
 
         if($options)
         {
+	        @ini_set('max_execution_time', 1500);
+	        
             if(!class_exists('WP_Import'))
             {
                 if(!defined('WP_LOAD_IMPORTERS')) define('WP_LOAD_IMPORTERS', true);

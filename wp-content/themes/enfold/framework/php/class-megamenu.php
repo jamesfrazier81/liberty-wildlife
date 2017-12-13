@@ -649,15 +649,20 @@ if( !function_exists( 'avia_fallback_menu' ) )
 		$output  = "";
 		$current = "";
 		$exclude = avia_get_option('frontpage');
-		if (is_front_page()){$current = "class='current-menu-item'";}
+		if (is_front_page()){$current = " current-menu-item";}
 		if ($exclude) $exclude ="&exclude=".$exclude;
 
-		$output .= "<div class='fallback_menu av-main-nav-wrap'>";
-		$output .= "<ul class='avia_mega menu av-main-nav'>";
-		$output .= "<li $current><a href='".get_bloginfo('url')."'>".__('Home','avia_framework')."</a></li>";
-		$output .= wp_list_pages('echo=0&title_li=&sort_column=menu_order'.$exclude);
-		$output .= apply_filters('avf_fallback_menu_items', "", 'fallback_menu');
-		$output .= "</ul></div>";
+			//	apply class to allow burger menu CSS to hide menu
+		$page_list = wp_list_pages('echo=0&title_li=&sort_column=menu_order'.$exclude);
+		$page_list = str_replace( 'page_item', 'page_item menu-item', $page_list );
+		
+		$output .=	"<div class='avia-menu fallback_menu av-main-nav-wrap'>";
+		$output .=		"<ul id='avia-menu' class='menu avia_mega av-main-nav'>";
+		$output .=			"<li class='menu-item{$current}'><a href='".get_bloginfo('url')."'>".__('Home','avia_framework')."</a></li>";
+		$output .=			$page_list;
+		$output .=			apply_filters('avf_fallback_menu_items', "", 'fallback_menu');
+		$output .=		"</ul>";
+		$output .=	"</div>";
 		
 		if($params['echo'])
 		{

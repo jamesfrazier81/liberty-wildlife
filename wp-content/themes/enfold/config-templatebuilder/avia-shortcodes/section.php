@@ -286,6 +286,18 @@ if ( !class_exists( 'avia_sc_section' ) )
 						"id" 	=> "scroll_down",
 						"std" 	=> "",
 						"type" 	=> "checkbox"),
+						
+					
+					array(
+							"name" 	=> __("Custom Arrow Color", 'avia_framework' ),
+							"desc" 	=> __("Select a custom arrow color. Leave empty if you want to use the default arrow color and style", 'avia_framework' ),
+							"id" 	=> "custom_arrow_bg",
+							"type" 	=> "colorpicker",
+							"std" 	=> "",
+							"required" => array('scroll_down','not',''),
+						),
+					
+					
 
 
 				  array(	"name" 	=> __("For Developers: Section ID", 'avia_framework' ),
@@ -597,7 +609,8 @@ array(
 			    								'scroll_down' => '',
 			    								'bottom_border_diagonal_color' => '',
 			    								'bottom_border_diagonal_direction' => '',
-			    								'bottom_border_style'=>''
+			    								'bottom_border_style'=>'',
+			    								'custom_arrow_bg' => ''
 			    								
 			    								), 
 			    							$atts, $this->config['shortcode']);
@@ -730,11 +743,21 @@ array(
 				
 				if(!empty($scroll_down))
 				{	
+					$arrow_style = "";
+					$arrow_class = "";
+					
 					if(!$overlay)
 					{
-					$params['attach'] .= $pre_wrap;	
+						$params['attach'] .= $pre_wrap;	
 					}
-					$params['attach'] .= "<a href='#next-section' title='' class='scroll-down-link' ". av_icon_string( 'scrolldown' ). "></a>";
+					
+					if(!empty($custom_arrow_bg))
+					{
+						$arrow_style = "style='color: {$custom_arrow_bg};'";
+						$arrow_class = " av-custom-scroll-down-color";
+					}
+					
+					$params['attach'] .= "<a href='#next-section' title='' class='scroll-down-link {$arrow_class}' {$arrow_style} ". av_icon_string( 'scrolldown' ). "></a>";
 				}
 			    
 			    
@@ -760,6 +783,12 @@ array(
 			    		$params['close'] = false;
 			    	}
 			    }
+			    
+			    if($bottom_border == 'border-extra-arrow-down')
+			    {
+				    $params['class'] .= " av-arrow-down-section";
+			    }
+			    
 		
 				
 				$avia_config['layout_container'] = "section";

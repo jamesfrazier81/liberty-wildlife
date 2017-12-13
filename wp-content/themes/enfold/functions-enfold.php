@@ -61,7 +61,7 @@ if(!function_exists('avia_menu_item_filter'))
 /* filter menu item urls */
 if(!function_exists('avia_maps_key_for_plugins'))
 {
-	add_filter( 'script_loader_src', 'avia_maps_key_for_plugins', 10 , 99, 2 );
+	add_filter( 'script_loader_src', 'avia_maps_key_for_plugins', 10, 2 );
 
 	function avia_maps_key_for_plugins ( $url, $handle  )
 	{
@@ -71,13 +71,12 @@ if(!function_exists('avia_maps_key_for_plugins'))
 		
 		if ( strpos( $url, "maps.google.com/maps/api/js" ) !== false || strpos( $url, "maps.googleapis.com/maps/api/js" ) !== false ) 
 		{
+				//	if no key, we can generate a new link with our key
 			if ( strpos( $url, "key=" ) === false ) 
 			{	
-				$url = "http://maps.google.com/maps/api/js?v=3.27";
-				$url = esc_url( add_query_arg( 'key',$key,$url) );
+				$url = av_google_maps::api_url( $key );
 			}
 		}
-		
 	
 		return $url;
 	}
@@ -129,6 +128,22 @@ if(!function_exists('avia_append_search_nav'))
 	}
 }
 
+/*	Prepare a possible fix for menu plugins, that remove theme location from menu array to exchange the menus	*/
+if( ! function_exists( 'avia_save_menu_location' ) )
+{
+	add_filter('wp_nav_menu_args', 'avia_save_menu_location', 1, 1 );
+	
+	function avia_save_menu_location( $args )
+	{
+		global $avia_config;
+		
+		$avia_config['current_menu_location_output'] = isset( $args['theme_location'] ) ? $args['theme_location'] : '';
+		
+		return $args;
+	}
+}
+
+
 /* Append the burger menu */
 if(!function_exists('avia_append_burger_menu'))
 {
@@ -138,7 +153,20 @@ if(!function_exists('avia_append_burger_menu'))
 
 	function avia_append_burger_menu ( $items , $args )
 	{	
-	    if ((is_object($args) && $args->theme_location == 'avia') || (is_string($args) && $args = "fallback_menu"))
+		global $avia_config;
+		
+		$location = ( is_object( $args ) && isset( $args->theme_location ) ) ? $args->theme_location : '';
+		$original_location = isset( $avia_config['current_menu_location_output'] ) ? $avia_config['current_menu_location_output'] : '';	
+		
+		/**
+		 * Allow compatibility with plugins that change menu or third party plugins to manpulate the location
+		 * 
+		 * @used_by Enfold config-menu-exchange\config.php			10
+		 * @since 4.1.3
+		 */
+		$location = apply_filters( 'avf_append_burger_menu_location', $location, $original_location, $items , $args );
+		
+	    if( ( is_object( $args ) && ( $location == 'avia' ) ) || ( is_string( $args ) && ( $args == "fallback_menu" ) ) )
 	    {
 	        $class = avia_get_option('burger_size');
 	        
@@ -698,36 +726,6 @@ ga('send', 'pageview');
 	}
 }
 
-/*
-* add gmaps code
-*/
-
-if(!function_exists('avia_gmap_key'))
-{
-	add_action('wp_footer', 'avia_gmap_key', 10);
-	add_action('admin_footer', 'avia_gmap_key', 10);
-
-	function avia_gmap_key()
-	{
-		$api_key = avia_get_option('gmap_api');
-		
-		if(!empty($api_key))
-		{
-			echo "
-<script type='text/javascript'>
- /* <![CDATA[ */  
-var avia_framework_globals = avia_framework_globals || {};
-	avia_framework_globals.gmap_api = '".$api_key."';
-/* ]]> */ 
-</script>	
-";
-    
-		}
-	}
-
-}
-
-
 
 /*
 function that checks which header style we are using. In general the whole site has the same header active, based on the option in theme options->header
@@ -944,6 +942,10 @@ if(!function_exists('avia_header_setting_sidebar'))
 		
 		$header = array_merge($header, $overwrite);
 		
+		//	Reset to actual user setting - otherwise burger menu will result in wrong behaviour
+		$settings = avia_get_option();
+		$header['submenu_clone'] = isset( $settings['submenu_clone'] ) && in_array( $settings['submenu_clone'], array( 'av-submenu-clone', 'av-submenu-noclone' ) ) ? $settings['submenu_clone'] : 'av-submenu-noclone';
+	
 		if( strpos($header['header_position'] , 'left') === false ) $header['sidebarmenu_sticky'] = "never_sticky";
 		
 		$header['header_class'] = " av_".str_replace(' ',' av_',$header['header_position']." ".$header['sidebarmenu_sticky']);

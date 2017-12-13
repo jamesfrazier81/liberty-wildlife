@@ -210,6 +210,11 @@
         	$('.av-countdown-timer', container).aviaCountdown();
     	}
     	
+		 //load audio player
+		if($.fn.aviaPlayer)
+        {
+        	$('.av-player', container).aviaPlayer();
+    	}
     	
     	
     }
@@ -272,7 +277,7 @@
 			}
 			
 			//show ticker
-			if(_self.firstrun) _self.container.addClass('av-countdown-active')
+			if(_self.firstrun) _self.container.addClass('av-countdown-active');
 			
 			_self.oldtime 	= $.extend( {}, _self.time );
 			_self.firstrun	= false;
@@ -299,7 +304,7 @@
 			{
 				_self.update[_units[i]] = {
 					time_container:  _self.container.find('.av-countdown-' + _units[i] + ' .av-countdown-time'),
-					label_container: _self.container.find('.av-countdown-' + _units[i] + ' .av-countdown-time-label'),
+					label_container: _self.container.find('.av-countdown-' + _units[i] + ' .av-countdown-time-label')
 				};
 				
 				if(_self.update[_units[i]].label_container.length)
@@ -314,10 +319,74 @@
 
 			
 		});
-	}
+	};
+	
+	
 	
 }(jQuery));
 
+
+// -------------------------------------------------------------------------------------------
+// 
+// AVIA Player
+// 
+// -------------------------------------------------------------------------------------------
+(function($)
+{ 
+	"use strict";
+	
+	var autostarted = false,
+		container = null,
+	
+		monitorStart = function( container )
+			{
+				var play_pause	= container.find('.av-player-player-container .mejs-playpause-button');
+				
+				if( play_pause.length == 0 )
+				{
+					setTimeout( function(){
+							monitorStart( container );
+						}, 200 );
+				}
+				
+				if( ! play_pause.hasClass('mejs-pause') )
+				{
+					play_pause.trigger( 'click' );
+				}
+				
+			};
+	
+	$.fn.aviaPlayer = function( options )
+	{	
+		if( ! this.length ) return; 
+
+		return this.each(function()
+		{
+			var _self 			= {};
+			
+			_self.container		= $( this );
+			
+			/**
+			 * Limit autostart to the first player with this option set only
+			 * 
+			 * DOM is not loaded completely and we have no event when player is loaded
+			 */
+			if( _self.container.hasClass( 'avia-playlist-autoplay' ) && ! autostarted )
+			{
+				if( ( _self.container.css('display') == 'none') || ( _self.container.css("visibility") == "hidden" ) )
+				{
+					return;
+				}
+				
+				autostarted = true;
+				setTimeout( function(){
+							monitorStart( _self.container );
+						}, 200 );
+			}
+			
+		});
+	};
+}(jQuery));
 
 
 // -------------------------------------------------------------------------------------------
@@ -353,7 +422,7 @@
 				});
 
 		});
-	}
+	};
 	
 }(jQuery));
 
@@ -444,7 +513,8 @@
 	{
 		if(typeof window.av_google_map == 'undefined')
 		{
-			$.avia_utilities.log('Map creation stopped, var av_google_map not found'); return
+			$.avia_utilities.log('Map creation stopped, var av_google_map not found'); 
+			return;
 		}
 	
 		// gatehr container and map data
@@ -457,19 +527,33 @@
 		
 		// set up the whole api object
 		this._init( options );
-	}
+	};
 	
 	$.AviaMapsAPI.apiFiles = 
 	{
 		loading: false, 
 		finished: false, 
-		src: 'https://maps.googleapis.com/maps/api/js?v=3.27&callback=aviaOnGoogleMapsLoaded' 
-	}
+		src: ''
+	};
 	
   	$.AviaMapsAPI.prototype =
     {
     	_init: function()
     	{
+			if( 'undefined' == typeof avia_framework_globals.gmap_maps_loaded || avia_framework_globals.gmap_maps_loaded == '' )
+			{
+						//	this is only a fallback setting 
+				$.AviaMapsAPI.apiFiles.src = 'https://maps.googleapis.com/maps/api/js?v=3.30&callback=aviaOnGoogleMapsLoaded';
+				if( typeof avia_framework_globals.gmap_api != 'undefined' && avia_framework_globals.gmap_api != "" )
+				{
+					$.AviaMapsAPI.apiFiles.src += "&key=" + avia_framework_globals.gmap_api;
+				}
+			}
+			else
+			{
+				$.AviaMapsAPI.apiFiles.src = avia_framework_globals.gmap_maps_loaded;
+			}
+			
     		this._bind_execution();
     		this._getAPI();
     	},
@@ -481,14 +565,9 @@
 			{	
 				$.AviaMapsAPI.apiFiles.loading = true;
 				var script 	= document.createElement('script');
-				script.type = 'text/javascript';	
-				script.src 	= $.AviaMapsAPI.apiFiles.src;
-				
-				if(avia_framework_globals.gmap_api != 'undefined' && avia_framework_globals.gmap_api != "")
-				{
-					script.src 	+= "&key=" + avia_framework_globals.gmap_api;
-				}
-				
+					script.type = 'text/javascript';	
+					script.src 	= $.AviaMapsAPI.apiFiles.src;
+
       			document.body.appendChild(script);
 			}
 			else if((typeof window.google != 'undefined' && typeof window.google.maps != 'undefined') || $.AviaMapsAPI.apiFiles.loading == false)
@@ -735,7 +814,7 @@
 		}
 		
     	
-    }
+    };
 
     //simple wrapper to call the api. makes sure that the api data is not applied twice
     $.fn.aviaMaps = function( options )
@@ -749,7 +828,7 @@
     			self = $.data( this, 'aviaMapsApi', new $.AviaMapsAPI( options, this ) );
     		}
     	});
-    }
+    };
     
 })( jQuery );
 
@@ -1296,6 +1375,8 @@ $.fn.avia_masonry = function(options)
 				{
 					container.css({overflow:'visible'});
 				});
+			
+				setTimeout(function() { the_win.trigger('debouncedresize'); }, 500);
 				
 				return false;
 		},
@@ -1461,7 +1542,7 @@ $.fn.avia_masonry = function(options)
 				error: finished,
 				complete: function()
 				{
-				    
+				    setTimeout(function() { the_win.trigger('debouncedresize'); }, 500);
 				}
 			});
 		}
@@ -2648,6 +2729,7 @@ $.fn.avia_sc_toggle = function(options)
 					{
 						content.removeClass('active_tc').attr({style:''});
 						win.trigger('av-height-change');
+						location.replace(thisheading.data('fake-id') + "-closed");
 					});
 					thisheading.removeClass('activeTitle');
 
@@ -2663,19 +2745,27 @@ $.fn.avia_sc_toggle = function(options)
 						});
 						heading.removeClass('activeTitle');
 					}
-					content.addClass('active_tc').slideDown(200,
 					
-					function()
-					{
-                        if(!container.is('.toggle_close_all'))
-                        {
-                            scroll_to_viewport();
-                        }
-                        
-                        win.trigger('av-height-change');
-					}
+					content.addClass('active_tc');
 					
-					);
+					setTimeout(function(){
+						
+						content.slideDown(200,
+						
+							function()
+							{
+		                        if(!container.is('.toggle_close_all'))
+		                        {
+		                            scroll_to_viewport();
+		                        }
+		                        
+		                        win.trigger('av-height-change');
+							}
+						
+						);
+					
+					}, 1);
+					
 					thisheading.addClass('activeTitle');
 					location.replace(thisheading.data('fake-id'));
 				}
@@ -2869,6 +2959,7 @@ $.fn.avia_sc_tab_section= function()
 	{
 		var container 		= $(this),
 			tabs			= container.find('.av-section-tab-title'),
+		    	tab_outer = container.find('.av-tab-section-outer-container'),
 			tab_wrap		= container.find('.av-tab-section-tab-title-container'),
 			tab_nav			= container.find('.av_tab_navigation'), 
 			content_wrap	= container.find('.av-tab-section-inner-container'),
@@ -2948,7 +3039,10 @@ $.fn.avia_sc_tab_section= function()
 					var old_height = inner_content.height();
 					inner_content.height('auto');
 					
-					var height = current_content.find('.av-layout-tab-inner').height();
+					var height = current_content.find('.av-layout-tab-inner').height(),
+					    add_height = tab_wrap.height();
+					
+					tab_outer.css('max-height', height + add_height + 100);
 					inner_content.height(old_height);
 					inner_content.height(height);
 					
@@ -2960,15 +3054,41 @@ $.fn.avia_sc_tab_section= function()
 			
 			set_tab_titlte_pos = function()
 			{
-				//scroll the tabs if there is not enough room to display them all
+				//	scroll the tabs if there is not enough room to display them all - rtl allign right to left !!
 				var current_tab = container.find('.av-active-tab-title'),
 					viewport	= container.width(),
-					left_pos	= viewport < min_width ? (current_tab.position().left * - 1) - (current_tab.outerWidth() / 2) + (viewport / 2): 0;
+					left_pos	= ( current_tab.position().left * - 1) - (current_tab.outerWidth() / 2) + (viewport / 2);
+			
+				if( ! $('body').hasClass("rtl") )
+				{
+					if( viewport >= min_width )
+					{
+						left_pos = 0;
+					}
+					
+					if(left_pos + min_width < viewport) left_pos = (min_width - viewport) * -1;
+					if(left_pos > 0) left_pos = 0;
 				
-				if(left_pos + min_width < viewport) left_pos = (min_width - viewport) * -1;
-				if(left_pos > 0) left_pos = 0;
-				
-				tab_wrap.css('left',left_pos );
+					tab_wrap.css('left',left_pos );
+				}
+				else
+				{
+					var right_pos = 0;
+					
+					if( viewport < min_width )
+					{
+						if( left_pos + min_width > viewport )
+						{
+							if( left_pos > 0 ) left_pos = 0;
+							
+							var right_pos = (left_pos + min_width - viewport) * -1;
+							tab_wrap.css('left', 'auto' );
+							tab_wrap.css('right', right_pos );
+						}
+					}
+					tab_wrap.css('left', 'auto' );
+					tab_wrap.css('right', right_pos );
+				}
 			},
 			switch_to_next_prev = function(e)
 			{
@@ -3012,7 +3132,7 @@ $.fn.avia_sc_tab_section= function()
 				tabs.on('click', change_tab);
 				tab_nav.on('click', switch_to_next_prev);
 				win.on('debouncedresize', set_tab_titlte_pos);	
-				win.on('debouncedresize', set_slide_height);	
+				win.on('debouncedresize av-height-change', set_slide_height);	
 				
 				set_min_width();
 				set_slide_height(); 

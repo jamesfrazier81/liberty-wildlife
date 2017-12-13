@@ -162,7 +162,9 @@ function layerslider_dependency_notice() {
 		<img src="<?php echo LS_ROOT_URL.'/static/admin/img/ls_80x80.png' ?>" alt="LayerSlider icon">
 		<h1><?php _e('Server configuration issues detected!', 'LayerSlider') ?></h1>
 		<p>
-			<?php echo sprintf(__('phpQuery, an external library in LayerSlider, have unmet dependencies. It requires PHP 5.3.0 or newer with the following extensions installed: PHP DOM extension, PHP Multibyte String extension. Please contact with your hosting provider to resolve these dependencies, as it will likely prevent LayerSlider from functioning properly. %sThis issue could result a blank page in slider builder.%s', 'LayerSlider'), '<strong>', '</strong>' ) ?>
+			<?php echo sprintf(__('LayerSlider and its external dependencies require PHP 5.3.0 or newer. Please contact with your web server hosting provider to resolve this issue, as it will likely prevent LayerSlider from functioning properly. %sThis issue could result a blank page in slider builder.%s Check %sSystem Status%s for more information and comprehensive test about your server environment.', 'LayerSlider'), '<strong>', '</strong>', '<a href="'.admin_url('admin.php?page=ls-system-status').'">', '</a>' ) ?>
+
+			<a href="<?php echo admin_url('admin.php?page=ls-system-status') ?>" class="button button-primary"><?php _e('Check System Status', 'LayerSlider') ?></a>
 		</p>
 		<div class="clear"></div>
 	</div>

@@ -680,6 +680,9 @@ $height: $width / 16 * 9;
 		}
 
 		small {
+			display: inline !important;
+			width: auto !important;
+			float: none !important;
 			position: relative;
 			top: -5px;
 			left: 5px;

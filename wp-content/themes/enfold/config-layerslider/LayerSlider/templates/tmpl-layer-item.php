@@ -3,8 +3,8 @@
 	<li>
 		<span class="ls-sublayer-sortable-handle dashicons dashicons-menu"></span>
 		<span class="ls-sublayer-controls">
-			<span class="ls-icon-eye dashicons dashicons-visibility" data-help="<?php _e('Hide layer in the editor.', 'LayerSlider') ?>"></span>
-			<span class="ls-icon-lock dashicons dashicons-lock disabled" data-help="<?php _e('Prevent layer from dragging in the editor.', 'LayerSlider') ?>"></span>
+			<span class="ls-icon-eye dashicons dashicons-visibility" data-help="<?php _e('Toggle layer visibility.', 'LayerSlider') ?>"></span>
+			<span class="ls-icon-lock dashicons dashicons-lock disabled" data-help="<?php _e('Prevent layer dragging in the editor.', 'LayerSlider') ?>"></span>
 		</span>
 		<div class="ls-sublayer-thumb"></div>
 		<input type="text" name="subtitle" class="ls-sublayer-title" value="<?php echo sprintf(__('Layer #%d', 'LayerSlider'), '1') ?>">

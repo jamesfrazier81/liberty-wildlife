@@ -58,7 +58,7 @@ if ( !class_exists( 'avia_sc_image_hotspots' ) )
 					
 					array(
 							"name" => __("Add/Edit your hotspots.", 'avia_framework' ),
-							"desc" => __("Here you can add, remove and edit the map locations for your Google Map.", 'avia_framework' )."<br/>",
+							"desc" => __("Here you can add, remove and edit the locations, tooltips and appearance for your hotspots.", 'avia_framework' )."<br/>",
 							"type" 			=> "modal_group",
 							"id" 			=> "content",
 							"modal_title" 	=> __("Edit Hotspot Tooltip", 'avia_framework' ),

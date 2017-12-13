@@ -2003,6 +2003,12 @@ text-align: center;
 z-index: 1000;
 }
 
+#top .av-alb-blogposts.template-blog div.post_delimiter{
+	width: 100%;
+	left: 0;
+	position: relative;
+}
+
 #top .fullsize .related_entries_container img{ margin: 0 auto;}
 #top .fullsize .related_title{text-align: center; }
 #top .fullsize .related_posts{ padding: 23px 0 33px 0; }
@@ -2249,7 +2255,7 @@ margin-top:-55px;
 padding:15px;
 text-decoration: none;
 z-index: 501; /*fixes: https://github.com/AviaThemes/wp-themes/issues/807 */
--webkit-transform: translate3d(0,0,0); /* fixes: http://www.kriesi.at/support/topic/next-previous-blog-post-bug/ */
+-webkit-transform: translate3d(0,0,0); /* fixes: https://kriesi.at/support/topic/next-previous-blog-post-bug/ */
 }
 
 #top .avia-post-nav:hover{
@@ -4036,6 +4042,8 @@ animation:         avia_pop_small 0.5s 1 cubic-bezier(0.175, 0.885, 0.320, 1.275
 		.responsive #top .av_mobile_menu_tablet .av-main-nav .menu-item-avia-special{display:block;}
 		.responsive #top #wrap_all .av_mobile_menu_tablet .menu-item-search-dropdown > a { font-size: 24px; }
 		.responsive #top .av_mobile_menu_tablet #header_main_alternate{display:none;}
+		.responsive.html_mobile_menu_tablet #top #header #header_meta .social_bookmarks{display:none;}
+		.responsive.html_mobile_menu_tablet .phone-info{float:none; width:100%; clear:both; text-align: center;}
 		.responsive.html_mobile_menu_tablet #top .av-logo-container .social_bookmarks{display:none}
 		.responsive.html_mobile_menu_tablet #top .av-logo-container .main_menu .social_bookmarks{display:block; position: relative; margin-top: -15px; right:0;}
 		.responsive.html_logo_center.html_bottom_nav_header .av_mobile_menu_tablet .avia-menu.av_menu_icon_beside{height:100%;}

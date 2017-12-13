@@ -100,9 +100,16 @@ include LS_ROOT_PATH . '/templates/tmpl-share-sheet.php';
 include LS_ROOT_PATH . '/templates/tmpl-layer-item.php';
 include LS_ROOT_PATH . '/templates/tmpl-static-layer-item.php';
 include LS_ROOT_PATH . '/templates/tmpl-layer.php';
+include LS_ROOT_PATH . '/templates/tmpl-preview-context-menu.php';
 include LS_ROOT_PATH . '/templates/tmpl-transition-window.php';
 include LS_ROOT_PATH . '/templates/tmpl-popup-presets-window.php';
 include LS_ROOT_PATH . '/templates/tmpl-popup-example-slider.php';
+include LS_ROOT_PATH . '/templates/tmpl-post-chooser.php';
+include LS_ROOT_PATH . '/templates/tmpl-insert-icons-modal.php';
+include LS_ROOT_PATH . '/templates/tmpl-insert-media-modal.php';
+include LS_ROOT_PATH . '/templates/tmpl-button-presets.php';
+include LS_ROOT_PATH . '/templates/tmpl-import-slide.php';
+include LS_ROOT_PATH . '/templates/tmpl-import-layer.php';
 
 ?>
 
@@ -285,6 +292,17 @@ include LS_ROOT_PATH . '/templates/tmpl-popup-example-slider.php';
 				$layerVal['innerAttributes'] = !empty($layerVal['innerAttributes']) ?  (object) $layerVal['innerAttributes'] : new stdClass;
 				$layerVal['outerAttributes'] = !empty($layerVal['outerAttributes']) ?  (object) $layerVal['outerAttributes'] : new stdClass;
 
+
+				// v6.5.6: Convert old checkbox media settings to the new
+				// select based options.
+				if( isset( $layerVal['transition']->controls ) ) {
+					if( true === $layerVal['transition']->controls ) {
+						$layerVal['transition']->controls = 'auto';
+					} elseif( false === $layerVal['transition']->controls ) {
+						$layerVal['transition']->controls = 'disabled';
+					}
+				}
+
 				$slider['layers'][$slideKey]['sublayers'][$layerKey] = $layerVal;
 			}
 		} else {
@@ -399,7 +417,9 @@ include LS_ROOT_PATH . '/templates/tmpl-popup-example-slider.php';
 					<span class="dashicons dashicons-dismiss"></span>
 				</a>
 				<?php endforeach; ?>
-				<a href="#"  title="<?php _e('Add new slide', 'LayerSlider') ?>" class="unsortable" id="ls-add-layer"><i class="dashicons dashicons-plus"></i></a>
+				<a href="#"  data-help="<?php _e('Add new slide', 'LayerSlider') ?>" class="unsortable" id="ls-add-layer"><i class="dashicons dashicons-plus"></i></a>
+				<a href="#"  data-help="<?php _e('Import slide', 'LayerSlider') ?>" class="unsortable" id="ls-import-slide"><i class="dashicons dashicons-upload"></i></a>
+
 				<div class="unsortable clear"></div>
 			</div>
 

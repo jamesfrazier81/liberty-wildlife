@@ -180,7 +180,7 @@ if ( !class_exists( 'avia_sc_blog' ) )
 							"desc" 	=> __("When should the element be displayed?", 'avia_framework' ),
 							"id" 	=> "conditional",
 							"type" 	=> "select",
-							"std" 	=> "yes",
+							"std" 	=> "",
 							"subtype" => array(
 								__('Always display the element',  'avia_framework' ) =>'',
 								__('Remove element if the user navigated away from page 1 to page 2,3,4 etc ',  'avia_framework' ) =>'is_subpage')),
@@ -352,6 +352,14 @@ if ( !class_exists( 'avia_sc_blog' ) )
 				$page = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : get_query_var( 'page' );
 				if(!$page) $page = 1;
 				
+				/**
+				 * Skip blog queries, if element will not be displayed
+				 */
+				if( $atts['conditional'] == 'is_subpage' && $page != 1 ) 
+				{
+					return '';
+				}
+				
 				if($atts['blog_style'] == "blog-grid")
 				{
 					$atts['class'] = $meta['el_class'];
@@ -360,15 +368,8 @@ if ( !class_exists( 'avia_sc_blog' ) )
 					//using the post slider with inactive js will result in displaying a nice post grid
 					$slider = new avia_post_slider($atts);
 					$slider->query_entries();
-					
-					if($atts['conditional'] && $page != 1) 
-					{
-						return;
-					}
-					else
-					{
-						return $slider->html();
-					}
+			
+					return $slider->html();
 				}
 
 				$this->query_entries($atts);
@@ -378,6 +379,14 @@ if ( !class_exists( 'avia_sc_blog' ) )
 				$avia_config['image_size'] = $atts['image_size'];
 				$avia_config['blog_content'] = $atts['content_length'];
 				$avia_config['remove_pagination'] = $atts['paginate'] === "yes" ? false :true;
+				
+				/**
+				 * Force supress of pagination if element will be hidden on foillowing pages
+				 */
+				if( $atts['conditional'] == 'is_subpage' && $page == 1 )
+				{
+					$avia_config['remove_pagination'] = true;
+				}
 
 				$more = 0;
 				ob_start(); //start buffering the output instead of echoing it
@@ -390,17 +399,10 @@ if ( !class_exists( 'avia_sc_blog' ) )
 				{
 					$extraclass = function_exists('avia_blog_class_string') ? avia_blog_class_string() : "";
                     $markup = avia_markup_helper(array('context' => 'blog','echo'=>false, 'custom_markup'=>$meta['custom_markup']));
-					$output = "<div class='template-blog {$extraclass} {$av_display_classes}' {$markup}>{$output}</div>";
+					$output = "<div class='av-alb-blogposts template-blog {$extraclass} {$av_display_classes}' {$markup}>{$output}</div>";
 				}
 
-				if($atts['conditional'] && $page != 1) 
-				{
-					return;
-				}
-				else
-				{
-					return $output;
-				}
+				return $output;
 			}
 
 

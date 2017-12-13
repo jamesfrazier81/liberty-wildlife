@@ -10,6 +10,7 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
     {
         static $codeblock_id = 0;
         static $codeblocks = array();
+		static $shortcodes_executed = array();
         
         /**
          * Create the config array for the shortcode button
@@ -216,6 +217,8 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
                 $content = $output;
             }
 
+			ShortcodeHelper::$shortcode_index += avia_sc_codeblock::$shortcodes_executed[ avia_sc_codeblock::$codeblock_id ];
+			
             avia_sc_codeblock::$codeblock_id++;
             return $content;
         }
@@ -233,10 +236,18 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
 			$pattern = '\[(\[?)(av_codeblock)(?![\w-])([^\]\/]*(?:\/(?!\])[^\]\/]*)*?)(?:(\/)\]|\](?:([^\[]*+(?:\[(?!\/\2\])[^\[]*+)*+)\[\/\2\])?)(\]?)';
 			preg_match_all('/'.$pattern.'/s', $content, $matches);
 			
+				//	save value to be able to restore
+			$old_direct_calls = ShortcodeHelper::$direct_calls;
+			$old_is_direct_call = ShortcodeHelper::$is_direct_call;
+			
+			ShortcodeHelper::$is_direct_call = true;
+			
 			if(!empty($matches[0]) && is_array($matches))
-			{
+			{	
 			    foreach($matches[0] as $key => $data)
 			    {
+					ShortcodeHelper::$direct_calls = 0;
+					
 			        $codeblock = !empty($matches[5][$key]) ? $matches[5][$key] : '';
 					$codeblock = trim($codeblock);
 					
@@ -250,8 +261,12 @@ if ( !class_exists( 'avia_sc_codeblock' ) )
 			        }
 			
 			        self::$codeblocks[$key] = $codeblock;
+					avia_sc_codeblock::$shortcodes_executed[ $key ] = ShortcodeHelper::$direct_calls;
 			    }
 			}
+			
+			ShortcodeHelper::$direct_calls = $old_direct_calls;
+			ShortcodeHelper::$is_direct_call = $old_is_direct_call;
 			
 			return $content;
 		}

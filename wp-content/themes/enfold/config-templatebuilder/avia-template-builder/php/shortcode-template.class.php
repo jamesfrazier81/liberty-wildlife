@@ -10,14 +10,32 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 
 	abstract class aviaShortcodeTemplate
 	{
-		var $builder;
-		var $config  = array();
+		public $builder;
+		public $config;
+		public $elements;
 
-		function __construct($builder)
+		/**
+		 * 
+		 * @param AviaBuilder $builder
+		 */
+		public function __construct( $builder ) 
 		{
 			$this->builder = $builder;
+			$this->config = array();
+			$this->elements = array();
+			
 			$this->shortcode_insert_button();
 			$this->extra_config();
+		}
+		
+		/**
+		 * @since 4.3.1
+		 */
+		public function __destruct()
+		{
+			unset( $this->builder );
+			unset( $this->config );
+			unset( $this->elements );
 		}
 
 		//init function is executed in AviaBuilder::createShortcode if the shortcode is allowed
@@ -95,8 +113,40 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 		public function extra_assets(){}
 
 
-
-
+		/**
+		 * Scans the $this->elements array recursivly and returns the first element where key = "$element_id"
+		 * 
+		 * @param string $element_id
+		 * @param array $source
+		 * @return array|false
+		 * @since 4.1.3
+		 */
+		public function get_popup_element_by_id( $element_id, array &$source = null )
+		{
+			if( empty( $source ) )
+			{
+				$source = &$this->elements;
+			}
+			
+			foreach( $source as &$element )
+			{
+				if( isset( $element['id'] ) && ( $element_id == $element['id'] ) )
+				{
+					return $element;
+				}
+				
+				if( isset( $element['subelements'] ) && ! empty( $element['subelements'] ) )
+				{
+					$found = $this->get_option_by_id( $element_id, $element['subelements'] );
+					if( false !== $found )
+					{
+						return $found;
+					}
+				}
+			}
+			
+			return false;
+		}
 
 
 		/**
@@ -233,8 +283,14 @@ if ( !class_exists( 'aviaShortcodeTemplate' ) ) {
 				}
 
 				//if the shortcode was added without beeing a builder element (eg button within layerslider) reset all styles for that shortcode and make sure it is marked as a fake element
-				if(empty($meta['this']['tag']) || $shortcodename != $meta['this']['tag'])
+				if( empty($meta['this']['tag'] ) || $shortcodename != $meta['this']['tag'] || ShortcodeHelper::$is_direct_call || $fake )
 				{
+						//	increment theme shortcodes only, because these are in the shorcode tree
+					if( in_array( $shortcodename, ShortcodeHelper::$allowed_shortcodes ) )
+					{
+						ShortcodeHelper::$direct_calls++;
+					}
+					
 					$fake = true;
 					$meta = array('el_class'=>'');
 				}

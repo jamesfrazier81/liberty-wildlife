@@ -159,6 +159,11 @@ require( AVIA_PHP.'class-style-generator.php' );
 require( AVIA_PHP.'class-form-generator.php' );
 
 /**
+* The google maps api source and key check (backend)
+*/
+	require( AVIA_PHP.'class-gmaps.php' );
+	
+/**
 * This file holds the class that creates several framework specific widgets
 */
 require( AVIA_PHP.'class-framework-widgets.php' );
@@ -225,12 +230,6 @@ if(is_admin())
 	* This file loads the class responsible for one click theme updates
 	*/
 	require( AVIA_PHP.'auto-updates/auto-updates.php' );
-	
-	/**
-	* The google maps api key check
-	*/
-	require( AVIA_PHP.'class-gmaps.php' );
-	
 		
 	
 	/**

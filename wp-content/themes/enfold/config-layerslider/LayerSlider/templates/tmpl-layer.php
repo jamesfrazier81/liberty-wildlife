@@ -2,30 +2,37 @@
 <script type="text/html" id="ls-layer-template">
 	<div class="ls-sublayer-page ls-sublayer-basic active">
 
+		<div class="ls-layer-content-controls">
 
-		<div class="ls-set-screen-types">
-			<?php _e('Show this layer on the following devices:', 'LayerSlider') ?>
+			<input type="hidden" name="media" value="img">
+			<div class="ls-layer-kind">
+				<ul>
+					<li data-section="img"><span class="dashicons dashicons-format-image"></span><?php _e('Image', 'LayerSlider') ?></li>
+					<li data-section="icon" data-placeholder="<?php _e('Press the Add Icon button to insert an icon', 'LayerSlider') ?>"><span class="dashicons dashicons-flag"></span><?php _e('Icon', 'LayerSlider') ?></li>
+					<li data-section="text" data-placeholder="<?php _e('Enter text only content here ...', 'LayerSlider') ?>"><span class="dashicons dashicons-text"></span><?php _e('Text', 'LayerSlider') ?></li>
+					<li data-section="button" data-placeholder="<?php _e('Enter the label of your button', 'LayerSlider') ?>"><span class="dashicons dashicons-marker"></span><?php _e('Button', 'LayerSlider') ?></li>
+					<li data-section="media" data-placeholder="<?php _e('Paste embed code here   or   add self-hosted media ...', 'LayerSlider') ?>">
+						<span class="dashicons dashicons-video-alt3"></span><?php _e('Video / Audio', 'LayerSlider') ?>
+					</li>
+					<li data-section="html" data-placeholder="<?php _e('Enter custom HTML code   or   paste a WordPress shortcode, which will appear on your front-end pages ...', 'LayerSlider') ?>"><span class="dashicons dashicons-editor-code "></span><?php _e('HTML', 'LayerSlider') ?></li>
+					<li data-section="post" data-placeholder="<?php _e('You can enter both post placeholders and custom content here (including HTML and WP shortcodes) ...', 'LayerSlider') ?>"><span class="dashicons dashicons-admin-post"></span><?php _e('Dynamic Layer', 'LayerSlider') ?></li>
+				</ul>
+				<span class="dashicons dashicons-arrow-down-alt2"></span>
+			</div>
 
-				<button data-type="desktop" class="button dashicons dashicons-desktop playing" data-help="<?php _e('Show this layer on desktop.', 'LayerSlider') ?>"></button><!--
-			--><button data-type="tablet" class="button dashicons dashicons-tablet" data-help="<?php _e('Show this layer on tablets.', 'LayerSlider') ?>"></button><!--
-			--><button data-type="phone" class="button dashicons dashicons-smartphone" data-help="<?php _e('Show this layer on mobile phones.', 'LayerSlider') ?>"></button>
 
+			<div class="ls-set-screen-types">
+				<?php _e('Toggle device visibility:', 'LayerSlider') ?>
+
+					<button data-type="desktop" class="button dashicons dashicons-desktop playing" data-help="<?php _e('Show this layer on desktop.', 'LayerSlider') ?>"></button><!--
+				--><button data-type="tablet" class="button dashicons dashicons-tablet" data-help="<?php _e('Show this layer on tablets.', 'LayerSlider') ?>"></button><!--
+				--><button data-type="phone" class="button dashicons dashicons-smartphone" data-help="<?php _e('Show this layer on mobile phones.', 'LayerSlider') ?>"></button>
+
+			</div>
 		</div>
 
 
-		<input type="hidden" name="media" value="img">
-		<div class="ls-layer-kind">
-			<ul>
-				<li data-section="img" class="active"><span class="dashicons dashicons-format-image"></span><?php _e('Image', 'LayerSlider') ?></li>
-				<li data-section="text" data-placeholder="<?php _e('Enter text only content here ...', 'LayerSlider') ?>"><span class="dashicons dashicons-text"></span><?php _e('Text', 'LayerSlider') ?></li>
-				<li data-section="html" data-placeholder="<?php _e('Enter custom HTML code   or   paste a WordPress shortcode, which will appear on your front-end pages ...', 'LayerSlider') ?>"><span class="dashicons dashicons-editor-code "></span><?php _e('HTML', 'LayerSlider') ?></li>
-				<li data-section="media" data-placeholder="<?php _e('Paste embed code here   or   add self-hosted media ...', 'LayerSlider') ?>">
-					<span class="dashicons dashicons-video-alt3"></span><?php _e('Video / Audio', 'LayerSlider') ?>
-				</li>
-				<li data-section="post" data-placeholder="<?php _e('You can enter both post placeholders and custom content here (including HTML and WP shortcodes) ...', 'LayerSlider') ?>"><span class="dashicons dashicons-admin-post"></span><?php _e('Dynamic content from posts', 'LayerSlider') ?></li>
-			</ul>
-		</div>
-		<!-- End of Layer Media Type -->
+
 
 		<!-- Layer Element Type -->
 		<input type="hidden" name="type" value="p">
@@ -62,8 +69,19 @@
 			<div class="ls-html-code ls-hidden">
 				<div class="ls-html-textarea">
 					<textarea name="html" cols="50" rows="5" placeholder="<?php _e('Enter layer content here', 'LayerSlider') ?>"></textarea>
-					<button type="button" class="button ls-upload ls-bulk-upload ls-insert-media">
+					<button type="button" class="button ls-insert-icon">
+						<span class="dashicons dashicons-flag"></span>
+						<?php _e('Add Icon', 'LayerSlider') ?>
+					</button>
+					<button type="button" class="button ls-replace-icon ls-replace-icon-button">
+						<span class="dashicons dashicons-flag"></span>
+						<?php _e('Replace With Icon', 'LayerSlider') ?>
+					</button>
+					<button type="button" class="button ls-open-media-modal-button">
 						<span class="dashicons dashicons-admin-media"></span>
+						<?php _e('Change Media', 'LayerSlider') ?>
+					</button>
+					<button type="button" class=" button ls-upload ls-bulk-upload ls-insert-media">
 						<?php _e('Add Media', 'LayerSlider') ?>
 					</button>
 				</div>
@@ -112,24 +130,20 @@
 								<?php lsGetSelect($lsDefaults['layers']['mediaFillMode'], null, array('class' => 'sublayerprop')) ?>
 							</td>
 							<td>
-								<?php echo $lsDefaults['layers']['mediaVolume']['name'] ?> <br>
-								<?php lsGetInput($lsDefaults['layers']['mediaVolume'], null, array('class' => 'sublayerprop')) ?>
-							</td>
-							<td>
 								<?php echo $lsDefaults['layers']['mediaControls']['name'] ?> <br>
-								<?php lsGetCheckbox($lsDefaults['layers']['mediaControls'], null, array('class' => 'sublayerprop')) ?>
+								<?php lsGetSelect($lsDefaults['layers']['mediaControls'], null, array('class' => 'sublayerprop')) ?>
 							</td>
 							<td>
 								<?php echo $lsDefaults['layers']['mediaInfo']['name'] ?> <br>
-								<?php lsGetCheckbox($lsDefaults['layers']['mediaInfo'], null, array('class' => 'sublayerprop')) ?>
+								<?php lsGetSelect($lsDefaults['layers']['mediaInfo'], null, array('class' => 'sublayerprop')) ?>
 							</td>
-						</tr>
-					</table>
 
+							<td class="volume">
+								<?php echo $lsDefaults['layers']['mediaVolume']['name'] ?> <br>
+								<?php lsGetInput($lsDefaults['layers']['mediaVolume'], null, array('class' => 'sublayerprop')) ?>
+							</td>
 
-					<table class="ls-bgvideo-options">
-						<tr>
-							<td>
+							<td class="overlay">
 								<?php echo $lsDefaults['layers']['mediaOverlay']['name']; ?><br>
 								<?php
 
@@ -148,6 +162,14 @@
 							</td>
 						</tr>
 					</table>
+				</div>
+
+				<div class="ls-icon-options">
+					<button class="button button-hero ls-replace-icon"><?php _e('Click here to choose an other icon', 'LayerSlider') ?></button>
+				</div>
+
+				<div class="ls-button-options">
+					<button class="button button-hero ls-choose-button-preset"><?php _e('Choose Button Preset', 'LayerSlider') ?></button>
 				</div>
 			</div>
 
@@ -1533,8 +1555,16 @@
 		<h3 class="subheader"><?php _e('Linking', 'LayerSlider') ?></h3>
 		<div class="ls-slide-link clearfix">
 			<div>
-				<?php lsGetInput($lsDefaults['layers']['linkURL'], null, array('placeholder' => $lsDefaults['layers']['linkURL']['name'] )) ?>
-				<span><a href="#"><?php _e('use post URL', 'LayerSlider') ?></a></span>
+				<?php lsGetInput($lsDefaults['layers']['linkURL'], null, array('class' => 'url', 'placeholder' => $lsDefaults['layers']['linkURL']['name'] )) ?>
+				<input type="hidden" name="linkId">
+				<input type="hidden" name="linkName">
+				<input type="hidden" name="linkType">
+				<a href="#" class="change">
+					<span class="dashicons dashicons-editor-unlink"></span>
+					<?php _e('Change Link', 'LayerSlider') ?>
+				</a>
+				<span><a href="#" class="dyn"><?php _e('Use Dynamic post URL', 'LayerSlider') ?></a></span>
+				<span><a href="#" class="post"><?php _e('Choose Page or Post', 'LayerSlider') ?></a></span>
 			</div>
 			<?php lsGetSelect($lsDefaults['layers']['linkTarget'], null) ?>
 		</div>
@@ -1792,7 +1822,7 @@
 								</tr>
 								<tr>
 									<td><?php echo $lsDefaults['layers']['fontSize']['name'] ?></td>
-									<td><?php lsGetInput($lsDefaults['layers']['fontSize'], null, array('class' => 'auto')) ?></td>
+									<td><?php lsGetInput($lsDefaults['layers']['fontSize'], null, array('class' => 'auto', 'data-css-property' => 'font-size')) ?></td>
 								</tr>
 								<tr>
 									<td><?php echo $lsDefaults['layers']['lineHeight']['name'] ?></td>

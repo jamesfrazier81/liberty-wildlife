@@ -8,8 +8,10 @@ $google_fonts = apply_filters('avf_google_heading_font', array(	__('Default', 'a
 						'Arvo'=>'Arvo',
 						'Arimo'=>'Arimo:400,700',
 						'Antic'=>'Antic',
+						'Audiowide'=>'Audiowide',
 						
-						
+						'Bad Script'=>'Bad Script',
+						'Baumans'=>'Baumans',
 						'Bangers'=>'Bangers',
 						'Bitter'=>'Bitter',
 	
@@ -18,6 +20,7 @@ $google_fonts = apply_filters('avf_google_heading_font', array(	__('Default', 'a
 						'Carme'=>'Carme',
 						'Caveat'=>'Caveat:400,700',
 						'Coda'=>'Coda',
+						'Codystar'=>'Codystar:300,400',
 						'Comfortaa'=>'Comfortaa:300,400,700',
 						'Coustard'=>'Coustard',
 						'Gruppo'=>'Gruppo',
@@ -61,6 +64,7 @@ $google_fonts = apply_filters('avf_google_heading_font', array(	__('Default', 'a
 						'Marck Script'=>'Marck Script',
 						'Mako'=>'Mako',
 						'Megrim'=>'Megrim',
+						'Merienda' => 'Merienda:400,700',
 						'Merriweather'=>'Merriweather:300,400,700',
 						'Metrophobic'=>'Metrophobic',
 						'Molengo'=>'Molengo',
@@ -85,6 +89,7 @@ $google_fonts = apply_filters('avf_google_heading_font', array(	__('Default', 'a
 						'Podkova'=>'Podkova',
 						'Poiret One'=>'Poiret One',
 						'Poly'=>'Poly',
+						'Press Start 2P (Retro Pixelfont)'=>'Press Start 2P',
 						'PT Sans'=>'PT Sans',
 	
 						'Quattrocento'=>'Quattrocento',
@@ -100,6 +105,7 @@ $google_fonts = apply_filters('avf_google_heading_font', array(	__('Default', 'a
 						'Signika Negative'=>'Signika Negative',
 						'Source Serif Pro' => 'Source Serif Pro:400,600,700',
 						'Sunshiney'=>'Sunshiney',
+						'Special Elite'=>'Special Elite',
 	
 	
 						'Tangerine'=>'Tangerine',

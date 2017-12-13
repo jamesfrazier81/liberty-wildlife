@@ -80,8 +80,10 @@ class avia_wp_import extends WP_Import
 	
 	public function import_layerslides( $layerslider )
 	{
+		@ini_set('max_execution_time', 300);
+		
 		$slider 		= urlencode( $layerslider );
-		$remoteURL 		= 'http://www.kriesi.at/themes/wp-content/uploads/avia-sample-layerslides/'.$slider.".zip";
+		$remoteURL 		= 'https://kriesi.at/themes/wp-content/uploads/avia-sample-layerslides/'.$slider.".zip";
 	
 		$uploads 		= wp_upload_dir();
 		$downloadPath 	= $uploads['basedir'].'/lsimport.zip';
@@ -120,6 +122,8 @@ class avia_wp_import extends WP_Import
 	
 	public function import_iconfont( $new_fonts )
 	{
+		@ini_set('max_execution_time', 300);
+		
 		//update iconfont option 
 		$key 			= 'avia_builder_fonts';
 		$fonts_old 		= get_option( $key );

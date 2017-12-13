@@ -469,7 +469,7 @@ if ( !class_exists( 'avia_sc_tab_sub_section' ) )
 				
 				$active_tab = avia_sc_tab_section::$tab == avia_sc_tab_sub_section::$attr['initial'] ? "av-active-tab-content __av_init_open" : "";
 				
-				$tab_link = AviaHelper::save_string($atts['tab_title'],'-');
+				$tab_link = AviaHelper::valid_href( $atts['tab_title'], '-', 'av-tab-section-' . avia_sc_tab_section::$count . '-' . avia_sc_tab_section::$tab );
 				
 				$output   = '<div data-av-tab-section-content="'.avia_sc_tab_section::$tab.'" class="av-layout-tab av-animation-delay-container '.$active_tab.' '.$meta['el_class'].' '.$extraClass.' '.avia_sc_tab_sub_section::$extraClass.'" '.$outer_style.' '.$data.' data-tab-section-id="'.$tab_link.'">';
 				$output  .= "<div class='av-layout-tab-inner'>";

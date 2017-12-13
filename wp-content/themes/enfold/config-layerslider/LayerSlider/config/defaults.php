@@ -4,6 +4,11 @@ $lsDefaults = array(
 
 	'slider' => array(
 
+		'createdWith' => array(
+			'value' => '',
+			'keys' => 'createdWith'
+		),
+
 		'sliderVersion' => array(
 			'value' => '',
 			'keys' => 'sliderVersion',
@@ -29,14 +34,14 @@ $lsDefaults = array(
 			'desc' => __('<ul>
 	<li>Scheduled sliders will only be visible to your visitors between the time period you set here.</li>
 	<li>We’re using international date and time format to avoid ambiguity.</li>
-	<li>You can also use relative formats described <a href=\"http://php.net/manual/en/datetime.formats.relative.php\" target=\"_blank\">here</a>. For example: <br> <i>tomorrow noon</i>, <i>monday 9am</i> or <i>+1 month</i></li>
+	<li>You can also use relative formats described <a href="http://php.net/manual/en/datetime.formats.relative.php" target="_blank">here</a>. For example: <br> <i>tomorrow noon</i>, <i>monday 9am</i> or <i>+1 month</i></li>
 	<li>Clear the text field above and left it empty if you want to cancel the schedule.</li>
 </ul>
 
 <span>IMPORTANT:</span>
 <ul>
 	<li>You will still need to set the slider status as published,</li>
-	<li>and insert the slider to the target page with one of the methods described in the <a href=\"https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-shortcode\" target=\"_blank\">documentation</a>.</li>
+	<li>and insert the slider to the target page with one of the methods described in the <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-shortcode" target="_blank">documentation</a>.</li>
 </ul>', 'LayerSlider'),
 			'attrs' => array(
 				'placeholder' => __('No schedule', 'LayerSlider')
@@ -472,6 +477,14 @@ $lsDefaults = array(
 			'premium' => true
 		),
 
+		'playByScrollSkipSlideBreaks' => array(
+			'value' => false,
+			'name' => __('Skip Slide Breaks', 'LayerSlider'),
+			'keys' => 'playByScrollSkipSlideBreaks',
+			'desc' => __('Enable this option to eliminate the stop between slide changes. Visitors would no longer need to scroll at the end of slides, instead the slider will only stop at the keyframes you specify.', 'LayerSlider'),
+			'premium' => true
+		),
+
 		// Number of loops taking by the slideshow.
 		// Depends on: shuffle. Defaults to: 0 => infinite
 		'loops' => array(
@@ -534,7 +547,10 @@ $lsDefaults = array(
 			'value' => 'v6',
 			'name' => __('Skin', 'LayerSlider'),
 			'keys' => 'skin',
-			'desc' => __('The skin used for this slider. The “noskin” skin is a border- and buttonless skin. Your custom skins will appear in the list when you create their folders.', 'LayerSlider')
+			'desc' => __('The skin used for this slider. The “noskin” skin is a border- and buttonless skin. Your custom skins will appear in the list when you create their folders.', 'LayerSlider'),
+			'props' => array(
+				'output' => true
+			)
 		),
 
 
@@ -548,6 +564,18 @@ $lsDefaults = array(
 				'min' => 0
 			)
 		),
+
+
+		'sliderClasses' => array(
+			'value' => '',
+			'name' => __('Slider Classes', 'LayerSlider'),
+			'keys' => 'sliderclass',
+			'desc' => __('One or more space-separated class names to be added to the slider container element.', 'LayerSlider'),
+			'props' => array(
+				'meta' => true
+			)
+		),
+
 
 		// Some CSS values you can append on each slide individually
 		// to make some adjustments if needed.
@@ -622,22 +650,22 @@ $lsDefaults = array(
 
 		// Global background image size
 		'globalBGSize' => array(
-			'value' => 'cover',
+			'value' => 'auto',
 			'name' => __('Background size', 'LayerSlider'),
 			'keys' => 'globalBGSize',
 			'desc' => __('Global background size of the slider. You can set the size in pixels, percentages, or constants: auto | cover | contain ', 'LayerSlider'),
 			'attrs' => array('data-options' => '[{
-				"name": "auto",
+				"name": "'.__('auto', 'LayerSlider').'",
 				"value": "auto"
 			}, {
-				"name": "cover",
+				"name": "'.__('cover', 'LayerSlider').'",
 				"value": "cover"
 
 			},{
-				"name": "contain",
+				"name": "'.__('contain', 'LayerSlider').'",
 				"value": "contain"
 			}, {
-				"name": "stretch",
+				"name": "'.__('stretch', 'LayerSlider').'",
 				"value": "100% 100%"
 			}]')
 		),
@@ -795,9 +823,9 @@ $lsDefaults = array(
 		// Automatically starts vidoes on the given slide.
 		'autoPlayVideos' => array(
 			'value' => true,
-			'name' => __('Automatically play videos', 'LayerSlider'),
+			'name' => __('Automatically play media', 'LayerSlider'),
 			'keys' => array('autoplayvideos', 'autoPlayVideos'),
-			'desc' => __('Videos will be automatically started on the active slide.', 'LayerSlider')
+			'desc' => __('The playback of video and audio layers will automatically be started on the active slide.', 'LayerSlider')
 		),
 
 		// Automatically pauses the slideshow when a video is playing.
@@ -807,7 +835,7 @@ $lsDefaults = array(
 			'value' => 'auto',
 			'name' => __('Pause slideshow', 'LayerSlider'),
 			'keys' => array('autopauseslideshow', 'autoPauseSlideshow'),
-			'desc' => __('The slideshow can temporally be paused while videos are playing. You can choose to permanently stop the pause until manual restarting.', 'LayerSlider'),
+			'desc' => __('The slideshow can temporally be paused while video or audio layers are playing. You can choose to permanently stop the pause until manual restarting.', 'LayerSlider'),
 			'options' => array(
 				'auto' => __('While playing', 'LayerSlider'),
 				'enabled' => __('Permanently', 'LayerSlider'),
@@ -900,10 +928,9 @@ $lsDefaults = array(
 
 		'popupShowOnce' => array(
 			'value' => true,
-			'name' => __('Show only once', 'LayerSlider'),
+			'name' => __('Prevent reopening', 'LayerSlider'),
 			'keys' => 'popupShowOnce',
-			'desc' => __('Depending on your settings, the same Popup can be displayed in multiple times without reloading the page. Enabling this option will prevent opening this Popup consequently.', 'LayerSlider'),
-			'advanced' => true
+			'desc' => __('Depending on your settings, the same Popup can be displayed in multiple times without reloading the page. Such example would be when you use a scroll trigger and the user scrolls to that location a number of times. Enabling this option will prevent opening this Popup consequently.', 'LayerSlider')
 		),
 
 		'popupDisableOverlay' => array(
@@ -1732,38 +1759,59 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Enter URL', 'LayerSlider'),
 			'keys' => array('layer_link', 'linkUrl'),
-			'tooltip' => __('If you want to link the whole slide, enter the URL of your link here.', 'LayerSlider'),
+			'tooltip' => __('If you want to link the whole slide, type the URL here. You can choose a WordPress page/post/attachment or use one of the pre-defined options from the dropdown list when you click into this field. You can also type a hash mark followed by a number to link this layer to another slide. Example: #3 - this will switch to the third slide.', 'LayerSlider'),
 			'attrs' => array(
 				'data-options' => '[{
-					"name": "Switch to the next slide",
-					"value": "#next"
+					"name": "'.__('Switch to the next slide', 'LayerSlider').'",
+					"value": "#next",
+					"linkAction": true
 				},{
-					"name": "Switch to the previous slide",
-					"value": "#prev"
+					"name": "'.__('Switch to the previous slide', 'LayerSlider').'",
+					"value": "#prev",
+					"linkAction": true
 				},{
-					"name": "Stop the slideshow",
-					"value": "#stop"
+					"name": "'.__('Stop the slideshow', 'LayerSlider').'",
+					"value": "#stop",
+					"linkAction": true
 				},{
-					"name": "Resume the slideshow",
-					"value": "#start"
+					"name": "'.__('Resume the slideshow', 'LayerSlider').'",
+					"value": "#start",
+					"linkAction": true
 				},{
-					"name": "Replay the slide from the start",
-					"value": "#replay"
+					"name": "'.__('Replay the slide from the start', 'LayerSlider').'",
+					"value": "#replay",
+					"linkAction": true
 				},{
-					"name": "Reverse the slide, then pause it",
-					"value": "#reverse"
+					"name": "'.__('Reverse the slide, then pause it', 'LayerSlider').'",
+					"value": "#reverse",
+					"linkAction": true
 				},{
-					"name": "Reverse the slide, then replay it",
-					"value": "#reverse-replay"
+					"name": "'.__('Reverse the slide, then replay it', 'LayerSlider').'",
+					"value": "#reverse-replay",
+					"linkAction": true
 				},{
-					"name": "Close the Popup",
-					"value": "#closepopup"
+					"name": "'.__('Close the Popup', 'LayerSlider').'",
+					"value": "#closepopup",
+					"linkAction": true
 				}]'
 			),
 			'props' => array(
 				'meta' => true
 			)
 
+		),
+
+
+		'linkId' => array(
+			'value' => '',
+			'keys' => 'linkId',
+			'props' => array( 'meta' => true )
+		),
+
+		'linkType' => array(
+			'value' => '',
+			'keys' => 'linkType',
+			'props' => array( 'meta' => true )
 		),
 
 		'linkTarget' => array(
@@ -1783,9 +1831,9 @@ $lsDefaults = array(
 		),
 
 
-		'linkType' => array(
+		'linkPosition' => array(
 			'value' => 'over',
-			'keys' => array('layer_link_type', 'linkType'),
+			'keys' => array('layer_link_type', 'linkPosition'),
 			'tooltip' => __('Choose whether the slide link should be on top or underneath your layers. The later option makes the link clickable only at empty spaces where the slide background is visible, and enables you to link both slides and layers independently from each other.', 'LayerSlider'),
 			'options' => array(
 				'over' => __('On top of layers', 'LayerSlider'),
@@ -2072,6 +2120,14 @@ $lsDefaults = array(
 		// |  Content  | //
 		// ======================= //
 
+		'uuid' => array(
+			'value' => '',
+			'keys' => 'uuid',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
 		'type' => array(
 			'value' => '',
 			'keys' => 'type',
@@ -2146,15 +2202,25 @@ $lsDefaults = array(
 		),
 
 		'mediaInfo' => array(
-			'value' => true,
+			'value' => 'auto',
 			'name' => __('Show Info', 'LayerSlider'),
-			'keys' => 'showinfo'
+			'keys' => 'showinfo',
+			'options' => array(
+				'auto' => __('Auto', 'LayerSlider'),
+				'enabled' => __('Enabled', 'LayerSlider'),
+				'disabled' => __('Disabled', 'LayerSlider')
+			)
 		),
 
 		'mediaControls' => array(
-			'value' => true,
+			'value' => 'auto',
 			'name' => __('Controls', 'LayerSlider'),
-			'keys' => 'controls'
+			'keys' => 'controls',
+			'options' => array(
+				'auto' => __('Auto', 'LayerSlider'),
+				'enabled' => __('Enabled', 'LayerSlider'),
+				'disabled' => __('Disabled', 'LayerSlider')
+			)
 		),
 
 
@@ -2227,25 +2293,25 @@ $lsDefaults = array(
 			'keys' => 'offsetxin',
 			'tooltip' => __('Shifts the layer starting position from its original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position the layer out the staging area, so it enters the scene from either side when animating to its destination location.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Enter the stage from left",
+				"name": "'.__('Enter the stage from left', 'LayerSlider').'",
 				"value": "left"
 			}, {
-				"name": "Enter the stage from right",
+				"name": "'.__('Enter the stage from right', 'LayerSlider').'",
 				"value": "right"
 			}, {
-				"name": "100% layer width",
+				"name": "'.__('100% layer width', 'LayerSlider').'",
 				"value": "100lw"
 			}, {
-				"name": "-100% layer width",
+				"name": "'.__('-100% layer width', 'LayerSlider').'",
 				"value": "-100lw"
 			}, {
-				"name": "50% slider width",
+				"name": "'.__('50% slider width', 'LayerSlider').'",
 				"value": "50sw"
 			}, {
-				"name": "-50% slider width",
+				"name": "'.__('-50% slider width', 'LayerSlider').'",
 				"value": "-50sw"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -2256,25 +2322,25 @@ $lsDefaults = array(
 			'keys' => 'offsetyin',
 			'tooltip' => __('Shifts the layer starting position from its original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values “top” or “bottom” position the layer out the staging area, so it enters the scene from either vertical side when animating to its destination location.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Enter the stage from top",
+				"name": "'.__('Enter the stage from top', 'LayerSlider').'",
 				"value": "top"
 			}, {
-				"name": "Enter the stage from bottom",
+				"name": "'.__('Enter the stage from bottom', 'LayerSlider').'",
 				"value": "bottom"
 			}, {
-				"name": "100% layer height",
+				"name": "'.__('100% layer height', 'LayerSlider').'",
 				"value": "100lh"
 			}, {
-				"name": "-100% layer height",
+				"name": "'.__('-100% layer height', 'LayerSlider').'",
 				"value": "-100lh"
 			}, {
-				"name": "50% slider height",
+				"name": "'.__('50% slider height', 'LayerSlider').'",
 				"value": "50sh"
 			}, {
-				"name": "-50% slider height",
+				"name": "'.__('-50% slider height', 'LayerSlider').'",
 				"value": "-50sh"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -2327,7 +2393,7 @@ $lsDefaults = array(
 			'keys' => 'rotatein',
 			'tooltip' => __('Rotates the layer by the given number of degrees. Negative values are allowed for counterclockwise rotation.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2338,7 +2404,7 @@ $lsDefaults = array(
 			'keys' => 'rotatexin',
 			'tooltip' => __('Rotates the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2349,7 +2415,7 @@ $lsDefaults = array(
 			'keys' => 'rotateyin',
 			'tooltip' => __('Rotates the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2360,7 +2426,7 @@ $lsDefaults = array(
 			'keys' => 'skewxin',
 			'tooltip' => __('Skews the layer along the X (horizontal) by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2371,7 +2437,7 @@ $lsDefaults = array(
 			'keys' => 'skewyin',
 			'tooltip' => __('Skews the layer along the Y (vertical) by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2382,7 +2448,7 @@ $lsDefaults = array(
 			'keys' => 'scalexin',
 			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -2393,7 +2459,7 @@ $lsDefaults = array(
 			'keys' => 'scaleyin',
 			'tooltip' => __('Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -2411,16 +2477,16 @@ $lsDefaults = array(
 			'keys' => 'clipin',
 			'tooltip' => __('Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.', 'LayerSlider'),
 			'attrs' => array('data-options' => '[{
-				"name": "From top",
+				"name": "'.__('From top', 'LayerSlider').'",
 				"value": "0 0 100% 0"
 			}, {
-				"name": "From right",
+				"name": "'.__('From right', 'LayerSlider').'",
 				"value": "0 0 0 100%"
 			}, {
-				"name": "From bottom",
+				"name": "'.__('From bottom', 'LayerSlider').'",
 				"value": "100% 0 0 0"
 			}, {
-				"name": "From left",
+				"name": "'.__('From left', 'LayerSlider').'",
 				"value": "0 100% 0 0"
 			}]')
 		),
@@ -2468,28 +2534,28 @@ $lsDefaults = array(
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
-					"name": "Blur",
+					"name": "'.__('Blur', 'LayerSlider').'",
 					"value": "blur(5px)"
 				}, {
-					"name": "Brightness",
+					"name": "'.__('Brightness', 'LayerSlider').'",
 					"value": "brightness(40%)"
 				}, {
-					"name": "Contrast",
+					"name": "'.__('Contrast', 'LayerSlider').'",
 					"value": "contrast(200%)"
 				}, {
-					"name": "Grayscale",
+					"name": "'.__('Grayscale', 'LayerSlider').'",
 					"value": "grayscale(50%)"
 				}, {
-					"name": "Hue-rotate",
+					"name": "'.__('Hue-rotate', 'LayerSlider').'",
 					"value": "hue-rotate(90deg)"
 				}, {
-					"name": "Invert",
+					"name": "'.__('Invert', 'LayerSlider').'",
 					"value": "invert(75%)"
 				}, {
-					"name": "Saturate",
+					"name": "'.__('Saturate', 'LayerSlider').'",
 					"value": "saturate(30%)"
 				}, {
-					"name": "Sepia",
+					"name": "'.__('Sepia', 'LayerSlider').'",
 					"value": "sepia(60%)"
 				}]'
 			)
@@ -2515,25 +2581,25 @@ $lsDefaults = array(
 			'keys' => 'offsetxout',
 			'tooltip' => __('Shifts the layer from its original position on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” animate the layer out the staging area, so it can leave the scene on either side.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Leave the stage on left",
+				"name": "'.__('Leave the stage on left', 'LayerSlider').'",
 				"value": "left"
 			}, {
-				"name": "Leave the stage on right",
+				"name": "'.__('Leave the stage on right', 'LayerSlider').'",
 				"value": "right"
 			}, {
-				"name": "100% layer width",
+				"name": "'.__('100% layer width', 'LayerSlider').'",
 				"value": "100lw"
 			}, {
-				"name": "-100% layer width",
+				"name": "'.__('-100% layer width', 'LayerSlider').'",
 				"value": "-100lw"
 			}, {
-				"name": "50% slider width",
+				"name": "'.__('50% slider width', 'LayerSlider').'",
 				"value": "50sw"
 			}, {
-				"name": "-50% slider width",
+				"name": "'.__('-50% slider width', 'LayerSlider').'",
 				"value": "-50sw"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -2544,25 +2610,25 @@ $lsDefaults = array(
 			'keys' => 'offsetyout',
 			'tooltip' => __('Shifts the layer from its original position on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values “top” or “bottom” animate the layer out the staging area, so it can leave the scene on either vertical side.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Leave the stage on top",
+				"name": "'.__('Leave the stage on top', 'LayerSlider').'",
 				"value": "top"
 			}, {
-				"name": "Leave the stage on bottom",
+				"name": "'.__('Leave the stage on bottom', 'LayerSlider').'",
 				"value": "bottom"
 			}, {
-				"name": "100% layer height",
+				"name": "'.__('100% layer height', 'LayerSlider').'",
 				"value": "100lh"
 			}, {
-				"name": "-100% layer height",
+				"name": "'.__('-100% layer height', 'LayerSlider').'",
 				"value": "-100lh"
 			}, {
-				"name": "50% slider height",
+				"name": "'.__('50% slider height', 'LayerSlider').'",
 				"value": "50sh"
 			}, {
-				"name": "-50% slider height",
+				"name": "'.__('-50% slider height', 'LayerSlider').'",
 				"value": "-50sh"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -2653,7 +2719,7 @@ $lsDefaults = array(
 			'keys' => 'rotateout',
 			'tooltip' => __('Rotates the layer by the given number of degrees. Negative values are allowed for counterclockwise rotation.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2664,7 +2730,7 @@ $lsDefaults = array(
 			'keys' => 'rotatexout',
 			'tooltip' => __('Rotates the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2675,7 +2741,7 @@ $lsDefaults = array(
 			'keys' => 'rotateyout',
 			'tooltip' => __('Rotates the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2686,7 +2752,7 @@ $lsDefaults = array(
 			'keys' => 'skewxout',
 			'tooltip' => __('Skews the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2697,7 +2763,7 @@ $lsDefaults = array(
 			'keys' => 'skewyout',
 			'tooltip' => __('Skews the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -2708,7 +2774,7 @@ $lsDefaults = array(
 			'keys' => 'scalexout',
 			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -2719,7 +2785,7 @@ $lsDefaults = array(
 			'keys' => 'scaleyout',
 			'tooltip' => __('Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -2737,16 +2803,16 @@ $lsDefaults = array(
 			'keys' => 'clipout',
 			'tooltip' => __('Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.', 'LayerSlider'),
 			'attrs' => array('data-options' => '[{
-				"name": "From top",
+				"name": "'.__('From top', 'LayerSlider').'",
 				"value": "0 0 100% 0"
 			}, {
-				"name": "From right",
+				"name": "'.__('From right', 'LayerSlider').'",
 				"value": "0 0 0 100%"
 			}, {
-				"name": "From bottom",
+				"name": "'.__('From bottom', 'LayerSlider').'",
 				"value": "100% 0 0 0"
 			}, {
-				"name": "From left",
+				"name": "'.__('From left', 'LayerSlider').'",
 				"value": "0 100% 0 0"
 			}]')
 		),
@@ -2759,28 +2825,28 @@ $lsDefaults = array(
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
-					"name": "Blur",
+					"name": "'.__('Blur', 'LayerSlider').'",
 					"value": "blur(5px)"
 				}, {
-					"name": "Brightness",
+					"name": "'.__('Brightness', 'LayerSlider').'",
 					"value": "brightness(40%)"
 				}, {
-					"name": "Contrast",
+					"name": "'.__('Contrast', 'LayerSlider').'",
 					"value": "contrast(200%)"
 				}, {
-					"name": "Grayscale",
+					"name": "'.__('Grayscale', 'LayerSlider').'",
 					"value": "grayscale(50%)"
 				}, {
-					"name": "Hue-rotate",
+					"name": "'.__('Hue-rotate', 'LayerSlider').'",
 					"value": "hue-rotate(90deg)"
 				}, {
-					"name": "Invert",
+					"name": "'.__('Invert', 'LayerSlider').'",
 					"value": "invert(75%)"
 				}, {
-					"name": "Saturate",
+					"name": "'.__('Saturate', 'LayerSlider').'",
 					"value": "saturate(30%)"
 				}, {
-					"name": "Sepia",
+					"name": "'.__('Sepia', 'LayerSlider').'",
 					"value": "sepia(60%)"
 				}]'
 			)
@@ -2917,28 +2983,28 @@ $lsDefaults = array(
 			'tooltip' => __('Shifts the starting position of text nodes from their original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position text nodes out the staging area, so they enter the scene from either side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetxin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Enter the stage from left",
+				"name": "'.__('Enter the stage from left', 'LayerSlider').'",
 				"value": "left"
 			}, {
-				"name": "Enter the stage from right",
+				"name": "'.__('Enter the stage from right', 'LayerSlider').'",
 				"value": "right"
 			}, {
-				"name": "100% layer width",
+				"name": "'.__('100% layer width', 'LayerSlider').'",
 				"value": "100lw"
 			}, {
-				"name": "-100% layer width",
+				"name": "'.__('-100% layer width', 'LayerSlider').'",
 				"value": "-100lw"
 			}, {
-				"name": "50% slider width",
+				"name": "'.__('50% slider width', 'LayerSlider').'",
 				"value": "50sw"
 			}, {
-				"name": "-50% slider width",
+				"name": "'.__('-50% slider width', 'LayerSlider').'",
 				"value": "-50sw"
 			}, {
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "50|-50"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -2949,28 +3015,28 @@ $lsDefaults = array(
 			'tooltip' => __('Shifts the starting position of text nodes from their original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “top” or “bottom” position text nodes out the staging area, so they enter the scene from either vertical side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetyin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Enter the stage from top",
+				"name": "'.__('Enter the stage from top', 'LayerSlider').'",
 				"value": "top"
 			}, {
-				"name": "Enter the stage from bottom",
+				"name": "'.__('Enter the stage from bottom', 'LayerSlider').'",
 				"value": "bottom"
 			}, {
-				"name": "100% layer height",
+				"name": "'.__('100% layer height', 'LayerSlider').'",
 				"value": "100lh"
 			}, {
-				"name": "-100% layer height",
+				"name": "'.__('-100% layer height', 'LayerSlider').'",
 				"value": "-100lh"
 			}, {
-				"name": "50% slider height",
+				"name": "'.__('50% slider height', 'LayerSlider').'",
 				"value": "50sh"
 			}, {
-				"name": "-50% slider height",
+				"name": "'.__('-50% slider height', 'LayerSlider').'",
 				"value": "-50sh"
 			}, {
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "50|-50"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3039,10 +3105,10 @@ $lsDefaults = array(
 			'tooltip' => __('Rotates text fragments clockwise by the given number of degrees. Negative values are allowed for counterclockwise rotation. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textrotatein',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3053,10 +3119,10 @@ $lsDefaults = array(
 			'tooltip' => __('Rotates text fragments along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textrotatexin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3067,10 +3133,10 @@ $lsDefaults = array(
 			'tooltip' => __('Rotates text fragments along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textrotateyin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3081,10 +3147,10 @@ $lsDefaults = array(
 			'keys'  => 'textscalexin',
 			'tooltip' => __('Scales text fragments along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3095,10 +3161,10 @@ $lsDefaults = array(
 			'keys'  => 'textscaleyin',
 			'tooltip' => __('Scales text fragments along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3109,10 +3175,10 @@ $lsDefaults = array(
 			'tooltip' => __('Skews text fragments along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textskewxin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3123,10 +3189,10 @@ $lsDefaults = array(
 			'tooltip' => __('Skews text fragments along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textskewyin',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3139,7 +3205,7 @@ $lsDefaults = array(
 			'tooltip' => __('Sets a point on canvas from which transformations are calculated. For example, a layer may rotate around its center axis or a completely custom point, such as one of its corners. The three values represent the X, Y and Z axes in 3D space. Apart from the pixel and percentage values, you can also use the following constants: top, right, bottom, left, center, slidercenter, slidermiddle, slidertop, sliderright, sliderbottom, sliderleft.', 'LayerSlider'),
 			'keys'  => 'texttransformoriginin',
 			'attrs' => array('data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "50% 50% 0|100% 100% 0"
 			}]')
 		),
@@ -3203,28 +3269,28 @@ $lsDefaults = array(
 			'tooltip' => __('Shifts the ending position of text nodes from their original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position text nodes out the staging area, so they leave the scene from either side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetxout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Leave the stage on left",
+				"name": "'.__('Leave the stage on left', 'LayerSlider').'",
 				"value": "left"
 			}, {
-				"name": "Leave the stage on right",
+				"name": "'.__('Leave the stage on right', 'LayerSlider').'",
 				"value": "right"
 			}, {
-				"name": "100% layer width",
+				"name": "'.__('100% layer width', 'LayerSlider').'",
 				"value": "100lw"
 			}, {
-				"name": "-100% layer width",
+				"name": "'.__('-100% layer width', 'LayerSlider').'",
 				"value": "-100lw"
 			}, {
-				"name": "50% slider width",
+				"name": "'.__('50% slider width', 'LayerSlider').'",
 				"value": "50sw"
 			}, {
-				"name": "-50% slider width",
+				"name": "'.__('-50% slider width', 'LayerSlider').'",
 				"value": "-50sw"
 			}, {
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "50|-50"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3235,28 +3301,28 @@ $lsDefaults = array(
 			'tooltip' => __('Shifts the ending position of text nodes from their original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “top” or “bottom” position text nodes out the staging area, so they leave the scene from either vertical side when animating to their destination location. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textoffsetyout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Leave the stage on top",
+				"name": "'.__('Leave the stage on top', 'LayerSlider').'",
 				"value": "top"
 			}, {
-				"name": "Leave the stage on bottom",
+				"name": "'.__('Leave the stage on bottom', 'LayerSlider').'",
 				"value": "bottom"
 			}, {
-				"name": "100% layer height",
+				"name": "'.__('100% layer height', 'LayerSlider').'",
 				"value": "100lh"
 			}, {
-				"name": "-100% layer height",
+				"name": "'.__('-100% layer height', 'LayerSlider').'",
 				"value": "-100lh"
 			}, {
-				"name": "50% slider height",
+				"name": "'.__('50% slider height', 'LayerSlider').'",
 				"value": "50sh"
 			}, {
-				"name": "-50% slider height",
+				"name": "'.__('-50% slider height', 'LayerSlider').'",
 				"value": "-50sh"
 			}, {
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "50|-50"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3328,10 +3394,10 @@ $lsDefaults = array(
 			'tooltip' => __('Rotates text fragments clockwise by the given number of degrees. Negative values are allowed for counterclockwise rotation. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textrotateout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-			"name": "Cycle between values",
+			"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3342,10 +3408,10 @@ $lsDefaults = array(
 			'tooltip' => __('Rotates text fragments along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textrotatexout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3356,10 +3422,10 @@ $lsDefaults = array(
 			'tooltip' => __('Rotates text fragments along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textrotateyout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3370,10 +3436,10 @@ $lsDefaults = array(
 			'keys'  => 'textscalexout',
 			'tooltip' => __('Scales text fragments along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3384,10 +3450,10 @@ $lsDefaults = array(
 			'keys'  => 'textscaleyout',
 			'tooltip' => __('Scales text fragments along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks text fragments compared to their original size. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3398,10 +3464,10 @@ $lsDefaults = array(
 			'tooltip' => __('Skews text fragments along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textskewxout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3412,10 +3478,10 @@ $lsDefaults = array(
 			'tooltip' => __('Skews text fragments along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction. By listing multiple values separated with a | character, the slider will use different transition variations on each text node by cycling between the provided values.', 'LayerSlider'),
 			'keys'  => 'textskewyout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "30|-30"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3428,7 +3494,7 @@ $lsDefaults = array(
 			'tooltip' => __('Sets a point on canvas from which transformations are calculated. For example, a layer may rotate around its center axis or a completely custom point, such as one of its corners. The three values represent the X, Y and Z axes in 3D space. Apart from the pixel and percentage values, you can also use the following constants: top, right, bottom, left, center, slidercenter, slidermiddle, slidertop, sliderright, sliderbottom, sliderleft.', 'LayerSlider'),
 			'keys'  => 'texttransformoriginout',
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Cycle between values",
+				"name": "'.__('Cycle between values', 'LayerSlider').'",
 				"value": "50% 50% 0|100% 100% 0"
 			}]')
 		),
@@ -3463,25 +3529,25 @@ $lsDefaults = array(
 			'keys' => 'loopoffsetx',
 			'tooltip' => __('Shifts the layer starting position from its original on the horizontal axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. The values “left” or “right” position the layer out the staging area, so it can leave and re-enter the scene from either side during the transition.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Move out of stage on left",
+				"name": "'.__('Move out of stage on left', 'LayerSlider').'",
 				"value": "left"
 			}, {
-				"name": "Move out of stage on right",
+				"name": "'.__('Move out of stage on right', 'LayerSlider').'",
 				"value": "right"
 			}, {
-				"name": "100% layer width",
+				"name": "'.__('100% layer width', 'LayerSlider').'",
 				"value": "100lw"
 			}, {
-				"name": "-100% layer width",
+				"name": "'.__('-100% layer width', 'LayerSlider').'",
 				"value": "-100lw"
 			}, {
-				"name": "50% slider width",
+				"name": "'.__('50% slider width', 'LayerSlider').'",
 				"value": "50sw"
 			}, {
-				"name": "-50% slider width",
+				"name": "'.__('-50% slider width', 'LayerSlider').'",
 				"value": "-50sw"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3492,25 +3558,25 @@ $lsDefaults = array(
 			'keys' => 'loopoffsety',
 			'tooltip' => __('Shifts the layer starting position from its original on the vertical axis with the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the height of this layer. The values “top” or “bottom” position the layer out the staging area, so it can leave and re-enter the scene from either vertical side during the transition.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Move out of stage on top",
+				"name": "'.__('Move out of stage on top', 'LayerSlider').'",
 				"value": "top"
 			}, {
-				"name": "Move out of stage on bottom",
+				"name": "'.__('Move out of stage on bottom', 'LayerSlider').'",
 				"value": "bottom"
 			}, {
-				"name": "100% layer height",
+				"name": "'.__('100% layer height', 'LayerSlider').'",
 				"value": "100lh"
 			}, {
-				"name": "-100% layer height",
+				"name": "'.__('-100% layer height', 'LayerSlider').'",
 				"value": "-100lh"
 			}, {
-				"name": "50% slider height",
+				"name": "'.__('50% slider height', 'LayerSlider').'",
 				"value": "50sh"
 			}, {
-				"name": "-50% slider height",
+				"name": "'.__('-50% slider height', 'LayerSlider').'",
 				"value": "-50sh"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3578,7 +3644,7 @@ $lsDefaults = array(
 			'keys' => 'looprotate',
 			'tooltip' => __('Rotates the layer by the given number of degrees. Negative values are allowed for counterclockwise rotation.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3589,7 +3655,7 @@ $lsDefaults = array(
 			'keys' => 'looprotatex',
 			'tooltip' => __('Rotates the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3600,7 +3666,7 @@ $lsDefaults = array(
 			'keys' => 'looprotatey',
 			'tooltip' => __('Rotates the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3611,7 +3677,7 @@ $lsDefaults = array(
 			'keys' => 'loopskewx',
 			'tooltip' => __('Skews the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3622,7 +3688,7 @@ $lsDefaults = array(
 			'keys' => 'loopskewy',
 			'tooltip' => __('Skews the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3633,7 +3699,7 @@ $lsDefaults = array(
 			'keys' => 'loopscalex',
 			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3644,7 +3710,7 @@ $lsDefaults = array(
 			'keys' => 'loopscaley',
 			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3662,16 +3728,16 @@ $lsDefaults = array(
 			'keys' => 'loopclip',
 			'tooltip' => __('Clips (cuts off) the sides of the layer by the given amount specified in pixels or percentages. The 4 value in order: top, right, bottom and the left side of the layer.', 'LayerSlider'),
 			'attrs' => array('data-options' => '[{
-				"name": "From top",
+				"name": "'.__('From top', 'LayerSlider').'",
 				"value": "0 0 100% 0"
 			}, {
-				"name": "From right",
+				"name": "'.__('From right', 'LayerSlider').'",
 				"value": "0 0 0 100%"
 			}, {
-				"name": "From bottom",
+				"name": "'.__('From bottom', 'LayerSlider').'",
 				"value": "100% 0 0 0"
 			}, {
-				"name": "From left",
+				"name": "'.__('From left', 'LayerSlider').'",
 				"value": "0 100% 0 0"
 			}]')
 		),
@@ -3684,7 +3750,7 @@ $lsDefaults = array(
 			'attrs' => array(
 				'step' => 1,
 				'data-options' => '[{
-					"name": "Infinite",
+					"name": "'.__('Infinite', 'LayerSlider').'",
 					"value": -1
 				}]'
 			),
@@ -3723,28 +3789,28 @@ $lsDefaults = array(
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
-					"name": "Blur",
+					"name": "'.__('Blur', 'LayerSlider').'",
 					"value": "blur(5px)"
 				}, {
-					"name": "Brightness",
+					"name": "'.__('Brightness', 'LayerSlider').'",
 					"value": "brightness(40%)"
 				}, {
-					"name": "Contrast",
+					"name": "'.__('Contrast', 'LayerSlider').'",
 					"value": "contrast(200%)"
 				}, {
-					"name": "Grayscale",
+					"name": "'.__('Grayscale', 'LayerSlider').'",
 					"value": "grayscale(50%)"
 				}, {
-					"name": "Hue-rotate",
+					"name": "'.__('Hue-rotate', 'LayerSlider').'",
 					"value": "hue-rotate(90deg)"
 				}, {
-					"name": "Invert",
+					"name": "'.__('Invert', 'LayerSlider').'",
 					"value": "invert(75%)"
 				}, {
-					"name": "Saturate",
+					"name": "'.__('Saturate', 'LayerSlider').'",
 					"value": "saturate(30%)"
 				}, {
-					"name": "Sepia",
+					"name": "'.__('Sepia', 'LayerSlider').'",
 					"value": "sepia(60%)"
 				}]'
 			)
@@ -3768,13 +3834,13 @@ $lsDefaults = array(
 			'keys' => 'hoveroffsetx',
 			'tooltip' => __('Moves the layer horizontally by the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. ', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "20% layer width",
+				"name": "'.__('20% layer width', 'LayerSlider').'",
 				"value": "20lw"
 			}, {
-				"name": "-20% layer width",
+				"name": "'.__('-20% layer width', 'LayerSlider').'",
 				"value": "-20lw"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3785,13 +3851,13 @@ $lsDefaults = array(
 			'keys' => 'hoveroffsety',
 			'tooltip' => __('Moves the layer vertically by the given number of pixels. Use negative values for the opposite direction. Percentage values are relative to the width of this layer. ', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "20% layer height",
+				"name": "'.__('20% layer height', 'LayerSlider').'",
 				"value": "20lh"
 			}, {
-				"name": "-20% layer height",
+				"name": "'.__('-20% layer height', 'LayerSlider').'",
 				"value": "-20lh"
 			}, {
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-100,100)"
 			}]')
 		),
@@ -3845,7 +3911,7 @@ $lsDefaults = array(
 			'keys' => 'hoverrotate',
 			'tooltip' => __('Rotates the layer clockwise by the given number of degrees. Negative values are allowed for counterclockwise rotation.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3856,7 +3922,7 @@ $lsDefaults = array(
 			'keys' => 'hoverrotatex',
 			'tooltip' => __('Rotates the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3867,7 +3933,7 @@ $lsDefaults = array(
 			'keys' => 'hoverrotatey',
 			'tooltip' => __('Rotates the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3878,7 +3944,7 @@ $lsDefaults = array(
 			'keys' => 'hoverskewx',
 			'tooltip' => __('Skews the layer along the X (horizontal) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3889,7 +3955,7 @@ $lsDefaults = array(
 			'keys' => 'hoverskewy',
 			'tooltip' => __('Skews the layer along the Y (vertical) axis by the given number of degrees. Negative values are allowed for reverse direction.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(-45,45)"
 			}]')
 		),
@@ -3900,7 +3966,7 @@ $lsDefaults = array(
 			'keys' => 'hoverscalex',
 			'tooltip' => __('Scales the layer along the X (horizontal) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -3911,7 +3977,7 @@ $lsDefaults = array(
 			'keys' => 'hoverscaley',
 			'tooltip' => __('Scales the layer along the Y (vertical) axis by the specified vector. Use the value 1 for the original size. The value 2 will double, while 0.5 shrinks the layer compared to its original size.', 'LayerSlider'),
 			'attrs' => array('type' => 'text', 'data-options' => '[{
-				"name": "Random",
+				"name": "'.__('Random', 'LayerSlider').'",
 				"value": "random(2,4)"
 			}]')
 		),
@@ -4118,37 +4184,57 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Enter URL', 'LayerSlider'),
 			'keys' => 'url',
-			'tooltip' => __('If you want to link your layer, type here the URL. You can use a hash mark followed by a number to link this layer to another slide. Example: #3 - this will switch to the third slide.', 'LayerSlider'),
+			'tooltip' => __('If you want to link your layer, type the URL here. You can choose a WordPress page/post/attachment or use one of the pre-defined options from the dropdown list when you click into this field. You can also type a hash mark followed by a number to link this layer to another slide. Example: #3 - this will switch to the third slide.', 'LayerSlider'),
 			'attrs' => array(
 				'data-options' => '[{
-					"name": "Switch to the next slide",
-					"value": "#next"
+					"name": "'.__('Switch to the next slide', 'LayerSlider').'",
+					"value": "#next",
+					"linkAction": true
 				},{
-					"name": "Switch to the previous slide",
-					"value": "#prev"
+					"name": "'.__('Switch to the previous slide', 'LayerSlider').'",
+					"value": "#prev",
+					"linkAction": true
 				},{
-					"name": "Stop the slideshow",
-					"value": "#stop"
+					"name": "'.__('Stop the slideshow', 'LayerSlider').'",
+					"value": "#stop",
+					"linkAction": true
 				},{
-					"name": "Resume the slideshow",
-					"value": "#start"
+					"name": "'.__('Resume the slideshow', 'LayerSlider').'",
+					"value": "#start",
+					"linkAction": true
 				},{
-					"name": "Replay the slide from the start",
-					"value": "#replay"
+					"name": "'.__('Replay the slide from the start', 'LayerSlider').'",
+					"value": "#replay",
+					"linkAction": true
 				},{
-					"name": "Reverse the slide, then pause it",
-					"value": "#reverse"
+					"name": "'.__('Reverse the slide, then pause it', 'LayerSlider').'",
+					"value": "#reverse",
+					"linkAction": true
 				},{
-					"name": "Reverse the slide, then replay it",
-					"value": "#reverse-replay"
+					"name": "'.__('Reverse the slide, then replay it', 'LayerSlider').'",
+					"value": "#reverse-replay",
+					"linkAction": true
 				},{
-					"name": "Close the Popup",
-					"value": "#closepopup"
+					"name": "'.__('Close the Popup', 'LayerSlider').'",
+					"value": "#closepopup",
+					"linkAction": true
 				}]'
 			),
 			'props' => array(
 				'meta' => true
 			)
+		),
+
+		'linkId' => array(
+			'value' => '',
+			'keys' => 'linkId',
+			'props' => array( 'meta' => true )
+		),
+
+		'linkType' => array(
+			'value' => '',
+			'keys' => 'linkType',
+			'props' => array( 'meta' => true )
 		),
 
 
@@ -4322,7 +4408,7 @@ $lsDefaults = array(
 			'name' => __('Font size', 'LayerSlider'),
 			'keys' => 'font-size',
 			'tooltip' => __('The font size in pixels. Example: 16px.', 'LayerSlider'),
-			'attrs' => array('data-options' => '["9", "10", "11", "12", "13", "14", "18", "24", "36", "48", "64", "96"]'),
+			'attrs' => array('data-options' => '["9", "10", "11", "12", "13", "14", "18", "24", "36", "48", "64", "96", "128"]'),
 			'props' => array(
 				'meta' => true
 			)
@@ -4623,28 +4709,28 @@ $lsDefaults = array(
 			'premium' => true,
 			'attrs' => array(
 				'data-options' => '[{
-					"name": "Blur",
+					"name": "'.__('Blur', 'LayerSlider').'",
 					"value": "blur(5px)"
 				}, {
-					"name": "Brightness",
+					"name": "'.__('Brightness', 'LayerSlider').'",
 					"value": "brightness(40%)"
 				}, {
-					"name": "Contrast",
+					"name": "'.__('Contrast', 'LayerSlider').'",
 					"value": "contrast(200%)"
 				}, {
-					"name": "Grayscale",
+					"name": "'.__('Grayscale', 'LayerSlider').'",
 					"value": "grayscale(50%)"
 				}, {
-					"name": "Hue-rotate",
+					"name": "'.__('Hue-rotate', 'LayerSlider').'",
 					"value": "hue-rotate(90deg)"
 				}, {
-					"name": "Invert",
+					"name": "'.__('Invert', 'LayerSlider').'",
 					"value": "invert(75%)"
 				}, {
-					"name": "Saturate",
+					"name": "'.__('Saturate', 'LayerSlider').'",
 					"value": "saturate(30%)"
 				}, {
-					"name": "Sepia",
+					"name": "'.__('Sepia', 'LayerSlider').'",
 					"value": "sepia(60%)"
 				}]'
 			)

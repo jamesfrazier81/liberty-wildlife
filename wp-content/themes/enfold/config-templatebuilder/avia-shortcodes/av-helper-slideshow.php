@@ -484,7 +484,7 @@ if ( !class_exists( 'avia_slideshow' ) )
 					
 					
 					
-					// $img[0] = 'http://www.kriesi.at/themes/enfold-photography/files/2014/08/darkened_girl.jpg';
+					// $img[0] = 'https://kriesi.at/themes/enfold-photography/files/2014/08/darkened_girl.jpg';
 
 
 					$html .= "<li {$slider_data} class='{$extra_class} slide-{$counter} ' >";

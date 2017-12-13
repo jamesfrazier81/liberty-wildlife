@@ -12,19 +12,19 @@
 
 .ls-debug-window-wrapper {
 	border-radius: 3px !important;
-	margin: 20px auto;
-	border: 1px solid #ddd;
-	z-index: 9999999;
+	margin: 20px auto !important;
+	border: 1px solid #ddd !important;
+	z-index: 9999999 !important;
 	overflow: hidden;
-	position: relative;
-	max-width: 1000px;
+	position: relative !important;
+	max-width: 1000px !important;
 }
 
 	.ls-debug-window-wrapper table {
-		width: 100%;
-		box-sizing: border-box;
-		border-collapse: collapse;
-		border-spacing: 0;
+		width: 100% !important;
+		box-sizing: border-box !important;
+		border-collapse: collapse !important;
+		border-spacing: 0 !important;
 	}
 
 		.ls-debug-window-wrapper td,
@@ -37,10 +37,10 @@
 		}
 
 		.ls-debug-window-wrapper th {
-			background: rgb(245,245,245);
-			background: -moz-linear-gradient(top,  rgba(245,245,245,1) 0%, rgba(238,238,238,1) 100%);
-			background: -webkit-linear-gradient(top,  rgba(245,245,245,1) 0%,rgba(238,238,238,1) 100%);
-			background: linear-gradient(to bottom,  rgba(245,245,245,1) 0%,rgba(238,238,238,1) 100%);
+			background: rgb(245,245,245) !important;
+			background: -moz-linear-gradient(top,  rgba(245,245,245,1) 0%, rgba(238,238,238,1) 100%) !important;
+			background: -webkit-linear-gradient(top,  rgba(245,245,245,1) 0%,rgba(238,238,238,1) 100%) !important;
+			background: linear-gradient(to bottom,  rgba(245,245,245,1) 0%,rgba(238,238,238,1) 100%) !important;
 			font-weight: 600 !important;
 			color: black !important;
 			padding: 10px !important;
@@ -49,13 +49,13 @@
 
 		.ls-debug-window-wrapper td {
 			font-weight: 400 !important;
-			border-top: 1px solid #ddd;
+			border-top: 1px solid #ddd !important;
 			color: #333 !important;
 			background: white !important;
 		}
 
 		.ls-debug-log-type-group {
-			background: #f7f7f7;
+			background: #f7f7f7 !important;
 		}
 
 		.ls-debug-log-type-group td {
@@ -63,11 +63,11 @@
 		}
 
 		.ls-debug-log-type-warn td {
-			background: #fffbe6;
+			background: #fffbe6 !important;
 			color: #725520 !important;
 		}
 
 		.ls-debug-log-type-info td {
-			background: #ddeaff;
-			color: #00173e;
+			background: #ddeaff !important
+			color: #00173e !important;
 		}

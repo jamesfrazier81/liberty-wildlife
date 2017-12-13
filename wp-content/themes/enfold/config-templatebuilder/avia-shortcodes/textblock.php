@@ -58,7 +58,7 @@ if ( !class_exists( 'avia_sc_text' ) )
 							"desc" 	=> __("Size of the text in px", 'avia_framework' ),
 				            "id" 	=> "size",
 				            "type" 	=> "select",
-				            "subtype" => AviaHtmlHelper::number_array(10,40,1, array( __("Default Size", 'avia_framework' )=>'')),
+				            "subtype" => AviaHtmlHelper::number_array(8,40,1, array( __("Default Size", 'avia_framework' )=>'')),
 				            "std" => ""),
 							
 					array(

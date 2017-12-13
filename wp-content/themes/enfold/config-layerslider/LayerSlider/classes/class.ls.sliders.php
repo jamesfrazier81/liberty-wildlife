@@ -191,6 +191,7 @@ class LS_Sliders {
 		// Slider data
 		$data = !empty($data) ? $data : array(
 			'properties' => array(
+				'createdWith' => LS_PLUGIN_VERSION,
 				'sliderVersion' => LS_PLUGIN_VERSION,
 				'title' => $title,
 				'new' => true,

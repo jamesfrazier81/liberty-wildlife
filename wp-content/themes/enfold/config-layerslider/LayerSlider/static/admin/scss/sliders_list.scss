@@ -6,15 +6,8 @@
 	}
 }
 
-.ls-wp-wrap-white {
-	background-color: white !important;
-	padding-top: 32px !important;
-}
-
-.ls-body-black {
-	background-color: black !important;
+.ls-no-overflow {
 	overflow: hidden !important;
-	padding-top: 0 !important;
 }
 
 #show-guides-link-wrap {
@@ -1581,17 +1574,6 @@ ul.ls-font-list {
 
 .ls-system-status {
 
-	ul {
-		padding-left: 40px;
-		list-style-type: square;
-
-		li:last-child {
-			padding: 1px 5px;
-			font-weight: bold;
-			background: yellow;
-		}
-	}
-
 	span {
 		color: #e14d43;
 
@@ -1669,6 +1651,25 @@ ul.ls-font-list {
 		padding: 0 3px;
 		color: #555;
 		border-radius: 2px;
+	}
+
+	td.has-button {
+
+		div {
+			min-height: 30px;
+			position: relative;
+		}
+
+		span {
+			display: block;
+			margin-right: 150px;
+		}
+
+		.button {
+			position: absolute;
+			top: 3px;
+			right: 0px;
+		}
 	}
 
 }
@@ -1775,9 +1776,20 @@ ul.ls-font-list {
 
 /* IMPORT MODAL WINDOW */
 
-@import 'https://fonts.googleapis.com/css?family=Damion|Montserrat|Poppins';
+@import 'https://fonts.googleapis.com/css?family=Damion|Montserrat|Poppins|Lato';
 
 /* Head */
+
+#ls-import-modal-overlay {
+	position: fixed;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	opacity: 0;
+	z-index: 10000;
+	background: black;
+}
 
 #ls-import-modal-window {
 

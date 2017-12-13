@@ -121,15 +121,17 @@ margin-bottom:10px;
 }
 
 
-/*multi image upload into modal*/
+/*multi image and audio upload into modal*/
 
-div .avia-element-multi_image.avia-form-element-container{
+div .avia-element-multi_image.avia-form-element-container,
+div .avia-element-audio_player.avia-form-element-container{
 padding: 0;
 background: transparent;
 border:none;
 }
 
-div .avia-element-multi_image .button {
+div .avia-element-multi_image .button,
+div .avia-element-audio_player .button{
 top: 1px;
 }
 
@@ -217,7 +219,7 @@ background-position: 0 0, 8px 8px;
 }
 
 
-.avia-element-gallery .button, .avia-element-image .button, .avia-element-multi_image .button{
+.avia-element-gallery .button, .avia-element-image .button, .avia-element-multi_image .button, .avia-element-audio_player .button{
 line-height: 32px;
 height: auto;
 position: absolute;
@@ -281,7 +283,8 @@ width: auto;
 display:block; margin:0 auto; top:0;
 }
 
-.avia-modal-group-element-inner .avia_slideshow_image{width:40px; height:40px; display:block; float:left; margin-right:10px; border:1px solid #e1e1e1; background: #fff url(../../images/placeholder-image.png) center center no-repeat;}
+.avia-modal-group-element-inner .avia_slideshow_image
+{width:40px; height:40px; display:block; float:left; margin-right:10px; border:1px solid #e1e1e1; background: #fff url(../../images/placeholder-image.png) center center no-repeat;}
 .avia-modal-group-element-inner .avia_slideshow_image img{max-width: 100%; height: auto; display: block; padding:3px;  box-sizing:border-box; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; }
 .avia-multi-img .avia-modal-group-element-inner{clear: both; overflow: hidden;}
 .avia-multi-img .avia-modal-group-element-inner>div { overflow: hidden; }
@@ -302,3 +305,29 @@ display:block; margin:0 auto; top:0;
 div .ls-preview .draggable > *{line-height: 1.1em;}
 #ls-import-samples-template h3{}
 #ls-import-samples-template h3 + .inner{display: none;}
+
+
+
+/*multi audio upload into modal*/
+.avia-style .avia-element-audio_player .avia-name-description{
+	margin-left:190px;
+	width: auto;
+}
+
+/*audioplayer*/
+.avia-modal-group-element-inner .avia_audiolist_image {width:40px; height:40px; display:block; float:left; margin-right:10px; border:1px solid #e1e1e1; background: #fff url(../../images/placeholder-audio.png) center center no-repeat;}
+.avia-modal-group-element-inner .avia_audiolist_content{
+	float: left;
+	margin: -3px 0 0 3px;
+	line-height: 0px;
+}
+.avia-modal-group-element-inner .avia_audiolist_content p{
+	line-height: 8px;
+}
+
+.avia-modal-group-element-inner .avia_audiolist_image img{display:none;}
+.avia_audiolist_content .avia_content_description{display:none;}
+.avia_audiolist_content .avia_content_album{display:none;}
+.avia_audio_url{position: relative; top:-4px;}
+
+.avia-media-audio-insert .playlist-settings{display:none;}

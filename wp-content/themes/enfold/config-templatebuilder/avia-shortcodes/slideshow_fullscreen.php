@@ -84,7 +84,7 @@ if ( !class_exists( 'avia_sc_slider_fullscreen' ) )
 										"name" 	=> __("Which type of slide is this?",'avia_framework' ),
 										"id" 	=> "slide_type",
 										"type" 	=> "select",
-										"std" 	=> "",
+										"std" 	=> "image",
 										"subtype" => array(   __('Image Slide','avia_framework' )	=>'image',
 										                      __('Video Slide','avia_framework' )	=>'video',
 										                      )
@@ -106,7 +106,7 @@ if ( !class_exists( 'avia_sc_slider_fullscreen' ) )
 										"name" 	=> __("Image Position",'avia_framework' ),
 										"id" 	=> "position",
 										"type" 	=> "select",
-										"std" 	=> "Center Center",
+										"std" 	=> "center center",
 										"required" => array('id','not',''),
 										"subtype" => array(   __('Top Left','avia_framework' )       =>'top left',
 										                      __('Top Center','avia_framework' )     =>'top center',
@@ -874,7 +874,7 @@ array(
 			    
 			    
 				$skipSecond = false;
-				avia_sc_slider_full::$slide_count++;
+				avia_sc_slider_fullscreen::$slide_count++;
 				
 				$params['class'] = "avia-fullscreen-slider main_color {$av_display_classes} ".$meta['el_class'].$class;
 				$params['open_structure'] = false;

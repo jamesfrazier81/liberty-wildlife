@@ -74,15 +74,44 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
                     ),
 
 					array(
-					"name" 	=> __("Image Link", 'avia_framework' ),
-					"desc" 	=> __("By default images got a small link to a larger image version in a lightbox. You can deactivate that link. You can also set custom links when editing the images in the gallery", 'avia_framework' ),
-					"id" 	=> "links",
-					"type" 	=> "select",
-					"std" 	=> "active",
-					"subtype" => array(
-						__('Lightbox linking active',  'avia_framework' ) =>'active',
-						__('Lightbox linking deactivated',  'avia_framework' ) =>'',
-					)),
+						"name" 	=> __("Image Link", 'avia_framework' ),
+						"desc" 	=> __("By default images got a small link to a larger image version in a lightbox. You can deactivate that link. You can also set custom links when editing the images in the gallery", 'avia_framework' ),
+						"id" 	=> "links",
+						"type" 	=> "select",
+						"std" 	=> "active",
+						"subtype" => array(
+							__('Lightbox linking active',  'avia_framework' ) =>'active',
+							__('Lightbox linking deactivated',  'avia_framework' ) =>'',
+						)
+					),
+					
+					array(
+						"name"		=> __("Lightbox image description text", 'avia_framework' ),
+						"desc"		=> __("Select which text defined in the media gallery is displayed below the lightbox image.", 'avia_framework' ),
+						"id"		=> "lightbox_text",
+						"type"		=> "select",
+						"std"		=> "",
+						"required" 	=> array( 'links', 'equals', 'active'),
+						"subtype"	=> array(
+								__('No text', 'avia_framework' )										=> 'no_text',
+								__('Image title', 'avia_framework' )									=> '',
+								__('Image description (or image title if empty)', 'avia_framework' )	=> 'description',
+								__('Image caption (or image title if empty)', 'avia_framework' )		=> 'caption'
+						)
+					),
+					
+					array(
+						"name"		=> __("Custom link destination", 'avia_framework' ),
+						"desc"		=> __("Select where an existing custom link should be opend.", 'avia_framework' ),
+						"id"		=> "link_dest",
+						"type"		=> "select",
+						"std"		=> "",
+						"required" 	=> array( 'links', 'equals', ''),
+						"subtype"	=> array(
+								__('Open in same window', 'avia_framework' )		=> '',
+								__('Open in a new window', 'avia_framework' )		=> '_blank'
+						)
+					),
 	                    	
 	                array(
 					"name" 	=> __("Gap between images", 'avia_framework' ),
@@ -124,6 +153,15 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 						"std" 	=> "",
 						"subtype" => array(__('Default','avia_framework' ) =>'av-control-default',__('Minimal White','avia_framework' ) =>'av-control-minimal', __('Minimal Black','avia_framework' ) =>'av-control-minimal av-control-minimal-dark',__('Hidden','avia_framework' ) =>'av-control-hidden')),
 	                
+					
+					array(	
+						"name" 	=> __("For Developers: Section ID", 'avia_framework' ),
+						"desc" 	=> __("Apply a custom ID Attribute to the section, so you can apply a unique style via CSS. This option is also helpful if you want to use anchor links to scroll to a sections when a link is clicked", 'avia_framework' )."<br/><br/>".
+								   __("Use with caution and make sure to only use allowed characters. No special characters can be used.", 'avia_framework' ),
+			            "id" 	=> "id",
+			            "type" 	=> "input",
+			            "std"	=> "" ),
+					
 	                array(
 							"type" 	=> "close_div",
 							'nodescription' => true
@@ -253,14 +291,17 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 				extract(AviaHelper::av_mobile_sizes($atts)); //return $av_font_classes, $av_title_font_classes and $av_display_classes 
 				
 				extract(shortcode_atts(array(
-				'height'      		=> '400',
-				'size' 				=> 'large',
-				'links' 			=> 'active',
-				'gap'				=> 'large',
-				'ids'    	 		=> '',
-				'active'    		=> 'enlarge',
-				'control_layout'	=> 'av-control-default',
-				'initial'			=> 'initial'
+						'height'      		=> '400',
+						'size' 				=> 'large',
+						'links' 			=> 'active',
+						'lightbox_text'		=> '',				//	default to title
+						'link_dest'			=> '',
+						'gap'				=> 'large',
+						'ids'    	 		=> '',
+						'active'    		=> 'enlarge',
+						'control_layout'	=> 'av-control-default',
+						'initial'			=> '',
+						'id'				=> ''
 				
 				), $atts, $this->config['shortcode']));
 					
@@ -284,15 +325,20 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 					$padding 	= "style='padding: {$padding}% 0px;' data-av-enlarge='{$enlarge_by}' ";
 				}
 				
-				if(!empty($initial))
-				{
-					$initial = "data-av-initial='{$initial}' ";
-				}
-				
-				
 				if(!empty($attachments) && is_array($attachments))
 				{
 					self::$hor_gallery++;
+					
+					if( ! is_numeric( $initial ) || ( (int) $initial <= 0 ) )
+					{
+						$initial = '';
+					}
+
+					if( ! empty( $initial ) )
+					{
+						$initial = ( (int) $initial > count( $attachments ) ) ? count( $attachments ) : $initial;
+						$initial = "data-av-initial='{$initial}' ";
+					}
 
 					$counter 	= 0;
                     $markup 	= avia_markup_helper(
@@ -314,22 +360,63 @@ if ( !class_exists( 'avia_sc_gallery_horizontal' ) )
 						$lightbox	 	= wp_get_attachment_image_src($attachment->ID, 'large');
 						$lightbox		= $lightbox[0];
 						
-						$alt = get_post_meta($attachment->ID, '_wp_attachment_image_alt', true);
-                        $alt = !empty($alt) ? esc_attr($alt) : '';
-                        $title = trim($attachment->post_title) ? esc_attr($attachment->post_title) : "";
-                        $description = trim($attachment->post_content) ? esc_attr($attachment->post_content) : esc_attr(trim($attachment->post_excerpt));
+						$alt			= get_post_meta($attachment->ID, '_wp_attachment_image_alt', true);
+						$alt			= ! empty($alt) ? esc_attr($alt) : '';
 						
+						$title			= trim($attachment->post_title) ? esc_attr($attachment->post_title) : "";
+						$description	= trim($attachment->post_content) ? esc_attr($attachment->post_content) : '';
+						$caption		= trim($attachment->post_excerpt) ? esc_attr($attachment->post_excerpt) : '';
+						
+						$custom_link	= get_post_meta( $attachment->ID, 'av-custom-link', true );
+						$custom_link	= ! empty( $custom_link ) ? esc_attr( $custom_link ) : '';
+						
+						$lightbox_title = $title;
+						switch( $lightbox_text )
+						{
+							case 'caption':
+								$lightbox_title = ( '' != $caption ) ? $caption : $title;
+								break;
+							case 'description':
+								$lightbox_title = ( '' != $description ) ? $description : $title;
+								break;
+							case 'no_text':
+								$lightbox_title = '';
+						}
+						
+						if( $links != '' )		//	ignore custom link, if lightbox is active
+						{
+							$custom_link = '';
+						}
+						else if( $custom_link != '' )
+						{
+							if( '' != $title )
+							{
+								$title = ' - ' . $title;
+							}
+							$title = __( 'Click to show details', 'avia_framework' ) . $title;
+						}
 						
 						$output .= "<div class='av-horizontal-gallery-wrap noHover'>";
-							
-							
+								
+								if( ( '' == $links ) && ( $custom_link != '' ) ) 
+								{
+									$target = ( $link_dest != '' ) ?  ' target="' . $link_dest . '"' : '';
+									$output .= '<a href="' . $custom_link . '"' . $target . '>';
+								}
+								
 								$output .= "<img class='av-horizontal-gallery-img' ";
 								$output .= "width='".$img[1]."' height='".$img[2]."' src='".$img[0]."' title='".$title."' alt='".$alt."' />";	
 								
-								if($links != ""){
-								$output .= "<a href='{$lightbox}'  class='av-horizontal-gallery-link' {$display_char}>";		
-								$output .= "</a>";
+								if( $links != "" )
+								{
+									$output .= "<a href='{$lightbox}'  class='av-horizontal-gallery-link' {$display_char} title='{$lightbox_title}'>";		
+									$output .= "</a>";
 								}
+								else if( $custom_link != '' )
+								{
+									$output .= "</a>";
+								}
+								
 						$output .= "</div>";
 
 					}

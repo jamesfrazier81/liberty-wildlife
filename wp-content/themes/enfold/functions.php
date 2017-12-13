@@ -298,7 +298,14 @@ if(!function_exists('avia_register_frontend_scripts'))
 
 	function avia_register_frontend_scripts()
 	{
-		$vn = "4.1";
+		$theme = wp_get_theme();
+		if( false !== $theme->parent() )
+		{
+			$theme = $theme->parent();
+		}
+		$vn = $theme->get( 'Version' );
+		
+		$options = avia_get_option();
 		
 		$template_url 		= get_template_directory_uri();
 		$child_theme_url 	= get_stylesheet_directory_uri();
@@ -307,7 +314,11 @@ if(!function_exists('avia_register_frontend_scripts'))
 		wp_enqueue_script( 'avia-compat', $template_url.'/js/avia-compat.js', array('jquery'), $vn, false ); //needs to be loaded at the top to prevent bugs
 		wp_enqueue_script( 'avia-default', $template_url.'/js/avia.js', array('jquery'), $vn, true );
 		wp_enqueue_script( 'avia-shortcodes', $template_url.'/js/shortcodes.js', array('jquery'), $vn, true );
-		wp_enqueue_script( 'avia-popup',  $template_url.'/js/aviapopup/jquery.magnific-popup.min.js', array('jquery'), $vn, true);
+		
+		if( empty( $options['lightbox_active'] ) || ( 'lightbox_active' == $options['lightbox_active'] ) )
+		{
+			wp_enqueue_script( 'avia-popup',  $template_url.'/js/aviapopup/jquery.magnific-popup.min.js', array('jquery'), $vn, true);
+		}
 
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'wp-mediaelement' );
@@ -324,8 +335,12 @@ if(!function_exists('avia_register_frontend_scripts'))
 		wp_enqueue_style( 'avia-base' ,   $template_url."/css/base.css", array(), 		$vn, 'all' );
 		wp_enqueue_style( 'avia-layout',  $template_url."/css/layout.css", array(), 	$vn, 'all' );
 		wp_enqueue_style( 'avia-scs',     $template_url."/css/shortcodes.css", array(), $vn, 'all' );
-		wp_enqueue_style( 'avia-popup-css', $template_url."/js/aviapopup/magnific-popup.css", array(), $vn, 'screen' );
-		wp_enqueue_style( 'avia-media'  , $template_url."/js/mediaelement/skin-1/mediaelementplayer.css", array(), $vn, 'screen' );
+		
+		if( empty( $options['lightbox_active'] ) || ( 'lightbox_active' == $options['lightbox_active'] ) )
+		{
+			wp_enqueue_style( 'avia-popup-css', $template_url."/js/aviapopup/magnific-popup.css", array(), $vn, 'screen' );
+		}
+		
 		wp_enqueue_style( 'avia-print' ,  $template_url."/css/print.css", array(), $vn, 'print' );
 		
 		
@@ -451,7 +466,7 @@ require_once( 'config-templatebuilder/config.php' );			//templatebuilder plugin
 require_once( 'config-gravityforms/config.php' );				//compatibility with gravityforms plugin
 require_once( 'config-woocommerce/config.php' );				//compatibility with woocommerce plugin
 require_once( 'config-wordpress-seo/config.php' );				//compatibility with Yoast WordPress SEO plugin
-
+require_once( 'config-menu-exchange/config.php' );				//compatibility with Zen Menu Logic and Themify_Conditional_Menus plugin
 
 if(!current_theme_supports('deactivate_tribe_events_calendar'))
 {

@@ -264,6 +264,8 @@ jQuery(function($) {
 		}
 	};
 
+	var importModalWindowTimeline = null,
+		importModalThumbnailsTransition = null;
 
 	// Checkboxes
 	$('.ls-global-settings :checkbox').customCheckbox();
@@ -413,26 +415,39 @@ jQuery(function($) {
 		event.preventDefault();
 
 		var	$modal,
-			width = jQuery( window ).width(),
-			tl;
+			width = jQuery( window ).width();
+
+		// If the Template Store was previously opened on the current page,
+		// just grab the element, do not bother re-appending and setting
+		// up events, etc.
+
+		// Append dark overlay
+		if( !jQuery( '#ls-import-modal-overlay' ).length ){
+			jQuery( '<div id="ls-import-modal-overlay">' ).appendTo( '#wpwrap' );
+		}
 
 		if( jQuery( '#ls-import-modal-window' ).length ){
 
 			$modal = jQuery( '#ls-import-modal-window' );
 
-		}else{
+		// First time open on the current page. Set up the UI and others.
+		} else {
 
+			// Append the template & setup the live logo
 			$modal = jQuery( jQuery('#tmpl-import-sliders').text() ).hide().prependTo('body');
+			lsLogo.append( '#ls-import-modal-window .layerslider-logo', true );
+
 
 			// Update last store view date
 			if( $modal.hasClass('has-updates') ) {
 				jQuery.get( window.ajaxurl, { action: 'ls_store_opened' });
 			}
 
-			lsLogo.append( '#ls-import-modal-window .layerslider-logo', true );
 
+			// Setup Shuffle. Use setTimeout to avoid timing issues.
 			setTimeout(function(){
 
+				// Init Shuffle
 				var	Shuffle = window.shuffle,
 					element = jQuery( '#ls-import-modal-window .inner .items' )[0];
 					shuffle = new Shuffle(element, {
@@ -443,95 +458,97 @@ jQuery(function($) {
 					}),
 					$comingSoon = jQuery( '.coming-soon' );
 
-				jQuery( '#ls-import-modal-window .inner nav li' ).on( 'click', function(){
+				// Setup category switcher sidebar.
+				jQuery( '#ls-import-modal-window' ).on( 'click', '.inner nav li', function(){
+
+					// Highlight and filter new category
 					jQuery(this).addClass('active').siblings().removeClass('active');
 					shuffle.filter( jQuery(this).data( 'group' ) );
-					if( !jQuery( '.shuffle .shuffle-item--visible' ).length ){
-						$comingSoon.addClass( 'visible' );
-					}else{
-						$comingSoon.removeClass( 'visible' );
-					}
+
+					// Display the Coming Soon tile if the category
+					// has no entries at all.
+					var $tiles = jQuery( '.shuffle .shuffle-item--visible' );
+					$comingSoon[ $tiles.length ? 'removeClass' : 'addClass' ]('visible');
 				});
 
 			}, 100 );
+
+			// Hide all template items temporarily for faster animations
+			jQuery( '#ls-import-modal-window .items' ).hide();
+
+			importModalWindowTimeline = new TimelineMax({
+				onStart: function(){
+					jQuery( '#ls-import-modal-overlay' ).show();
+					jQuery( 'html, body' ).addClass( 'ls-no-overflow' );
+					jQuery(document).on( 'keyup.LS', function( e ) {
+						if( e.keyCode === 27 ){
+							jQuery( '#ls-import-samples-button' ).data( 'lsModalTimeline' ).reverse().timeScale(1.5);
+						}
+					});
+				},
+				onComplete: function(){
+					importModalWindowTimeline.remove( importModalThumbnailsTransition );
+				},
+				onReverseComplete: function(){
+					jQuery( 'html, body' ).removeClass( 'ls-no-overflow' );
+					jQuery(document).off( 'keyup.LS' );
+					jQuery( '#ls-import-modal-overlay' ).hide();
+				},
+				paused: true
+			});
+
+			$(this).data( 'lsModalTimeline', importModalWindowTimeline );
+
+			importModalWindowTimeline.fromTo( $modal[0], 0.75, {
+				autoCSS: false,
+				css: {
+					position: 'fixed',
+					display: 'block',
+					x: width
+				}
+			},{
+				autoCSS: false,
+				css: {
+					x: 0
+				},
+				ease: Quart.easeInOut
+			}, 0 );
+
+			importModalWindowTimeline.fromTo( $('#ls-import-modal-overlay')[0], 0.75, {
+				autoCSS: false,
+				css: {
+					opacity: 0
+				}
+			},{
+				autoCSS: false,
+				css: {
+					opacity: 0.75
+				},
+				ease: Quart.easeInOut
+			}, 0 );
+
+			importModalThumbnailsTransition = TweenMax.fromTo( $( '#ls-import-modal-window .items' )[0], 0.5, {
+				autoCSS: false,
+				css: {
+					opacity: 0,
+					display: 'block'
+				}
+			},{
+				autoCSS: false,
+				css: {
+					opacity: 1
+				},
+			ease: Quart.easeInOut
+			});
+
+			importModalWindowTimeline.add( importModalThumbnailsTransition, 0.75 );
+
+			importModalWindowTimeline.add( function(){
+				shuffle.update();
+			}, 0.25 );
 		}
 
-		tl = new TimelineMax({
-			onStart: function(){
-				jQuery( 'html, body' ).addClass( 'ls-body-black' );
-				jQuery( '<div>' ).addClass( 'ls-overlay-transparent' ).css({
-					position: 'fixed',
-					left: 0,
-					top: 0,
-					right: 0,
-					bottom: 0
-				}).appendTo( '#wpwrap' );
-				jQuery( '#wpwrap' ).addClass( 'ls-wp-wrap-white' );
-				jQuery(document).on( 'keyup.LS', function( e ) {
-					if( e.keyCode === 27 ){
-						jQuery( '#ls-import-samples-button' ).data( 'lsModalTimeline' ).reverse();
-					}
-				});
-			},
-			onReverseComplete: function(){
-				jQuery( 'html, body' ).removeClass( 'ls-body-black' );
-				jQuery( '#wpwrap' ).removeClass( 'ls-wp-wrap-white' );
-				jQuery( '#wpwrap' ).attr( 'style', '' );
-				jQuery( '#ls-import-samples-button' ).data( 'lsModalTimeline' ).clear().kill();
-				jQuery( '#ls-import-samples-button' ).removeData( 'lsModalTimeline' );
-				jQuery(document).off( 'keyup.LS' );
-				jQuery( '#ls-import-modal-window' ).css({
-					display: 'none'
-				});
-				jQuery( '.ls-overlay-transparent' ).remove();
-			},
-			paused: true
-		});
-
-		$(this).data( 'lsModalTimeline', tl );
-
-		tl.fromTo( $modal[0], 1, {
-			autoCSS: false,
-			css: {
-				position: 'fixed',
-				display: 'block',
-				x: width,
-				rotationY: 45,
-				opacity: .4,
-				transformPerspective: width,
-				transformOrigin: '0% 50%'
-			}
-		},{
-			autoCSS: false,
-			css: {
-				x: 0,
-				opacity: 1,
-				rotationY: 0
-			},
-			ease: Quint.easeInOut
-		}, 0 );
-
-		tl.fromTo( $( '#wpwrap' )[0], 1, {
-			autoCSS: false,
-			css: {
-				transformPerspective: width,
-				transformOrigin: '100% 50%'
-			}
-		},{
-			autoCSS: false,
-			css: {
-				x: -width,
-				rotationY: -45,
-				opacity: .4
-			},
-			ease: Quint.easeInOut
-		}, 0 );
-
-		tl.add( function(){
-			shuffle.update();
-		}, 0.15 );
-
-		tl.play();
+		importModalWindowTimeline.play();
 	});
 
 	$( document ).on( 'click', '#ls-import-modal-window > header b', function(){

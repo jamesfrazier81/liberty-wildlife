@@ -57,6 +57,14 @@ function ls_register_form_actions() {
 			}
 		}
 
+		// Database Update
+		if(isset($_GET['page']) && $_GET['page'] == 'ls-system-status' && isset($_GET['action']) && $_GET['action'] == 'database_update') {
+			if(check_admin_referer('database_update')) {
+				layerslider_create_db_table();
+				wp_redirect('admin.php?page=ls-system-status&message=dbUpdateSuccess');
+			}
+		}
+
 
 		// Slider list bulk actions
 		if(isset($_POST['ls-bulk-action'])) {
@@ -201,7 +209,9 @@ function ls_register_form_actions() {
 		add_action('wp_ajax_ls_parse_date', 'ls_parse_date');
 		add_action('wp_ajax_ls_save_screen_options', 'ls_save_screen_options');
 		add_action('wp_ajax_ls_get_mce_sliders', 'ls_get_mce_sliders');
+		add_action('wp_ajax_ls_get_mce_slides', 'ls_get_mce_slides');
 		add_action('wp_ajax_ls_get_post_details', 'ls_get_post_details');
+		add_action('wp_ajax_ls_get_search_posts', 'ls_get_search_posts');
 		add_action('wp_ajax_ls_get_taxonomies', 'ls_get_taxonomies');
 		add_action('wp_ajax_ls_upload_from_url', 'ls_upload_from_url');
 		add_action('wp_ajax_ls_store_opened', 'ls_store_opened');
@@ -223,8 +233,8 @@ function layerslider_delete_caches() {
 			WHERE option_name LIKE '_transient_ls-slider-data-%'
 			ORDER BY option_id DESC LIMIT 100";
 
-	if($transients = $wpdb->get_results($sql)) {
-		foreach ($transients as $key => $value) {
+	if( $transients = $wpdb->get_results($sql) ) {
+		foreach( $transients as $key => $value ) {
 			$key = str_replace('_transient_', '', $value->option_name);
 			delete_transient($key);
 		}
@@ -381,14 +391,110 @@ function ls_save_screen_options() {
 
 function ls_get_mce_sliders() {
 
-	$sliders = LS_Sliders::find(array('limit' => 50));
+	$sliders = LS_Sliders::find( array( 'limit' => 100 ) );
 	foreach($sliders as $key => $item) {
 		$sliders[$key]['preview'] = apply_filters('ls_preview_for_slider', $item );
-		$sliders[$key]['name'] = ! empty($item['name']) ? htmlspecialchars($item['name']) : 'Unnamed';
+		$sliders[$key]['name'] = ! empty($item['name']) ? htmlspecialchars(stripslashes($item['name'])) : 'Unnamed';
 	}
 
-	die(json_encode($sliders));
+	die( json_encode( $sliders ) );
 }
+
+
+function ls_get_mce_slides() {
+
+	$sliderID = (int) $_GET['sliderID'];
+
+	$slider = LS_Sliders::find( $sliderID );
+	$slider = $slider['data'];
+	$slides = array();
+
+	// Slides
+	foreach($slider['layers'] as $slideKey => $slide ) {
+
+		// Add untouched slide data
+		$slides[ $slideKey ] = $slide;
+
+
+		if( ! empty( $slide['properties']['backgroundId'] ) ) {
+			$slides[ $slideKey ]['properties'][ 'background' ] = apply_filters('ls_get_image', $slide['properties']['backgroundId'], $slide['properties']['background']);
+			$slides[ $slideKey ]['properties'][ 'backgroundThumb' ] = apply_filters('ls_get_image', $slide['properties']['backgroundId'], $slide['properties']['background']);
+		}
+
+		if( ! empty( $slide['properties']['thumbnailId'] ) ) {
+			$slides[ $slideKey ]['properties'][ 'thumbnail' ] = apply_filters('ls_get_image', $slide['properties']['thumbnailId'], $slide['properties']['thumbnail']);
+		}
+
+		$slides[ $slideKey ]['properties']['title'] = ! empty( $slide['properties']['title'] ) ? stripslashes( $slide['properties']['title'] ) : 'Slide #'.($slideKey+1);
+
+		// Layers
+		foreach( $slide['sublayers'] as $layerKey => $layer ) {
+
+			// Ensure that magic quotes will not mess with JSON data
+			if( function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc() ) {
+				$layer['styles'] 		= stripslashes( $layer['styles'] );
+				$layer['transition'] 	= stripslashes( $layer['transition'] );
+			}
+
+			// Parse embedded JSON data
+			$layer['styles'] 		= !empty( $layer['styles'] ) ? (object) json_decode(stripslashes($layer['styles']), true) : new stdClass;
+			$layer['transition'] 	= !empty( $layer['transition'] ) ? (object) json_decode(stripslashes($layer['transition']), true) : new stdClass;
+			$layer['html'] 			= !empty( $layer['html'] ) ? stripslashes($layer['html']) : '';
+
+			// Add 'top', 'left' and 'wordwrap' to the styles object
+			if(isset($layer['top'])) { $layer['styles']->top = $layer['top']; unset($layer['top']); }
+			if(isset($layer['left'])) { $layer['styles']->left = $layer['left']; unset($layer['left']); }
+			if(isset($layer['wordwrap'])) { $layer['styles']->wordwrap = $layer['wordwrap']; unset($layer['wordwrap']); }
+
+			if( ! empty( $layer['transition']->showuntil ) ) {
+
+				$layer['transition']->startatout = 'transitioninend + '.$layer['transition']->showuntil;
+				$layer['transition']->startatouttiming = 'transitioninend';
+				$layer['transition']->startatoutvalue = $layer['transition']->showuntil;
+				unset($layer['transition']->showuntil);
+			}
+
+			if( ! empty( $layer['transition']->parallaxlevel ) ) {
+				$layer['transition']->parallax = true;
+			}
+
+			// Custom attributes
+			$layer['innerAttributes'] = !empty($layer['innerAttributes']) ?  (object) $layer['innerAttributes'] : new stdClass;
+			$layer['outerAttributes'] = !empty($layer['outerAttributes']) ?  (object) $layer['outerAttributes'] : new stdClass;
+
+
+			// v6.5.6: Convert old checkbox media settings to the new
+			// select based options.
+			if( isset( $layer['transition']->controls ) ) {
+				if( true === $layer['transition']->controls ) {
+					$layer['transition']->controls = 'auto';
+				} elseif( false === $layer['transition']->controls ) {
+					$layer['transition']->controls = 'disabled';
+				}
+			}
+
+			$slides[ $slideKey ]['sublayers'][ $layerKey ] = $layer;
+
+			if( ! empty( $layer['imageId'] ) ) {
+				$slides[ $slideKey ]['sublayers'][ $layerKey ][ 'image' ] = apply_filters('ls_get_image', $layer['imageId'], $layer['image']);
+				$slides[ $slideKey ]['sublayers'][ $layerKey ][ 'imageThumb' ] = apply_filters('ls_get_image', $layer['imageId'], $layer['image']);
+			}
+
+			if( ! empty( $layer['posterId'] ) ) {
+				$slides[ $slideKey ]['sublayers'][ $layerKey ][ 'poster' ] = apply_filters('ls_get_image', $layer['posterId'], $layer['poster']);
+				$slides[ $slideKey ]['sublayers'][ $layerKey ][ 'posterThumb' ] = apply_filters('ls_get_image', $layer['posterId'], $layer['poster']);
+			}
+
+			$slides[ $slideKey ]['sublayers'][ $layerKey ]['subtitle'] = ! empty( $layer['subtitle'] ) ? substr( stripslashes( $layer['subtitle'] ), 0, 32) : 'Layer #'.($layerKey+1);
+		}
+
+		$slides[ $slideKey ][ 'sublayers' ] = array_reverse( $slides[ $slideKey ][ 'sublayers' ] );
+	}
+
+	die( json_encode( $slides ) );
+}
+
+
 
 function ls_save_slider() {
 
@@ -437,7 +543,7 @@ function ls_save_slider() {
 	}
 
 	// WPML
-	if(function_exists('icl_register_string')) {
+	if( has_action( 'wpml_register_single_string' ) ) {
 		layerslider_register_wpml_strings($id, $data);
 	}
 
@@ -529,7 +635,11 @@ function ls_revert_slider( ) {
 	// Security check
 	check_admin_referer('ls-revert-slider-'.$sliderId);
 
+	// Revert back to revision
 	LS_Revisions::revert( $sliderId, $revisionId );
+
+	// Delete transient cache
+	delete_transient( 'ls-slider-data-'.$sliderId );
 
 	wp_redirect( admin_url('admin.php?page=layerslider&action=edit&id='.$sliderId) );
 	die();
@@ -940,7 +1050,8 @@ function ls_get_post_details() {
 		'post_status' => 'publish',
 		'limit' => 100,
 		'posts_per_page' => 100,
-		'post_type' => $params['post_type']
+		'post_type' => $params['post_type'],
+		'suppress_filters' => false
 	);
 
 	if(!empty($params['post_orderby'])) {
@@ -966,6 +1077,63 @@ function ls_get_post_details() {
 	$posts = LS_Posts::find($queryArgs)->getParsedObject();
 
 	die(json_encode($posts));
+}
+
+
+function ls_get_search_posts() {
+
+	$filters = array(
+		'posts_per_page' 	=> 50,
+		'post_status' 		=> 'any',
+		'post_type' 		=> 'post'
+	);
+
+	if( ! empty( $_GET['s'] ) ) {
+		$filters['s'] = $_GET['s'];
+	}
+
+	if( ! empty( $_GET['post_type'] ) ) {
+		$types = array( 'post', 'page', 'attachment' );
+		if( in_array( $_GET['post_type'], $types ) ) {
+			$filters['post_type'] = $_GET['post_type'];
+		}
+	}
+
+	$query = new WP_Query( $filters );
+
+	if( ! empty( $query->posts ) ) {
+		$ret = array();
+		foreach ( $query->posts as $key => $val ) {
+
+			if( $val->post_type === 'attachment' ) {
+				$imageURL = wp_get_attachment_url( $val->ID );
+			} elseif( function_exists('get_post_thumbnail_id') && function_exists('wp_get_attachment_url') ) {
+				$imageURL = wp_get_attachment_url(get_post_thumbnail_id( $val->ID ));
+			}
+
+			if( ! $imageURL ) {
+				$imageURL = LS_ROOT_URL . '/static/admin/img/blank.gif';
+			}
+
+			$ret[] = array(
+				'author' 	=> get_userdata($val->post_author)->user_nicename,
+				'content' 	=> htmlentities( $val->post_content ),
+				'image-url' => $imageURL,
+				'post-id' 	=> $val->ID,
+				'post-slug' => $val->post_name,
+				'post-url' 	=> get_permalink( $val->ID ),
+				'post-type' => $val->post_type,
+				'title' 	=> htmlentities( $val->post_title ),
+				'date-published' => date( get_option('date_format'), strtotime($val->post_date) ),
+				'date-modified' => date( get_option('date_format'), strtotime($val->post_modified) )
+			);
+		}
+
+		die( json_encode( $ret ) );
+	}
+
+	die('[]');
+
 }
 
 
@@ -1067,6 +1235,9 @@ function ls_do_erase_plugin_data() {
 		'ls-revisions-enabled',
 		'ls-revisions-limit',
 		'ls-revisions-interval',
+
+		// Popup Index
+		'ls-popup-index',
 
 		// Legacy
 		'ls-collapsed-boxes',
@@ -1233,15 +1404,30 @@ function layerslider_convert_urls($arr) {
 }
 
 
-function layerslider_register_wpml_strings($sliderID, $data) {
+function layerslider_register_wpml_strings( $sliderID, $data ) {
 
 	if(!empty($data['layers']) && is_array($data['layers'])) {
 		foreach($data['layers'] as $slideIndex => $slide) {
 
 			if(!empty($slide['sublayers']) && is_array($slide['sublayers'])) {
 				foreach($slide['sublayers'] as $layerIndex => $layer) {
-					if($layer['type'] != 'img') {
-						icl_register_string('LayerSlider WP', '<'.$layer['type'].':'.substr(sha1($layer['html']), 0, 10).'> layer on slide #'.($slideIndex+1).' in slider #'.$sliderID.'', $layer['html']);
+
+					if( ! empty( $layer['html'] ) && $layer['type'] != 'img' ) {
+
+						// Check 'createdWith' property to decide which WPML implementation
+						// should we use. This property was added in v6.5.5 along with the
+						// new WPML implementation, so no version comparison required.
+						if( ! empty( $layer['uuid'] ) && ! empty( $data['properties']['createdWith'] ) ) {
+
+							$string_name = "slider-{$sliderID}-layer-{$layer['uuid']}-html";
+							do_action( 'wpml_register_single_string', 'LayerSlider Sliders', $string_name, $layer['html'] );
+
+						// Old implementation
+						} else {
+
+							$string_name = '<'.$layer['type'].':'.substr(sha1($layer['html']), 0, 10).'> layer on slide #'.($slideIndex+1).' in slider #'.$sliderID.'';
+							do_action( 'wpml_register_single_string', 'LayerSlider WP', $string_name, $layer['html']);
+						}
 					}
 				}
 			}

@@ -119,6 +119,12 @@
         	var shortcode = this.settings.av_shortcode,
         		modalData = $.extend({}, {modal_class:'', before_save:'' }, shortcode.modal_data);
         		
+		if(typeof shortcode.modal_on_load == "object") {
+			shortcode.modal_on_load = $.map(shortcode.modal_on_load, function(modal){
+				return modal;
+			});
+		}
+		
         	if(typeof shortcode.modal_on_load != "undefined" && typeof shortcode.modal_on_load != "string") shortcode.modal_on_load = shortcode.modal_on_load.join(', ');
         	
             tinyMCE.activeEditor.execCommand("openAviaModal", false, 

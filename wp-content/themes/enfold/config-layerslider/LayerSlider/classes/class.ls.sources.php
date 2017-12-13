@@ -52,6 +52,10 @@ class LS_Sources {
 			if(file_exists($path.'/info.json')) {
 				$skins[$handle]['info'] = json_decode(file_get_contents($path.'/info.json'), true);
 				$skins[$handle]['name'] = $skins[$handle]['info']['name'];
+
+				if( ! empty( $skins[$handle]['info']['requires'] ) ) {
+					$skins[$handle]['requires'] = $skins[$handle]['info']['requires'];
+				}
 			}
 		}
 
@@ -189,6 +193,10 @@ class LS_Sources {
 					$sliders[$handle]['url'] = '#';
 					if( ! empty($sliders[$handle]['info']['url']) ) {
 						$sliders[$handle]['url'] = $sliders[$handle]['info']['url'];
+					}
+
+					if( ! empty( $sliders[$handle]['info']['requires'] ) ) {
+						$sliders[$handle]['requires'] = $sliders[$handle]['info']['requires'];
 					}
 				}
 

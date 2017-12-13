@@ -4,7 +4,7 @@
 Plugin Name: LayerSlider WP
 Plugin URI: https://codecanyon.net/item/layerslider-responsive-wordpress-slider-plugin-/1362246
 Description: LayerSlider is the most advanced responsive WordPress slider plugin with the famous Parallax Effect and over 200 2D & 3D transitions.
-Version: 6.5.1
+Version: 6.6.1
 Author: Kreatura Media
 Author URI: https://layerslider.kreaturamedia.com
 Text Domain: LayerSlider
@@ -34,8 +34,8 @@ $GLOBALS['lsAutoUpdateBox'] = true;
 
 // Basic configuration
 define('LS_DB_TABLE', 'layerslider');
-define('LS_DB_VERSION', '6.5.0');
-define('LS_PLUGIN_VERSION', '6.5.1');
+define('LS_DB_VERSION', '6.5.5');
+define('LS_PLUGIN_VERSION', '6.6.1');
 
 
 // Path info
@@ -46,6 +46,7 @@ define('LS_ROOT_PATH', dirname(__FILE__));
 
 
 // Other constants
+define('LS_WP_ADMIN', true);
 define('LS_PLUGIN_SLUG', basename(dirname(__FILE__)));
 define('LS_PLUGIN_BASE', plugin_basename(__FILE__));
 define('LS_MARKETPLACE_ID', '1362246');
@@ -72,10 +73,10 @@ include LS_ROOT_PATH.'/classes/class.ls.popups.php';
 
 // Back-end only
 if( is_admin() ) {
+	include LS_ROOT_PATH.'/wp/actions.php';
 	include LS_ROOT_PATH.'/wp/activation.php';
 	include LS_ROOT_PATH.'/wp/tinymce.php';
 	include LS_ROOT_PATH.'/wp/notices.php';
-	include LS_ROOT_PATH.'/wp/actions.php';
 	include LS_ROOT_PATH.'/classes/class.ls.revisions.php';
 
 	LS_Revisions::init();

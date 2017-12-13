@@ -148,7 +148,7 @@ if($headerS['header_topbar'] == true)
 							}
 						
 						
-						    $output .= "<nav class='main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
+						    $main_nav = "<nav class='main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
 						        $avia_theme_location = 'avia';
 						        $avia_menu_class = $avia_theme_location . '-menu';
 						        $args = array(
@@ -161,8 +161,8 @@ if($headerS['header_topbar'] == true)
 						            'walker' 			=> new avia_responsive_mega_menu()
 						        );
 						
-						        $main_nav = wp_nav_menu($args);
-						        $output .= $main_nav;
+						        $wp_main_nav = wp_nav_menu($args);
+						        $main_nav .= $wp_main_nav;
 						        
 						      
 						    /*
@@ -170,14 +170,21 @@ if($headerS['header_topbar'] == true)
 						    */
 						    ob_start();
 						    do_action('ava_inside_main_menu'); // todo: replace action with filter, might break user customizations
-						    $output .= ob_get_clean();
+						    $main_nav .= ob_get_clean();
 						    
 						    if($icon_beside)
 						    {
-							    $output .= $icons; 
+							    $main_nav .= $icons; 
 						    }
 						        
-						    $output .= '</nav>';
+						    $main_nav .= '</nav>';
+							
+							/**
+							 * Allow to modify or remove main menu for special pages
+							 * 
+							 * @since 4.1.3
+							 */
+							$output .= apply_filters( 'avf_main_menu_nav', $main_nav );
 						
 						    /*
 						    * Hook that can be used for plugins and theme extensions

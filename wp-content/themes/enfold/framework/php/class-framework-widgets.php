@@ -1304,16 +1304,11 @@ if (!class_exists('avia_google_maps'))
 
         function helper_print_google_maps_scripts()
         {
-            $prefix  = is_ssl() ? "https" : "http";
-            $api_key = avia_get_option('gmap_api');
-            $api_url = $prefix.'://maps.google.com/maps/api/js?v=3.27';
             
-            if($api_key != ""){
-	           $api_url .= "&key=" .$api_key;
-            }
+			$api_key = avia_get_option('gmap_api');
+			$api_url = av_google_maps::api_url( $api_key );
             
             wp_register_script( 'avia-google-maps-api', $api_url, array('jquery'), NULL, true);
-            
             
             $load_google_map_api = apply_filters('avf_load_google_map_api', true, 'avia_google_map_widget');
             
@@ -1378,14 +1373,9 @@ if(!function_exists('avia_printmap'))
 
 
 		if(apply_filters('avia_google_maps_widget_load_api', true, $avia_config['g_maps_widget_active']))
-        {
-	        $prefix  = is_ssl() ? "https" : "http";
-            $api_key = avia_get_option('gmap_api');
-            $api_url = $prefix.'://maps.google.com/maps/api/js?v=3.24';
-            
-            if($api_key != ""){
-	           $api_url .= "&key=" .$api_key;
-            }
+        {	
+			$api_key = avia_get_option('gmap_api');
+			$api_url = av_google_maps::api_url( $api_key );
 	  
             wp_register_script( 'avia-google-maps-api', $api_url, array('jquery'), NULL, true);
             wp_enqueue_script( 'avia-google-maps-api' );

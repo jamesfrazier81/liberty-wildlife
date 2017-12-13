@@ -471,7 +471,9 @@ array(
 	if($name)	$output .= 					"<strong  class='avia-testimonial-name'  {$this->title_styling} {$markup_name}>{$name}</strong>";
 if($subtitle)	$output .= 					"<span  class='avia-testimonial-subtitle {$this->subtitle_class}' {$this->title_styling}  {$markup_job}>{$subtitle}</span>";
     if($link)	$output .= 					"<span class='hidden avia-testimonial-markup-link'  {$markup_url}>{$link}</span>";
-	if($link)	$output .= 					" &ndash; <a class='aviablank avia-testimonial-link' href='{$link}' >{$linktext}</a>";
+	
+	if($link && $subtitle)	$output .= 					" &ndash; ";
+	if($link)	$output .= 					"<a class='aviablank avia-testimonial-link' href='{$link}' >{$linktext}</a>";
 				$output .= 				"</div>";
 				$output .= 			"</div>";
 				$output .= "</div>";

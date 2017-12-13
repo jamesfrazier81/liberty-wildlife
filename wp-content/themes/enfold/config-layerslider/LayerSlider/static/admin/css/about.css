@@ -4,16 +4,22 @@
   top: 10px;
   border: 0 !important; }
 
+.ls-start-button-wrapper {
+  text-align: center; }
+
+.layerslider-logo {
+  width: 60px;
+  float: left;
+  margin: 2px 30px 0 0; }
+
 .ls-start-button {
   border: none !important;
-  background-color: #ff3300 !important;
+  background-color: #f9292d !important;
   border-radius: 40px !important;
   box-shadow: none !important;
   text-shadow: none !important;
   text-transform: uppercase;
-  display: block !important;
   margin: 20px auto 25px auto !important;
-  width: 200px !important;
   line-height: 46px !important;
   text-align: center; }
 

@@ -257,6 +257,12 @@ function product_add_to_cart_click()
 			loader.show();
 		}
 		
+		var $html = jQuery('html');
+		if( ! $html.hasClass( 'html_visible_cart' ) )
+		{
+			$html.addClass('html_visible_cart');
+		}
+		
 		//e.preventDefault();
 	});
 	

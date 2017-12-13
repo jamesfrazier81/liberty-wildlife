@@ -1,6 +1,11 @@
 <?php if(!defined('LS_ROOT_FILE')) {  header('HTTP/1.0 403 Forbidden'); exit; }
 
-$queryArgs = array('post_status' => 'publish', 'limit' => 100, 'posts_per_page' => 100);
+$queryArgs = array(
+	'post_status' => 'publish',
+	'limit' => 100,
+	'posts_per_page' => 100,
+	'suppress_filters' => false
+);
 
 if(!empty($slider['properties']['post_orderby'])) {
 	$queryArgs['orderby'] = $slider['properties']['post_orderby']; }
@@ -27,7 +32,7 @@ if(!empty($slider['properties']['post_taxonomy']) && !empty($slider['properties'
 
 $posts = LS_Posts::find($queryArgs)->getParsedObject();
 ?>
-<script type="text/javascript" class="ls-hidden" id="ls-posts-json">window.lsPostsJSON = <?php echo $posts ? json_encode($posts) : '[]' ?>;</script>
+<script type="text/javascript" class="ls-hidden" id="ls-posts-json">window.lsPostsJSON = <?php echo $posts ? json_encode($posts) : '[]' ?> || [];</script>
 <div id="ls-post-options">
 	<div class="ls-box ls-modal ls-configure-posts-modal">
 		<h2 class="header">

@@ -461,7 +461,12 @@ function avia_breadcrumbs( $args = array() ) {
 		//google rich snippets
 		if($richsnippet === true)
 		{
-			$vocabulary = 'xmlns:v="http://rdf.data-vocabulary.org/#"';
+            		if(is_ssl()){
+                		$vocabulary = 'xmlns:v="https://rdf.data-vocabulary.org/#"';    
+            		}
+			else{
+				$vocabulary = 'xmlns:v="http://rdf.data-vocabulary.org/#"';
+			}
 		}
 
 		/* Open the breadcrumb trail containers. */

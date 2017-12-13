@@ -62,6 +62,8 @@ function layerslider_enqueue_content_res() {
 	wp_register_script('layerslider-popup', LS_ROOT_URL.'/static/layerslider/plugins/popup/layerslider.popup.js', array('jquery'), LS_PLUGIN_VERSION, $footer );
 	wp_register_style('layerslider-popup', LS_ROOT_URL.'/static/layerslider/plugins/popup/layerslider.popup.css', false, LS_PLUGIN_VERSION );
 
+	// 3rd-party: Font Awesome
+	wp_register_style('layerslider-font-awesome', LS_ROOT_URL.'/static/font-awesome/css/font-awesome.min.css', false, LS_PLUGIN_VERSION );
 
 	// Build LS_Meta object
 	$LS_Meta = array('v' => LS_PLUGIN_VERSION);
@@ -122,6 +124,12 @@ function layerslider_footer_scripts() {
 		}
 	}
 
+
+	// Font Awesome
+	if( ! empty( $GLOBALS['lsLoadFontAwesome'] ) ) {
+		wp_print_styles('layerslider-font-awesome');
+	}
+
 	if( ! empty( $GLOBALS['lsSliderInit'] ) ) {
 		echo implode('', $GLOBALS['lsSliderInit']);
 	}
@@ -176,6 +184,9 @@ function layerslider_enqueue_admin_res() {
 		wp_enqueue_style('layerslider-admin', LS_ROOT_URL.'/static/admin/css/admin.css', false, LS_PLUGIN_VERSION );
 		wp_enqueue_style('layerslider-admin-new', LS_ROOT_URL.'/static/admin/css/admin_new.css', false, LS_PLUGIN_VERSION );
 		wp_enqueue_style('kreaturamedia-ui', LS_ROOT_URL.'/static/admin/css/km-ui.css', false, LS_PLUGIN_VERSION );
+
+		// 3rd-party: Font Awesome
+		wp_enqueue_style('layerslider-font-awesome', LS_ROOT_URL.'/static/font-awesome/css/font-awesome.min.css', false, LS_PLUGIN_VERSION );
 
 		// 3rd-party: CodeMirror
 		wp_enqueue_style('codemirror', LS_ROOT_URL.'/static/codemirror/lib/codemirror.css', false, LS_PLUGIN_VERSION );

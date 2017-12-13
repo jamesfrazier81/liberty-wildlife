@@ -212,3 +212,7 @@ left: 0!important;
 .html_av-overlay-side #top #wrap_all .av-burger-overlay li li a {
     padding-right: 70px;
 }
+.html_av-overlay-side-classic #top .av-burger-overlay li li .avia-bullet {
+    left: auto;
+    right: 50px;
+}

@@ -1,15 +1,17 @@
 <div class="wrap about-wrap ls-about-page">
 
 	<!-- LayerSlider Logo & continue button -->
-	<img src="<?php echo LS_ROOT_URL ?>/static/admin/img/ls-tb.png" class="ls-about-img" alt="LayerSlider">
+	<div class="layerslider-logo"></div>
 
 	<!-- Main title -->
 	<h1 class="about-heading"><?php _e( 'Welcome to LayerSlider WP 6', 'LayerSlider' ); ?></h1>
 	<div class="about-text"><?php _e( 'Thank you for installing LayerSlider WP! Version 6 is our biggest update yet.', 'LayerSlider' ); ?></div>
 
-	<a href="<?php echo admin_url('admin.php?page=layerslider') ?>" class="button button-primary button-hero ls-start-button">
-		<?php _e('Let’s Get Started', 'LayerSlider') ?>
-	</a>
+	<div class="ls-start-button-wrapper">
+		<a href="<?php echo admin_url('admin.php?page=layerslider') ?>" class="button button-primary button-hero ls-start-button">
+			<?php _e('Let’s Get Started', 'LayerSlider') ?>
+		</a>
+	</div>
 
 	<!-- Share sheet -->
 	<div class="ls-share-template">

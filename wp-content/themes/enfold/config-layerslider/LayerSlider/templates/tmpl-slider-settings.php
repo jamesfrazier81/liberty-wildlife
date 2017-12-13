@@ -53,9 +53,9 @@
 				<i class="dashicons dashicons-screenoptions"></i>
 				<strong><?php _e('Thumbnail Navigation', 'LayerSlider') ?></strong>
 			</li>
-			<li data-deeplink="videos">
+			<li data-deeplink="media">
 				<i class="dashicons dashicons-video-alt3"></i>
-				<strong><?php _e('Videos', 'LayerSlider') ?></strong>
+				<strong><?php _e('Video / Audio', 'LayerSlider') ?></strong>
 			</li>
 			<li data-deeplink="popup"><i class="dashicons dashicons-external"></i><?php _e('Popup', 'LayerSlider') ?><small><?php _e('NEW', 'LayerSlider') ?></small></li>
 			<li data-deeplink="yourlogo">
@@ -216,6 +216,7 @@
 					<?php
 					lsOptionRow('checkbox', $sDefs['playByScroll'], $sProps );
 					lsOptionRow('checkbox', $sDefs['playByScrollStart'], $sProps );
+					lsOptionRow('checkbox', $sDefs['playByScrollSkipSlideBreaks'], $sProps );
 					lsOptionRow('input', $sDefs['playByScrollSpeed'], $sProps );
 					?>
 					<tr><th colspan="3"><?php _e('Cycles', 'LayerSlider') ?></th></tr>
@@ -254,6 +255,7 @@
 					</tr>
 					<?php
 					lsOptionRow('input', $sDefs['sliderFadeInDuration'], $sProps );
+					lsOptionRow('input', $sDefs['sliderClasses'], $sProps );
 					?>
 					<tr>
 						<td><?php _e('Custom slider CSS', 'LayerSlider') ?></td>

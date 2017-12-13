@@ -53,8 +53,8 @@ if(is_admin())
 	//dont call on plugins page so user can enable the plugin if he wants to
 	if(isset($_SERVER['PHP_SELF']) && basename($_SERVER['PHP_SELF']) == "plugins.php" && (is_dir(WP_PLUGIN_DIR . '/LayerSlider') || is_dir(WPMU_PLUGIN_DIR . '/LayerSlider'))) return;
 	
-	add_action('init', 'avia_include_layerslider' , 1 );
-	
+	add_action( 'init', 'avia_include_layerslider' , 1 );
+	add_filter( 'site_transient_update_plugins', 'avia_remove_layerslider_update_notification', 10, 1 );
 }
 else
 {	
@@ -118,6 +118,39 @@ function avia_include_layerslider()
 		    }
 	    }
 	}
+}
+
+
+/**
+ * Remove LayerSlider's plugin update notifications if the bundled version is used.
+ * 
+ * @since 4.1.3
+ * @param stdClass $plugins
+ * @return stdClass
+ */
+function avia_remove_layerslider_update_notification( $plugins ) 
+{
+
+	if( empty( $plugins ) || empty( $plugins->response ) || current_theme_supports( 'deactivate_layerslider' ) )
+	{
+		return $plugins;
+	}
+	
+	// Path for LayerSlider WP main PHP file - ensure Windows comp with drives
+	$layerslider = str_replace( '\\', '/', get_template_directory() . '/config-layerslider/LayerSlider/layerslider.php' );
+	
+	/**
+	 * Supress hiding update notification
+	 * 
+	 * @since 4.3.1
+	 * @return string			'yes'|'no'
+	 */
+	if( 'no' == apply_filters( 'avia_show_layerslider_update_notification', 'no' ) ) 
+	{
+		unset($plugins->response[ $layerslider ] );
+	}
+	
+	return $plugins;
 }
 
 
