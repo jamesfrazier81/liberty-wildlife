@@ -128,10 +128,16 @@ class LS_Sources {
 	 * @param string $skin The name of the skin/folder
 	 * @return string URL for the skin's directory
 	 */
-	public static function urlForSkin($handle) {
+	public static function urlForSkin( $handle ) {
 		$path = self::$skins[ strtolower($handle) ]['dir'];
 		$url = content_url() . str_replace(realpath(WP_CONTENT_DIR), '', realpath($path)).'/';
-		return str_replace('\\', '/', $url);
+		$url = set_url_scheme( str_replace('\\', '/', $url) );
+
+		if( has_filter( 'layerslider_skin_url' ) ) {
+			$url = apply_filters( 'layerslider_skin_url', $url, $handle );
+		}
+
+		return $url;
 	}
 
 

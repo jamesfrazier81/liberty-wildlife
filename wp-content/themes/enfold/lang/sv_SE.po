@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Enfold v3.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-08 16:10+0100\n"
-"PO-Revision-Date: 2016-06-08 16:10+0100\n"
+"PO-Revision-Date: 2019-05-07 10:14+0200\n"
 "Last-Translator: Kriesi <support@kriesi.at>\n"
 "Language-Team: \n"
 "Language: sv_SE\n"
@@ -11,11 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
@@ -74,7 +74,7 @@ msgstr ""
 
 #: comments.php:166
 msgid "Feel free to contribute!"
-msgstr ""
+msgstr "Dela med dig av dina synpunkter!"
 
 # @ avia_framework
 #: comments.php:176
@@ -2871,9 +2871,9 @@ msgstr ""
 #: config-layerslider/LayerSlider_old/views/slider_list.php:253
 #: config-templatebuilder/avia-shortcodes/postslider.php:319
 #: config-templatebuilder/avia-shortcodes/slideshow_feature_image.php:561
-#: framework/php/function-set-avia-frontend.php:1065
-#: includes/loop-index.php:55 includes/loop-index.php:56
-#: includes/loop-page.php:27 includes/loop-portfolio-single.php:27
+#: framework/php/function-set-avia-frontend.php:1065 includes/loop-index.php:55
+#: includes/loop-index.php:56 includes/loop-page.php:27
+#: includes/loop-portfolio-single.php:27
 msgid "Read more"
 msgstr "Läs mer"
 
@@ -14133,8 +14133,7 @@ msgid "The Envato Marketplace \"item ID\" is a required parameter."
 msgstr ""
 
 # @ avia_framework
-#: framework/php/class-breadcrumb.php:26
-#: framework/php/class-breadcrumb.php:186
+#: framework/php/class-breadcrumb.php:26 framework/php/class-breadcrumb.php:186
 msgid "You are here:"
 msgstr "Du är här:"
 
@@ -17619,7 +17618,7 @@ msgid ""
 "Sorry, the post you are looking for is not available. Maybe you want to "
 "perform a search?"
 msgstr ""
-"Tyvärr, innehållet du försökte finna är inte tillgängligt. Försök att finna "
+"Tyvärr, innehållet du försökte hitta är inte tillgängligt. Försök att hitta "
 "det genom att göra en sökning?"
 
 # @ avia_framework
@@ -17781,7 +17780,7 @@ msgstr "Din kommentar väntar godkännande."
 #: includes/loop-index.php:257 includes/loop-portfolio-single.php:33
 #: template-builder.php:49
 msgid "Pages:"
-msgstr ""
+msgstr "Sidor:"
 
 # @ avia_framework
 #: includes/loop-index.php:271 includes/loop-portfolio-single.php:44
@@ -17792,27 +17791,30 @@ msgstr "Taggar:"
 #: includes/loop-search.php:124
 msgid "Sorry, no posts matched your criteria. Please try another search"
 msgstr ""
+"Tyvärr hittades inga inlägg som matchade dina kriterier. Vänligen försök med "
+"en ny sökning"
 
 # @ avia_framework
 #: includes/loop-search.php:130
 msgid ""
 "You might want to consider some of our suggestions to get better results:"
 msgstr ""
+"Du kanske vill överväga några av våra förslag för att få bättre resultat:"
 
 # @ avia_framework
 #: includes/loop-search.php:132
 msgid "Check your spelling."
-msgstr ""
+msgstr "Dubbelkolla stavningen."
 
 # @ avia_framework
 #: includes/loop-search.php:133
 msgid "Try a similar keyword, for example: tablet instead of laptop."
-msgstr ""
+msgstr "Prova ett liknande sökord."
 
 # @ avia_framework
 #: includes/related-posts.php:97
 msgid "You might also like"
-msgstr ""
+msgstr "Du kanske också gillar"
 
 # @ avia_framework
 #: index.php:12 single.php:11
@@ -17827,7 +17829,7 @@ msgstr "Ny sökning"
 # @ avia_framework
 #: search.php:32
 msgid "If you are not happy with the results below please do another search"
-msgstr ""
+msgstr "Om du inte är nöjd med resultatet nedan vänligen gör en ny sökning"
 
 # @ avia_framework
 #: template-archives.php:53
@@ -17837,7 +17839,7 @@ msgstr "De 20 senaste bloggposterna"
 # @ avia_framework
 #: template-archives.php:63
 msgid "No Blog Posts found"
-msgstr ""
+msgstr "Inga blogginlägg hittades"
 
 # @ avia_framework
 #: template-archives.php:92

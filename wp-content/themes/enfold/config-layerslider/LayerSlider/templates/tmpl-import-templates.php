@@ -4,7 +4,7 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 	window.lsImportNonce = '<?php echo wp_create_nonce('ls-import-demos'); ?>';
 </script>
 <script type="text/html" id="tmpl-import-sliders">
-	<div id="ls-import-modal-window" class="ls-modal fullpage ls-box <?php echo $lsStoreHasUpdate ? 'has-updates' : '' ?>">
+	<div id="ls-import-modal-window" class="ls-box <?php echo $lsStoreHasUpdate ? 'has-updates' : '' ?>">
 		<header class="header">
 			<div class="layerslider-logo"></div>
 			<h1>
@@ -76,7 +76,7 @@ $demoSliders = LS_Sources::getDemoSliders(); ?>
 					$now = time();
 					foreach($demoSliders as $handle => $item) :
 				?>
-				<figure class="item" data-groups="<?php echo $item['groups'] ?>" data-handle="<?php echo $handle; ?>" data-bundled="<?php echo ! empty($item['bundled']) ? 'true' : 'false' ?>" data-premium="<?php echo ( ! empty($item['premium']) ) ? 'true' : 'false' ?>" data-version-warning="<?php echo version_compare($item['requires'], LS_PLUGIN_VERSION, '>') ? 'true' : 'false' ?>">
+				<figure class="item" data-name="<?php echo $item['name'] ?>" data-groups="<?php echo $item['groups'] ?>" data-handle="<?php echo $handle; ?>" data-bundled="<?php echo ! empty($item['bundled']) ? 'true' : 'false' ?>" data-premium="<?php echo ( ! empty($item['premium']) ) ? 'true' : 'false' ?>" data-version-warning="<?php echo version_compare($item['requires'], LS_PLUGIN_VERSION, '>') ? 'true' : 'false' ?>">
 					<div class="aspect">
 						<div class="item-picture" style="background: url(<?php echo $item['preview'] ?>);">
 						</div>

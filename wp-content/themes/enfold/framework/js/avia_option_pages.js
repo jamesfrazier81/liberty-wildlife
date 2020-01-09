@@ -128,10 +128,10 @@ jQuery(function($) {
 
 						
 			//bind actions:
-			saveButtons.bind('click', {set: saveData}, methods.save); 		//saves the current form
-			resetButtons.bind('click', {set: saveData}, methods.reset); 	//resets the option page
-			importButton.bind('click', {set: saveData}, methods.do_import); //imports dummy daa
-			importParentSettingsButton.bind('click', {set: saveData}, methods.do_parent_import); //imports parent theme data
+			saveButtons.on('click', {set: saveData}, methods.save); 		//saves the current form
+			resetButtons.on('click', {set: saveData}, methods.reset); 	//resets the option page
+			importButton.on('click', {set: saveData}, methods.do_import); //imports dummy daa
+			importParentSettingsButton.on('click', {set: saveData}, methods.do_parent_import); //imports parent theme data
 			//
 			//add "form listener"
 			methods.activateSaveButton(container);
@@ -192,8 +192,8 @@ jQuery(function($) {
 				elements = $('input, select, textarea', container).not('.avia_button_inactive').not('.avia_dont_activate_save_buttons');
 				
 				//bind click events
-				elements.bind('keydown change', function(){ saveButton.removeClass('avia_button_inactive');});
-				$('.avia_clone_set, .avia_remove_set, .avia_dynamical_add_elements').bind('click', function(){ saveButton.removeClass('avia_button_inactive'); });
+				elements.on('keydown change', function(){ saveButton.removeClass('avia_button_inactive');});
+				$('.avia_clone_set, .avia_remove_set, .avia_dynamical_add_elements').on('click', function(){ saveButton.removeClass('avia_button_inactive'); });
 		},
 		
 		/**
@@ -208,7 +208,8 @@ jQuery(function($) {
 			var me = hiddensave == true ? passed : passed.data.set,
 				buttonClicked = $(this),		//button that was clicked
 				elements	= $('input:text, input:hidden, input:radio:checked, input:checkbox, select, textarea','.avia_options_container'), //elements with values
-				dataString = "";		// data string passed to the ajax script
+				dataString = "",		// data string passed to the ajax script
+				save_succeded = false;
 			
 			//if no options have changed do not save
 			if(buttonClicked.is('.avia_button_inactive') && !hiddensave) return false;
@@ -249,8 +250,6 @@ jQuery(function($) {
 				});
 			}
 			  
-			
-			
 			//sends the request. calls the the wp_ajax_avia_ajax_save_options_page php function
 			$.ajax({
 					type: "POST",
@@ -292,6 +291,7 @@ jQuery(function($) {
 						if(response.match('avia_save'))
 						{
 							$('body').avia_alert();
+							save_succeded = true;
 						}
 						else
 						{
@@ -317,6 +317,11 @@ jQuery(function($) {
 					
 						$('.avia_loading',  me.container).fadeOut();
 						
+						var param = {
+								success: save_succeded
+							};
+						
+						$('body').trigger( 'avia_options_data_saved', param );
 					}
 				});
 			
@@ -368,7 +373,7 @@ jQuery(function($) {
 							{
 								var resultcontainer = $('.avia_import_result_parent', me.container);
 								//resultcontainer.css('display','none').html(response).slideDown();
-								$('body').avia_alert({text: 'Alright sparky!<br/>Import worked out, no problems whatsoever. <br/>The page will now be reloaded to reflect the changes'}, function()
+								$('body').avia_alert({text: 'Alright!<br/>Import worked out, no problems whatsoever. <br/>The page will now be reloaded to reflect the changes'}, function()
 								{
 									window.location.hash = "#wpwrap";
 						 			window.location.reload(true);
@@ -452,7 +457,7 @@ jQuery(function($) {
 								
 								var resultcontainer = $('.avia_import_result', me.container);
 								//resultcontainer.css('display','none').html(response).slideDown();
-								$('body').avia_alert({text: 'Alright sparky!<br/>Import worked out, no problems whatsoever. <br/>The page will now be reloaded to reflect the changes'}, function()
+								$('body').avia_alert({text: 'Alright!<br/>Import worked out, no problems whatsoever. <br/>The page will now be reloaded to reflect the changes'}, function()
 								{
 									window.location.hash = "#wpwrap";
 						 			window.location.reload(true);
@@ -571,7 +576,7 @@ jQuery(function($) {
 		var defaults = 
 		{
 			the_class: 'success',		//success, alert
-			text:  'Alright sparky!<br/>All Options saved, no problems whatsoever.',
+			text:  'Alright!<br/>All Options saved, no problems whatsoever.',
 			show:	2200
 		};
 		

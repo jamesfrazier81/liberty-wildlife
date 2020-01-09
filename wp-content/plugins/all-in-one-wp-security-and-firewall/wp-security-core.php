@@ -7,7 +7,7 @@ if ( !defined('ABSPATH') ) {
 if (!class_exists('AIO_WP_Security')){
 
 class AIO_WP_Security{
-    var $version = '4.2.9';
+    var $version = '4.4.2';
     var $db_version = '1.9';
     var $plugin_url;
     var $plugin_path;
@@ -74,7 +74,6 @@ class AIO_WP_Security{
         define('AIOWPSEC_USER_REGISTRATION_MENU_SLUG', 'aiowpsec_user_registration');
         define('AIOWPSEC_DB_SEC_MENU_SLUG', 'aiowpsec_database');
         define('AIOWPSEC_FILESYSTEM_MENU_SLUG', 'aiowpsec_filesystem');
-        define('AIOWPSEC_WHOIS_MENU_SLUG', 'aiowpsec_whois');
         define('AIOWPSEC_BLACKLIST_MENU_SLUG', 'aiowpsec_blacklist');
         define('AIOWPSEC_FIREWALL_MENU_SLUG', 'aiowpsec_firewall');
         define('AIOWPSEC_MAINTENANCE_MENU_SLUG', 'aiowpsec_maintenance');
@@ -138,36 +137,20 @@ class AIO_WP_Security{
         }
     }
 
-    static function activate_handler()
+    static function activate_handler($networkwide)
     {
+        global $wpdb;
         //Only runs when the plugin activates
         include_once ('classes/wp-security-installer.php');
-        AIOWPSecurity_Installer::run_installer();
-
-        if ( !wp_next_scheduled('aiowps_hourly_cron_event') ) {
-            wp_schedule_event(time(), 'hourly', 'aiowps_hourly_cron_event'); //schedule an hourly cron event
-        }
-        if ( !wp_next_scheduled('aiowps_daily_cron_event') ) {
-            wp_schedule_event(time(), 'daily', 'aiowps_daily_cron_event'); //schedule an daily cron event
-        }
-
-        do_action('aiowps_activation_complete');
+        AIOWPSecurity_Installer::run_installer($networkwide);
+        AIOWPSecurity_Installer::set_cron_tasks_upon_activation($networkwide);
     }
     
-    static function deactivate_handler()
+    static function deactivate_handler($networkwide)
     {
         //Only runs with the pluign is deactivated
         include_once ('classes/wp-security-deactivation-tasks.php');
-        AIOWPSecurity_Deactivation::run_deactivation_tasks();
-        wp_clear_scheduled_hook('aiowps_hourly_cron_event');
-        wp_clear_scheduled_hook('aiowps_daily_cron_event');
-        if (AIOWPSecurity_Utility::is_multisite_install()){
-            delete_site_transient('users_online');
-        }
-        else{
-            delete_transient('users_online');
-        }
-        
+        AIOWPSecurity_Deactivation::run_deactivation_tasks($networkwide);
         do_action('aiowps_deactivation_complete');
     }
     
@@ -206,7 +189,7 @@ class AIO_WP_Security{
         $this->scan_obj = new AIOWPSecurity_Scan();//Object to handle scan tasks 
         $this->cron_handler = new AIOWPSecurity_Cronjob_Handler();
         
-        add_action('wp_head',array(&$this, 'aiowps_header_content'));
+        add_action('login_enqueue_scripts',array(&$this, 'aiowps_login_enqueue'));
         add_action('wp_footer',array(&$this, 'aiowps_footer_content'));
         
         add_action('wp_login', array('AIOWPSecurity_User_Login', 'wp_login_action_handler'), 10, 2);
@@ -218,12 +201,21 @@ class AIO_WP_Security{
     {
         new AIOWPSecurity_WP_Loaded_Tasks();
     }
-
-    function aiowps_header_content()
-    {
-        //NOP
-    }
     
+    /**
+     * Enqueues the Google recaptcha v2 api URL for the standard WP login page
+     * @global type $aio_wp_security
+     */
+    function aiowps_login_enqueue()
+    {
+        global $aio_wp_security;
+        if($aio_wp_security->configs->get_value('aiowps_default_recaptcha')) {
+            wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js', false );
+            // below is needed to provide some space for the google reCaptcha form (otherwise it appears partially hidden on RHS)
+            wp_add_inline_script( 'google-recaptcha', 'document.addEventListener("DOMContentLoaded", ()=>{document.getElementById("login").style.width = "340px";});' );
+        }
+    }
+
     function aiowps_footer_content()
     {
         new AIOWPSecurity_WP_Footer_Content();
@@ -234,6 +226,10 @@ class AIO_WP_Security{
         global $aio_wp_security;
         if(isset($_GET['aiowpsec_do_log_out']))
         {
+            $nonce = isset($_GET['_wpnonce'])?$_GET['_wpnonce']:'';
+            if ( !wp_verify_nonce( $nonce, 'aio_logout' ) ) {
+                return; 
+            }
             wp_logout();
             if(isset($_GET['after_logout']))//Redirect to the after logout url directly
             {

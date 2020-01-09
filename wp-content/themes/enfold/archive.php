@@ -58,8 +58,14 @@
                                 'use_main_query_pagination' => 'yes',
                                 'custom_query' => array( 'post__in'=>$post_ids, 'post_type'=>get_post_types() )
                             );
+							
+							/**
+							 * @since 4.5.5
+							 * @return array
+							 */
+							$atts = apply_filters( 'avf_post_slider_args', $atts, 'archive' );
 
-                            $blog = new avia_post_slider($atts);
+                            $blog = new avia_post_slider( $atts );
                             $blog->query_entries();
                             echo "<div class='entry-content-wrapper'>".$blog->html()."</div>";
                         }
@@ -86,7 +92,12 @@
 				<?php
 
 				//get the sidebar
-				$avia_config['currently_viewing'] = 'blog';
+                if (avia_get_option('archive_sidebar') == 'archive_sidebar_separate') {
+                    $avia_config['currently_viewing'] = 'archive';
+                }
+                else {
+                    $avia_config['currently_viewing'] = 'blog';
+                }
 				get_sidebar();
 
 				?>
@@ -98,4 +109,5 @@
 
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();

@@ -47,7 +47,7 @@ class LS_Posts {
 
 	public function getParsedObject() {
 
-		if(!$this->posts) {
+		if( ! $this->posts ) {
 			return array();
 		}
 
@@ -56,18 +56,23 @@ class LS_Posts {
 			$ret[$key]['post-id'] = $val->ID;
 			$ret[$key]['post-slug'] = $val->post_name;
 			$ret[$key]['post-url'] = get_permalink($val->ID);
-			$ret[$key]['date-published'] = date(get_option('date_format'), strtotime($val->post_date));
-			$ret[$key]['date-modified'] = date(get_option('date_format'), strtotime($val->post_modified));
-			$ret[$key]['thumbnail'] = $this->getPostThumb($val->ID);
-			$ret[$key]['thumbnail'] = !empty($ret[$key]['thumbnail']) ? $ret[$key]['thumbnail'] : LS_ROOT_URL . '/static/admin/img/blank.gif';
-			$ret[$key]['image'] = '<img src="'.$ret[$key]['thumbnail'].'" alt="">';
-			$ret[$key]['image-url'] = $ret[$key]['thumbnail'];
+			$ret[$key]['date-published'] = date_i18n(get_option('date_format'), strtotime($val->post_date));
+			$ret[$key]['date-modified'] = date_i18n(get_option('date_format'), strtotime($val->post_modified));
+
+
+			$ret[$key]['thumbnail'] = $this->getFeaturedImage( $val->ID, 'thumbnail' );
+			$ret[$key]['thumbnail-url'] = $this->getFeaturedImageURL( $val->ID, 'thumbnail' );
+
+			$ret[$key]['image'] = $this->getFeaturedImage( $val->ID );
+			$ret[$key]['image-url'] = $this->getFeaturedImageURL( $val->ID );
+
 			$ret[$key]['title'] = htmlspecialchars($this->getTitle());
 			$ret[$key]['content'] = $this->getContent();
 			$ret[$key]['excerpt'] = $this->getExcerpt();
 			$ret[$key]['author'] = get_userdata($val->post_author)->user_nicename;
 			$ret[$key]['author-name'] = get_userdata($val->post_author)->display_name;
 			$ret[$key]['author-id'] = $val->post_author;
+			$ret[$key]['author-avatar'] = $this->getAuthorImage($val);
 			$ret[$key]['categories'] = $this->getCategoryList($val);
 			$ret[$key]['tags'] = $this->getTagList($val);
 			$ret[$key]['comments'] = $val->comment_count;
@@ -98,30 +103,36 @@ class LS_Posts {
 
 		// Date published
 		if(stripos($str, '[date-published]') !== false) {
-			$str = str_replace('[date-published]', date(get_option('date_format'), strtotime($this->post->post_date)), $str); }
+			$str = str_replace('[date-published]', date_i18n(get_option('date_format'), strtotime($this->post->post_date)), $str); }
 
 		// Date modified
 		if(stripos($str, '[date-modified]') !== false) {
-			$str = str_replace('%date-modified]', date(get_option('date_format'), strtotime($this->post->post_modified)), $str); }
+			$str = str_replace('%date-modified]', date_i18n(get_option('date_format'), strtotime($this->post->post_modified)), $str); }
 
 		// Featured image
 		if(stripos($str, '[image]') !== false) {
-			if(has_post_thumbnail($this->post->ID)) {
-				$src = $this->getPostThumb($this->post->ID);
-				if(!empty($src)){
-					$str = str_replace('[image]', '<img src="'.$src.'" />', $str);
-				}
-			}
+			$markup = $this->getFeaturedImage( $this->post->ID );
+			$str = str_replace('[image]', $markup, $str);
 		}
 
 		// Featured image URL
 		if(stripos($str, '[image-url]') !== false) {
-			if(has_post_thumbnail($this->post->ID)) {
-				$src = $this->getPostThumb($this->post->ID);
-				if(!empty($src)){
-					$str = str_replace('[image-url]', $src, $str);
-				}
-			}
+
+			$url = $this->getFeaturedImageURL( $this->post->ID );
+			$str = str_replace('[image-url]', $url, $str);
+		}
+
+		// Featured image thumbnail
+		if(stripos($str, '[thumbnail]') !== false) {
+			$markup = $this->getFeaturedImage( $this->post->ID, 'thumbnail' );
+			$str = str_replace('[thumbnail]', $markup, $str);
+		}
+
+		// Featured image thumbnail URL
+		if(stripos($str, '[thumbnail-url]') !== false) {
+
+			$url = $this->getFeaturedImageURL( $this->post->ID, 'thumbnail' );
+			$str = str_replace('[thumbnail-url]', $url, $str);
 		}
 
 		// Title
@@ -145,6 +156,11 @@ class LS_Posts {
 		// Author display name
 		if(stripos($str, '[author-name]') !== false) {
 			$str = str_replace('[author-name]', $this->getAuthor(false), $str); }
+
+		// Author avatar image
+		if(stripos($str, '[author-avatar]') !== false) {
+			$str = str_replace('[author-avatar]', $this->getAuthorImage( $this->post ), $str); }
+
 
 		// Author ID
 		if(stripos($str, '[author-id]') !== false) {
@@ -226,7 +242,22 @@ class LS_Posts {
 	}
 
 
-	public function getCategoryList($post = null) {
+	public function getAuthorImage( $post = null ) {
+
+		if( ! empty( $post ) ) { $post = $this->post; }
+
+		if( function_exists( 'get_avatar_url' ) ) {
+
+			return '<img src="'.get_avatar_url( $post->post_author, array(
+				'size' => 256
+			)).'">';
+		}
+
+		return '';
+	}
+
+
+	public function getCategoryList( $post = null ) {
 
 		if(!empty($post)) { $post = $this->post; }
 
@@ -243,7 +274,7 @@ class LS_Posts {
 	}
 
 
-	public function getTagList($post = null) {
+	public function getTagList( $post = null ) {
 
 		if(!empty($post)) { $post = $this->post; }
 
@@ -277,14 +308,46 @@ class LS_Posts {
 	}
 
 	/**
-	 * Returns the attachment ID of
-	 * featured image in a post
+	 * Returns the featured image URL for the specified post ID.
+	 * Defaults to an empty GIF on error.
+	 *
 	 * @param  integer $postID  The ID of the post
-	 * @return string			The ID of the post, or an empty string on failure.
+	 * @param  string  $size    Attachment image size
+	 * @return string			Featured image URL
 	 */
-	public function getPostThumb($postID = 0) {
-		if(function_exists('get_post_thumbnail_id') && function_exists('wp_get_attachment_url')) {
-			return wp_get_attachment_url(get_post_thumbnail_id($postID));
+	public function getFeaturedImageURL( $postID = 0, $size = 'full' ) {
+
+		if( function_exists('get_post_thumbnail_id') ) {
+
+			$attachmentID 	= get_post_thumbnail_id( $postID );
+			$attachment 	= wp_get_attachment_image_src( $attachmentID, $size );
+
+			if( ! empty( $attachment[0] ) ) {
+				return $attachment[0];
+			}
 		}
+
+		return LS_ROOT_URL . '/static/admin/img/blank.gif';
+	}
+
+	/**
+	 * Returns the featured image HTML element markup for the specified post ID.
+	 * Defaults to empty string on error.
+	 *
+	 * @param  integer $postID  The ID of the post
+	 * @param  string  $size    Attachment image size
+	 * @return string			<img> HTML markup or empty string on error
+	 */
+	public function getFeaturedImage( $postID = 0, $size = 'full' ) {
+
+		if( function_exists('get_post_thumbnail_id') ) {
+
+			$attachmentID 	= get_post_thumbnail_id( $postID );
+			$attachment 	= wp_get_attachment_image( $attachmentID, $size );
+
+			return $attachment;
+		}
+
+		return '';
 	}
 }

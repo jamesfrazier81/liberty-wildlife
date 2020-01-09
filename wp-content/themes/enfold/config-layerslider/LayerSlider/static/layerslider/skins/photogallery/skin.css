@@ -276,3 +276,21 @@
 .ls-photogallery .ls-ct-center {
 	border-width: 2px;
 }
+
+
+
+
+.ls-photogallery .ls-media-unmute {
+	opacity: .5;
+}
+
+.ls-photogallery .ls-media-unmute:hover {
+	opacity: 1;
+}
+
+.ls-photogallery .ls-media-unmute-bg {
+	border-radius: 0;
+	background: rgba(0, 0, 0, 0.7);
+	border: 0 !important;
+	box-shadow: none !important;
+}

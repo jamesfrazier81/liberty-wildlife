@@ -1,4 +1,7 @@
 <?php
+	if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+	
+	
 	global $avia_config;
 
 	$author_id    = get_query_var( 'author' );
@@ -12,6 +15,22 @@
 	$name         = "<span class='author-box-name' ".avia_markup_helper(array('context' => 'author_name','echo'=>false)).">". $name ."</span>";
 	$heading      = __("About",'avia_framework') ." ". $name;
 	$description  = apply_filters('avf_author_description', get_the_author_meta('description', $author_id), $author_id);
+	
+	$default_heading = 'h3';
+	$args = array(
+				'heading'		=> $default_heading,
+				'extra_class'	=> ''
+			);
+
+	/**
+	 * @since 4.5.5
+	 * @return array
+	 */
+	$args = apply_filters( 'avf_customize_heading_settings', $args, 'loop_default_author', array() );
+
+	$heading1 = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+	$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+	
 
     echo '<section class="author-box" '.avia_markup_helper(array('context' => 'author','echo'=>false)).'>';
 	if(empty($description))
@@ -28,7 +47,6 @@
 
 	echo "<span class='post-author-format-type blog-meta'><span class='rounded-container'>{$gravatar}</span></span>";
     echo "<div class='author_description '>
-        <h3 class='author-title'>{$heading}</h3>
+        <{$heading1} class='author-title {$css}'>{$heading}</{$heading1}>
         <div class='author_description_text'" .avia_markup_helper(array('context' => 'description','echo'=>false)).">".wpautop($description)."</div><span class='author-extra-border'></span></div>";
     echo '</section>';
-?>

@@ -41,7 +41,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	}
 
 	/**
-	 * Get the IDs of all organizers associated with an event
+	 * Get the IDs of all organizers associated with an event.
 	 *
 	 * @param int $event_id The event post ID. Defaults to the current event.
 	 *
@@ -49,19 +49,56 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 */
 	function tribe_get_organizer_ids( $event_id = null ) {
 		$event_id = Tribe__Events__Main::postIdHelper( $event_id );
-		$organizer_ids = array();
-		if ( is_numeric( $event_id ) && $event_id > 0 ) {
-			if ( Tribe__Events__Main::instance()->isOrganizer( $event_id ) ) {
-				$organizer_ids[] = $event_id;
-			} else {
-				$organizer_ids = tribe_get_event_meta( $event_id, '_EventOrganizerID', false );
 
-				// for some reason we store a blank "0" element in this array.
-				// let's scrub this garbage out
-				$organizer_ids = array_filter( (array) $organizer_ids );
+		$organizer_ids = array();
+
+		if ( Tribe__Events__Main::instance()->isEvent( $event_id ) ) {
+			$organizer_ids = tribe_get_event_meta( $event_id, '_EventOrganizerID', false );
+
+			// Protect against storing array items that render false, such as `0`.
+			$organizer_ids = array_filter( (array) $organizer_ids );
+		}
+
+		return apply_filters( 'tribe_get_organizer_ids', $organizer_ids, $event_id );
+	}
+
+	/**
+	 * An organizers can have two sources the list of ordered items and the meta field associated with organizers,
+	 * where the meta field takes precedence we need to respect the order of the meta order only when the present items
+	 * on the meta field.
+	 *
+	 * @deprecated 4.6.23
+	 * @todo Remove on 4.7
+	 *
+	 * @since 4.6.15
+	 *
+	 * @param array $current
+	 * @param array $ordered
+	 *
+	 * @return array
+	 */
+	function tribe_sanitize_organizers( $current = array(), $ordered = array() ) {
+		_deprecated_function( __METHOD__, '4.6.23', 'No longer needed after removing reliance on a separate postmeta field to store the ordering.' );
+
+		if ( empty( $ordered ) ) {
+			return $current;
+		}
+
+		$order    = array();
+		$excluded = array();
+		foreach ( (array) $current as $post_id ) {
+			$key = array_search( $post_id, $ordered );
+			if ( false === $key ) {
+				$excluded[] = $post_id;
+			} else {
+				$order[ $key ] = $post_id;
 			}
 		}
-		return apply_filters( 'tribe_get_organizer_ids', $organizer_ids, $event_id );
+
+		// Make sure before the merge the order is ordered by the keys
+		ksort( $order );
+
+		return array_merge( $order, $excluded );
 	}
 
 	/**
@@ -125,7 +162,8 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		}
 
 		if ( $organizer_id && $link = tribe_get_organizer_website_link() ) {
-			$details[] = '<span class="link"> <a href="' . esc_attr( $link ) . '">' . $link . '</a> </span>';
+			// $link is a full HTML string (<a>) whose components are already escaped, so we don't need create an anchor tag or escape again here
+			$details[] = '<span class="link">' . $link . '</span>';
 		}
 
 		$html = join( '<span class="tribe-events-divider">|</span>', $details );
@@ -226,7 +264,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 		if ( $echo != false ) _deprecated_argument( __FUNCTION__, '4.0' );
 
 		$org_id = tribe_get_organizer_id( $postId );
-		if ( class_exists( 'Tribe__Events__Pro__Main' ) ) {
+		if ( class_exists( 'Tribe__Events__Pro__Main' ) && get_post_status( $org_id ) == 'publish' ) {
 			$url = esc_url_raw( get_permalink( $org_id ) );
 			if ( $full_link ) {
 				$name = tribe_get_organizer( $org_id );
@@ -318,24 +356,86 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	/**
 	 * Get all the organizers
 	 *
-	 * @param $deprecated
-	 * @param $posts_per_page Maximum number of results
+	 * @param bool  $only_with_upcoming Only return organizers with upcoming events attached to them.
+	 * @param int   $posts_per_page
+	 * @param bool  $suppress_filters
+	 * @param array $args {
+	 *		Optional. Array of Query parameters.
 	 *
-	 * @return array An array of organizer post objects.
+	 *		@type int  $event       Only organizers linked to this event post ID.
+	 *		@type bool $has_events  Only organizers that have events.
+	 *		@type bool $found_posts Return the number of found organizers.
+	 * }
+	 *
+	 * @return array|int An array of organizer post objects or an integer value if `found_posts` is set to a truthy value.
 	 */
-	function tribe_get_organizers( $deprecated = null, $posts_per_page = -1 ) {
-		if ( null !== $deprecated ) {
-			_deprecated_argument( __FUNCTION__, '3.0', 'This parameter is no longer supported.' );
+	function tribe_get_organizers( $only_with_upcoming = false, $posts_per_page = - 1, $suppress_filters = true, array $args = array() ) {
+		// filter out the `null` values
+		$args = array_diff_key( $args, array_filter( $args, 'is_null' ) );
+
+		if ( tribe_is_truthy( $only_with_upcoming ) ) {
+			$args['only_with_upcoming'] = true;
 		}
 
-		$organizers = get_posts(
-			array(
-				'post_type' => Tribe__Events__Main::ORGANIZER_POST_TYPE,
-				'posts_per_page' => $posts_per_page,
+		$filter_args = array(
+			'event'              => 'find_for_event',
+			'has_events'         => 'find_with_events',
+			'only_with_upcoming' => 'find_with_upcoming_events',
+		);
+
+		foreach ( $filter_args as $filter_arg => $method ) {
+			if ( ! isset( $args[ $filter_arg ] ) ) {
+				continue;
+			}
+
+			if ('only_with_upcoming' !== $filter_arg) {
+				$found = tribe( 'tec.linked-posts.organizer' )->$method( $args[ $filter_arg ] );
+			} else {
+				$found = tribe( 'tec.linked-posts.organizer' )->find_with_upcoming_events(
+					$args[ $filter_arg ],
+					isset( $args['post_status'] ) ? $args['post_status'] : null
+				);
+			}
+
+			if ( empty( $found ) ) {
+				return array();
+			}
+
+			$args['post__in'] = ! empty( $args['post__in'] )
+				? array_intersect( (array) $args['post__in'], $found )
+				: $found;
+
+			if ( empty( $args['post__in'] ) ) {
+				return array();
+			}
+		}
+
+		$parsed_args = wp_parse_args( $args, array(
+				'post_type'        => Tribe__Events__Main::ORGANIZER_POST_TYPE,
+				'posts_per_page'   => $posts_per_page,
+				'suppress_filters' => $suppress_filters,
 			)
 		);
 
-		return $organizers;
+		$return_found_posts = ! empty( $args['found_posts'] );
+
+		if ( $return_found_posts ) {
+			$parsed_args['posts_per_page'] = 1;
+			$parsed_args['paged']          = 1;
+		}
+
+		$query = new WP_Query( $parsed_args );
+
+		if ( $return_found_posts ) {
+			if ( $query->have_posts() ) {
+
+				return $query->found_posts;
+			}
+
+			return 0;
+		}
+
+		return $query->have_posts() ? $query->posts : array();
 	}
 
 }

@@ -1,41 +1,91 @@
 <?php
-	
-if ( !class_exists( 'avia_slideshow' ) )
+/**
+ * Helper for slideshows
+ * 
+ */	
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
+if ( ! class_exists( 'avia_slideshow' ) )
 {
 	class avia_slideshow
 	{
 		static  $slider = 0; 				//slider count for the current page
-		protected $config;	 				//base config set on initialization
-		protected $slides;	 				//attachment posts for the current slider
-		protected $slide_count = 0;			//number of slides
-		protected $id_array = array();
-		function __construct($config)
+		
+		/**
+		 * base config set on initialization
+		 * 
+		 * @var array 
+		 */
+		protected $config;	 				
+		
+		/**
+		 * attachment posts for the current slider
+		 * 
+		 * @var array 
+		 */
+		protected $slides;	 				
+	
+		/**
+		 * number of slides
+		 * 
+		 * @var int 
+		 */
+		protected $slide_count;
+		
+		/**
+		 *
+		 * @var array 
+		 */
+		protected $id_array;
+		
+		
+		/**
+		 *
+		 * @var boolean 
+		 */
+		protected $need_conditional_load;
+
+
+		/**
+		 * 
+		 * @global array $_wp_additional_image_sizes
+		 * @param array $config
+		 */
+		public function __construct( array $config )
 		{
+			$this->slides = array();
+			$this->slide_count = 0;
+			$this->id_array = array();
+			$this->need_conditional_load = false;
 
-			$this->config = array_merge(array(
-				'size'			=> 'featured',
-				'lightbox_size'	=> 'large',
-				'animation'		=> 'slide',
-				'ids'    	 	=> '',
-				'video_counter' => 0,
-				'autoplay'		=> 'false',
-				'bg_slider'		=> 'false',
-				'slide_height'	=> '',
-				'handle'		=> '',
-				'interval'		=> 5,
-				'class'			=> "",
-				'css_id'		=> "",
-				'scroll_down'	=> "",
-				'control_layout'=> '',
-				'content'		=> array(),
-				'custom_markup' => '',
-				'perma_caption'	=> '',
-				'autoplay_stopper'=>'',
-				'image_attachment'=>'',
-				'min_height'	  =>'0px'
-				), $config);
+			$this->config = array_merge( array(
+								'size'				=> 'featured',
+								'lightbox_size'		=> 'large',
+								'animation'			=> 'slide',
+								'conditional_play'	=> '',
+								'ids'				=> '',
+								'video_counter'		=> 0,
+								'autoplay'			=> 'false',
+								'bg_slider'			=> 'false',
+								'slide_height'		=> '',
+								'handle'			=> '',
+								'interval'			=> 5,
+								'class'				=> '',
+								'el_id'				=> '',
+								'css_id'			=> '',
+								'scroll_down'		=> '',
+								'control_layout'	=> '',
+								'content'			=> array(),
+								'custom_markup'		=> '',
+								'perma_caption'		=> '',
+								'autoplay_stopper'	=> '',
+								'image_attachment'	=> '',
+								'min_height'		=> '0px'
 
-			$this->config = apply_filters('avf_slideshow_config', $this->config);
+						), $config );
+
+			$this->config = apply_filters( 'avf_slideshow_config', $this->config );
 
 			//check how large the slider is and change the classname accordingly
 			global $_wp_additional_image_sizes;
@@ -45,6 +95,12 @@ if ( !class_exists( 'avia_slideshow' ) )
 			{
 				$width  = $_wp_additional_image_sizes[$this->config['size']]['width'];
 				$height = $_wp_additional_image_sizes[$this->config['size']]['height'];
+				
+				/**
+				 * Avoid notices in case user manipulated image settings to 0
+				 */
+				$height = is_numeric( $height ) && $height > 0 ? $height : get_option( 'medium_size_h', 300 );
+				$width = is_numeric( $width ) && $width > 0 ? $width : get_option( 'medium_size_w', $height );
 				
 				$this->config['default-height'] = (100/$width) * $height;
 				
@@ -81,21 +137,61 @@ if ( !class_exists( 'avia_slideshow' ) )
 
 			$this->set_slides($this->config['ids']);
 		}
-
-		public function set_slides($ids)
+		
+		/**
+		 * @since 4.4
+		 */
+		public function __destruct() 
 		{
-			if(empty($ids) && empty($this->config['video_counter'])) return;
+			unset( $this->config );
+			unset( $this->slides );
+			unset( $this->id_array );
+		}
 
-			$this->slides = get_posts(array(
-				'include' => $ids,
-				'post_status' => 'inherit',
-				'post_type' => 'attachment',
-				'post_mime_type' => 'image',
-				'order' => 'ASC',
-				'orderby' => 'post__in')
-				);
-
-
+		
+		/**
+		 * 
+		 * @param string $ids
+		 * @return void
+		 */
+		public function set_slides( $ids )
+		{
+			$ids = trim( $ids );
+			
+			if( empty( $ids ) && empty( $this->config['video_counter'] ) ) 
+			{
+				return;
+			}
+			
+			/**
+			 * video slides have no id and return empty string - avoid an unnecessary db query if only video slides
+			 */
+			$post_ids = explode( ',', $ids );
+			$post_ids = array_unique( $post_ids );
+			if( ( 1 == count( $post_ids ) ) && empty( $post_ids[0] ) )
+			{
+				$post_ids = '';
+			}
+			else
+			{
+				$post_ids = implode(',', $post_ids );
+			}
+			
+			if( ! empty( $post_ids ) )
+			{
+				$this->slides = get_posts(array(
+					'include' => $ids,
+					'post_status' => 'inherit',
+					'post_type' => 'attachment',
+					'post_mime_type' => 'image',
+					'order' => 'ASC',
+					'orderby' => 'post__in')
+					);
+			}
+			else
+			{
+				$this->slides = array();
+			}
 
 			//resort slides so the id of each slide matches the post id
 			$new_slides = array();
@@ -106,36 +202,53 @@ if ( !class_exists( 'avia_slideshow' ) )
 
 			$slideshow_data = array();
 			$slideshow_data['slides'] = $new_slides;
-			$slideshow_data['id_array'] = explode(',',$this->config['ids']);
+			$slideshow_data['id_array'] = explode( ',', $this->config['ids'] );
 			$slideshow_data['slide_count'] = count(array_filter($slideshow_data['id_array'])) + $this->config['video_counter'];
 			
-			$slideshow_data = apply_filters('avf_avia_builder_slideshow_filter', $slideshow_data);
+			$slideshow_data = apply_filters( 'avf_avia_builder_slideshow_filter', $slideshow_data, $this );
 			
 			$this->slides = $slideshow_data['slides'];
 			$this->id_array = $slideshow_data['id_array'];
 			$this->slide_count = $slideshow_data['slide_count'];
 		}
 
-		public function set_size($size)
+		/**
+		 * 
+		 * @param string $size
+		 */
+		public function set_size( $size )
 		{
 			$this->config['size'] = $size;
 		}
 
-		public function set_extra_class($class)
+		
+		/**
+		 * 
+		 * @param string $class
+		 */
+		public function set_extra_class( $class )
 		{
 			$this->config['class'] .= " ".$class;
 		}
 
 
-
+		/**
+		 * 
+		 * @return string
+		 */
 		public function html()
 		{
 			$html 		= "";
 			$counter 	= 0;
 			$style   	= "";
 			$extraClass = "";
+			$cond_play_class = '';
 			avia_slideshow::$slider++;
-			if($this->slide_count == 0) return $html;
+			
+			if($this->slide_count == 0) 
+			{
+				return $html;
+			}
 			
 			if(!empty($this->config['scroll_down']))
 			{	
@@ -145,6 +258,11 @@ if ( !class_exists( 'avia_slideshow' ) )
 			
 			if(!empty($this->config['control_layout'])) $extraClass .= " ".$this->config['control_layout'];
 			
+			if( ! empty( $this->config['conditional_play'] ) && $this->need_conditional_load )
+			{
+				$cond_play_class = 'av-show-video-on-click';
+			}
+						
 			$style = "";
 			$data = AviaHelper::create_data_string($this->config);
 			$slide_html = empty($this->subslides) ? $this->default_slide() : $this->advanced_slide();
@@ -159,11 +277,9 @@ if ( !class_exists( 'avia_slideshow' ) )
             $markup = avia_markup_helper(array('context' => 'image','echo'=>false, 'custom_markup'=>$this->config['custom_markup']));
 
 			
-
-			$html .= "<div {$data} class='avia-slideshow avia-slideshow-".avia_slideshow::$slider." {$extraClass} avia-slideshow-".$this->config['size']." ".$this->config['handle']." ".$this->config['class']." avia-".$this->config['animation']."-slider ' $markup>";
+			$html .= "<div {$this->config['el_id']} {$data} class='avia-slideshow avia-slideshow-".avia_slideshow::$slider." {$extraClass} avia-slideshow-".$this->config['size']." ".$this->config['handle']." ".$this->config['class']." avia-".$this->config['animation']."-slider ' $markup>";
 			
-			
-			$html .= "<ul class='avia-slideshow-inner' {$style}>";
+			$html .= "<ul class='avia-slideshow-inner {$cond_play_class}' {$style} >";
 
 			
 			$html .= $slide_html;
@@ -233,8 +349,10 @@ if ( !class_exists( 'avia_slideshow' ) )
 			$counter = 0;
 			$this->ie8_fallback = "";
 
-			foreach($this->id_array as $key => $id)
+			foreach( $this->id_array as $key => $id )
 			{
+				$dev_tags = aviaShortcodeTemplate::set_frontend_developer_heading_tag( $this->subslides[$key]['attr'] );
+				
 				$meta = array_merge( array( 'content'		=> $this->subslides[$key]['content'],
 											'title'			=>'',
 											'link_apply'	=>'',
@@ -264,6 +382,7 @@ if ( !class_exists( 'avia_slideshow' ) )
 											'video_mobile_disabled'=>'',
 											'video_mobile'	=>'mobile-fallback-image',
 											'mobile_image'	=> '',
+											'fallback_link' => '',
 											'slide_type'	=>'',
 											'custom_markup' => '',
 											'custom_title_size' => '',
@@ -276,13 +395,13 @@ if ( !class_exists( 'avia_slideshow' ) )
 			    							'overlay_color' => '',
 			    							'overlay_pattern' => '',
 			    							'overlay_custom_pattern' => '',
+											'preload' => $this->need_conditional_load ? 'none' : ''
 
-
-										), $this->subslides[$key]['attr']);
+										), $this->subslides[$key]['attr'] );
 				
 				//return $av_font_classes, $av_title_font_classes and $av_display_classes 
-				extract(AviaHelper::av_mobile_sizes($this->subslides[$key]['attr'])); 
-				extract($meta);
+				extract( AviaHelper::av_mobile_sizes( $this->subslides[$key]['attr'] ) ); 
+				extract( $meta );
 				
 				if(isset($this->slides[$id]) || $slide_type == 'video')
 				{
@@ -298,24 +417,36 @@ if ( !class_exists( 'avia_slideshow' ) )
 					$stretch_height	= false;
 					$final_ratio	= "";
 					$viewport		= 16/9;
-
+					
+					$fallback_img_style = "";
+					$fallback_img_class = "";
+					
+					
             		$markup_url = avia_markup_helper(array('context' => 'image_url','echo'=>false, 'id'=>$attachment_id, 'custom_markup'=>$custom_markup));
 					
 					if($slide_type == 'video')
 					{
 						$this->service    = avia_slideshow_video_helper::which_video_service($video);
-						$video 			  = avia_slideshow_video_helper::set_video_slide($video, $this->service, $meta); 
+						$video 			  = avia_slideshow_video_helper::set_video_slide($video, $this->service, $meta , $this->config); 
 						$video_class	  = !empty( $video_controls ) ? " av-hide-video-controls" : "";
 						$video_class	 .= !empty( $video_mute ) ? " av-mute-video" : "";
 						$video_class	 .= !empty( $video_loop ) ? " av-loop-video" : "";
 						$video_class	 .= !empty( $video_mobile ) ? " av-".$video_mobile : "";
-						
+			
 						$extra_class 	.= " av-video-slide ".$video_cover." av-video-service-".$this->service." ".$video_class;
 						$slider_data 	.= " data-controls='{$video_controls}' data-mute='{$video_mute}' data-loop='{$video_loop}' data-disable-autoplay='{$video_autoplay}' ";	
 						
-						if($mobile_image){
-							$fallback_img = wp_get_attachment_image_src($mobile_image, $this->config['size']);
+						if( $mobile_image )
+						{
+							$fallback_img 		= wp_get_attachment_image_src( $mobile_image, $this->config['size'] );
+							$fallback_img_style = "style='background-image:url(\"{$fallback_img[0]}\");'";
+							
 							$slider_data .= " data-mobile-img='".$fallback_img[0]."'";
+							
+							if($fallback_link)
+							{
+								$slider_data .= " data-fallback-link='".$fallback_link."'";
+							}
 						}
 						
 						//if we dont use a fullscreen slider pass the video ratio to the slider
@@ -418,13 +549,32 @@ if ( !class_exists( 'avia_slideshow' ) )
 						$content_class	 = "av_inherit_color";
 					}
 					
-					
-					
-					
 					//check if we got a caption
                     $markup_description = avia_markup_helper(array('context' => 'description','echo'=>false, 'id'=>$attachment_id, 'custom_markup'=>$custom_markup));
                     $markup_name = avia_markup_helper(array('context' => 'name','echo'=>false, 'id'=>$attachment_id, 'custom_markup'=>$custom_markup));
-					if(trim($title) != "")   $title 	= "<h2 {$title_styling} class='avia-caption-title {$av_title_font_classes}' $markup_name>".trim(apply_filters('avf_slideshow_title', $title))."</h2>";
+					
+					if( trim( $title ) != '' )   
+					{
+						
+						$default_heading = ! empty( $dev_tags['heading_tag'] ) ? $dev_tags['heading_tag'] : 'h2';
+						$args = array(
+									'heading'		=> $default_heading,
+									'extra_class'	=> $dev_tags['heading_class']
+								);
+						
+						$extra_args = array( $this, $key );
+
+						/**
+						 * @since 4.5.5
+						 * @return array
+						 */
+						$args = apply_filters( 'avf_customize_heading_settings', $args, __CLASS__, $extra_args );
+
+						$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+						$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : $dev_tags['heading_class'];
+			
+						$title = "<{$heading} {$title_styling} class='avia-caption-title {$css} {$av_title_font_classes}' $markup_name>" . trim( apply_filters( 'avf_slideshow_title', $title ) ) . "</{$heading}>";
+					}
 					
 					if(is_array($content)) $content = implode(' ',$content); //temp fix for trim() expects string warning until I can actually reproduce the problem
 					if(trim($content) != "") $content 	= "<div class='avia-caption-content {$av_font_classes} {$content_class}' {$markup_description} {$content_styling}>".ShortcodeHelper::avia_apply_autop(ShortcodeHelper::avia_remove_autop(trim($content)))."</div>";
@@ -488,7 +638,7 @@ if ( !class_exists( 'avia_slideshow' ) )
 
 
 					$html .= "<li {$slider_data} class='{$extra_class} slide-{$counter} ' >";
-					$html .= "<".$tags[0]." data-rel='slideshow-".avia_slideshow::$slider."' class='avia-slide-wrap' {$linkdescription} >{$caption}";
+					$html .= "<".$tags[0]." data-rel='slideshow-".avia_slideshow::$slider."' class='avia-slide-wrap {$fallback_img_class}' {$fallback_img_style} {$linkdescription} >{$caption}";
 					if($this->config['bg_slider'] != "true" && empty($video))
 					{
 						$img_style = "";
@@ -507,6 +657,10 @@ if ( !class_exists( 'avia_slideshow' ) )
 					}
 					$html .= $video;
 					$html .= $this->create_overlay($meta);
+					$html .= $this->create_click_to_play_overlay();
+					
+					
+					
 					$html .= "</".$tags[1].">";
 					$html .= "</li>";
 					
@@ -584,7 +738,11 @@ if ( !class_exists( 'avia_slideshow' ) )
 			return $html;
 		}
 
-		protected function extract_subslides($slide_array)
+		/**
+		 * 
+		 * @param array $slide_array
+		 */
+		protected function extract_subslides( array $slide_array )
 		{
 			$this->config['ids']= array();
 			$this->subslides 	= array();
@@ -594,18 +752,38 @@ if ( !class_exists( 'avia_slideshow' ) )
 				$this->subslides[$key] = $slide;
 				$this->config['ids'][] = $slide['attr']['id'];
 			
-				if( empty($slide['attr']['id']) && !empty($slide['attr']['video']) && $slide['attr']['slide_type'] === 'video')
+				if( empty($slide['attr']['id']) && ! empty( $slide['attr']['video']) && $slide['attr']['slide_type'] === 'video')
 				{
 					$this->config['video_counter'] ++ ;
+					if( avia_slideshow_video_helper::is_extern_service( $slide['attr']['video'] ) )
+					{
+						$this->need_conditional_load = true;
+					}
+					else
+					{
+						if( ! $this->need_conditional_load )
+						{
+							/**
+							 * Allow to change default behaviour to lazy load all video files
+							 * 
+							 * @since 4.4
+							 */
+							$this->need_conditional_load = apply_filters( 'avf_video_slide_conditional_load_html5', true, $slide_array, $this );
+						}
+					}
 				}
 			}
-
-			$this->config['ids'] = implode(',',$this->config['ids'] );
 			
+			$this->config['ids'] = implode(',', $this->config['ids'] );
 			unset($this->config['content']);
 		}
 		
-		protected function create_overlay($meta)
+		/**
+		 * 
+		 * @param array $meta
+		 * @return string
+		 */
+		protected function create_overlay( array $meta)
 		{
 			extract($meta);
 			
@@ -635,8 +813,27 @@ if ( !class_exists( 'avia_slideshow' ) )
 			return $overlay;
 		}
 		
-
-		
+		/**
+		 * Returns an overlay div if we need late loading of videos
+		 * 
+		 * @since 4.4
+		 * @return string
+		 */
+		protected function create_click_to_play_overlay()
+		{
+			if( ! $this->need_conditional_load )
+			{
+				return '';
+			}
+			
+			
+			$overlay =	"<div class='av-click-to-play-overlay'>";
+			$overlay .= '<div class="avia_playpause_icon">';
+			$overlay .=	'</div>';
+			$overlay .=	'</div>';
+			
+			return $overlay;
+		}
 		
 	}
 }
@@ -650,18 +847,39 @@ if ( !class_exists( 'avia_slideshow_video_helper' ) )
 {
 	class avia_slideshow_video_helper
 	{
-		static function set_video_slide($video_url, $service = false, $meta = false)
+		
+		/**
+		 * Define extern services that need to be confirmed by user
+		 * @var array 
+		 */
+		static protected $extern_services = array( 'youtube', 'vimeo' );
+		
+		
+		static function set_video_slide($video_url, $service = false, $meta = false, $config = false)
 		{
 			$video = "";
+			$origin_url = $video_url;
 			if(empty($service)) $service = self::which_video_service($video_url);
 			
 			$uid 		= 'player_'.get_the_ID().'_'.mt_rand().'_'.mt_rand();
 			$controls 	= empty($meta['video_controls']) ? 1 : 0;
-			$loop 		= empty($meta['video_loop']) ? 0 : 1;
+			$atts  = array();
+			$atts['loop'] = empty($meta['video_loop']) ? 0 : 1;
+			$atts['autoplay'] = empty($meta['video_autoplay']) ? 1 : 0;
+			$atts['muted'] = empty($meta['video_mute']) ? 0 : 1;
+			
+			//was previously only used for mobile,now for everything
+			$fallback_img = !empty($meta['mobile_image']) ? $meta['mobile_image'] : "";
+			
+			if(is_numeric($fallback_img)) 
+			{
+				$fallback_img = wp_get_attachment_image_src($fallback_img, $config['size']);
+				$fallback_img = ( is_array( $fallback_img ) ) ? $fallback_img[0] : '';
+			}
 			
 			switch( $service )
 			{
-				case "html5": $video = "<div class='av-click-overlay'></div>".avia_html5_video_embed($video_url); break;
+				case "html5": $video = "<div class='av-click-overlay'></div>".avia_html5_video_embed($video_url,  $fallback_img , $types = array('webm' => 'type="video/webm"', 'mp4' => 'type="video/mp4"', 'ogv' => 'type="video/ogg"'), $atts); break;
 				case "iframe":$video = $video_url; break;
 				case "youtube":
 					
@@ -695,7 +913,7 @@ if ( !class_exists( 'avia_slideshow_video_helper' ) )
 						
 					$data = AviaHelper::create_data_string($video_data);
 				
-					$video 	= "<div class='av-click-overlay'></div><div class='mejs-mediaelement'><div height='1600' width='900' class='av_youtube_frame' id='{$uid}' {$data}></div></div>";
+					$video 	= "<div class='av-click-overlay'></div><div class='mejs-mediaelement'><div height='1600' width='900' class='av_youtube_frame' id='{$uid}' {$data} data-original_url='{$origin_url}' ></div></div>";
 					
 				break;
 				case "vimeo":
@@ -710,7 +928,7 @@ if ( !class_exists( 'avia_slideshow_video_helper' ) )
 							'byline'	=> 0,
 							'title'		=> 0,
 							'badge'		=> 0,
-							'loop'		=> $loop,
+							'loop'		=> $atts['loop'],
 							'autopause'	=> $autopause,
 							'api'		=> 1,
 							'rel'		=> 0,
@@ -721,7 +939,7 @@ if ( !class_exists( 'avia_slideshow_video_helper' ) )
 					));
 					
 					$video_url = apply_filters( 'avf_vimeo_video_url' , $video_url);
-					$video 	= "<div class='av-click-overlay'></div><div class='mejs-mediaelement'><iframe src='{$video_url}' height='1600' width='900'  frameborder='' class='av_vimeo_frame' id='{$uid}'></iframe></div>";
+					$video 	= "<div class='av-click-overlay'></div><div class='mejs-mediaelement'><div data-src='{$video_url}' data-original_url='{$origin_url}' height='1600' width='900' class='av_vimeo_frame' id='{$uid}'></div></div>";
 					
 				break;
 			}
@@ -733,7 +951,7 @@ if ( !class_exists( 'avia_slideshow_video_helper' ) )
 		}
 		
 		//get the video service based on the url string fo the video
-		static function which_video_service($video_url)
+		static function which_video_service( $video_url )
 		{
 			$service = "";
 			
@@ -759,8 +977,18 @@ if ( !class_exists( 'avia_slideshow_video_helper' ) )
 			
 			return $service;
 		}
+		
+		/**
+		 * Checks, if teh video
+		 * @since 4.4
+		 * @param string $video_url
+		 * @return boolean
+		 */
+		static public function is_extern_service( $video_url )
+		{
+			$ervice = avia_slideshow_video_helper::which_video_service($video_url);
+			
+			return in_array( $ervice, avia_slideshow_video_helper::$extern_services );
+		}
 	}
 }
-
-
-

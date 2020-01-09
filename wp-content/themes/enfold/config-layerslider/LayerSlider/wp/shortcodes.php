@@ -1,6 +1,8 @@
 <?php
 
-$GLOBALS['lsLoadPlugins'] = array();
+$GLOBALS['lsLoadPlugins'] 	= array();
+$GLOBALS['lsLoadFonts'] 	= array();
+
 function layerslider( $id = 0, $filters = '', $options = array() ) {
 	echo LS_Shortcode::handleShortcode(
 		array_merge( array('id' => $id, 'filters' => $filters), $options)
@@ -213,8 +215,14 @@ class LS_Shortcode {
 
 	public static function cacheForSlider( $sliderID ) {
 
+		// Exclude administrators to avoid serving a copy
+		// where notifications and other items may not be present.
+		if( current_user_can( get_option('layerslider_custom_capability', 'manage_options') ) ) {
+			return false;
+		}
+
 		// Attempt to retrieve the pre-generated markup
-		// set via the Transients API
+		// set via the Transients API if caching is enabled.
 		if( get_option('ls_use_cache', true) ) {
 
 			if( $slider = get_transient('ls-slider-data-'.$sliderID) ) {
@@ -261,8 +269,12 @@ class LS_Shortcode {
 			$output['flag_deleted'] 	= $slider['flag_deleted'];
 
 
-			// Save generated markup if caching is enabled
-			if( get_option('ls_use_cache', true) ) {
+			// Save generated markup if caching is enabled, except for
+			// administrators to avoid serving a copy where notifications
+			// and other items may be present.
+			$capability = get_option('layerslider_custom_capability', 'manage_options');
+			$permission = current_user_can( $capability );
+			if( get_option('ls_use_cache', true) && ! $permission ) {
 				set_transient('ls-slider-data-'.$slider['id'], $output, HOUR_IN_SECONDS * 6);
 			}
 		}
@@ -301,16 +313,21 @@ class LS_Shortcode {
 			$output['markup'] = apply_filters('layerslider_slider_markup', $output['markup'], $slider, $sID);
 		}
 
-		// Origami
-		if( !empty( $output['plugins'] ) ) {
+		// Plugins
+		if( ! empty( $output['plugins'] ) ) {
 			$GLOBALS['lsLoadPlugins'] = array_merge($GLOBALS['lsLoadPlugins'], $output['plugins']);
-
 		}
 
-		if($footer) {
+		// Fonts
+		if( ! empty( $output['fonts'] ) ) {
+			$GLOBALS['lsLoadFonts'] = array_merge($GLOBALS['lsLoadFonts'], $output['fonts']);
+		}
+
+		if( $footer ) {
 			$GLOBALS['lsSliderInit'][] = $output['init'];
 			return $output['markup'];
 		} else {
+			$output['init'] = '<script type="text/javascript">'.$output['init'].'</script>';
 			return $output['init'].$output['markup'];
 		}
 	}
@@ -320,20 +337,21 @@ class LS_Shortcode {
 	public static function generateSliderMarkup( $slider = null, $embed = array() ) {
 
 		// Bail out early if no params received or using Popup on unactivated sites
-		if( ! $slider || ( (int)$slider['flag_popup'] && ! get_option('layerslider-authorized-site', false) ) ) {
+		if( ! $slider || ( (int)$slider['flag_popup'] && ! LS_Config::isActivatedSite() ) ) {
 			return array('init' => '', 'container' => '', 'markup' => '');
 		}
 
 		// Slider and markup data
-		$id = $slider['id'];
-		$sliderID = 'layerslider_'.$id;
-		$slides = $slider['data'];
+		$id 			= $slider['id'];
+		$sliderID 		= 'layerslider_'.$id;
+		$slides 		= $slider['data'];
 
 		// Store generated output
-		$lsInit = array();
-		$lsContainer = array();
-		$lsMarkup = array();
-		$lsPlugins = array();
+		$lsInit 		= array();
+		$lsContainer 	= array();
+		$lsMarkup 		= array();
+		$lsPlugins 		= array();
+		$lsFonts 		= array();
 
 		// Include slider file
 		if(is_array($slides)) {
@@ -355,16 +373,16 @@ class LS_Shortcode {
 			if( ! empty( $GLOBALS['lsPremiumNotice'] ) ) {
 				array_unshift($lsContainer, self::generateErrorMarkup(
 					__('Premium features is available for preview purposes only.', 'LayerSlider'),
-					sprintf(__('We’ve detected that you’re using premium features in this slider, but you have not yet activated your copy of LayerSlider. Premium features in your sliders will not be available for your visitors without activation. %sClick here to learn more%s. Detected features: %s', 'LayerSlider'), '<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" target="_blank">', '</a>', implode(', ', $GLOBALS['lsPremiumNotice'])),
+					sprintf(__('We’ve detected that you’re using premium features in this slider, but you have not yet activated your copy of LayerSlider. Premium features in your sliders will not be available for your visitors without activation. %sClick here to learn more%s. Detected features: %s', 'LayerSlider'), '<a href="https://layerslider.kreaturamedia.com/documentation/#activation" target="_blank">', '</a>', implode(', ', $GLOBALS['lsPremiumNotice'])),
 					'dashicons-star-filled', 'info'
 				));
 			}
 
 
 
-			$lsInit = implode('', $lsInit);
-			$lsContainer = implode('', $lsContainer);
-			$lsMarkup = implode('', $lsMarkup);
+			$lsInit 		= implode('', $lsInit);
+			$lsContainer 	= implode('', $lsContainer);
+			$lsMarkup 		= implode('', $lsMarkup);
 		}
 
 		// Concatenate output
@@ -379,10 +397,11 @@ class LS_Shortcode {
 
 		// Return formatted data
 		return array(
-			'init' => $lsInit,
+			'init' 		=> $lsInit,
 			'container' => $lsContainer,
-			'markup' => $lsMarkup,
-			'plugins' => array_unique($lsPlugins)
+			'markup' 	=> $lsMarkup,
+			'plugins' 	=> array_unique( $lsPlugins ),
+			'fonts' 	=> array_unique( $lsFonts )
 		);
 	}
 

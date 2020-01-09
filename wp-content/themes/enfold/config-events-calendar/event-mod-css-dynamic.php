@@ -1,5 +1,17 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+/**
+ * IMPORTANT:
+ * ==========
+ * 
+ * class vevent hentry has been removed with 4.5.5.  https://github.com/KriesiMedia/wp-themes/issues/2157
+ * If we do not encounter any problems related CSS can also be removed later.
+ * 
+ * @added_by guenter
+ */
+
 //add color styles
 if(!function_exists('avia_events_dynamic_css'))
 {

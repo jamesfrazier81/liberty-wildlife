@@ -173,8 +173,20 @@ class Tribe__Log {
 			$this->get_current_logger()->log( $entry, $type, $src );
 		}
 
-		// Only go further if we have WP_CLI
-		if ( ! class_exists( 'WP_CLI' ) ) {
+		/**
+		 * Whether to log the message to wp-cli, if available, or not.
+		 *
+		 * @since 4.9.6
+		 *
+		 * @param bool $log_to_wpcli Whether to log to wp-cli, if available, or not.
+		 * @param string $entry The message entry.
+		 * @param string $type  The message type.
+		 * @param string $src   The message source.
+		 */
+		$log_to_wpcli = apply_filters( 'tribe_common_log_to_wpcli', true, $entry, $type, $src );
+
+		// Only go further if we have WP_CLI or if we want to log to WP-CLI.
+		if ( ! class_exists( 'WP_CLI' ) || false === $log_to_wpcli ) {
 			return false;
 		}
 
@@ -233,10 +245,15 @@ class Tribe__Log {
 	}
 
 	/**
-	 * Returns the currently active logger or null if none is set/none are
-	 * available.
+	 * Returns the currently active logger.
 	 *
-	 * @return Tribe__Log__Logger|null
+	 * If no loggers are available, this will be the null logger which is a no-op
+	 * implementation (making it safe to call Tribe__Log__Logger methods on the
+	 * return value of this method at all times).
+	 *
+	 * @since 4.6.2 altered the return signature to only return instances of Tribe__Log__Logger
+	 *
+	 * @return Tribe__Log__Logger
 	 */
 	public function get_current_logger() {
 		if ( ! $this->current_logger ) {
@@ -244,10 +261,10 @@ class Tribe__Log {
 			$available = $this->get_logging_engines();
 
 			if ( empty( $engine ) || ! isset( $available[ $engine ] ) ) {
-				return null;
+				return $this->current_logger = new Tribe__Log__Null_Logger();
+			} else {
+				$this->current_logger = $this->get_engine( $engine );
 			}
-
-			$this->current_logger = $this->get_engine( $engine );
 		}
 
 		return $this->current_logger;
@@ -264,6 +281,9 @@ class Tribe__Log {
 	 */
 	public function set_current_logger( $engine ) {
 		$available_engines = $this->get_logging_engines();
+
+		// Make sure to de-duplicate the slashes on class names.
+		$engine = str_replace( '\\\\', '\\', $engine );
 
 		if ( ! isset( $available_engines[ $engine ] ) ) {
 			throw new Exception( sprintf( __( 'Cannot set %s as the current logging engine', 'tribe-common' ), $engine ) );

@@ -75,10 +75,12 @@ class LS_ExportUtil {
 	 *
 	 * @since 5.0.3
 	 * @access public
-	 * @param string $path Image path to add
+	 * @param mixed $files Image path or an array of image paths to be added
+	 * @param string $folder Sub-folder name
+	 * @param string $imgFolder Name of the folder that stores the images
 	 * @return void
 	 */
-	public function addImage($files, $folder = '') {
+	public function addImage($files, $folder = '', $imgFolder = 'uploads') {
 
 		// Check file
 		if(empty($files)) { return false; }
@@ -87,7 +89,7 @@ class LS_ExportUtil {
 		if(!is_array($files)) { $files = array($files); }
 
 		// Check folder
-		$folder = is_string($folder) ? $folder.'/uploads/' : 'uploads/';
+		$folder = is_string($folder) ? $folder."/$imgFolder/" : "$imgFolder/";
 
 		// Add contents to ZIP
 		foreach($files as $file) {
@@ -101,20 +103,66 @@ class LS_ExportUtil {
 
 
 	/**
+	 * Adds any kind of file to the export ZIP
+	 *
+	 * @since 6.6.3
+	 * @access public
+	 * @param mixed $file File path or an array of file paths to be added
+	 * @param string $path File location within the ZIP package
+	 * @return void
+	 */
+	public function addFile($files, $path = '/') {
+
+		// Check file
+		if(empty($files)) { return false; }
+
+		// Check file type
+		if(!is_array($files)) { $files = array($files); }
+
+		// Add contents to ZIP
+		foreach($files as $file) {
+			if(!empty($file) && is_string($file)) {
+				$this->zip->addFile($file,
+					$path.sanitize_file_name(basename($file))
+				);
+			}
+		}
+	}
+
+
+	/**
+	 * Adds any kind of file with the provided contents to the ZIP package.
+	 *
+	 * @since 5.0.3
+	 * @access public
+	 * @param string $data Slider settings JSON
+	 * @return void
+	 */
+	public function addFileFromString( $path = '/slider.html', $data = '') {
+		$this->zip->addFromString($path, $data);
+	}
+
+
+	/**
 	 * Closes all pending operations and downloads the ZIP file.
 	 *
 	 * @since 5.0.3
 	 * @access public
 	 * @return void
 	 */
-	public function download() {
+	public function download( $name = false ) {
 
 		// Close ZIP operations
 		$this->zip->close();
 
+		// File name
+		if( empty( $name ) ) {
+			$name = 'LayerSlider_Export_'.date('Y-m-d').'_at_'.date('H.i.s').'.zip';
+		}
+
 		// Set headers and to user
 		header('Content-Type: application/zip');
-		header('Content-Disposition: attachment; filename="LayerSlider_Export_'.date('Y-m-d').'_at_'.date('H.i.s').'.zip"');
+		header('Content-Disposition: attachment; filename="'.$name.'"');
 		header("Content-length: " . filesize($this->file));
 		header('Pragma: no-cache');
 		header('Expires: 0');
@@ -144,8 +192,10 @@ class LS_ExportUtil {
 		if(!empty($data['layers']) && is_array($data['layers'])) {
 		foreach($data['layers'] as $slide) {
 
-				$this->_addImageToList( $slide['properties'], 'backgroundId', 'background' );
-				$this->_addImageToList( $slide['properties'], 'thumbnailId', 'thumbnail' );
+				if( ! empty( $slide['properties'] ) ) {
+					$this->_addImageToList( $slide['properties'], 'backgroundId', 'background' );
+					$this->_addImageToList( $slide['properties'], 'thumbnailId', 'thumbnail' );
+				}
 
 
 				// Layers
@@ -154,6 +204,7 @@ class LS_ExportUtil {
 
 						$this->_addImageToList( $layer, 'imageId', 'image' );
 						$this->_addImageToList( $layer, 'posterId', 'poster' );
+						$this->_addImageToList( $layer, 'layerBackgroundId', 'layerBackground' );
 					}
 				}
 			}

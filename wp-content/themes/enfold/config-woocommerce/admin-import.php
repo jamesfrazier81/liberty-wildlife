@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 /**
  * Functions for handling WordPress import to make it compatable with WooCommerce
  *

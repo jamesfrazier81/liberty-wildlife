@@ -65,13 +65,13 @@ if( ! class_exists( 'avia_form' ) )
 
 		/**
 		 * Array that holds the auto responder field
-		 * @var bool
+		 * @var array
 		 */
 		var $autoresponder = array();
 
 		/**
 		 * Static var that counts the numbers of forms and if one is submitted makes sure that the others arent checked
-		 * @var bool
+		 * @var int
 		 */
 		static $form_id = 1;
 
@@ -95,7 +95,7 @@ if( ! class_exists( 'avia_form' ) )
         
         /**
          * array that translates the passed width to a numeric value
-         * @var int
+         * @var array
          */
         var $width_translate = array('fullwidth'=>1, 'element_half' => 0.5, 'element_fourth' => 0.25, 'element_third' => 0.3, 'element_two_third' => 0.6, 'element_three_fourth' => 0.75);
         
@@ -104,7 +104,29 @@ if( ! class_exists( 'avia_form' ) )
         
         /*error message that can be displayed in front of form*/
         var $error_msg;
+		
+		/**
+		 *
+		 * @since 4.5.7.2
+		 * @var string 
+		 */
+		protected $button_html_before;
+		
+		/**
+		 *
+		 * @since 4.5.7.2
+		 * @var string 
+		 */
+		protected $button_html_after;
+		
         
+		/**
+		 * Message that is shown in the response area after submitting with ajax
+		 * 
+		 * @since 4.5.7.2
+		 * @var string 
+		 */
+		public $submit_error;
 
 		/**
          * Constructor
@@ -112,22 +134,33 @@ if( ! class_exists( 'avia_form' ) )
          * The constructor sets up the default params
          * @param array $params array with default form information such as submit button label, heading and success message
          */
-		function __construct($params)
+		function __construct( $params )
 		{
-			add_filter('avf_safe_string_trans', array(&$this,'remove_invalid_chars'), 10, 3);
+			add_filter( 'avf_safe_string_trans', array( $this, 'remove_invalid_chars' ), 10, 3 );
 
 			$this->form_params = $params;
+			if( ! isset( $this->form_params['el-id'] ) )
+			{
+				$this->form_params['el-id'] = '';
+			}
+			
 			$this->formID 		= avia_form::$form_id ++;
 			$this->form_params['avia_formID'] = $this->formID;
-			$this->id_sufix		= isset($params['multiform']) ? "_".$this->formID : "";
-			$this->placeholder	= !empty($params['placeholder']) ? true : false;
+			$this->id_sufix		= isset( $params['multiform'] ) ? "_".$this->formID : "";
+			$this->placeholder	= ! empty( $params['placeholder'] ) ? true : false;
+			$this->error_msg = '';
+			$this->submit_error = '';
+			$this->button_html_before = '';
+			$this->button_html_after = '';
 
 			$extraClass  = isset($params['form_class']) ? $params['form_class'] : "";
 			$redirect    = isset($params['redirect']) ? "data-avia-redirect='".$params['redirect']."'" : "";
 			
-			$form_class  = apply_filters('avf_ajax_form_class', 'ajax_form', $this->formID, $this->form_params);
+			$form_class  = apply_filters( 'avf_ajax_form_class', 'avia_ajax_form', $this->formID, $this->form_params );
 			$form_class .= $this->placeholder ? " av-form-labels-hidden " : " av-form-labels-visible ";
 			$form_data   = "";
+			
+			$aria_label = ! empty( $this->form_params['aria_label'] ) ? " aria-label='{$this->form_params['aria_label']}' " : '';
 			
 			if(isset($this->form_params['form_data']))
 			{
@@ -137,12 +170,12 @@ if( ! class_exists( 'avia_form' ) )
 				}
 			}
 			
-			$this->output  = '<form action="'.$params['action'].'" method="post" '.$form_data.' class="'.$form_class.' '.$extraClass.'" data-avia-form-id="'.$this->formID.'" '.$redirect.'><fieldset>';
+			$this->output  = '<form action="'.$params['action'].'" method="post" '.$form_data.' class="'.$form_class.' '.$extraClass.'" data-avia-form-id="'.$this->formID.'" '. $redirect . ' ' . $this->form_params['el-id'] . $aria_label . '>';
 			$this->output .=  $params['heading'];
+			$this->output .=  '<fieldset>';
 
 			$this->length = apply_filters('avf_form_el_name_length', 30, $this->formID, $this->form_params);
 			$this->length = (int)$this->length;
-
 
 			if(!isset($_POST) || !count($_POST) || empty($_POST['avia_generated_form'.$this->formID]))
 			{
@@ -156,10 +189,10 @@ if( ! class_exists( 'avia_form' ) )
 			}
 			else
 			{
-				$this->execute = array($this, 'send');
+				$this->execute = array( $this, 'send' );
 			}
 			
-			$this->submit_attr = apply_filters('avf_contact_form_submit_button_attr', '', $this->formID, $this->form_params);
+			$this->submit_attr = apply_filters( 'avf_contact_form_submit_button_attr', '', $this->formID, $this->form_params );
 		}
 
 		/**
@@ -238,8 +271,8 @@ if( ! class_exists( 'avia_form' ) )
 					}
 					
 					
-					$element = apply_filters('avf_form_el_filter', $element, $this->formID, $this->form_params);
-					$this->{$element['type']}($element_id.$this->id_sufix, $element);
+					$element = apply_filters( 'avf_form_el_filter', $element, $this->formID, $this->form_params );
+					$this->{$element['type']}( $element_id . $this->id_sufix, $element );
 				}
 			}
 		}
@@ -252,30 +285,82 @@ if( ! class_exists( 'avia_form' ) )
          */
 		function display_form($return = false)
 		{
-			$success = '<div id="ajaxresponse'.$this->id_sufix.'" class="ajaxresponse ajaxresponse'.$this->id_sufix.' hidden"></div>';
+			$success = '<div id="ajaxresponse' . $this->id_sufix . '" class="ajaxresponse ajaxresponse' . $this->id_sufix . ' hidden"></div>';
 			
 			$call_instance = $this->execute[0];
 			$call_function = $this->execute[1];
 			
 			
-			if($this->submit_form && $call_instance->$call_function( $this ) && empty($this->error_msg))
+			$form = $this->elements_html;
+			if( empty( $this->button_html ) )
 			{
-				$success = '<div id="ajaxresponse'.$this->id_sufix.'" class="ajaxresponse ajaxresponse'.$this->id_sufix.'">'.$this->form_params['success'].'</div>';
+				$this->button( false, array() ); // generate a default button if none are defined via the form builder
+				$form .= $this->button_html;
+			}
+			
+			/**
+			 * Changed with 4.5.7.2 because returning false on submit broke output of success panel in contact form.
+			 * Logic kept for mailchimp.
+			 */
+			if( $this->submit_form )
+			{
+				$submit_result = $call_instance->$call_function( $this );
+				
+				
+				if( false === $submit_result && ! empty( $this->error_msg ) )
+				{
+					//	Output error message prior to form ( - mailchimp error )
+					$this->output .= $this->error_msg;
+					$this->output .= $form;
+				}
+				else
+				{
+					//	Output only the messages and hide form
+					if( ! empty( $this->error_msg ) )
+					{
+						$this->submit_error = $this->error_msg + '<br /><br />' . $this->submit_error;
+					}
+
+					$class = ! empty( $this->submit_error ) ? ' avia-form-error ' : '';
+
+					$success =		'<div id="result_ajax_response' . $this->id_sufix . '" class="ajaxresponse ajaxresponse' . $this->id_sufix . $class . '">';
+
+					if( false === $submit_result )
+					{
+						$success .= ! empty( $this->submit_error ) ? $this->submit_error : __( 'Form could not be submitted - an error occured. Please reload page and try again.', 'avia_framework' );
+					}
+					else
+					{
+						 $success .= $this->form_params['success'];
+					}
+
+					 $success .=	'</div>';
+				}
 			}
 			else
 			{
 				$this->output .= $this->error_msg;
-				$this->output .= $this->elements_html;
-				
-				if(empty($this->button_html))
-				{
-					$this->button(false, array()); // generate a default button is none are defined via the form builder
-					$this->output .= $this->button_html;
-				}
+				$this->output .= $form;
 			}
 
 
-			$this->output .= '</fieldset></form>'.$success;
+			$this->output .= '</fieldset>';
+			
+			/**
+			 * Add an overlay if Google reCaptcha had been activated and user disbled it with cookie
+			 * 
+			 * @since 4.5.7.2
+			 * @return string
+			 */
+			$msg = __( 'This contact form is deactivated because you refused to accept Google reCaptcha service which is necessary to validate any messages sent by the form.', 'avia_framework' );
+			$msg = apply_filters( 'avf_contact_form_recaptcha_disabled_msg', $msg );
+			
+			$this->output .=	'<div class="avia-disabled-forn">';
+			$this->output .=		$msg;
+			$this->output .=	'</div>';
+			
+			$this->output .= '</form>' . $success;
+			
 
 			if($return)
 			{
@@ -306,23 +391,43 @@ if( ! class_exists( 'avia_form' ) )
 			}
 		}
 		
-		
-		function button($id = "", $element = array())
+		/**
+		 * 
+		 * @since < 4.0
+		 * @param string|false $id
+		 * @param array $element
+		 * @return string
+		 */
+		function button( $id = '', $element = array() )
 		{
-			if(!empty( $this->button_html )) return;
+			if( ! empty( $this->button_html ) ) 
+			{
+				return;
+			}
 			
 			$submit_label = isset( $element['label'] ) ? $element['label'] : $this->form_params['submit'];
-			$class = isset($element['class']) ? $element['class'] : $this-> auto_width();
-			if(!empty($class)) $class .= " modified_width";
-			if(!empty( $element['disabled']) )  $class .= " av-hidden-submit";
-			
+			$class = isset( $element['class'] ) ? $element['class'] : $this->auto_width();
+			if( ! empty( $class ) ) 
+			{
+				$class .= ' modified_width';
+			}
+			if( ! empty( $element['disabled'] ) )  
+			{
+				$class .= ' av-hidden-submit';
+			}
 					
-			$this->button_html  = '<p class="form_element '.$class.'">';
-			$this->button_html .= '<input type="hidden" value="1" name="avia_generated_form'.$this->formID.'" />';
-			$this->button_html .= '<input type="submit" value="'.$submit_label.'" class="button" '.$this->submit_attr.' data-sending-label="'.__('Sending','avia_framework').'"/>';
-			$this->button_html .= '</p>';
+			$this->button_html = $this->button_html_before;
+			$this->button_html_before = '';
 			
-			if($id)
+			$this->button_html .=	'<p class="form_element ' . $class . '">';
+			$this->button_html .=		'<input type="hidden" value="1" name="avia_generated_form' . $this->formID . '" />';
+			$this->button_html .=		'<input type="submit" value="' . $submit_label . '" class="button" ' . $this->submit_attr . ' data-sending-label="' . __( 'Sending', 'avia_framework' ) . '"/>';
+			$this->button_html .=	'</p>';
+			
+			$this->button_html .= $this->button_html_after;
+			$this->button_html_after = '';
+			
+			if( $id )
 			{
 				$this->elements_html .= $this->button_html;
 			}
@@ -377,7 +482,7 @@ if( ! class_exists( 'avia_form' ) )
 			
 			if($this->placeholder)
 			{
-				$label = "";
+//				$label = "";
 				$placeholder = " placeholder='".$element['label'].$extra."'" ;
 			}
 			
@@ -452,7 +557,7 @@ if( ! class_exists( 'avia_form' ) )
 			
 			if($this->placeholder)
 			{
-				$label = "";
+//				$label = "";
 			}
 			
             if(isset($this->form_params['label_first']))
@@ -475,11 +580,11 @@ if( ! class_exists( 'avia_form' ) )
                 'currentText'       => __( 'Today', 'avia_framework' ),
                 'nextText'			=> __( 'Next', 'avia_framework' ),
 				'prevText'			=> __( 'Prev', 'avia_framework' ),
-                'monthNames'        => $this->helper_strip_array_indices( $wp_locale->month ),
-                'monthNamesShort'   => $this->helper_strip_array_indices( $wp_locale->month_abbrev ),
-                'dayNames'          => $this->helper_strip_array_indices( $wp_locale->weekday ),
-                'dayNamesShort'     => $this->helper_strip_array_indices( $wp_locale->weekday_abbrev ),
-                'dayNamesMin'       => $this->helper_strip_array_indices( $wp_locale->weekday_initial ),
+                'monthNames'        => array_values( $wp_locale->month ),
+                'monthNamesShort'   => array_values( $wp_locale->month_abbrev ),
+                'dayNames'          => array_values( $wp_locale->weekday ),
+                'dayNamesShort'     => array_values( $wp_locale->weekday_abbrev ),
+                'dayNamesMin'       => array_values( $wp_locale->weekday_initial ),
                 'dateFormat'        => $date_format,
                 'firstDay'          => get_option( 'start_of_week' ),
                 'isRTL'             => $wp_locale->is_rtl()
@@ -518,15 +623,6 @@ if( ! class_exists( 'avia_form' ) )
             }); });';
 			echo "\n</script>\n";
         }
-
-        function helper_strip_array_indices( $ArrayToStrip ) {
-            foreach( $ArrayToStrip as $objArrayItem) {
-                $NewArray[] = $objArrayItem;
-            }
-
-            return( $NewArray );
-        }
-
 
 		/**
          * checkbox
@@ -634,7 +730,10 @@ if( ! class_exists( 'avia_form' ) )
 			$form_el = ' <select '.$multi.' name="'.$id.'" class="select '.$element_class.'" id="'.$id.'">'.$select.'</select>';
 			$label = '<label for="'.$id.'">'.$element['label'].$required.'</label>';
 
-			if($this->placeholder) $label = "";
+			if( $this->placeholder ) 
+			{
+//				$label = "";
+			}
 
 			if(isset($this->form_params['label_first']))
 			{
@@ -683,7 +782,7 @@ if( ! class_exists( 'avia_form' ) )
 			
 			if($this->placeholder)
 			{
-				$label = "";
+//				$label = "";
 				$placeholder = " placeholder='".$element['label'].$extra."'" ;
 			}
 			
@@ -716,6 +815,93 @@ if( ! class_exists( 'avia_form' ) )
 			$this->elements_html .= '<p class="hidden"><input type="text" name="'.$id.'" class="hidden '.$element_class.'" id="'.$id.'" value="" /></p>';
 		}
 
+		/**
+		 * Adds a Google reCAPTCHA div used by js to identify actions needed
+		 * 
+		 * @since 4.5.7.2
+		 * @param string $id
+		 * @param array $element
+		 */
+		public function grecaptcha( $id, array $element )
+		{
+			if( ! isset( $element['context'] ) || 'av_contact_form' != $element['context'] )
+			{
+				return;
+			}
+			
+			if( Avia_Google_reCAPTCHA()->is_loading_prohibited() )
+			{
+				return;
+			}
+			
+			$element =  shortcode_atts( array(
+												'class'				=> '',
+												'container_class'	=> '',
+												'custom_class'		=> '',
+												'context'			=> 'av_contact_form',
+												'token_input'		=> 'av_recaptcha_token',
+												'version'			=> '',
+												'theme'				=> '',
+												'size'				=> '',
+												'score'				=> '',
+												'text_to_preview'	=> false,
+												'value'				=> ''
+											), $element, 'google_recaptcha_form_params' );
+			
+			if( '' == $element['theme'] )
+			{
+				$element['theme'] = Avia_Google_reCAPTCHA()->get_theme();
+			}
+			
+			if( '' == $element['size'] )
+			{
+				$element['size'] = 'normal';
+			}
+			
+			if( '' == $element['score'] )
+			{
+				$element['score'] = Avia_Google_reCAPTCHA()->get_score();
+			}
+				
+			$data = '';
+			foreach( $element as $key => $value ) 
+			{
+				if( in_array( $key , array( 'type', 'class' ) ) )
+				{
+					continue;
+				}
+				
+				$data .= ' data-' . $key . '="' . esc_attr( $value ) . '"';
+			}
+			
+			$output  = '';
+			$output .=	"<div id='{$id}' class='av-recaptcha-area {$element['class']} {$element['container_class']}' {$data}>";
+			
+			if( true === $element['text_to_preview'] )
+			{
+				if( 'avia_recaptcha_v2' == $element['version'] )
+				{
+					$image = AVIA_IMG_URL . "misc/grecaptcha-check-{$element['theme']}-{$element['size']}.png";
+					$title = __( 'A non functional image only preview for checkbox of Google reCAPTCHA', 'avia_framework' );
+					$alt =  __( 'Checkbox for Google reCAPTCHA', 'avia_framework' );
+					$output .=	"<img src='{$image}' alt='{$alt}' title='{$title}' />";
+				}
+				else if( 'avia_recaptcha_v3' == $element['version'] )
+				{
+					$badge = Avia_Google_reCAPTCHA()->get_display_badge_html();
+					$badge = str_replace( 'hidden', '', $badge );
+					$this->button_html_after .=	$badge;
+				}
+			}
+			else
+			{
+				$output .=	Avia_Google_reCAPTCHA()->get_display_badge_html();
+			}
+			
+			$output .=	'</div>';
+			
+			$this->elements_html .= $output;
+		}
 
 
 		/**
@@ -731,12 +917,12 @@ if( ! class_exists( 'avia_form' ) )
 
 			if(!empty($element['check']))
 			{
-				$required = ' <abbr class="required" title="'.__( 'required', 'avia_framework' ).'">*</abbr>';
+				$required = ' <abbr class="required" title="' . __( 'required', 'avia_framework' ) . '">*</abbr>';
 				$element_class = $element['check'];
-				$p_class = $this->check_element($id, $element);
+				$p_class .= $this->check_element($id, $element);
 			}
 
-			$p_class = $this-> auto_width();
+			$p_class .= ' ' . $this->auto_width() . ' ' . $element['class'];
 
 			if(!empty($_POST[$id])) $value = esc_html(urldecode($_POST[$id]));
 			if(!empty($_POST[$id.'_verifier'])) $valueVer = esc_html(urldecode($_POST[$id.'_verifier']));
@@ -778,12 +964,15 @@ if( ! class_exists( 'avia_form' ) )
 		{
 			$this->elements_html .= '<input type="hidden" name="'.$id.'" id="'.$id.'" value="'.$element['value'].'" />';
 		}
-
+		
 
 		/**
          * Send the form
          *
          * The send method tries to send the form. It builds the necessary email and submits it via wp_mail
+		 * 
+		 * @param array $self_instance
+		 * @return boolean
          */
 		function send( $self_instance )
 		{	
@@ -793,7 +982,6 @@ if( ! class_exists( 'avia_form' ) )
 				$new_post[str_replace('avia_','',$key)] = $post;
 			}
 			
-			
 			$mymail 	= empty($this->form_params['myemail']) ? $new_post['myemail'] : $this->form_params['myemail'];
 			$myblogname = empty($this->form_params['myblogname']) ? $new_post['myblogname'] : $this->form_params['myblogname'];
 
@@ -802,10 +990,20 @@ if( ! class_exists( 'avia_form' ) )
 
 			$default_from = parse_url(home_url());
 
-
-			//hook to stop execution here and do something different with the data
+			/**
+			 * Hook to stop execution here and do something different with the data
+			 * Set $this->submit_error to display a custom submit message
+			 * 
+			 * @used_by						av_google_recaptcha						999999
+			 * @since < 4.0
+			 * @param boolean
+			 * @param array $new_post
+			 * @param array $form_params
+			 * @param avia_form $this
+			 * @return boolean|null				null on submit error|false to stop sending
+			 */
 			$proceed = apply_filters( 'avf_form_send', true, $new_post, $this->form_params, $this );
-
+ 
 			if( ! $proceed )
 			{
 				if( is_null( $proceed ) )
@@ -822,11 +1020,14 @@ if( ! class_exists( 'avia_form' ) )
 			$from = "no-reply@wp-message.com";
 			$usermail = false;
 
-			if(!empty($default_from['host'])) $from = "no-reply@".$default_from['host'];
-
-			if(!empty($this->autoresponder[0]))
+			if( ! empty( $default_from['host'] ) ) 
 			{
-				$from = $_POST[$this->autoresponder[0]];
+				$from = "no-reply@".$default_from['host'];
+			}
+			
+			if( ! empty( $this->autoresponder[0] ) )
+			{
+				$from = $_POST[ $this->autoresponder[0] ];
 				$usermail = true;
 			}
 			else
@@ -846,24 +1047,26 @@ if( ! class_exists( 'avia_form' ) )
 
 					}
 
-					if($usermail == true) break;
+					if( $usermail ) 
+					{
+						break;
+					}
 				}
 			}
 			
-			
 			$to = urldecode( $mymail );
-			
-			$delimiter = ",";
-			if(strpos($to, ',') === false && strpos($to, ' ') !== false) $delimiter = " ";
-			
-			$to = array_filter(array_map('trim', explode($delimiter, $to)));
-			$to = apply_filters("avf_form_sendto", $to, $new_post, $this->form_params);
+			$delimiter = ( strpos( $to, ',' ) === false && strpos( $to, ' ' ) !== false ) ? ' ' : ',';
+			$to = array_filter( array_map( 'trim', explode( $delimiter, $to ) ) );
+			$to = apply_filters( 'avf_form_sendto', $to, $new_post, $this->form_params );
 	
 			$from = urldecode( $from );
-			$from = apply_filters("avf_form_from", $from, $new_post, $this->form_params);
+			$send_from = ! empty( $this->form_params['myfrom'] ) ? urldecode( $this->form_params['myfrom'] ) : $from;
+			$from_filtered = apply_filters( 'avf_form_from', $send_from, $new_post, $this->form_params );
 
 			$subject = urldecode( $subject );
-			$subject = apply_filters("avf_form_subject", $subject, $new_post, $this->form_params);
+			$subject = apply_filters( 'avf_form_subject', $subject, $new_post, $this->form_params );
+			
+			$subject = htmlspecialchars_decode( $subject );
 
 			$message = "";
 			$iterations = 0;
@@ -889,25 +1092,43 @@ if( ! class_exists( 'avia_form' ) )
 				{
 					if($element['type'] != 'hidden' && $element['type'] != 'decoy')
 					{
-						if($element['type'] == 'textarea') $message .= " <br/>";
+						$form_field = '';
+						if($element['type'] == 'textarea') $form_field .= " <br/>";
+						
 						$field_value = apply_filters( "avf_form_mail_field_values", nl2br(urldecode($new_post[$key])), $new_post, $this->form_elements, $this->form_params, $element, $key );
-						$message .= $element['label'].": ".$field_value." <br/>";
-						if($element['type'] == 'textarea') $message .= " <br/>";
+						
+						$form_field .= $element['label'].": ".$field_value." <br/>";
+						if($element['type'] == 'textarea') $form_field .= " <br/>";
+						
+						$message .= apply_filters( "avf_form_mail_form_field", $form_field, $new_post, $this->form_elements, $this->form_params, $element, $key, $field_value );
 					}
 				}
 			}
 
-
 			$use_wpmail = apply_filters("avf_form_use_wpmail", true, $new_post, $this->form_params);
 
 			//$header  = 'MIME-Version: 1.0' . "\r\n";
-			$header = 'Content-type: text/html; charset=utf-8' . "\r\n";
-			$header = apply_filters("avf_form_mail_header", $header, $new_post, $this->form_params);
-			$copy 	= apply_filters("avf_form_copy", $to, $new_post, $this->form_params);
+			$header = "Content-type: text/html; charset=utf-8 \r\n";
 			
-			$message = apply_filters("avf_form_message", stripslashes($message), $new_post, $this->form_params);
+			if( $use_wpmail )
+			{
+				$header .= "From: {$from_filtered} <{$from_filtered}> \r\n";
+			}
+			else
+			{
+				$header .= "From: {$from_filtered} \r\n";
+			}
 			
-			foreach($copy as $send_to_mail)
+			if( $usermail )
+			{
+				$header .= "Reply-To: {$from} \r\n";
+			}
+			
+			$header = apply_filters( 'avf_form_mail_header', $header, $new_post, $this->form_params, $from, $from_filtered );
+			$copy 	= apply_filters( 'avf_form_copy', $to, $new_post, $this->form_params );
+			$message = apply_filters( 'avf_form_message', stripslashes($message), $new_post, $this->form_params );
+			
+			foreach( $copy as $send_to_mail )
 			{
 				//if a demo email is mistakenly used change it to the admin url
 				if( strpos( $send_to_mail, '@kriesi.at') !== false && isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != "www.kriesi.at")
@@ -918,16 +1139,13 @@ if( ! class_exists( 'avia_form' ) )
 					}
 				}
 				
-				
-				if($use_wpmail)
+				if( $use_wpmail )
 				{
-					$header .= 'From: '. $from . " <".$from."> \r\n";
-					wp_mail($send_to_mail, $subject, $message, $header);
+					wp_mail( $send_to_mail, $subject, $message, $header );
 				}
 				else
 				{
-					$header .= 'From:'. $from . " \r\n";
-					mail($send_to_mail, $subject, $message, $header);
+					mail( $send_to_mail, $subject, $message, $header );
 				}
 			}
 
@@ -956,33 +1174,49 @@ if( ! class_exists( 'avia_form' ) )
 					$message = apply_filters("avf_form_autorespondermessage", $message);
 				}
 					
-				$from = apply_filters( "avf_form_autoresponder_from", $from, $new_post, $this->form_params );
-
-				$this->form_params['autoresponder_email'] = array_filter( array_map( 'trim', explode( $delimiter, $this->form_params['autoresponder_email'] ) ) );
+				/**
+				 * @since 4.4.2
+				 */
+				$autoresponder_to = $from;
+				$autoresponder_to = apply_filters_deprecated( 'avf_form_autoresponder_from', array( $autoresponder_to, $new_post, $this->form_params ), '4.4.2', 'avf_form_autoresponder_to', __( 'Inconsistent usage of filter name.', 'avia_framework' ) );
+				$autoresponder_to = apply_filters( 'avf_form_autoresponder_to', $autoresponder_to, $new_post, $this->form_params );
 				
-				if( is_array( $this->form_params['autoresponder_email'] ) )
+				$delimiter = ( strpos( $this->form_params['autoresponder_email'], ',' ) === false && strpos( $this->form_params['autoresponder_email'], ' ' ) !== false ) ? ' ' : ',';
+				$autoresponder_email = array_filter( array_map( 'trim', explode( $delimiter, $this->form_params['autoresponder_email'] ) ) );
+				if( is_array( $autoresponder_email ) )
 				{
-					$this->form_params['autoresponder_email'] = $this->form_params['autoresponder_email'][0];
+					$autoresponder_email = $autoresponder_email[0];
 				}
+				
+				/**
+				 * @since 4.4.2
+				 */
+				$autoresponder_email = apply_filters( 'avf_form_autoresponder_email_from', $autoresponder_email, $new_post, $this->form_params );
+				
+				/**
+				 * @since 4.5.7.2
+				 */
+				$from_prefix = get_bloginfo('name');
+				$from_prefix = apply_filters( 'avf_form_autoresponder_email_from_prefix', $from_prefix, $new_post, $this->form_params );
+				$from_prefix = htmlspecialchars_decode( $from_prefix );
 
 				if( $use_wpmail )
 				{
-					$header .= 'From:' . get_bloginfo('name') .' <'. urldecode( $this->form_params['autoresponder_email'] ) . "> \r\n";
-					$result = wp_mail( $from, $this->form_params['autoresponder_subject'], $message, $header );
+					$header .= 'From: ' . $from_prefix .' <'. urldecode( $autoresponder_email ) . "> \r\n";
+					$result = wp_mail( $autoresponder_to, $this->form_params['autoresponder_subject'], $message, $header );
 				}
 				else
 				{
-					$header .= 'From:'. urldecode( $this->form_params['autoresponder_email'] ) . " \r\n";
-					mail( $from, $this->form_params['autoresponder_subject'], $message, $header );
+					$header .= 'From: '. urldecode( $autoresponder_email ) . " \r\n";
+					mail( $autoresponder_to, $this->form_params['autoresponder_subject'], $message, $header );
 				}
 			}
+			
 			unset($_POST);
 			return true;
 			//return wp_mail( $to, $subject, $message , $header);
 
-
 		}
-
 
 		/**
          * Check the value of an element
@@ -1013,6 +1247,13 @@ if( ! class_exists( 'avia_form' ) )
 
 						$this->autoresponder[] = $id;
 						if(preg_match("!^[\w|\.|\-]+@\w[\w|\.|\-]*\.[a-zA-Z]{2,20}$!", urldecode($_POST[$id]))) return "valid";
+
+					break;
+						
+					case 'is_ext_email':
+
+						$this->autoresponder[] = $id;
+						if(preg_match("!^[\w|\.|\-|ÄÖÜäöü]+@\w[\w|\.|\-|ÄÖÜäöü]*\.[a-zA-Z]{2,20}$!", urldecode($_POST[$id]))) return "valid";
 
 					break;
 
@@ -1054,12 +1295,3 @@ if( ! class_exists( 'avia_form' ) )
 		}
 	}
 }
-
-
-
-
-
-
-
-
-

@@ -91,11 +91,68 @@ function duplicate_post_clone_post_link( $link = null, $before = '', $after = ''
  */
 function duplicate_post_get_original($post = null , $output = OBJECT){
 	if ( !$post = get_post( $post ) )
-		return;
+		return null;
 	$original_ID = get_post_meta( $post->ID, '_dp_original');
 	if (empty($original_ID)) return null;
 	$original_post = get_post($original_ID[0],  $output);
 	return $original_post;
+}
+
+function duplicate_post_get_edit_or_view_link( $post ){
+	$post = get_post( $post );
+	if ( ! $post )
+		return null;
+
+	$can_edit_post    = current_user_can( 'edit_post', $post->ID );
+	$title            = _draft_or_post_title( $post );
+	$post_type_object = get_post_type_object( $post->post_type );
+
+	if ( $can_edit_post && 'trash' != $post->post_status ) {
+		return sprintf(
+			'<a href="%s" aria-label="%s">%s</a>',
+			get_edit_post_link( $post->ID ),
+			esc_attr( sprintf( __( 'Edit &#8220;%s&#8221;', 'default' ), $title ) ),
+			$title
+		);
+	} else if ( duplicate_post_is_post_type_viewable( $post_type_object ) ) {
+		if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ) ) ) {
+			if ( $can_edit_post ) {
+				$preview_link    = get_preview_post_link( $post );
+				return sprintf(
+					'<a href="%s" rel="bookmark" aria-label="%s">%s</a>',
+					esc_url( $preview_link ),
+					esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;', 'default' ), $title ) ),
+					$title
+				);
+			}
+		} elseif ( 'trash' != $post->post_status ) {
+			return sprintf(
+				'<a href="%s" rel="bookmark" aria-label="%s">%s</a>',
+				get_permalink( $post->ID ),
+				/* translators: %s: post title */
+				esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'default' ), $title ) ),
+				$title
+			);
+		}
+	}
+	return $title;
+}
+
+/*
+ * Workaround for is_post_type_viewable (introduced in WP 4.4)
+ */
+function duplicate_post_is_post_type_viewable( $post_type ) {
+	if ( function_exists( 'is_post_type_viewable' ) ){
+		return is_post_type_viewable( $post_type );
+	} else {
+		if ( is_scalar( $post_type ) ) {
+			$post_type = get_post_type_object( $post_type );
+			if ( ! $post_type ) {
+				return false;
+			}
+		}
+		return $post_type->publicly_queryable || ( $post_type->_builtin && $post_type->public );
+	}
 }
 
 // Admin bar
@@ -103,34 +160,54 @@ function duplicate_post_admin_bar_render() {
 	if(!is_admin_bar_showing()) return;
 	global $wp_admin_bar;
 	$current_object = get_queried_object();
-	if ( empty($current_object) )
-		return;
-	if ( ! empty( $current_object->post_type )
-		&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
-		&& duplicate_post_is_current_user_allowed_to_copy()
-		&& ( $post_type_object->show_ui || 'attachment' == $current_object->post_type )
-		&& (duplicate_post_is_post_type_enabled($current_object->post_type) ) )
-	{
-		$wp_admin_bar->add_menu( array(
-        'id' => 'new_draft',
-        'title' => esc_attr__("Copy to a new draft", 'duplicate-post'),
-        'href' => duplicate_post_get_clone_post_link( $current_object->ID )
-		) );	
+	if ( !empty($current_object) ){
+		if ( ! empty( $current_object->post_type )
+			&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
+			&& duplicate_post_is_current_user_allowed_to_copy()
+			&& ( $post_type_object->show_ui || 'attachment' == $current_object->post_type )
+			&& (duplicate_post_is_post_type_enabled($current_object->post_type) ) )
+		{
+			$wp_admin_bar->add_menu( array(
+	        	'id' => 'new_draft',
+	        	'title' => esc_attr__("Copy to a new draft", 'duplicate-post'),
+	        	'href' => duplicate_post_get_clone_post_link( $current_object->ID )
+			) );	
+		}
+	} else if ( is_admin() && isset( $_GET['post'] )){
+		$id = $_GET['post'];
+		$post = get_post($id);
+		if( !is_null($post) 
+				&& duplicate_post_is_current_user_allowed_to_copy()
+				&& duplicate_post_is_post_type_enabled($post->post_type)) {
+					$wp_admin_bar->add_menu( array(
+						'id' => 'new_draft',
+						'title' => esc_attr__("Copy to a new draft", 'duplicate-post'),
+						'href' => duplicate_post_get_clone_post_link( $id )
+					) );
+		}
 	}
 }
 
 function duplicate_post_add_css() {
 	if(!is_admin_bar_showing()) return;
 	$current_object = get_queried_object();
-	if ( empty($current_object) )
-		return;
-	if ( ! empty( $current_object->post_type )
-		&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
-		&& duplicate_post_is_current_user_allowed_to_copy()
-		&& ( $post_type_object->show_ui || 'attachment' == $current_object->post_type )
-		&& (duplicate_post_is_post_type_enabled($current_object->post_type) ) )
-	{
-		wp_enqueue_style ( 'duplicate-post', plugins_url('/duplicate-post.css', __FILE__));
+	if ( !empty($current_object) ){
+		if ( ! empty( $current_object->post_type )
+			&& ( $post_type_object = get_post_type_object( $current_object->post_type ) )
+			&& duplicate_post_is_current_user_allowed_to_copy()
+			&& ( $post_type_object->show_ui || 'attachment' == $current_object->post_type )
+			&& (duplicate_post_is_post_type_enabled($current_object->post_type) ) )
+		{
+			wp_enqueue_style ( 'duplicate-post', plugins_url('/duplicate-post.css', __FILE__), array(), DUPLICATE_POST_CURRENT_VERSION );
+		}
+	} else if ( is_admin() && isset( $_GET['post'] )){
+		$id = $_GET['post'];
+		$post = get_post($id);
+		if( !is_null($post)
+				&& duplicate_post_is_current_user_allowed_to_copy()
+				&& duplicate_post_is_post_type_enabled($post->post_type)) {
+					wp_enqueue_style ( 'duplicate-post', plugins_url('/duplicate-post.css', __FILE__), array(), DUPLICATE_POST_CURRENT_VERSION );
+				}
 	}
 }
 
@@ -140,7 +217,8 @@ add_action('init', 'duplicate_post_init');
 function duplicate_post_init(){
 	if (get_option ( 'duplicate_post_show_adminbar' ) == 1) {
 		add_action ( 'wp_before_admin_bar_render', 'duplicate_post_admin_bar_render' );
-		add_action ( 'wp_enqueue_scripts', 'duplicate_post_add_css' );	
+		add_action ( 'wp_enqueue_scripts', 'duplicate_post_add_css' );
+		add_action ( 'admin_enqueue_scripts', 'duplicate_post_add_css' );
 	}
 }
 

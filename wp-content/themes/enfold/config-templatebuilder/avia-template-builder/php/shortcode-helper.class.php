@@ -18,11 +18,22 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
         static $pattern = "";
         static $tree = array();
         static $shortcode_index = 0; //tells us which index the currently rendered shortcode has
+		
+		/**
+		 * Stores the post that had been base for the tree. In loops of posts we have to make sure we have the appropriate tree loaded for the post.
+		 * Otherwise this can result in $meta['index'] undefined
+		 *  
+		 * @since 4.5.5
+		 * @var WP_Post|null
+		 */
+		static public $current_post_in_tree = null;
+
         
-		static $direct_calls = 0;			//	adds direct calls to theme shortcodes (e.g. from codeblocks to update $shortcode_index correctly)
-        static $is_direct_call = false;		//	set to true if shortcodes are eecuted inside elements and removed from final code to execute like in codeblocks (shortcode tree is incorrect in that case) 
+		static public $direct_calls = 0;			//	adds direct calls to theme shortcodes (e.g. from codeblocks to update $shortcode_index correctly)
+        static public $is_direct_call = false;		//	set to true if shortcodes are eecuted inside elements and removed from final code to execute like in codeblocks (shortcode tree is incorrect in that case) 
         
-        /**
+		
+		/**
 		 *Converts a shortcode into an array
 		 **/
         static function shortcode2array($content, $depth = 1000)
@@ -51,7 +62,6 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
         	return $return;
         }
 
-        
         
         /**
 		 *set the allowed shortcodes
@@ -118,9 +128,18 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
 	 	
 	 	
 	 	/**
-		 *create a fake pattern on the fly that makes us able to check a post for shortcodes upfront, just so we know if we need to load any special resources
+		 * Create a fake pattern on the fly that makes us able to check a post for shortcodes upfront, 
+		 * just so we know if we need to load any special resources. Can also returns the complete 
+		 * shortcode tags (open or close, not the content) to check and balance the shortcodes.
+		 * 
+		 * With 4.2.1 this function also returns the escaped shortcodes.
+		 * 
+		 * @param boolean $nested 
+		 * @param array|false $shortcode_tags
+		 * @param string $return					'fake' | 'tags' (added with 4.3) | 'complete'  (added with 4.1.2)
+		 * @return string 
 		 **/
-		static function get_fake_pattern($nested = false, $shortcode_tags = false)
+		static function get_fake_pattern( $nested = false, $shortcode_tags = false, $return = 'fake' )
 	 	{
 	 		if(!is_array($shortcode_tags))
 	 		{
@@ -138,73 +157,188 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
 				}
 			}
 			
-			$pattern = "\[".implode('[\s|\]]|\[', $shortcode_tags)."[\s|\]]|\[\/".implode('\]|\[\/', $shortcode_tags)."\]";
+			if( 'fake' == $return )
+			{
+				//	match all shortcodes and escaped shortcodes start and end tags:  [xxx  [[xxx  [/xxx]  [/xxx]]
+				$pattern = "\[{1,2}" . implode( '[\s|\]]|\[{1,2}', $shortcode_tags ) . "[\s|\]]|\[\/" . implode( '\]{1,2}|\[\/', $shortcode_tags ) . "\]{1,2}";
+			}
+			else
+			{			
+				$arr_patt = array();
+				
+				foreach ($shortcode_tags as $key => $shortcode_tag) 
+				{	
+					/**
+					 *	captures unclosed tags like "[fooo ...  [ " and  [/foo .... [  - must be placed first otherwise will be included in standard match
+					 * 
+					 * (?=\[) includes everything up to next [ (but not including [)
+					 */
+					if( 'complete' == $return )
+					{
+						$arr_patt[] = '\[{1,2}[\/]?' . $shortcode_tag . '[^\]]*?(?=\[)';
+					}
 
+					//	captures complete opening and closing shortcode tags
+					$arr_patt[] = '\[{1,2}[\/]?' . $shortcode_tag . '[^\]]*\]{1,2}';
+					
+				}
+				
+				$pattern = implode( '|', $arr_patt );
+			}
+			
 			return $pattern;
         }
 
-        
-        /**
-		 *build a shortcode tree out of an array that was extracted from the content with get_fake_pattern
-		 **/
-		static function build_shortcode_tree($matches)
+		/**
+		 * Builds a shortcode tree out of an array that was extracted from the content with get_fake_pattern and a call to 
+		 * preg_match_all( ...., PREG_OFFSET_CAPTURE ).
+		 * 
+		 * Also removes shortcodes inside escaped shortcodes and escaped shortcodes as WP ignores these.
+		 * 
+		 * Ensure that the HTML shortcode structure in page content is balanced with all registered shortcodes before calling this function, 
+		 * otherwise this might lead to a broken layout because WP might work with a different shortcode structure
+		 * https://codex.wordpress.org/Shortcode_API#Unclosed_Shortcodes
+		 *   
+		 * ( also see ShortcodeHelper::balance_shortcode() )
+		 * 
+		 * @param string $content	
+		 * @return array
+		 */
+		static public function &build_shortcode_tree( $content )
         { 
-            if( is_array( $matches[0] ) ) 
-			{
-				$matches = $matches[0];
-			}
-            
-            $matches = explode( ',', str_replace( ']', '', implode( ',', $matches ) ) );
-            
-            //	close all elements that are not self closing to generate a valid xml string			
-			$current = 0;
 			
-			while ( $current < count( $matches ) )
+			//	see avia_sc_postcontent (currently experimental only)
+//          if( is_array( $matches[0] ) ) 
+//			{
+//				$matches = $matches[0];
+//			}
+			
+			$tree = array();
+			$wp_result = array();
+			
+			$parser_state = Avia_Builder()->get_posts_shortcode_parser_state();
+			
+			if( in_array( $parser_state, array( 'disabled' ) ) || ! in_array( Avia_Builder()->get_shortcode_parser()->get_shortode_state(), array( 'valid' ) ) )
 			{
-				$match = $matches[ $current ];
+				/**
+				 * This is for a fallback situation when user does not want to or cannot use the autorepair function because it breaks.
+				 * We use the old style from version <= 4.2
+				 * 
+				 * Extract all shortcodes from the post array and store them so we know what we are dealing with when the user opens a page.
+				 * Usesfull for special elements that we might need to render outside of the default loop like fullscreen slideshows
+				 */
 				
-				if( strpos( $match, '/' ) !== false )
+				$matches = array();
+				
+				preg_match_all( "/" . ShortcodeHelper::get_fake_pattern() . "/s", $content, $matches );
+				if( is_array( $matches ) && is_array( $matches[0] ) && ( ! empty( $matches[0] ) ) )
 				{
+					$matches = $matches[0];
+				}
+				else
+				{
+					return $tree;
+				}
+				
+				$matches = explode( ',', str_replace( ']', '', implode( ',', $matches ) ) );
+
+				/**
+				 * Close all elements that are not self closing to generate a valid xml string
+				 */
+				$current = 0;
+
+				while ( $current < count( $matches ) )
+				{
+					$match = trim( $matches[ $current ] );
+
+					if( strpos( $match, '/' ) !== false )
+					{
+						$current ++;
+						continue;
+					}
+
+					$closing = trim(str_replace('[','[/',$match));
+
+					$search = $current + 1;
+					$auto_close = true;
+
+					while ( $search < count( $matches ) )
+					{
+						$comp = trim( $matches[ $search ] );
+						
+						if( $match == $comp )
+						{
+							break;
+						}
+
+						if( $closing == $comp )
+						{
+							$auto_close = false;
+							break;
+						}
+
+						$search ++;
+					}
+
+					if( $auto_close ) //if we got no closing tag add a temp one
+					{
+						array_splice( $matches, $current + 1, 0, array( $closing ) ); 
+					}
+
 					$current ++;
-					continue;
-				}
-				
-				$closing = trim(str_replace('[','[/',$match));
-				
-				$search = $current + 1;
-				$auto_close = true;
-				
-				while ( $search < count( $matches ) )
+				}				
+				/**
+				 * Reset to new style array
+				 */
+				foreach( $matches as $sc ) 
 				{
-					if( strpos( $match, $matches[ $search ] ) !== false )
-					{
-						break;
-					}
-					
-					if( strpos( $closing, $matches[ $search ] ) !== false )
-					{
-						$auto_close = false;
-						break;
-					}
-					
-					$search ++;
+					$wp_result[] = array( $sc );
 				}
-				
-				if( $auto_close ) //if we got no closing tag add a temp one
-				{
-					array_splice( $matches, $current + 1, 0, array( $closing ) ); 
-				}
-				
-				$current ++;
 			}
+			else
+			{
+				$parser = Avia_Builder()->get_shortcode_parser();
+				
+				/**
+				 * This is the preferred way since 4.2.1
+				 * 
+				 * To be on the safe side we use pure WP regex to extract the shortcodes.
+				 * As content should have been balanced before calling this function we can rely on a
+				 * valid shortcode structure 
+				 */
+				$wp_result = $parser->get_wp_result( $content );
 
-            $matches = explode( ',', str_replace( '[', '', implode( ',', $matches ) ) );
 
+				/**
+				 * Ensure we have a valid shortcode structure before calling this function !!!
+				 * Now we scan for escaped shortcodes and add missing closing tags to self closing tags so we have a valid XML structure
+				 * for easier building of the tree.
+				 */
+				$wp_result = $parser->balance_shortcode_array( $wp_result, 'forced' );
+
+				/**
+				 * Remove escaped shortcodes and extract only ALB shortcodes that have a valid callback 
+				 */
+				$parser->remove_escape_shortcodes_in_array( $wp_result );
+				$parser->filter_shortcodes_in_array( $wp_result, ShortcodeHelper::$allowed_shortcodes );
+			}
+		
+			/*
+			 * As we can rely on valid shortcode structure now we can safely use the truncated shortcode without attributes
+			 */
+			$sc = array();
+			foreach ( $wp_result as $code ) 
+			{
+				$sc[] = $code[0];
+			}
+			
+            $shortcodes = explode( ',', str_replace( array( ']', '[' ), '', implode( ',', $sc ) ) );
+ 
             $temp_index = 0;
             $tree       = array('content' => array());
             $pointers   = array(&$tree);
             
-            foreach ($matches as $index => $line) 
+            foreach( $shortcodes as $index => $line ) 
             {
             	if(!empty($line[0]))
             	{
@@ -267,17 +401,21 @@ if ( !class_exists( 'ShortcodeHelper' ) ) {
             return $return;
         }
         
-        
-        
-
-        
-        /**
-		 *remove all unnecessary tags around shortcodes that are added by the editor
-		 **/
-		static function clean_up_shortcode($text)
+		/**
+		 * Clean up the rendered text and ensure balanced shortcode tags (depending on shortcode parser setting). 
+		 * $text can be content of an ALB paga, a non ALB page, _aviaLayoutBuilderCleanData or ALB template
+		 * 
+		 *		- Checks, that existing closing shortcode tags are applied to all opening shortcode tags ( nesting of same name shortcode is not supported )
+		 *		- Removes all unnecessary html tags around shortcodes that are added by the editor
+		 * 
+		 * @param string $text
+		 * @param string $action			'content' | 'balance_only'
+		 * @return string
+		 */
+		static public function clean_up_shortcode( $text, $action = 'balance_only' )
 	 	{
-            /*
-self::build_pattern();
+/*
+			self::build_pattern();
             $text_nodes = preg_split("/".self::$pattern."/s", $text);
             
             //usually removes all <p> tags that are not needed before shorttcode and in between them like </p><p>
@@ -290,27 +428,44 @@ self::build_pattern();
 	        }
 	        
 */
-	        
-	        //remove all <br/> tags that are not needed. those that follow immediatly after a shortode or are located just before one
-	        $shortcode_tags = array_merge(ShortcodeHelper::$allowed_shortcodes, ShortcodeHelper::$nested_shortcodes);
+			
+			/**
+			 * Activates the shortcode parser depending on shortcode parser flag setting and generates the error output to DB
+			 */
+			$text = Avia_Builder()->get_shortcode_parser()->parse_shortcode( $text );
+			
+			
+			/**
+			 * On a non ALB page, _aviaLayoutBuilderCleanData and template we only need to add the missing shortcode tags and do not
+			 * touch the structure of the page
+			 */
+			if( 'balance_only' == $action )
+			{
+				return $text;
+			}
+			
+			/**
+			 * On ALB page content:
+			 * 
+			 * remove all <br/> tags that are not needed. those that follow immediately after a shortode or are located just before one
+			 */
+			$shortcode_tags = array_merge( ShortcodeHelper::$allowed_shortcodes, ShortcodeHelper::$nested_shortcodes );
 	    
-	     
-	        $tagregexp = join( '|', array_map('preg_quote', $shortcode_tags) );
+			$tagregexp = join( '|', array_map( 'preg_quote', $shortcode_tags ) );
 	        
-            $regex = "!(\s*?\<br.?/?>.?)*?(\[\/?($tagregexp).*?\])(\s*?\<br.?/?>.?)*!s";
-            $text = preg_replace($regex, '${2}', $text);
+			$regex = "!(\s*?\<br.?/?>.?)*?(\[\/?($tagregexp).*?\])(\s*?\<br.?/?>.?)*!s";
+			$text = preg_replace( $regex, '${2}', $text );
             
-            return $text;
-        }
-
-
-        /**
+			return $text;
+		}
+			
+		
+		/**
          * Removes wordpress autop and invalid nesting of p tags, as well as br tags
          *
          * @param string $content html content by the wordpress editor
          * @return string $content
          */
-
         static function avia_remove_autop($content,$do_shortcode = false)
         {
             $shortcode_tags = array_merge(ShortcodeHelper::$allowed_shortcodes, ShortcodeHelper::$nested_shortcodes);
@@ -350,7 +505,7 @@ self::build_pattern();
 		/** 
 		* holds the function that creates the shortcode based on variables that are passed
 		*/
-		static function create_shortcode_by_array($name, $content = NULL, $args = array())
+		static function create_shortcode_by_array($name, $content = null, $args = array())
 		{
 			$sc = "[".$name;
 		
@@ -396,8 +551,6 @@ self::build_pattern();
             //$sc = str_replace("\n",'',$sc);
 			return $sc;
 		}
-	
 	}
-	
 	
 }

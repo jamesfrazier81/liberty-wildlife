@@ -13,6 +13,10 @@
 (function($)
 {
 	"use strict";
+	
+	var avia_ajax_add_error = 'Couldn\'t add the font because the server didn’t respond.<br/>Please reload the page, then try again';
+	var avia_ajax_remove_error = 'Couldn\'t remove the font because the server didn’t respond.<br/>Please reload the page, then try again';
+	
 	$.AviaElementBehavior = $.AviaElementBehavior || {};
 	$.AviaElementBehavior.wp_media = $.AviaElementBehavior.wp_media || [];
 	
@@ -63,7 +67,7 @@
 						displaySettings: true,
 						allowLocalEdits: true
 						// AttachmentView: media.view.Attachment.Library
-					}),
+					})
 				]);
 		
 		
@@ -80,7 +84,7 @@
 		var state		= file_frame.state(), 
 			selection	= state.get('selection').first().toJSON(),
 			value		= selection.id,
-			fetch_val   = typeof options.fetch != 'undefined' ? fetch_val = options.fetch : false
+			fetch_val   = typeof options.fetch != 'undefined' ? fetch_val = options.fetch : false;
 		
 		/*fetch custom val like url*/
 		if(fetch_val)
@@ -106,25 +110,29 @@
 		}	
 		
 		//change the target input value
-		options.input_target.val(value).trigger('change')
+		options.input_target.val(value).trigger('change');
 		
 		//trigger event in case it is necessary (eg: uplaods)
 		if(typeof options.trigger != "undefined")
 		{
 			$("body").trigger(options.trigger, [selection, options]);
 		}
-	}
+	};
 
 	
 	$(document).ready(function () 
 	{
 		$.AviaElementBehavior.wp_media_35();
 		
-		//fontello Zip file upload
+		//fontello iconfont manager
 		$("body").on('av_fontello_zip_insert', $.AviaElementBehavior.fontello_insert);
-		
-		//fontello font manager
 		$("body").on('click', '.avia_iconfont_manager .avia-del-font', $.AviaElementBehavior.fontello_remove);
+		
+		//Typefont manager
+		$("body").on('av_typefont_zip_insert', $.AviaElementBehavior.typefont_insert);
+		$("body").on('click', '.avia_typefont_manager .avia-del-font', $.AviaElementBehavior.typefont_remove);
+		$('body').on( 'avia_options_data_saved', $.AviaElementBehavior.typefont_changed );
+		
 
         //config file upload
         $("body").on('av_config_file_insert', $.AviaElementBehavior.config_file_insert);
@@ -135,6 +143,172 @@
 /************************************************************************
 EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 *************************************************************************/
+	
+	$.AviaElementBehavior.typefont_action = null;
+	
+	$.AviaElementBehavior.typefont_insert = function(event, selection, options)
+	{
+		// clean the options field, we dont need to save a value
+		options.input_target.val("");
+		
+		if(selection.subtype !== 'zip')
+		{
+			$('body').avia_alert({the_class:'error', text:'Please upload a valid ZIP file.<br/>You can create the file on Fontello.com'});
+			return;
+		}
+		
+		var manager = $('.avia_typefont_manager');
+		var loader = options.input_target.parents('.avia_control').eq(0).find('.avia_upload_loading');
+		
+		
+		// send request to server to extract the zip file, re arrange the content and save a config file
+		$.ajax({
+			type: "POST",
+			url: ajaxurl,
+			dataType: 'json',
+			cache: false,
+			data: 
+			{
+				action: 'avia_ajax_add_zipped_type_font',
+				values: selection,
+				avia_request: true,
+				_wpnonce: $('input[name=avia-nonce]').val()
+			},
+			beforeSend: function()
+			{
+				loader.css({opacity:0, display:"block", visibility:'visible'}).animate({opacity:1});
+			},
+			error: function()
+			{
+				$('body').avia_alert({the_class:'error', text:avia_ajax_add_error });
+			},
+			success: function(response)
+			{
+				if( ( 'undefined' == typeof response ) || ( 'undefined' == typeof response.success ) )
+				{
+					$('body').avia_alert({the_class:'error', text:avia_ajax_add_error });
+				}
+				else if( response.success )
+				{
+					var ids = response.id.split(',');
+					$.each(ids, function( index, value ) {
+								var existing = manager.find('[data-font="'+value+'"]');
+								if(existing.length)
+								{
+									existing.slideUp( 200,function(){
+												existing.remove();
+											});
+								}
+						});
+					
+					var result = $(response.result);
+					result.css({display:'none'}).appendTo(manager).slideDown(200);
+					
+					if( '' != typeof response.redirect )
+					{
+						$('body').avia_alert({show:10000 , text:response.redirect});
+						$.AviaElementBehavior.typefont_action = 'typefont_insert';
+					}
+					
+					$('.avia_button.avia_submit').removeClass('avia_button_inactive').trigger('click');
+				}
+				else
+				{
+					$('body').avia_alert({the_class:'error', show:10000 , text:response.error});
+				}
+				
+				if(typeof console != 'undefined') console.log(response);
+				
+			},
+			complete: function(response)
+			{	
+				loader.fadeOut();
+			}
+		});		
+	};
+	
+	$.AviaElementBehavior.typefont_changed = function( event, param )
+	{
+		if( null === $.AviaElementBehavior.typefont_action )
+		{
+			return;
+		}
+		
+		$.AviaElementBehavior.typefont_action = null;
+		
+		if( ( 'undefined' !== typeof param ) && ( 'undefined' !== typeof param.success ) && ( true === param.success ) )
+		{
+			window.location.hash = '#goto_upload';
+			window.location.reload(true);	//	we need to force reloading
+			return;
+		}
+		
+		$('body').avia_alert({the_class:'error', show:6500 , text:'An error occured saving the options. Please reload the page, check them and try again.'});
+		
+		return;
+	}
+	
+	$.AviaElementBehavior.typefont_remove = function(event)
+	{
+		event.preventDefault();
+		
+		var button 		= $(this),
+			parent		= button.parents('.avia-available-font:eq(0)'),
+			manager		= button.parents('.avia_typefont_manager:eq(0)'),
+			all_fonts	= manager.find('.avia-available-font'),
+			del_font	= button.data('delete');
+		
+		var loader = button.parents('.avia_control').eq(0).find('.avia_upload_loading');
+		
+		// send request to server to remove the folder and the database entry
+		$.ajax({
+			type: "POST",
+			url: ajaxurl,
+			dataType: 'json',
+			cache: false,
+			data: 
+			{
+				action: 'avia_ajax_remove_zipped_type_font',
+				del_font: del_font,
+				avia_request: true,
+				_wpnonce: $('input[name=avia-nonce]').val()
+			},
+			beforeSend: function()
+			{
+				loader.css({opacity:0, display:"block", visibility:'visible'}).animate({opacity:1});
+			},
+			error: function()
+			{
+				$('body').avia_alert({the_class:'error', text:avia_ajax_remove_error });
+			},
+			success: function(response)
+			{
+				if( ( 'undefined' == typeof response ) || ( 'undefined' == typeof response.success ) )
+				{
+					$('body').avia_alert({the_class:'error', text:avia_ajax_add_error });
+				}
+				else if(response.success)
+				{			
+					parent.slideUp(200,function()
+					{
+						parent.remove();
+					});
+				}
+				else
+				{
+					$('body').avia_alert({the_class:'error', text:response.error});
+				}
+				
+				if(typeof console != 'undefined') console.log(response);
+				
+			},
+			complete: function(response)
+			{	
+				loader.fadeOut();
+			}
+		});		
+	};
+	
 	
 	$.AviaElementBehavior.fontello_insert = function(event, selection, options)
 	{
@@ -167,7 +341,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 			},
 			error: function()
 			{
-				$('body').avia_alert({the_class:'error', text:'Couldn\'t add the font because the server didn’t respond.<br/>Please reload the page, then try again'});
+				$('body').avia_alert({the_class:'error', text:avia_ajax_add_error });
 			},
 			success: function(response)
 			{
@@ -185,7 +359,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 							
 							if(all_fonts.index(existing) === 1)
 							{
-								var del = existing.find('.avia-def-font').removeClass('avia-def-font').addClass('avia-del-font').text('Delete')
+								var del = existing.find('.avia-def-font').removeClass('avia-def-font').addClass('avia-del-font').text('Delete');
 							}
 						}
 						else
@@ -206,7 +380,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 				loader.fadeOut();
 			}
 		});
-	}
+	};
 
 	$.AviaElementBehavior.fontello_remove = function(event)
 	{
@@ -236,7 +410,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 			},
 			error: function()
 			{
-				$('body').avia_alert({the_class:'error', text:'Couldn\'t remove the font because the server didn’t respond.<br/>Please reload the page, then try again'});
+				$('body').avia_alert({the_class:'error', text:avia_ajax_remove_error });
 			},
 			success: function(response)
 			{
@@ -244,7 +418,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 				{
 					if(all_fonts.index(parent) === 1)
 					{
-						var del = parent.find('.avia-del-font').removeClass('avia-del-font').addClass('avia-def-font').text('(Default Font)')
+						var del = parent.find('.avia-del-font').removeClass('avia-del-font').addClass('avia-def-font').text('(Default Font)');
 					}
 					else
 					{					
@@ -267,7 +441,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
 				loader.fadeOut();
 			}
 		});
-	}
+	};
 
 
 
@@ -309,7 +483,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
             {
                 if(response.match(/avia_config_file_imported/))
                 {
-					$('body').avia_alert({text: 'Alright sparky!<br/>Import worked out, no problems whatsoever. <br/>The page will now be reloaded to reflect the changes'}, function()
+					$('body').avia_alert({text: 'Alright!<br/>Import worked out, no problems whatsoever. <br/>The page will now be reloaded to reflect the changes'}, function()
 								{
 									// window.location.hash = "#goto_importexport";
 									window.location.hash = "";
@@ -329,16 +503,7 @@ EXTRA FUNCTIONS, NOT NECESSARY FOR THE DEFAULT UPLOAD
                 loader.fadeOut();
             }
         });
-    }
-
-
-
-
-
-
-
-
-
+    };
 
 
 })(jQuery);	 

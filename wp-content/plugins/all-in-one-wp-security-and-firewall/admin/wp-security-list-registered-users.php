@@ -1,4 +1,7 @@
 <?php
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
 
 class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
 
@@ -63,12 +66,12 @@ class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
     function get_columns(){
         $columns = array(
             'cb' => '<input type="checkbox" />', //Render a checkbox
-            'ID' => 'User ID',
-            'user_login' => 'Login Name',
-            'user_email' => 'Email',
-            'user_registered' => 'Register Date',
-            'account_status' => 'Account Status',
-            'ip_address' => 'IP Address'
+            'ID' => __('User ID', 'all-in-one-wp-security-and-firewall'),
+            'user_login' => __('Login Name', 'all-in-one-wp-security-and-firewall'),
+            'user_email' => __('Email', 'all-in-one-wp-security-and-firewall'),
+            'user_registered' => __('Register Date', 'all-in-one-wp-security-and-firewall'),
+            'account_status' => __('Account Status', 'all-in-one-wp-security-and-firewall'),
+            'ip_address' => __('IP Address', 'all-in-one-wp-security-and-firewall')
         );
         return $columns;
     }
@@ -158,6 +161,10 @@ class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
                         $email_msg .= __('Your account with user ID:','all-in-one-wp-security-and-firewall').$user->ID.__(' is now active','all-in-one-wp-security-and-firewall')."\n";
                         $site_title = get_bloginfo( 'name' );
                         $from_name = empty($site_title)?'WordPress':$site_title;
+                        $subject = apply_filters( 'aiowps_register_approval_email_subject', $subject );
+                        $email_msg = apply_filters( 'aiowps_register_approval_email_msg', $email_msg, $user ); //also pass the WP_User object
+                        $from_name = apply_filters( 'aiowps_register_approval_email_from_name', $from_name );
+
                         $email_header = 'From: '.$from_name.' <'.get_bloginfo('admin_email').'>' . "\r\n\\";
                         $sendMail = wp_mail($to_email_address, $subject, $email_msg, $email_header);
                         if(FALSE === $sendMail){
@@ -188,6 +195,10 @@ class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
                 $email_msg .= __('Your account with username: ','all-in-one-wp-security-and-firewall').$user->user_login.__(' is now active','all-in-one-wp-security-and-firewall')."\n";
                 $site_title = get_bloginfo( 'name' );
                 $from_name = empty($site_title)?'WordPress':$site_title;
+                $subject = apply_filters( 'aiowps_register_approval_email_subject', $subject );
+                $email_msg = apply_filters( 'aiowps_register_approval_email_msg', $email_msg, $user ); //also pass the WP_User object
+                $from_name = apply_filters( 'aiowps_register_approval_email_from_name', $from_name );
+                
                 $email_header = 'From: '.$from_name.' <'.get_bloginfo('admin_email').'>' . "\r\n\\";
                 $sendMail = wp_mail($to_email_address, $subject, $email_msg, $email_header);
                 if(FALSE === $sendMail){
@@ -293,13 +304,14 @@ class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
         $columns = $this->get_columns();
         $hidden = array();
         $sortable = $this->get_sortable_columns();
+        $search = isset( $_REQUEST['s'] ) ? sanitize_text_field( $_REQUEST['s'] ) : '';
 
         $this->_column_headers = array($columns, $hidden, $sortable);
         
         $this->process_bulk_action();
     	
         //Get registered users which have the special 'aiowps_account_status' meta key set to 'pending'
-        $data = $this->get_registered_user_data('pending');
+        $data = $this->get_registered_user_data('pending', $search);
         
         $current_page = $this->get_pagenum();
         $total_items = count($data);
@@ -313,7 +325,7 @@ class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
     }
     
     //Returns all users who have the special 'aiowps_account_status' meta key
-    function get_registered_user_data($status='')
+    function get_registered_user_data($status='', $search='')
     {
         $user_fields = array( 'ID', 'user_login', 'user_email', 'user_registered');
         $user_query = new WP_User_Query(array('meta_key' => 'aiowps_account_status', 'meta_value' => $status, 'fields' => $user_fields));
@@ -326,7 +338,14 @@ class AIOWPSecurity_List_Registered_Users extends AIOWPSecurity_List_Table {
             $temp_array['account_status'] = get_user_meta($temp_array['ID'], 'aiowps_account_status', true);
             $ip = get_user_meta($temp_array['ID'], 'aiowps_registrant_ip', true);
             $temp_array['ip_address'] = empty($ip)?'':$ip;
-            $final_data[] = $temp_array;
+            if(empty($search)) {
+                $final_data[] = $temp_array;
+            } else {
+                $input = preg_quote($search, '~'); // don't forget to quote input string!
+
+                $result = preg_grep('~' . $input . '~', $temp_array);
+                if(!empty($result)) $final_data[] = $temp_array;
+            }
         }
         return $final_data;
     }

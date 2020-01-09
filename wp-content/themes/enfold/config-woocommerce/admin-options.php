@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 ######################################################################
 # remove backend options by removing them from the config array
 ######################################################################
@@ -158,13 +161,13 @@ function avia_woocommerce_product_options($boxes)
 	return $boxes;
 }
 
-add_filter('avf_builder_elements','avia_woocommerce_product_elements');
+add_filter( 'avf_builder_elements', 'avia_woocommerce_product_elements', 500, 1 );
 
-function avia_woocommerce_product_elements($elements)
+function avia_woocommerce_product_elements( $elements )
 {
 	$posttype = avia_backend_get_post_type();
 
-    if(!empty($posttype) && $posttype == 'product')
+    if( ! empty( $posttype ) && $posttype == 'product' )
     {
         $elements[] = array("slug"	=> "avia_product_hover",
             "name" 	=> "Hover effect on <strong>Overview Pages</strong>",
@@ -176,12 +179,15 @@ function avia_woocommerce_product_elements($elements)
             "subtype" => array("Yes - show first gallery image on hover" => 'hover_active', "No hover effect" => ''));
             
         $counter = 0;
-        foreach($elements as $element)
+        foreach( $elements as $element )
         {
-            if($element['id'] == 'sidebar') $elements[$counter]['required'] = '';
-            if($element['id'] == 'layout') 
+            if( $element['id'] == 'sidebar' ) 
+			{
+				$elements[ $counter ]['required'] = '';
+			}
+            else if( $element['id'] == 'layout' ) 
             {
-	            $elements[$counter]['builder_active'] = true;
+	            $elements[ $counter ]['builder_active'] = true;
 	           // unset($elements[$counter]);
             }
             $counter++;
@@ -236,7 +242,7 @@ function av_woo_enqueue_color_picker( $hook_suffix ) {
 
 function avia_woo_styling_select($term)
 {
-	$styling = is_object($term) ? get_woocommerce_term_meta( $term->term_id, 'av_cat_styling', true ) : "";
+	$styling = is_object($term) ? avia_get_woocommerce_term_meta( $term->term_id, 'av_cat_styling', true ) : "";
 	
 	
 	
@@ -274,9 +280,9 @@ function avia_woo_styling_select($term)
 
 function avia_woo_banner_options($term)
 {
-	$font 		= is_object($term) ? get_woocommerce_term_meta( $term->term_id, 'av-banner-font', true ) : "";
-	$overlay 	= is_object($term) ? get_woocommerce_term_meta( $term->term_id, 'av-banner-overlay', true ) : "";
-	$opacity 	= is_object($term) ? get_woocommerce_term_meta( $term->term_id, 'av-banner-overlay-opacity', true ) : "";
+	$font 		= is_object($term) ? avia_get_woocommerce_term_meta( $term->term_id, 'av-banner-font', true ) : "";
+	$overlay 	= is_object($term) ? avia_get_woocommerce_term_meta( $term->term_id, 'av-banner-overlay', true ) : "";
+	$opacity 	= is_object($term) ? avia_get_woocommerce_term_meta( $term->term_id, 'av-banner-overlay-opacity', true ) : "";
 	
 	if(empty($opacity)) $opacity = "0.5";
 	?>
@@ -331,7 +337,7 @@ function avia_woo_add_category_fields($term)
 
 function avia_woo_edit_category_fields($term)
 {		
-			$styling = is_object($term) ? get_woocommerce_term_meta( $term->term_id, 'av_cat_styling', true ) : "";
+			$styling = is_object($term) ? avia_get_woocommerce_term_meta( $term->term_id, 'av_cat_styling', true ) : "";
 			$hidden  = empty($styling) ?  "dependant_on_av_cat_styling hidden" : "dependant_on_av_cat_styling";
 ?>
 		<tr class="form-field">
@@ -348,11 +354,6 @@ function avia_woo_edit_category_fields($term)
 			</td>
 		</tr>
 		 
-		
-		
-		<?php
+<?php
 }
-
-
-
 

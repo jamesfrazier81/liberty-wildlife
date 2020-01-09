@@ -1,7 +1,11 @@
 <?php
 
-//activate the update script
-add_action('admin_init', array(new avia_update_helper(), 'update_version'));
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+//update_option( "Enfold_version", "4.5.7" ); // for testing
+
+//activate the update script. temp: let it always run, also in frontend. change hook to admin_init after a few versions 
+add_action( 'wp_loaded', array( new avia_update_helper(), 'update_version' ) );
 
 /*all the functions that keep compatibility between theme versions: */
 
@@ -294,6 +298,7 @@ function avia_update_layerslider_data_structure($prev_version, $new_version)
 	//if the previous theme version is equal or bigger to 3.0 we don't need to update
 	if(version_compare($prev_version, 4.0, ">=")) return; 
 	
+	
 	// Get WPDB Object
     global $wpdb;
  
@@ -412,7 +417,7 @@ function avia_update_layerslider_data_structure($prev_version, $new_version)
 							{
 								$full_url 	= "http://www.kriesi.at/themes/wp-content/uploads/avia-sample-layerslides/" . $image_name;
 								
-								$new_url = media_sideload_image( $full_url , false, NULL, 'src');
+								$new_url = media_sideload_image( $full_url , false, null, 'src');
 								
 								if(!is_object($new_url) && !empty($new_url))
 								{
@@ -448,7 +453,7 @@ function avia_update_layerslider_data_structure($prev_version, $new_version)
 						else
 						{
 							$full_url 	= "http://www.kriesi.at/themes/wp-content/uploads/avia-sample-layerslides/" . $image_name;
-							$new_url = media_sideload_image( $full_url , false, NULL, 'src');
+							$new_url = media_sideload_image( $full_url , false, null, 'src');
 							
 							if(!is_object($new_url) && !empty($new_url))
 							{
@@ -544,10 +549,167 @@ function avia_update_menu_icon_advanced($prev_version, $new_version)
 	
 }
 
+ /*
+ *
+ * update for version 4.3: set caching and file merging to be deactivated for installations that get updated. new installations will have it enabled by default
+ * will reduce errors with legacy installs
+ */
  
+add_action('ava_trigger_updates', 'avia_update_performance',16,2);
+
+function avia_update_performance($prev_version, $new_version)
+{	
+	//if the previous theme version is equal or bigger to 4.3 we don't need to update
+	if(version_compare($prev_version, '4.3', ">=")) return; 
+	
+	//set global options
+	global $avia;
+	$theme_options = $avia->options['avia'];
+
+	if(!empty($theme_options))
+	{
+		if(!isset($theme_options['merge_css'])) $theme_options['merge_css'] = "none";
+		if(!isset($theme_options['merge_js']))  $theme_options['merge_js'] = "none";
+		if(!isset($theme_options['disable_alb_elements']))  $theme_options['disable_alb_elements'] = "load_all";
+		
+		//replace existing options with the new options
+		$avia->options['avia'] = $theme_options;
+		update_option($avia->option_prefix, $avia->options);
+		
+		//set admin notice
+		update_option('avia_admin_notice', 'performance_update');
+	}
+	
+	Avia_Builder()->element_manager()->handler_after_import_demo();
+}
+
+
+ /*
+ *
+ * update for version 4.4: we change the cookie consent buttons to a group element and users can add unlimited buttons. need to port data structure of old buttons
+ */
  
+add_action('ava_trigger_updates', 'avia_update_cookie_consent_data_structure',17,2);
+
+function avia_update_cookie_consent_data_structure($prev_version, $new_version)
+{	
+	//if the previous theme version is equal or bigger to 4.4 we don't need to update
+	if(version_compare($prev_version, '4.4', ">=")) return; 
+	
+	//set global options
+	global $avia;
+	$theme_options = $avia->options['avia'];
+
+	if(!empty($theme_options))
+	{
+		$theme_options['msg_bar_buttons'] = array();
+		
+		//cookie linktext		
+		if( isset($theme_options['cookie_infolink']) && $theme_options['cookie_infolink'] == 'cookie_infolink')
+		{
+			$theme_options['msg_bar_buttons'][] = array(
+			'msg_bar_button_label' => $theme_options['cookie_linktext'], 'msg_bar_button_action' => 'link', 'msg_bar_button_link' => $theme_options['cookie_linksource']
+			);
+		}
+		
+		if(isset($theme_options['cookie_buttontext']))
+		{
+		//dismiss button 
+		$theme_options['msg_bar_buttons'][] = array(
+			'msg_bar_button_label' => $theme_options['cookie_buttontext'], 'msg_bar_button_action' => '', 'msg_bar_button_link' => ''
+		);
+		}
+		
+		//replace existing options with the new options
+		$avia->options['avia'] = $theme_options;
+		update_option($avia->option_prefix, $avia->options);
+		
+		
+		//check if we can set an admin notice. version 4.3 is more important so only set if its empty ;)
+		//set admin notice
+		if(!get_option('avia_admin_notice'))
+		{
+			update_option('avia_admin_notice', 'gdpr_update');
+		}
+	}
+}
  
+ /*
+ *
+ * update for version 4.4.1: remove the mirzepapa username and api key that somehot ended up in a demo import file from all installations
+ */
  
- 
- 
+add_action('ava_trigger_updates', 'avia_remove_wrong_update_credentials',18,2);
+
+function avia_remove_wrong_update_credentials($prev_version, $new_version)
+{	
+	//if the previous theme version is equal or bigger to 4.4.1 we don't need to update
+	if(version_compare($prev_version, '4.4.1', ">=")) return; 
+	
+	if(avia_get_option('updates_username') == "mirzepapa")
+	{
+		avia_delete_option('updates_api_key');
+		avia_delete_option('updates_username');
+	}
+}
+
+
+add_action( 'ava_trigger_updates', 'avia_remove_google_plus', 19, 2 );
+
+function avia_remove_google_plus( $prev_version, $new_version )
+{	
+	//if the previous theme version is equal or bigger to 4.5.7.2 we don't need to update
+	if( version_compare( $prev_version, '4.5.7.2', ">=") ) 
+	{
+		return; 
+	}
+	
+	//set global options
+	global $avia;
+	$theme_options = $avia->options['avia'];
+	
+	$social_icons = isset( $theme_options['social_icons'] ) ? $theme_options['social_icons'] : array();
+	$new_icons = array();
+	
+	foreach( $social_icons as $key => $icon ) 
+	{
+		if( isset( $icon['social_icon'] ) && ( 'gplus' == $icon['social_icon'] ) )
+		{
+			continue;
+		}
+		
+		$new_icons[] = $icon;
+	}
+	
+	$theme_options['social_icons'] = $new_icons;
+	
+	if( '' == $theme_options['developer_options'] )
+	{
+		$theme_options['developer_options'] = 'hide';
+	}
+	
+	//replace existing options with the new options
+	$avia->options['avia'] = $theme_options;
+	update_option( $avia->option_prefix, $avia->options );
+	
+}
+
+add_action( 'ava_trigger_updates', 'avia_add_gdpr2_notice', 20, 2 );
+
+function avia_add_gdpr2_notice( $prev_version, $new_version )
+{	
+	//if the previous theme version is equal or bigger to 4.6.2 we don't need to update
+	if( version_compare( $prev_version, '4.6.2', ">=") ) 
+	{
+		return; 
+	}
+	
+	update_option( 'avia_admin_notice', 'gdpr_update_2' );
+}
+
+
+
+
+
+
 

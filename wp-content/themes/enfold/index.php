@@ -41,8 +41,20 @@
                     $avia_config['blog_style'] = apply_filters('avf_blog_style', avia_get_option('blog_style','multi-big'), 'blog');
                     if($avia_config['blog_style'] == 'blog-grid')
                     {
-                        $atts 	= array('type' => 'grid', 'items' => get_option('posts_per_page'), 'columns'=> 3, 'class'=>'avia-builder-el-no-sibling', 'paginate'=>'yes');
-                        $blog = new avia_post_slider($atts);
+                        $atts = array(
+									'type'		=> 'grid',
+									'items'		=> get_option('posts_per_page'),
+									'columns'	=> 3,
+									'class'		=> 'avia-builder-el-no-sibling',
+									'paginate'	=> 'yes');
+                        
+						/**
+						 * @since 4.5.5
+						 * @return array
+						 */
+						$atts = apply_filters( 'avf_post_slider_args', $atts, 'index' );
+						
+						$blog = new avia_post_slider( $atts );
                         $blog->query_entries();
                         echo "<div class='entry-content-wrapper'>".$blog->html()."</div>";
                     }
@@ -77,4 +89,5 @@
 
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();

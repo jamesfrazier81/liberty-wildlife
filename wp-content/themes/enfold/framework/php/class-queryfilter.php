@@ -15,19 +15,28 @@
  */
 
 
-if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfilter'))
+if( ! class_exists( 'avia_queryfilter' ) && current_theme_supports( 'avia_queryfilter' ) )
 {
 
 	class avia_queryfilter
 	{
-		function __construct()
+		
+		public function __construct()
 		{
-			if(!is_admin()) add_filter( 'posts_results', array(&$this, 'filter_entries') );
+			if( ! is_admin() ) 
+			{
+				add_filter( 'posts_results', array( $this, 'filter_entries' ), 10, 1 );
+			}
 		}
 		
-		function filter_entries( $entries )
+		/**
+		 * 
+		 * @param array $entries
+		 * @return array
+		 */
+		public function filter_entries( $entries )
 		{
-			foreach($entries as &$entry)
+			foreach( $entries as &$entry )
 			{
 				//make sure that we never process the same entry twice
 				if(!isset($entry->av_filter) && isset($entry->post_type))
@@ -46,8 +55,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 		}
 		
 		
-		
-		function modify_post($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function modify_post( $entry )
 		{
 			$format = get_post_format($entry->ID);
 			if(empty($format)) $format = "standard";
@@ -64,20 +76,42 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 			}
 		}
 		
-		function modify_page($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function modify_page($entry)
 		{
 			
 			
 		}
 		
-		
-		function filter_title($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_title( $entry )
 		{
-			$heading = is_singular() ? "h1" : "h2";
+			$default_heading = is_singular() ? 'h1' : 'h2';
+			$args = array(
+						'heading'		=> $default_heading,
+						'extra_class'	=> ''
+					);
+			
+			/**
+			 * @since 4.5.5
+			 * @return array
+			 */
+			$args = apply_filters( 'avf_customize_heading_settings', $args, 'avia_queryfilter::filter_title', array( $entry ) );
+			
+			$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+			$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+			
+			
 			$title_attr = the_title_attribute(array('before' =>__('Link to:','avia_framework')." ",'after' => '','echo' => false ,'post' => $entry->ID));
 			
 			$output  = "";
-			$output .= "<{$heading} class='post-title entry-title' ".avia_markup_helper(array('context' => 'entry_title','echo'=>false)).">";
+			$output .= "<{$heading} class='post-title entry-title {$css}' ".avia_markup_helper(array('context' => 'entry_title','echo'=>false)).">";
 			$output .= "<a href='".get_permalink($entry->ID)."' rel='bookmark' title='{$title_attr}'>";
 			$output .= get_the_title($entry->ID);
 			$output .= "<span class='post-format-icon minor-meta'></span>";
@@ -88,8 +122,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 			
 		}
 		
-		
-		function filter_gallery($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_gallery( $entry )
 		{
 			//search for the first av gallery or gallery shortcode
 			preg_match("!\[(?:av_)?gallery.+?\]!", $entry->post_content, $match_gallery);
@@ -106,7 +143,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 			}
 		}
 		
-		function filter_video($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_video( $entry )
 		{
 			//replace empty url strings with an embed code
 		 	$content = preg_replace( '|^\s*(https?://[^\s"]+)\s*$|im', "[embed]$1[/embed]", $entry->post_content );
@@ -123,7 +164,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 			}
 		}
 		
-		function filter_image($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_image( $entry )
 		{
 			$prepend_image = get_the_post_thumbnail(get_the_ID(), 'large');
 			$image = "";
@@ -161,7 +206,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 			}
 		}
 		
-		function filter_link($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_link( $entry )
 		{
 			//retrieve the link for the post
 			$link 		= "";
@@ -218,7 +267,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 
 		}
 		
-		function filter_quote($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_quote( $entry )
 		{
 		
 			$output  = "";	
@@ -230,7 +283,11 @@ if( !class_exists( 'avia_queryfilter' ) && current_theme_supports('avia_queryfil
 		
 		}
 		
-		function filter_audio($entry)
+		/**
+		 * 
+		 * @param WP_Post $entry
+		 */
+		protected function filter_audio( $entry )
 		{
 			preg_match("!\[audio.+?\]\[\/audio\]!", $entry->post_content, $match_audio);
 

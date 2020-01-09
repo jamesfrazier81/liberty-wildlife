@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 global $avia_config;
 
 	/*
@@ -9,9 +12,9 @@ global $avia_config;
 		
 	 $title = tribe_is_month() ? __('Calendar of Events', 'avia_framework') : tribe_get_events_title(false);
  	 $args = array('title'=> $title, 'link'=>'');
-
+	 
  	 if( !is_singular() || get_post_meta(get_the_ID(), 'header', true) != 'no') echo avia_title($args);
- 	 
+
  	 do_action( 'ava_after_main_title' );
  	 
 	 ?>
@@ -43,4 +46,4 @@ global $avia_config;
 
 
 
-<?php get_footer(); ?>
+<?php get_footer();

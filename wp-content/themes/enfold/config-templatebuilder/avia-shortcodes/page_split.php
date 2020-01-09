@@ -1,14 +1,16 @@
 <?php
 /**
  * Page Split Element
+ * 
+ * Add a page split to the template. A pagination helps the user to navigate to the previous/next page.
  */
  
 // Don't load directly
-if ( !defined('ABSPATH') ) { die('-1'); }
+if ( ! defined('ABSPATH') ) { die('-1'); }
 
-if(current_theme_supports('avia_template_builder_page_split_element'))
+if( current_theme_supports( 'avia_template_builder_page_split_element' ) )
 {
-	if ( !class_exists( 'av_sc_page_split' ) )
+	if ( ! class_exists( 'av_sc_page_split' ) )
 	{
 		class av_sc_page_split extends aviaShortcodeTemplate{
 				
@@ -17,14 +19,16 @@ if(current_theme_supports('avia_template_builder_page_split_element'))
 				 */
 				function shortcode_insert_button()
 				{
-					$this->config['name']		= __('Page Split', 'avia_framework' );
-					$this->config['tab']		= __('Layout Elements', 'avia_framework' );
+					$this->config['self_closing']	=	'yes';
+					
+					$this->config['name']		= __( 'Page Split', 'avia_framework' );
+					$this->config['tab']		= __( 'Layout Elements', 'avia_framework' );
 					$this->config['icon']		= AviaBuilder::$path['imagesURL']."sc-heading.png";
 					$this->config['order']		= 5;
 					$this->config['target']		= 'avia-target-insert';
 					$this->config['shortcode'] 	= 'av_sc_page_split';
-	                $this->config['tinyMCE'] 	= array('disable' => "true");
-					$this->config['tooltip'] 	= __('Add a page split to the template. A pagination helps the user to navigate to the previous/next page.', 'avia_framework' );
+	                $this->config['tinyMCE'] 	= array( 'disable' => 'true' );
+					$this->config['tooltip'] 	= __( 'Add a page split to the template. A pagination helps the user to navigate to the previous/next page.', 'avia_framework' );
 	                $this->config['drag-level'] = 1;
 				}
 				
@@ -43,7 +47,7 @@ if(current_theme_supports('avia_template_builder_page_split_element'))
 	            {
 	                $params['innerHtml'] = "<img src='".$this->config['icon']."' title='".$this->config['name']."' />";
 	                $params['innerHtml'].= "<div class='avia-element-label'>".$this->config['name']."</div>";
-	                $params['content'] 	 = NULL; //remove to allow content elements
+	                $params['content'] 	 = null; //remove to allow content elements
 	                return $params;
 	            }
 				
@@ -55,7 +59,7 @@ if(current_theme_supports('avia_template_builder_page_split_element'))
 				 * @param string $shortcodename the shortcode found, when == callback name
 				 * @return string $output returns the modified html string 
 				 */
-				function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
+				function shortcode_handler( $atts, $content = "", $shortcodename = "", $meta = "" )
 				{
 	        		return '<!--avia_template_builder_nextpage-->';
 	        	}
@@ -65,16 +69,18 @@ if(current_theme_supports('avia_template_builder_page_split_element'))
 	}
 
 
-	if(!function_exists('avia_template_builder_split_page_filter'))
+	if( ! function_exists( 'avia_template_builder_split_page_filter' ) )
 	{
-		add_filter('avf_template_builder_content', 'avia_template_builder_split_page_filter', 10, 1);
-		function avia_template_builder_split_page_filter($content)
+		add_filter( 'avf_template_builder_content', 'avia_template_builder_split_page_filter', 10, 1 );
+		
+		function avia_template_builder_split_page_filter( $content )
 		{
 			/*
-			multipage support - adds page split to content if user uses the element in the page builder
-			nextpage code taken from /wp-includes/query.php and slightly modified 
+			 * multipage support - adds page split to content if user uses the element in the page builder
+			 * nextpage code taken from /wp-includes/query.php and slightly modified 
 			 */
 			global $id, $page, $pages, $multipage, $numpages;
+			
 			$numpages = 1;
 			$multipage = 0;
 			$page = get_query_var('page');

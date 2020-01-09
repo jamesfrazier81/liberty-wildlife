@@ -34,10 +34,6 @@ function avia_nl2br (str, is_xhtml)
 }
 
 
-
-
-
-
 //main builder js
 (function($)
 {
@@ -98,9 +94,20 @@ function avia_nl2br (str, is_xhtml)
         
         //var that holds the function to update the editor once updateTextarea() was executed, since updating the tinymce field requires too much resources on big sites
         this.update_timout	= false;
+		
+		//supress auto switching TinyMCE/HTML editor style for content editor when switching between ALB and standard editor 
+		//(used by Gutenberg, caused page reload with Edge browser when triggering HTML button)
+		this.disable_autoswitch_editor_style = false;
+		
+		this.builder_drag_drop_container = 'body';
         
         //activate the plugin
         this.set_up();
+		
+		/**
+		 * Allow 3rd party like Gutenberg add on to chain properly
+		 */
+		this.body_container.trigger( 'AviaBuilder_after_set_up', this );
     };
     
    	$.AviaBuilder.prototype = {
@@ -136,7 +143,19 @@ function avia_nl2br (str, is_xhtml)
 	               window.postboxes.init(); 
                }
                
-               window.postboxes.save_order(pagenow);
+               /**
+				* Some plugins cause problem by adding their own postboxes to the post editor and
+				* the object has not been correctly initialised
+				* see https://kriesi.at/support/topic/uncaught-error-cannot-call-methods-on-sortable-prior-to-initialization/#post-516758
+				*/
+			   if( 'undefined' == typeof window.postboxes || 'function' != typeof window.postboxes.save_order )
+			   {
+				   setTimeout( function() { window.postboxes.save_order(pagenow); }, 500 );
+			   }
+			   else
+			   {
+					window.postboxes.save_order(pagenow);
+			   }
             }
 		},
 		
@@ -153,7 +172,7 @@ function avia_nl2br (str, is_xhtml)
 			this.switch_button.on('click', function(e)
 			{
                 e.preventDefault();
-				obj.switch_layout_mode();
+				obj.switch_layout_mode(e);
 			});
 			
 			
@@ -242,13 +261,18 @@ function avia_nl2br (str, is_xhtml)
 					params.on_save		= obj.send_to_datastorage;
 					params.save_param	= parent;
 					params.ajax_param	= {extract: true, shortcode: parent.find('>.avia_inner_shortcode>'+ obj.datastorage + ':eq(0)').val(), allowed: params.allowedShortcodes, _ajax_nonce: $('#avia-loader-nonce').val() };
-					
+
+					var preview_scale_markup = '';
+					if (!isNaN(params.preview_scale)) {
+						preview_scale_markup = "<span class='avia-modal-preview-scale'>"+window.avia_preview.scale+" "+params.preview_scale+"%</span>";
+					}
+
 					if(params.preview) //check for preview window
 					{
 						var bg_colors = "<a href='#' style='background:#fff;'></a><a href='#' style='background:#f1f1f1;'></a><a href='#' style='background:#222;'></a>";
 						params.modal_class = " modal-preview-active modal-preview-"+params.preview;
 						params.on_load = params.on_load != "" ? params.on_load + ", modal_preview_script" : "modal_preview_script";
-						params.attach_content = "<div class='avia-modal-preview'><div class='avia-modal-preview-header'><h3 class='avia-modal-title'>"+window.avia_preview.title+"</h3><div class='avia_loading'></div></div><div class='avia-modal-preview-content'></div><div class='avia-modal-preview-footer'><span>"+window.avia_preview.background+"</span>"+bg_colors+"</div></div>";
+						params.attach_content = "<div class='avia-modal-preview'><div class='avia-modal-preview-header'><h3 class='avia-modal-title'>"+window.avia_preview.title+"</h3><div class='avia_loading'></div></div><div class='avia-modal-preview-content' data-preview-scale='"+params.preview_scale+"'></div><div class='avia-modal-preview-footer'><span>"+window.avia_preview.background+"</span>"+bg_colors+preview_scale_markup+"</div></div>";
 					}
 				
 				var modal = new $.AviaModal(params);
@@ -366,10 +390,11 @@ function avia_nl2br (str, is_xhtml)
 				scope  	= passed_scope || this.canvasParent,
 				params 	= 
 				{ 
-					appendTo: "body",
+					appendTo: this.builder_drag_drop_container,
 					handle: '>.menu-item-handle:not( .av-no-drag-drop .menu-item-handle )',
 					helper: "clone",
 					scroll: true,
+					cancel: '#aviaLayoutBuilder .avia_sorthandle a, input, textarea, button, select, option',
 					zIndex: 20000, /*must be bigger than fullscreen overlay in fixed pos*/
 					cursorAt: { left: 20 },
 					start: function( event, ui )
@@ -620,7 +645,7 @@ function avia_nl2br (str, is_xhtml)
 		* Switches between the wordpress editor and the AviaBuilder editor
 		*
 		*/
-		switch_layout_mode: function()
+		switch_layout_mode: function(event)
 		{
 			var self = this, editor = this.tiny_active ? window.tinyMCE.get('content') : false;
 			
@@ -628,16 +653,23 @@ function avia_nl2br (str, is_xhtml)
 			
 			if(this.activeStatus.val() != 'active')
 			{
-				$('#content-html').trigger('click');
+				if( false === this.disable_autoswitch_editor_style )
+				{
+					$('#content-html').trigger('click');
+				}
+				
 				self.body_container.addClass('avia-advanced-editor-enabled');
 				self.classic_editor_wrap.addClass('avia-hidden-editor');
 				self.switch_button.addClass('avia-builder-active').text(self.switch_button.data('active-button'));
 				self.activeStatus.val('active');
 				self.canvasParent.removeClass('avia-hidden');
-					
+				
 				setTimeout(function()
 				{
-					$('#content-tmce').trigger('click');
+					if( false === this.disable_autoswitch_editor_style )
+					{
+						$('#content-tmce').trigger('click');
+					}
 					self.convertTextToInterface();
 					
 					/*
@@ -648,6 +680,7 @@ function avia_nl2br (str, is_xhtml)
 					}
 					*/
 					
+					self.body_container.trigger('AviaBuilder_after_switch_layout_mode', self.switch_button, self.activeStatus.val() );
 				},10);
 			}
 			else
@@ -668,6 +701,8 @@ function avia_nl2br (str, is_xhtml)
 					if(editor) editor.setContent("", {format:'html'});
 					this.classic_textarea.val("");
 				}
+				
+				this.body_container.trigger('AviaBuilder_after_switch_layout_mode', this.switch_button, this.activeStatus.val() );
 			}
 			
 			return false;
@@ -937,7 +972,7 @@ function avia_nl2br (str, is_xhtml)
 			}
 			
 			this.classic_textarea.val(content).trigger('av_update');
-			this.secureContent.val(content);
+			this.secureContent.val(content).trigger('av_secureContent_update');
 		},
 		
 		// create a snapshot for the undoredo function. timeout it so javascript has enough time to remove animation classes and hover states
@@ -961,7 +996,7 @@ function avia_nl2br (str, is_xhtml)
 		*/
 		convertTextToInterface: function(text)
 		{	
-            if(this.activeStatus.val() != "active") return;
+            if( this.activeStatus.val() != "active") return;
             
             this.body_container.addClass('avia-advanced-editor-enabled');
 		
@@ -975,6 +1010,14 @@ function avia_nl2br (str, is_xhtml)
 				{
                 	text = this.classic_textarea.val(); //entity-test: val() to html()
                 	if(this.tiny_active) text = window.switchEditors._wp_Nop(text);
+					
+					/**
+					 * With WP 4.9 we get an empty 
+					 * <span style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" data-mce-type="bookmark" class="mce_SELRES_start"></span>
+					 * which breaks our backend
+					 */
+					text = text.replace( /<\s*?span\b[^>]*mce_SELRES_start[^>]*>(.*?)<\/span\b[^>]*>/gi, '' );
+
                 	this.secureContent.val(text);
 				}
 			}
@@ -1000,6 +1043,8 @@ function avia_nl2br (str, is_xhtml)
 				//obj.updateTextarea(); //dont update textarea on load, only when elements got edited
 				obj.canvas.removeClass('preloading');
 				obj.do_history_snapshot();
+				
+				obj.body_container.trigger('AviaBuilder_interface_loaded');
 			}
 		});
 			
@@ -1332,6 +1377,11 @@ function avia_nl2br (str, is_xhtml)
 								if(typeof values[key] == "string")
 								{
 									values[key] = values[key].replace(/'(.+?)'/g,'‘$1’').replace(/'/g,'’');
+									//	Add a unique id to new created elements	
+									if( ( 'av_uid' == key ) && ( '' == $.trim( values[key] ) ) )
+									{
+										values[key] = 'av-' + ( new Date().getTime()).toString(36);
+									}
 								}
 								else if(typeof values[key] == "object")
 								{
@@ -1349,11 +1399,23 @@ function avia_nl2br (str, is_xhtml)
 					var shortcode		= element_container.data('shortcodehandler'),
 						visual_updates	= element_container.find("[data-update_with]"),
 						class_updates	= element_container.find("[data-update_class_with]"),
+						closing_tag		= element_container.data("closing_tag"),
 						visual_key 		= "",
 						visual_el		= "",
 						visual_template	= "",
+						visual_update_object = '',
 						update_html		= "",
 						replace_val		= "";
+				
+						//	check if element must have a closing tag (independent if a content exists)
+						force_content_close = ( 'undefined' == typeof force_content_close ) ? false : force_content_close;
+						if( true !== force_content_close )
+						{
+							if( ( 'string' == typeof closing_tag ) && ( 'yes' == closing_tag ) )
+							{
+								force_content_close = true;
+							}
+						}
 						
 						if(!element_container.is('.avia-no-visual-updates'))
 						{	
@@ -1366,6 +1428,7 @@ function avia_nl2br (str, is_xhtml)
 								visual_el	= $(this);
 								visual_key	= visual_el.data('update_with');
 								visual_template = visual_el.data('update_template');
+								visual_update_object = visual_el.data('update_object');
 								
 								
 								if(typeof values[visual_key] === "string" || typeof values[visual_key] === "number" || typeof values[visual_key] === "object")
@@ -1385,8 +1448,27 @@ function avia_nl2br (str, is_xhtml)
 										}
 									}
 									
-									//in case an object is passed as replacement only fetch the first entry as replacement value
-									if(typeof replace_val === "object") replace_val = replace_val[0];
+									//in case an object is passed as replacement only fetch the first entry as replacement value by default
+									if(typeof replace_val === "object")
+									{
+										if( visual_update_object && ( 'all-elements' == visual_update_object ) )
+										{
+											var str = '';
+											$.each( replace_val, function( index, val ){
+															if( index > 0 )
+															{
+																str += ', ';
+															}
+															str += val;
+														});
+											replace_val = str;
+										}
+										else 	
+										{
+											replace_val = replace_val[0];
+										}
+
+									}
 									
 									//check for a template
 									if(visual_template)
@@ -1430,7 +1512,17 @@ function avia_nl2br (str, is_xhtml)
 							
 							if(element_container.find(".avia-element-bg-color:eq(0)").length) // set the bg color indicator
 							{
-								var insert_bg_indicator = values.custom_bg || values.background_color || "";
+                                if (values.background == 'bg_color') {
+                                    var insert_bg_indicator = values.custom_bg || values.background_color || "";
+                                }
+                                else if (values.background == 'bg_gradient'){
+                                    if (values.background_gradient_color1 !== "" && values.background_gradient_color2 !== "") {
+                                        var insert_bg_indicator = "linear-gradient(" + values.background_gradient_color1 + ", " +values.background_gradient_color2 + ")";
+                                    }
+                                    else{
+                                        var insert_bg_indicator = "";
+                                    }
+                                }
 								element_container.find(".avia-element-bg-color:eq(0)").css("background",insert_bg_indicator);
 							}
 							
@@ -1493,7 +1585,8 @@ function avia_nl2br (str, is_xhtml)
 		
 		
 		/**
-		* function that gets executed by send_to_datastorage and creates the actual shortcode string out of the arguments and content
+		* Function that gets executed by send_to_datastorage or from tinyMCE shortcode wand button onSave callback. 
+		* Creates the actual shortcode string out of the arguments and content
 		*/
 		createShortcode: function(values, shortcode, tag, force_content_close)
 		{
@@ -1558,7 +1651,7 @@ function avia_nl2br (str, is_xhtml)
 			
 			return output;
 		}
-	}
+	};
 	
 	$(document).ready(function () 
 	{
@@ -1793,7 +1886,7 @@ function avia_nl2br (str, is_xhtml)
 		}
 		
 		
-	}
+	};
 	
 	
 	/*function necessary for row/cell management*/

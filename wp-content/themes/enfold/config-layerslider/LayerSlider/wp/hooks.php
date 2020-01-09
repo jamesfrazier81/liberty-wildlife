@@ -11,12 +11,21 @@ add_filter('ls_parse_defaults', 'ls_parse_defaults', 10, 2);
 
 function ls_filter_slider_title($sliderName = '', $maxLength = 50) {
 	$name = empty($sliderName) ? 'Unnamed' : htmlspecialchars(stripslashes($sliderName));
-	return isset($name[$maxLength]) ? substr($name, 0, $maxLength) . ' ...' : $name;
+	$return = isset($name[$maxLength]) ? substr($name, 0, $maxLength) . ' ...' : $name;
+
+	return $return;
 }
 
 function ls_preview_for_slider( $slider = array() ) {
 
-	// Attempt to find pre-defined slider banner
+	// Attempt to find pre-defined slider banner by upload ID
+	if( ! empty($slider['data']['meta']) && ! empty($slider['data']['meta']['previewId']) ) {
+		if( $src = wp_get_attachment_image_src( $slider['data']['meta']['previewId'], 'large' ) ) {
+			return $src[0];
+		}
+	}
+
+	// Fallback to preview URL
 	if( ! empty($slider['data']['meta']) && ! empty($slider['data']['meta']['preview']) ) {
 		return $slider['data']['meta']['preview'];
 	}
@@ -25,11 +34,25 @@ function ls_preview_for_slider( $slider = array() ) {
 	// Find an image
 	if( isset($slider['data']['layers']) ) {
 		foreach( $slider['data']['layers'] as $layer) {
+
+			if( ! empty( $layer['properties']['thumbnail'] ) ) {
+				$image = $layer['properties']['thumbnail'];
+
+				if( ! empty( $layer['properties']['thumbnailId'] ) ) {
+					$src = wp_get_attachment_image_src( $layer['properties']['thumbnailId'], 'large');
+					if( ! empty( $src[0] ) ) {
+						$image = $src[0];
+					}
+				}
+
+				break;
+			}
+
 			if( !empty($layer['properties']['background']) && $layer['properties']['background'] !== '[image-url]' ) {
 				$image = $layer['properties']['background'];
 
 				if( ! empty($layer['properties']['backgroundId'] ) ) {
-					$src = wp_get_attachment_image_src( $layer['properties']['backgroundId'], 'medium');
+					$src = wp_get_attachment_image_src( $layer['properties']['backgroundId'], 'large');
 					if( ! empty( $src[0] ) ) {
 						$image = $src[0];
 					}
@@ -48,8 +71,8 @@ function ls_get_thumbnail($id = null, $url = null, $blankPlaceholder = false) {
 
 	// Image ID
 	if(!empty($id)) {
-		if($image = wp_get_attachment_thumb_url($id, 'thumbnail')) {
-			return $image;
+		if( $image = wp_get_attachment_image_src( $id, 'medium' ) ) {
+			return $image[0];
 		}
 	}
 
@@ -81,8 +104,9 @@ function ls_get_image($id = null, $url = null) {
 function ls_parse_defaults($defaults = array(), $raw = array()) {
 
 
-	$activated = get_option('layerslider-authorized-site', false);
-	$permission = current_user_can('publish_posts');
+	$activated 	= LS_Config::isActivatedSite();
+	$capability = get_option('layerslider_custom_capability', 'manage_options');
+	$permission = current_user_can( $capability );
 	$ret = array();
 
 
@@ -95,14 +119,15 @@ function ls_parse_defaults($defaults = array(), $raw = array()) {
 		// Check premium features
 		$isPremium = false;
 		if( ! empty( $default['premium'] ) && ! $activated ) {
-			if( ! $permission ) {
+
+			//if( ! $permission ) {
 
 				if( ! empty( $raw['styles'][$phpKey] ) ) {
 					unset( $ret['props']['styles'][$jsKey] );
 				}
 
 				continue;
-			}
+			//}
 
 			$isPremium = true;
 		}
@@ -122,9 +147,12 @@ function ls_parse_defaults($defaults = array(), $raw = array()) {
 			$ret[$retKey][$jsKey] = $raw[$phpKey];
 
 		} elseif(isset($raw[$phpKey]) && is_bool($default['value'])) {
-			if($default['value'] == true && empty($raw[$phpKey])) {
+
+			if( $default['value'] == true && ( empty( $raw[$phpKey] ) || $raw[$phpKey] === 'disabled' ) ) {
 				$ret[$retKey][$jsKey] = false;
-			} elseif($default['value'] == false && !empty($raw[$phpKey])) {
+
+			} elseif( $default['value'] == false && ( ! empty( $raw[$phpKey] ) || $raw[$phpKey] === 'enabled') ) {
+
 				$ret[$retKey][$jsKey] = true;
 			}
 
@@ -146,7 +174,15 @@ function ls_parse_defaults($defaults = array(), $raw = array()) {
 		$premiumStyle = false;
 		if( $isPremium && ! empty( $raw['styles'][$phpKey] ) ) {
 			if( (string)$default['value'] !== (string)$raw['styles'][$jsKey] ) {
-				$premiumStyle = true;
+
+				// v6.6.4: Fix blend-mode due to change in default value
+				if( $phpKey === 'mix-blend-mode' && $raw['styles'][$phpKey] === 'normal' ) {
+					// Do nothing, the 'normal' blend-mode value should not be
+					// counted as
+
+				} else {
+					$premiumStyle = true;
+				}
 			}
 		}
 
@@ -173,6 +209,11 @@ function ls_array_to_attr($arr, $mode = '') {
 				$ret[] = "$key:$val;";
 			}
 		}
+
+		if( has_filter('layerslider_attr_list') ) {
+			return apply_filters( 'layerslider_attr_list', $ret );
+		}
+
 		return implode('', $ret);
 	}
 }

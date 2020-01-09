@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 //if either calendar plugin or modified version of the plugin that is included in the theme is available we can make use of it, otherwise return
 
 if ( !class_exists( 'Tribe__Events__Main' ) ) return false;
@@ -32,7 +35,22 @@ if(!function_exists('avia_events_tempalte_paths'))
 		
 		if(in_array($template, $redirect))
 		{
-			$file = AVIA_EVENT_PATH . "views/".$template;
+			$file = AVIA_EVENT_PATH . "views/" . $template;
+			
+			/**
+			 * https://github.com/KriesiMedia/wp-themes/issues/1676
+			 * 
+			 * with 4.2.5 we added a better support for mobile view, which broke output of this plugin. We revert to old style.
+			 * 
+			 * @since 4.2.7
+			 */
+			if( class_exists( 'Tribe__Tickets_Plus__Main' ) )
+			{
+				if( 'single-event.php' == $template )
+				{
+					$file = AVIA_EVENT_PATH . 'views/single-event-no-mobile.php';
+				}
+			}
 		}
 		
 		return $file;
@@ -153,38 +171,73 @@ function avia_tribe_ref()
 }
 
 
-/*modfiy post navigation*/
-
-if(!function_exists('avia_events_custom_post_nav'))
+if( ! function_exists( 'avia_events_custom_post_nav' ) )
 {
-	add_action( 'avia_post_nav_entries', 'avia_events_custom_post_nav', 10);
+	add_filter( 'avf_post_nav_entries', 'avia_events_custom_post_nav', 10, 3 );
 
-	function avia_events_custom_post_nav($entry)
+	/**
+	 * Modfiy post navigation
+	 * 
+	 * @since < 4.0    modified 4.5.6
+	 * @param array $entry
+	 * @param array $settings
+	 * @param array $queried_entries
+	 * @return array
+	 */
+	function avia_events_custom_post_nav( array $entry, array $settings, array $queried_entries )
 	{
-		if(tribe_is_event())
+		if( tribe_is_event() )
 		{
-			$final = $links = $entry = array();
-			$links['next'] = tribe_get_next_event_link("{-{%title%}-}");
-			$links['prev'] = tribe_get_prev_event_link("{-{%title%}-}");
-				
-			foreach($links as $key => $link)
+			$final = $links = array();
+			$entry = array(
+							'prev'	=> '',
+							'next'	=> ''
+						);
+			
+			if( version_compare( Tribe__Events__Main::VERSION, '4.6.22', '>=' ) )
 			{
-				preg_match('/^<a.*?href=(["\'])(.*?)\1.*$/', $link, $m);
-				$final[$key]['link_url'] = !empty($m[2]) ? $m[2] : "";
-				
-				preg_match('/\{\-\{(.+)\}\-\}/', $link, $m2);
-				$final[$key]['link_text'] = !empty($m2[1]) ? $m2[1] : "";
-				
-				if(!empty($final[$key]['link_text']))
+				$old_prev = tribe( 'tec.adjacent-events' )->previous_event_link;
+				$old_next = tribe( 'tec.adjacent-events' )->next_event_link;
+
+				tribe( 'tec.adjacent-events' )->previous_event_link = '';
+				tribe( 'tec.adjacent-events' )->next_event_link = '';
+			}
+			
+			$links['prev'] = tribe_get_prev_event_link( '{-{%title%}-}' );
+			$links['next'] = tribe_get_next_event_link( '{-{%title%}-}' );
+						
+			foreach( $links as $key => $link )
+			{
+				if( empty( $link ) )
 				{
-					$entry[$key] = new stdClass();
-					$entry[$key]->av_custom_link  = $final[$key]['link_url'];
-					$entry[$key]->av_custom_title = $final[$key]['link_text'];
-					$entry[$key]->av_custom_image = false;
+					continue;
 				}
 				
+				preg_match( '/^<a.*?href=(["\'])(.*?)\1.*$/', $link, $m );
+				$final[ $key ]['link_url'] = ! empty( $m[2] ) ? $m[2] : '';
+				
+				preg_match( '/\{\-\{(.+)\}\-\}/', $link, $m2 );
+				$final[ $key ]['link_text'] = ! empty( $m2[1] ) ? $m2[1] : '';
+				
+				if( ! empty( $final[ $key ]['link_text'] ) )
+				{
+					$mode = 'prev' == $key ? 'previous' : 'next';
+					$event = tribe( 'tec.adjacent-events' )->get_closest_event( $mode );
+					
+					$entry[ $key ] = new stdClass();
+					$entry[ $key ]->av_custom_link  = $final[ $key ]['link_url'];
+					$entry[ $key ]->av_custom_title = $final[ $key ]['link_text'];
+					$entry[ $key ]->av_custom_image = get_the_post_thumbnail( $event->ID, 'thumbnail' );
+				}
+			}
+			
+			if( version_compare( Tribe__Events__Main::VERSION, '4.6.22', '>=' ) )
+			{
+				tribe( 'tec.adjacent-events' )->previous_event_link = $old_prev;
+				tribe( 'tec.adjacent-events' )->next_event_link = $old_next;
 			}
 		}
+		
 		return $entry;
 	}
 }
@@ -210,7 +263,7 @@ if(!function_exists('avia_events_breadcrumb'))
 		if((isset($avia_config['currently_viewing']) && $avia_config['currently_viewing'] == 'events') || tribe_is_month() || get_post_type() === Tribe__Events__Main::POSTTYPE || is_tax(Tribe__Events__Main::TAXONOMY) )
 		{	
 			$events = __('Events','avia_framework');
-			$events_link = '<a href="'.tribe_get_events_link().'">'.$events.'</a>';
+			$events_link = '<a href="'.tribe_get_events_link().'" title="' . $events . '">' . $events . '</a>';
 			
 			if(is_tax(Tribe__Events__Main::TAXONOMY) )
 			{
@@ -296,3 +349,43 @@ remove_action( 'tribe_events_single_event_after_the_meta', array( $tec, 'registe
 add_action( 'tribe_events_single_event_after_the_content', array( $tec, 'register_related_events_view' ) );
 
 
+if( ! function_exists( 'avia_events_modify_recurring_event_query' ) )
+{
+	/**
+	 * Selecting checkbox Recurring event instances in Events -> Settings -> General might might break our queries because of GROUP BY clause.
+	 * Reason is probably if multiple posttypes are part of the query.
+	 * 
+	 * @added_by Günter
+	 * @since 4.2.4
+	 * @param array $query
+	 * @param array $params
+	 * @return array
+	 */
+	function avia_events_modify_recurring_event_query( array $query, array $params )
+	{
+		remove_filter( 'posts_request', array( 'Tribe__Events__Pro__Recurrence__Queries', 'collapse_sql' ), 10, 2 );
+
+		return $query;
+	}
+}
+
+if( ! function_exists( 'avia_events_reset_recurring_event_query' ) )
+{
+	/**
+	 * Add the previously removed filter again
+	 * 
+	 * @added_by Günter
+	 * @since 4.2.4
+	 */
+	function avia_events_reset_recurring_event_query()
+	{
+		if( false === has_filter( 'posts_request', array( 'Tribe__Events__Pro__Recurrence__Queries', 'collapse_sql' ) ) )
+		{
+			add_filter( 'posts_request', array( 'Tribe__Events__Pro__Recurrence__Queries', 'collapse_sql' ), 10, 2 );
+		}
+	}
+}
+	
+add_filter( 'avia_masonry_entries_query', 'avia_events_modify_recurring_event_query', 10, 2 );
+add_action( 'ava_after_masonry_entries_query', 'avia_events_reset_recurring_event_query', 10 );
+	

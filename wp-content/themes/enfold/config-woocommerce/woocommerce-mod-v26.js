@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 	$( document ).on( 'updated_cart_totals', avia_apply_quant_btn );
 
 	setTimeout(first_load_amount, 10);
-	$('body').bind('added_to_cart', update_cart_dropdown);
+	$('body').on('added_to_cart', update_cart_dropdown);
 		
 	// small fix for the hover menu for woocommerce sort buttons since it does no seem to work on mobile devices. 
 	// even if no event is actually bound the css dropdown works. if the binding is removed dropdown does no longer work.
@@ -85,7 +85,7 @@ function update_cart_dropdown(event)
 			
 			if(!header.length) header = 'body';			
 			
-			template.bind('mouseenter avia_hide', function()
+			template.on('mouseenter avia_hide', function()
 			{
 				template.animate({opacity:0, top: parseInt(template.css('top'), 10) + 15 }, function()
 				{
@@ -207,7 +207,7 @@ function product_add_to_cart_click()
 		//e.preventDefault();
 	})
 	
-	jbody.bind('added_to_cart', function()
+	jbody.on('added_to_cart', function()
 	{
 		jQuery('.adding-to-cart-loading').removeClass('adding-to-cart-loading').addClass('added-to-cart-check');
 		

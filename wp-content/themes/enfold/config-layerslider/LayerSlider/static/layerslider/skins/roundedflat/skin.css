@@ -493,3 +493,23 @@
 .ls-roundedflat .ls-ct-center {
 	border-width: 2px;
 }
+
+
+
+.ls-roundedflat .ls-media-unmute {
+	opacity: 1;
+}
+
+.ls-roundedflat .ls-media-unmute-bg {
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0.7);
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+.ls-roundedflat .ls-media-unmute:hover .ls-media-unmute-bg {
+	background: #e74c3c;
+}
+
+
+

@@ -14,6 +14,21 @@
 	 echo avia_title();
 	 
 	 do_action( 'ava_after_main_title' );
+	 
+		$default_heading = 'h3';
+		$args = array(
+					'heading'		=> $default_heading,
+					'extra_class'	=> ''
+				);
+
+		/**
+		 * @since 4.5.5
+		 * @return array
+		 */
+		$args = apply_filters( 'avf_customize_heading_settings', $args, 'template-archives', array() );
+
+		$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+		$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
 	 ?>
 
 
@@ -50,7 +65,7 @@
                     echo '<div class="tab_inner_content">'."\n";
 
 					 if (have_posts()) :
-                    echo "<h3>" . __('The 20 latest Blog Posts','avia_framework') . "</h3>";
+                    echo "<{$heading} class='av-archive-latest-posts {$css}'>" . __('The 20 latest Blog Posts','avia_framework') . "</{$heading}>";
                     echo "<ul>";
                         while (have_posts()) : the_post();
 
@@ -60,7 +75,7 @@
                     echo "</ul>";
                     else:
                     
-                      echo "<h3>" . __('No Blog Posts found','avia_framework') . "</h3>";
+                      echo "<{$heading} class='av-archive-no-posts {$css}'>" . __('No Blog Posts found','avia_framework') . "</{$heading}>";
                     
                     endif;
 
@@ -89,7 +104,7 @@
                     $first = "first";
 
                     $output .= "<div class ='latest-portfolio-archive'>";
-                    $output .= "<h3>" . __('The 8 latest Portfolio Entries','avia_framework') . "</h3>";
+                    $output .=		"<{$heading} class='av-archive-latest-portfolio {$css}'>" . __('The 8 latest Portfolio Entries','avia_framework') . "</{$heading}>";
                     $output .= "<div class=' autoslide_false'>";
 
                     while (have_posts()) : the_post();
@@ -159,7 +174,7 @@
                     echo '<div class="tab_inner_content">'."\n";
 
                     echo "<div class='one_third first archive_list'>";
-                    echo "<h3>" . __('Available Pages','avia_framework') . "</h3>";
+                    echo	"<{$heading} class='av-archive-pages {$css}'>" . __('Available Pages','avia_framework') . "</{$heading}>";
                     echo "<ul>";
                     wp_list_pages('title_li=&depth=-1' );
                     echo "</ul>";
@@ -173,7 +188,7 @@
                     echo '<div class="tab_inner_content">'."\n";
 
                     echo "<div class='one_third archive_list'>";
-                    echo "<h3>" . __('Archives by Subject:','avia_framework') . "</h3>";
+                    echo	"<{$heading} class='av-archive-subjects {$css}'>" . __('Archives by Subject:','avia_framework') . "</{$heading}>";
                     echo "<ul>";
                     wp_list_categories('sort_column=name&optioncount=0&hierarchical=0&title_li=');
                     echo "</ul>";
@@ -188,7 +203,7 @@
                     echo '<div class="tab_inner_content">'."\n";
 
                     echo "<div class='one_third archive_list'>";
-                    echo "<h3>" . __('Archives by Month:','avia_framework') . "</h3>";
+                    echo	"<{$heading} class='av-archive-monthly {$css}'>" . __('Archives by Month:','avia_framework') . "</{$heading}>";
                     echo "<ul>";
                     wp_get_archives('type=monthly');
                     echo "</ul>";
@@ -224,4 +239,5 @@
 
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();

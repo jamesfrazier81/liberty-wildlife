@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 /*
  * Returns the schema.org markup based on the context value.
  * $args: context (string), echo (boolean) and post_type (string)
@@ -105,6 +108,7 @@ if(!function_exists('avia_markup_helper'))
                 break;
 
             case 'image':
+		$attributes['itemprop']  = 'image';
                 $attributes['itemscope'] = 'itemscope';
                 $attributes['itemtype']  = 'https://schema.org/ImageObject';
                 break;
@@ -355,7 +359,7 @@ if(!function_exists('av_blog_entry_markup_helper'))
 		{
 			$output .= "<span class='av-structured-data' {$publisher_markup}>
 				<span itemprop='name'>{$author_name}</span>
-				<span itemprop='logo' itemscope itemtype='http://schema.org/ImageObject'>
+				<span itemprop='logo' itemscope itemtype='https://schema.org/ImageObject'>
 				   <span itemprop='url'>{$logo_url}</span>
 				 </span>
 			  </span>";

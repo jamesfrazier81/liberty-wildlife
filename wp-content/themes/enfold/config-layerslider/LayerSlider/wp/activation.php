@@ -23,7 +23,7 @@ function layerslider_activation_redirect() {
 	if(get_option('layerslider_do_activation_redirect', false)) {
 		delete_option('layerslider_do_activation_redirect');
 		if(isset($_GET['activate']) && !isset($_GET['activate-multi'])) {
-			wp_redirect(admin_url('admin.php?page=ls-about'));
+			wp_redirect( admin_url( 'admin.php?page=layerslider-options&section=about' ) );
 		}
 	}
 }
@@ -116,6 +116,7 @@ function layerslider_create_db_table() {
 	// Table for Sliders
 	dbDelta("CREATE TABLE {$wpdb->prefix}layerslider (
 			  id int(10) NOT NULL AUTO_INCREMENT,
+			  group_id int(10),
 			  author int(10) NOT NULL DEFAULT 0,
 			  name varchar(100) DEFAULT '',
 			  slug varchar(100) DEFAULT '',
@@ -127,6 +128,7 @@ function layerslider_create_db_table() {
 			  flag_hidden tinyint(1) NOT NULL DEFAULT 0,
 			  flag_deleted tinyint(1) NOT NULL DEFAULT 0,
 			  flag_popup tinyint(1) NOT NULL DEFAULT 0,
+			  flag_group tinyint(1) NOT NULL DEFAULT 0,
 			  PRIMARY KEY  (id)
 			) $charset_collate;");
 

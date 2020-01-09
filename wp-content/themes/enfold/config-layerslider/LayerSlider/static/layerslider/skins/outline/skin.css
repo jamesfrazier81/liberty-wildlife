@@ -493,3 +493,24 @@
 .ls-outline .ls-ct-center {
 	border-width: 2px;
 }
+
+
+
+.ls-outline .ls-media-unmute {
+	opacity: 1;
+}
+
+.ls-outline .ls-media-unmute-bg {
+	border-radius: 3px;
+	transform: scale(0.1);
+	background: rgba(0,0,0,.1);
+	box-shadow: none !important;
+}
+
+.ls-outline .ls-media-unmute:hover .ls-media-unmute-bg {
+	background: white;
+}
+
+.ls-outline .ls-media-unmute:hover .ls-icon-unmuted {
+		background-image: url(../../img/icon-unmuted-black.png);
+}

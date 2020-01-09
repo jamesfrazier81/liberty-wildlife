@@ -25,10 +25,14 @@ width:100%;
 display: block !important;
 }
 
+#avia_sc_parser{
+float:left;
+width:100%;
+}
+
 #avia_builder.avia-hidden{
 display: none !important;
 }
-
 
 #aviaLayoutBuilder.preloading{
 background: #fff url(../../images/loading.gif) center center no-repeat;
@@ -64,6 +68,7 @@ background-color: #D54E21;
 color:#fff;
 padding:10px;
 margin-top:10px;
+display:block;
 }
 
 .av-builder-note.avia-name-description{
@@ -84,6 +89,49 @@ background-color: #2EA2CC;
 .av-builder-note a{color:#fff; text-decoration: underline; }
 .av-builder-note.av-only-active{ display:none; }
 .avia-advanced-editor-enabled .av-builder-note.av-only-active{ display:block; }
+
+
+#poststuff .avia-builder-parser-section{
+	width: 100%;
+	display: inline-block;
+	margin: 10px 0;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-label{
+	padding: 15px;
+	width: auto;
+	font-weight: bold;
+	float: left;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-select{
+	padding: 15px;
+	width: 50%;
+	float: left;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-info-button{
+	margin: 15px 0;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-message{
+	width: 100%;
+	float: left;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-message .avia-parser-valid{
+	color: #008c00;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-message .avia-parser-invalid{
+	color: #ea002b;
+	font-weight: 600;
+}
+
+#poststuff .avia-builder-parser-section .avia-builder-parser-message .avia-parser-undefined{
+	color: #0330f5;
+}
+
 
 
 .av-no-drag-drop .avia-expand-button,
@@ -172,7 +220,56 @@ overflow: hidden;
 display: block;
 }
 
+.avia-form-element .avia-image-radio{
+	position: relative;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 47.5%;
+	float: left;
+	clear: none;
+	padding: 0;
+}
 
+.avia-form-element .avia-image-radio:nth-child(odd) {
+	border-right-width: 0;
+}
+
+.avia-form-element .avia-image-radio .radio_image{
+	width: 80px;
+	float: left;
+	margin-right: 15px;
+}
+
+.avia-form-element .avia-image-radio label{
+	margin-left: 0;
+	display: table;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 7px;
+}
+
+.avia-form-element .avia-image-radio .labeltext{
+	display: table-cell;
+	vertical-align: middle;
+	width: 100%;
+}
+
+.avia-form-element .avia-image-radio input{
+	visibility: hidden;
+	opacity: 1;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.avia-form-element .avia-image-radio input:checked + label{
+	background-color: #E1E1E1;
+	box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
 
 .avia-expand-button{
 position: absolute;
@@ -225,7 +322,7 @@ visibility: hidden;
 position: fixed;
 top: 0px;
 left: 0;
-right: 0;
+right: 16px;
 background: #F8F8F8;
 padding: 41px 10px 10px;
 z-index: 120;
@@ -555,7 +652,7 @@ white-space: nowrap;
 position: absolute;
 top: 7px;
 right: 14px;
-z-index: 100;
+z-index: 25;
 background: transparent url(../../images/icon-info.png) top left no-repeat;
 }
 
@@ -1799,6 +1896,93 @@ display:none;
 .avia-modal-tab-container-inner{float: left; width:100%;}
 
 
+/*toggle elements*/
+
+a.avia-modal-toggle-title{background: #fff; overflow: hidden; padding: 12px 12px 12px 42px; margin:12px; text-decoration: none; display: block; color:#222; border: 1px solid #e1e1e1; font-weight: bold; position: relative;}
+
+a.avia-modal-toggle-title:hover{background: #f8f8f8;}
+
+a.avia-modal-toggle-title.active-modal-toggles{background:#008ec2; color:#fff; border: 1px solid #008ec2;}
+
+.avia-modal-toggle-ready .avia-modal-toggle-container-inner {
+    border: 1px solid #e1e1e1;
+    padding: 10px;
+    margin: 12px;
+    margin-top: -13px;
+}
+
+.avia-modal .avia-modal-toggle-ready .avia-modal-toggle-container-inner{
+	background: #f8f8f8;
+}
+
+.avia-modal .avia-modal-toggle-ready .avia-modal-toggle-container-inner .avia-form-element-container, .avia-modal .avia-modal-toggle-ready .avia-modal-toggle-container-inner .avia-form-element-container:hover{
+	background-color:transparent;
+}
+
+.avia-modal .avia-modal-toggle-ready .avia-modal-toggle-container-inner .avia-form-element-container:last-child{
+	border-bottom: none;
+}
+
+
+.avia-modal-toggle-arrow{
+	position: absolute;
+    left: 10px;
+    top: 50%;
+    margin-top: -13px;
+    color: #222;
+    fill: currentColor;
+    transition: transform .3s ease-in-out;
+}
+
+a.avia-modal-toggle-title span {
+    display: block;
+    font-weight: normal;
+}
+
+a.avia-modal-toggle-title.active-modal-toggles .avia-modal-toggle-arrow{
+	color:#fff;
+	transform: rotate(180deg);
+}
+
+.avia-modal .avia-modal-toggle-container-inner .avia-toggle-description{ float:none; margin: 20px; }
+.avia-modal .avia-modal-toggle-ready .avia-modal-toggle-container-inner .avia-toggle-description{ display:none; }
+
+/*iconswitcher*/
+.avia-modal-iconswitcher-titles {
+    padding: 0 20px;
+    position: relative;
+    top: 14px;
+    z-index: 10;
+}
+
+.avia-modal-iconswitcher-title strong{
+	display: none;
+}
+
+.avia-modal-iconswitcher-title span {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    background: #eaeaea;
+    margin-right: 2px;
+    padding: 7px;
+    border-radius: 3px;
+    border: 1px solid #eaeaea;
+}
+
+.avia-modal-iconswitcher-title.active-modal-icon-switcher span {
+    border: 1px solid #c9c9c9;
+    background: #fff;
+}
+
+.avia-modal-iconswitcher-title img{
+	max-width: 100%;
+	max-height: 100%;
+	opacity: 0.8;
+}
+
+
+
 /*table element*/
 .avia-table-builder-wrapper{
 position: relative;
@@ -2099,6 +2283,10 @@ height: auto;
 .av_catalogue .avia-element-label, .av_productlist .avia-element-label{display:block;}
 .avia-disabled-aviaTBaviaTBdisabled span, .avia-disabled-true span{  color: #D54E21; }
 
+/*button row*/
+
+.av_buttonrow .avia_inner_shortcode img, .av_productlist .avia_inner_shortcode img{margin:0;}
+.av_buttonrow .avia-element-label, .av_productlist .avia-element-label{display:block;}
 
 
 /* All Mobile Sizes (devices and browser) */
@@ -2238,7 +2426,7 @@ border-bottom:1px solid #fff;
 
 .avia-conditional-elements{position: relative; clear: both; overflow: hidden;}
 .av_option_hidden .av_conditional_overlay, .av-builder-active-overlay{opacity: 0.6; background: #fff; position: absolute; top:0; left:0; bottom:0; right:0; z-index: 2; border:1px solid #e1e1e1;}
-.av_option_hidden .av_conditional_overlay_content, .av-builder-active-overlay-content{z-index: 2; position: absolute; color:#333; background: #fff; border-radius: 2px; width:60%; margin-left:10%; padding:10%; top:25%; border: 1px solid #E1E1E1; }
+.av_option_hidden .av_conditional_overlay_content, .av-builder-active-overlay-content{z-index: 20; position: absolute; color:#333; background: #fff; border-radius: 2px; width:60%; margin-left:10%; padding:10%; top:25%; border: 1px solid #E1E1E1; }
 .av_option_hidden .av_conditional_overlay_content a{color:#2EA2CC;}
 
 .av-builder-active-overlay-content{width:72%; padding:3%; top:10%;}
@@ -2284,6 +2472,7 @@ border-bottom:1px solid #fff;
 
 
 .avia_layout_row > .avia_inner_shortcode{ display: table; table-layout: fixed; width: calc(100% - 2px);}
+.block-editor-page .avia_layout_row > .avia_inner_shortcode{ width:100%}
 .avia_layout_row > .avia_inner_shortcode > .avia_layout_cell{display: table-cell; float:none; vertical-align: top; }
 .avia_layout_column{background-color: #f8f8f8;}
 .avia_layout_cell {background-color: #fff;}
@@ -2513,19 +2702,42 @@ span.av-tab-title-text-wrap-full {
 }
 
 
+/*	Product Info Tab		*/
+.avia_inner_shortcode .avia-flex-element.product-info-tabs ul{
+	list-style: disc; 
+	text-align: left;
+	padding: 0 0 0 10px;
+}
 
 
+/* Search Element */
+.avia-sc-search-fakeinput {
+	padding: 4px;
+	border: 1px solid #ccc;
+	margin-right: 3px;
+	min-width: 140px;
+	height: 19px;
+	text-align: left;
+}
 
+/*	Google Maps	*/
+.avia_inner_shortcode .av-google-maps{
+	margin-bottom: 5px;
+	display: inline-block;
+}
 
+.avia_inner_shortcode .av-google-maps .av-gmap- .av-gmap-link-,
+.avia_inner_shortcode .av-google-maps .av-gmap-confirm_link .av-gmap-link-confirm_link,
+.avia_inner_shortcode .av-google-maps .av-gmap-page_only .av-gmap-link-page_only{
+	display: inline-block;
+}
 
-
-
-
-
-
-
-
-
-
-
+.avia_inner_shortcode .av-google-maps .av-gmap- .av-gmap-link-confirm_link,
+.avia_inner_shortcode .av-google-maps .av-gmap- .av-gmap-link-page_only,
+.avia_inner_shortcode .av-google-maps .av-gmap-confirm_link .av-gmap-link-,
+.avia_inner_shortcode .av-google-maps .av-gmap-confirm_link .av-gmap-link-page_only,
+.avia_inner_shortcode .av-google-maps .av-gmap-page_only .av-gmap-link-,
+.avia_inner_shortcode .av-google-maps .av-gmap-page_only .av-gmap-link-confirm_link{
+	display: none;
+}
 

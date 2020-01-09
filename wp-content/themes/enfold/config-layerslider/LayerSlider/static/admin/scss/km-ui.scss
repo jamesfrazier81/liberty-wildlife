@@ -38,123 +38,6 @@ KM-UI styles
 
 
 
-/* MODAL WINDOW */
-
-.km-ui-modal-window {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	visibility: hidden;
-	border-radius: 10px;
-	z-index: 1000010;
-	font-family: 'Poppins', 'Open Sans', Arial, sans-serif;
-	box-shadow: 0 5px 30px rgba(0,0,0,.3);
-
-	&.km-ui-theme-dark {
-		background: rgba(0,0,0,0.75);
-	}
-
-	&.km-ui-theme-light {
-		background: white;
-	}
-
-	.km-ui-prevent-events {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		z-index: 1000000;
-		display: none;
-	}
-
-	&.km-ui-animating .km-ui-prevent-events {
-		display: block !important;
-	}
-
-	header,
-	header.km-ui-modal-header {
-
-		box-shadow: none !important;
-
-		b,
-		.close,
-		.km-ui-close,
-		.km-ui-modal-close {
-			width: 25px;
-			height: 26px;
-			padding-left: 1px;
-			position: absolute;
-			right: 0px;
-			top: -8px;
-			text-align: center;
-			line-height: 27px;
-			color: #ccc	!important;
-			cursor: pointer !important;
-			font-size: 23px;
-			border-radius: 100px;
-			border: 2px solid #ccc !important;
-
-			&:hover {
-				color: #999 !important;
-				border-color: #999 !important;
-			}
-		}
-
-		h1 {
-			position: fixed;
-			margin: 0 !important;
-			padding: 0 !important;
-			font-size: 24px;
-			font-weight: 400;
-			color: #555 !important;
-		}
-	}
-
-	.km-ui-modal-scrollable {
-		position: absolute !important;
-		overflow: auto !important;
-		display: block !important;
-		text-align: center;
-		font-size: 15px;
-		line-height: normal !important;
-	}
-
-	> div, p, ul, li {
-		padding: 0 !important;
-		border: 0 !important;
-		margin: 0 auto !important;
-		font-size: 100%;
-		line-height: 1.5em;
-		color: #777;
-		box-shadow: none !important;
-	}
-
-	p, ul, li {
-		text-align: left;
-	}
-
-	p, ul, button,
-	.button {
-		margin-bottom: 24px !important;
-	}
-
-	li {
-		list-style-type: circle;
-		margin: 0 0 10px 30px !important;
-
-		&:last-child {
-			margin-bottom: 0 !important;
-		}
-	}
-
-	button,
-	.button {
-		margin: 24px auto !important;
-		border-radius: 100px;
-	}
-}
-
 /* POPOVER, TOOLTIP */
 
 .ls-popover-data,
@@ -165,7 +48,7 @@ body.hidepopover .km-ui-popover
 }
 
 .km-ui-popover {
-	max-width: 260px;
+	max-width: 270px;
 	min-width: 80px;
 	position: absolute;
 	padding: 15px;

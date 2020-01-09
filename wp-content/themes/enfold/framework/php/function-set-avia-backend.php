@@ -1,4 +1,6 @@
-<?php  if ( ! defined('AVIA_FW')) exit('No direct script access allowed');
+<?php  
+if ( ! defined( 'AVIA_FW' ) ) {	exit( 'No direct script access allowed' );	}
+
 /**
  * This file holds various helper functions that are needed by the frameworks BACKEND
  *
@@ -70,24 +72,134 @@ if(!class_exists('avia_update_helper'))
 			
 			$this->theme_version = $theme->get('Version');
 			$this->option_key = $theme->get('Name').'_version';
-			$this->db_version = get_option($this->option_key, '1');
+			$this->db_version = get_option($this->option_key, '0');
 			
 		}
 		
 		//provide a hook for update functions and update the version number
 		function update_version()
 		{
-			if(version_compare($this->theme_version, $this->db_version, ">"))
+			//if we are on a new installation do not do any updates to the db
+			if($this->db_version == "0")
+			{
+				update_option($this->option_key, $this->theme_version);
+			}
+			else if(version_compare($this->theme_version, $this->db_version, ">"))
 			{		
 				do_action('ava_trigger_updates', $this->db_version, $this->theme_version);
 				update_option($this->option_key, $this->theme_version);
 				do_action('ava_after_theme_update');
 			}
+	
 			
-			// update_option($this->option_key, "1"); // for testing
+			// update_option($this->option_key, "3"); // for testing
 		}
 	}
 }
+
+
+if( ! function_exists( 'avia_backend_admin_notice' ) )
+{
+	/**
+	 * Allows to display a simple admin notice based on the content of the options field avia_admin_notice
+	 * 
+	 * @since 4.3
+	 * @added_by Kriesi
+	 */
+	function avia_backend_admin_notice()
+	{
+		global $avia_config;
+		
+		$notice = get_option('avia_admin_notice');
+		
+		if(!empty($notice) )
+		{
+			//older admin notices that are no longer represented in our array are removed
+			if(!isset($avia_config['admin_notices'][$notice]))
+			{
+				delete_option('avia_admin_notice');
+			}
+			else
+			{
+				$nonce  = wp_create_nonce( "avia_admin_notice" );
+				$notice = $avia_config['admin_notices'][$notice];
+				$output = "";
+				
+				//the notice
+				$output .= '<div class="notice notice-'.$notice['class'].' avia-admin-notice is-dismissible">';
+				$output .= '<p>'.$notice['msg'].'</p>';
+				$output .= '</div>';
+				echo $output;
+				
+				
+				//a simple script that lets us ajax close the notice permanentley
+				?>
+				<script>
+					(function($){	
+					    "use strict";
+					    $(document).ready(function(){ 
+						    $('body').on('click', '.avia-admin-notice .notice-dismiss', function(e){
+								$.ajax({
+						 		  type: "POST", url: window.ajaxurl,
+						 		  data: "action=avia_ajax_reset_admin_notice&nonce=<?php echo $nonce; ?>",
+						 		});
+							});
+						});
+					})(jQuery);
+				</script>
+				<?php
+			}
+		}
+	}
+
+	//function to reset the notice
+	function avia_backend_reset_admin_notice() {
+		
+		$check = 'avia_admin_notice';
+		check_ajax_referer($check, 'nonce');
+		
+		delete_option('avia_admin_notice');
+		die();
+	}
+	
+	add_action( 'admin_notices', 'avia_backend_admin_notice' , 3);
+	add_action( 'wp_ajax_avia_ajax_reset_admin_notice', 'avia_backend_reset_admin_notice' );
+}
+
+
+
+
+/**
+ * load files from a multidemensional array
+ *
+ * @param array $scripts_to_load the array to pass
+ */
+if(!function_exists('avia_backend_load_scripts_by_option'))
+{
+	function avia_backend_load_scripts_by_option( $scripts_to_load )
+	{
+		foreach ( $scripts_to_load as $path => $includes )
+		{
+			if( $includes )
+			{
+				foreach ( $includes as $include )
+				{
+					switch( $path )
+					{
+					case 'php':
+					include_once( AVIA_PHP.$include.'.php' );
+					break;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
 
 
 /**
@@ -314,23 +426,24 @@ if(!function_exists('avia_backend_is_file'))
 
 
 
-if(!function_exists('avia_backend_get_hex_from_rgb'))
+if( ! function_exists( 'avia_backend_get_hex_from_rgb' ) )
 {
 	/**
 	 *  converts an rgb string into a hex value and returns the string
-	 *  @param string $r red
-	 *  @param string $g green
-	 *  @param string $B blue
+	 * 
+	 *  @param int $r red
+	 *  @param int $g green
+	 *  @param int $b blue
 	 *  @return string returns the converted string
 	 */
- 	function avia_backend_get_hex_from_rgb($r=FALSE, $g=FALSE, $b=FALSE) {
+ 	function avia_backend_get_hex_from_rgb( $r = false, $g = false, $b = false ) 
+	{
 		$x = 255;
 		$y = 0;
 
-		$r = (is_int($r) && $r >= $y && $r <= $x) ? $r : 0;
-		$g = (is_int($g) && $g >= $y && $g <= $x) ? $g : 0;
-		$b = (is_int($b) && $b >= $y && $b <= $x) ? $b : 0;
-
+		$r = ( is_int($r) && $r >= $y && $r <= $x ) ? $r : 0;
+		$g = ( is_int($g) && $g >= $y && $g <= $x ) ? $g : 0;
+		$b = ( is_int($b) && $b >= $y && $b <= $x ) ? $b : 0;
 
 		return sprintf('#%02X%02X%02X', $r, $g, $b);
 	}
@@ -394,24 +507,42 @@ if(!function_exists('avia_backend_calculate_similar_color'))
 	}
 }
 
-if(!function_exists('avia_backend_hex_to_rgb_array'))
+if( ! function_exists( 'avia_backend_hex_to_rgb_array' ) )
 {
 	/**
-	 *  converts an hex string into an rgb array
-	 *  @param string $color hex color code
-	 *  @return array $color
+	 * Converts a hex string into an rgb array. Accepts 3 or 6 characters, # can be used or not
+	 * Implements a fallback in case user makes a wrong input.
+	 * 
+	 * @resource: https://www.php.net/manual/en/function.hexdec.php#99478
+	 * @since 4.5.7		modified
+	 * @param string $color			hex color code
+	 * @return array				numerical indexed rgb values
 	 */
-	function avia_backend_hex_to_rgb_array($color)
+	function avia_backend_hex_to_rgb_array( $color )
 	{
-		if(strpos($color,'#') !== false)
+		//	Fallback in case of wrong input
+		$rgbArray = array( 0, 0, 0 );
+		
+		//	Gets a proper hex string
+		$hexStr = preg_replace( '/[^0-9A-Fa-f]/', '', $color );
+		
+		if( strlen( $hexStr ) == 6 )
 		{
-			$color = substr($color, 1, strlen($color));
+			//	If a proper hex code, convert using bitwise operation. No overhead... faster
+			$colorVal = hexdec( $hexStr );
+			$rgbArray[0] = 0xFF & ( $colorVal >> 0x10 );
+			$rgbArray[1] = 0xFF & ( $colorVal >> 0x8 );
+			$rgbArray[2] = 0xFF & $colorVal;
 		}
-
-		$color = str_split($color, 2);
-		foreach($color as $key => $c) $color[$key] = hexdec($c);
-
-		return $color;
+		else if( strlen( $hexStr ) == 3 )
+		{
+			//	if shorthand notation, need some string manipulations
+			$rgbArray[0] = hexdec( str_repeat( substr( $hexStr, 0, 1 ), 2 ) );
+			$rgbArray[1] = hexdec( str_repeat( substr( $hexStr, 1, 1 ), 2 ) );
+			$rgbArray[2] = hexdec( str_repeat( substr( $hexStr, 2, 1 ), 2 ) );
+		}
+		
+		return $rgbArray;
 	}
 }
 
@@ -420,6 +551,7 @@ if(!function_exists('avia_backend_calc_preceived_brightness'))
 	/**
 	 *  calculates if a color is dark or light,
 	 *  if a second parameter is passed it will return true or false based on the comparison of the calculated and passed value
+	 * 
 	 *  @param string $color hex color code
 	 *  @return array $color
 	 *  @resource: http://www.nbdtech.com/Blog/archive/2008/04/27/Calculating-the-Perceived-Brightness-of-a-Color.aspx
@@ -447,27 +579,33 @@ if(!function_exists('avia_backend_calc_preceived_brightness'))
 if(!function_exists('avia_backend_merge_colors'))
 {
 	/**
-	 *  merges to colors
-	 *  @param string $color1 hex color code
-	 *  @param string $color2 hex color code
-	 *  @return new color
+	 *  merges 2 colors and returns the hex string
+	 * 
+	 *  @param string $color1			hex color code
+	 *  @param string $color2			hex color code
+	 *  @return string					new color
 	 */
-	function avia_backend_merge_colors($color1, $color2)
+	function avia_backend_merge_colors( $color1, $color2 )
 	{
-		if(empty($color1)) return $color2;
-		if(empty($color2)) return $color1;
-
-		$prepend = array("", "");
-		$colors  = array(avia_backend_hex_to_rgb_array($color1), avia_backend_hex_to_rgb_array($color2));
-
-		$final = array();
-		foreach($colors[0] as $key => $color)
+		if( empty( $color1 ) ) 
 		{
-			$final[$key] = (int) ceil(($colors[0][$key] + $colors[1][$key]) / 2);
+			return $color2;
+		}
+		
+		if( empty( $color2 ) ) 
+		{
+			return $color1;
 		}
 
-		return avia_backend_get_hex_from_rgb($final[0], $final[1], $final[2]);
+		$colors  = array( avia_backend_hex_to_rgb_array( $color1 ), avia_backend_hex_to_rgb_array( $color2 ) );
 
+		$final = array();
+		foreach( $colors[0] as $key => $color )
+		{
+			$final[ $key ] = (int) ceil( ( $colors[0][ $key ] + $colors[1][ $key ]) / 2 );
+		}
+
+		return avia_backend_get_hex_from_rgb( $final[0], $final[1], $final[2] );
 	}
 }
 
@@ -634,6 +772,14 @@ if(!function_exists('avia_backend_truncate'))
 	 */
 	function avia_backend_truncate($string, $limit, $break=".", $pad="...", $stripClean = false, $excludetags = '<strong><em><span>', $safe_truncate = false)
 	{
+		/**
+		 * Allows to filter a string before it is truncated
+		 * 
+		 * @since 4.6
+		 * @return string
+		 */
+		$string = apply_filters( 'avf_avia_backend_truncate_string', $string, $limit, $break, $pad, $stripClean, $excludetags, $safe_truncate );
+		
 		if($stripClean)
 		{
 			$string = strip_shortcodes(strip_tags($string, $excludetags));
@@ -769,10 +915,23 @@ if(!function_exists('avia_backend_get_post_page_cat_name_by_id'))
 */
 if(!function_exists('avia_backend_create_folder'))
 {
-	function avia_backend_create_folder(&$folder, $addindex = true)
+	function avia_backend_create_folder( &$folder, $addindex = true, $make_unique = false )
 	{
-	    if(is_dir($folder) && $addindex == false)
-	        return true;
+		if( false !== $make_unique )
+		{
+			$i = 1;
+			$orig = $folder;
+			while( file_exists( $folder ) )
+			{
+				$folder = $orig . "-{$i}";
+				$i++;
+			}
+		}
+		
+	    if( is_dir( $folder ) && $addindex == false )
+		{
+			return true;
+		}
 
 	//      $oldmask = @umask(0);
 
@@ -797,6 +956,44 @@ if(!function_exists('avia_backend_create_folder'))
 	    return $created;
 	}
 }
+
+/**
+ * Delete a folder and it's content ( including subfolders )
+ * 
+ * @since 4.3
+ * @param string $path 
+ */
+if( ! function_exists( 'avia_backend_delete_folder' ) )
+{
+	function avia_backend_delete_folder( $path )
+	{
+		if( is_dir( $path ) )
+		{
+			$objects = scandir( $path );
+			if( false === $objects )
+			{
+				return;
+			}
+			
+			$objects = array_diff( $objects, array( '.', '..' ) );
+		    foreach ( $objects as $object ) 
+			{
+				$obj = $path . '/' . $object;
+				if( is_dir( $obj ) )
+				{
+					avia_backend_delete_folder( $obj );
+				}
+				else
+				{
+					unlink( $obj );
+				}
+		     }
+		     unset( $objects );
+		     rmdir( $path );
+		}
+	}
+}
+
 
 /*
 * creates a file for the theme framework
@@ -829,6 +1026,44 @@ if(!function_exists('avia_backend_create_file'))
 	}
 }
 
+if( ! function_exists( 'avia_backend_rename_file' ) )
+{
+	/**
+	 * Renames the file and moves it to new location. If the destination folder does not exist, it is created.
+	 * 
+	 * @since 4.3.1
+	 * @param string $old_file
+	 * @param string $new_file
+	 * @return boolean|WP_Error
+	 */
+	function avia_backend_rename_file( $old_file, $new_file )
+	{
+		$split = pathinfo( $new_file );
+		
+		$folder = $split['dirname'];
+		if( ! avia_backend_create_folder( $folder, false ) )
+		{
+			return new WP_Error( 'filesystem', sprintf( __( 'Unable to create folder %s.', 'avia_framework' ), $folder ) );
+		}
+		
+		if( file_exists( $new_file ) )
+		{
+			if( ! unlink( $new_file ) )
+			{
+				return new WP_Error( 'filesystem', sprintf( __( 'Unable to delete file %s.', 'avia_framework' ), $new_file ) );
+			}
+		}
+		
+		if( ! rename( $old_file, $new_file ) )
+		{
+			return new WP_Error( 'filesystem', sprintf( __( 'Unable to rename/move file %s to %s', 'avia_framework' ), $old_file, $new_file ) );
+		}
+			
+		return true;
+	}
+}
+
+
 if(!function_exists('av_backend_registered_sidebars'))
 {
 	function av_backend_registered_sidebars($sidebars = array(), $exclude = array())
@@ -849,93 +1084,134 @@ if(!function_exists('av_backend_registered_sidebars'))
 }
 
 // ADMIN MENU
-if(!function_exists('avia_backend_admin_bar_menu'))
+if( ! function_exists( 'avia_backend_admin_bar_menu' ) )
 {
-	add_action('admin_bar_menu', 'avia_backend_admin_bar_menu', 99);
-	function avia_backend_admin_bar_menu() {
-
-	if(!current_user_can('manage_options')) return;
-
-	global $avia, $wp_admin_bar;
-
-	$real_id  = is_admin() ? false : avia_get_the_ID();
-
-	//home edit button for frontpage
-	if(is_front_page())
+	add_action( 'admin_bar_menu', 'avia_backend_admin_bar_menu', 99 );
+	
+	/**
+	 * Extend the admin bar
+	 */
+	function avia_backend_admin_bar_menu() 
 	{
-		$front_id = avia_get_option('frontpage');
-		$parent = "";
-
-		if($front_id && $real_id == $front_id)
+		global $avia, $wp_admin_bar;
+		
+		if( ! current_user_can( 'manage_options' ) ) 
 		{
+			return;
+		}
+
+		$real_id  = is_admin() ? false : avia_get_the_ID();
+
+		$meta_target_edit = array();
+		$meta_target_dynamic = array();
+		$meta_target_options = array();
+		
+		if( ! is_admin() )
+		{	
+			/**
+			 * Allow to change WP default behaviour to stay on same tab (also ADA complience).
+			 * 
+			 * @used_by				currently unused
+			 * @since 4.5.4
+			 * @return string			anything different from '' sets value for target (e.g. "_blank")
+			 */
+			$target_edit = apply_filters( 'avf_admin_bar_link_target_frontend', '', 'edit_button' );
+			$target_dynamic = apply_filters( 'avf_admin_bar_link_target_frontend', '', 'dynamic_template' );
+			$target_options = apply_filters( 'avf_admin_bar_link_target_frontend', '', 'theme_options' );
+			
+			if( ! empty( $target_edit ) )
+			{
+				$meta_target_edit['target'] = $target_edit;
+			}
+			if( ! empty( $target_dynamic ) )
+			{
+				$meta_target_dynamic['target'] = $target_dynamic;
+			}
+			if( ! empty( $target_options ) )
+			{
+				$meta_target_options['target'] = $target_options;
+			}
+		}
+		
+		/**
+		 * Replace WP edit link with Edit Frontpage message
+		 */
+		if( is_front_page() )
+		{
+			$front_id = avia_get_option( 'frontpage' );
+
+			if( $front_id && $real_id == $front_id )
+			{
+				$menu = array(
+						'id'	=> 'edit',
+						'title' => __( 'Edit Frontpage', 'avia_framework' ),
+						'href'	=> admin_url( 'post.php?post=' . $real_id . '&action=edit' ),
+						'meta'	=> $target_edit
+				);
+
+				$wp_admin_bar->add_menu( $menu );
+			}
+		}
+
+		/**
+		 * dynamic template edit for current entry, in case a dynamic template is applied
+		 */
+		if( $real_id && $template = avia_is_dynamic_template() )
+		{
+			$safeSlug = avia_backend_safe_string( $template );
+
 			$menu = array(
-				'id' => 'edit',
-				'title' => __('Edit Frontpage','avia_framework'),
-				'href' => admin_url('post.php?post='.$real_id.'&action=edit'),
-				'meta' => array('target' => 'blank')
-			);
+					'id'		=> 'avia_edit',
+					'title'		=> __( 'Edit this entry', 'avia_framework' ),
+					'href'		=> admin_url( 'post.php?post=' . $real_id . '&action=edit' ),
+					'meta'		=> $meta_target_dynamic,
+					'parent'	=> 'edit'
+					);
+			$wp_admin_bar->add_menu($menu);
+
+			$menu = array(
+					'id'		=> 'avia_edit_dynamic',
+					'title'		=> __( 'Edit Dynamic Template of this entry', 'avia_framework' ),
+					'href'		=> admin_url( "admin.php?page=templates#goto_" . $safeSlug ),
+					'meta'		=> $meta_target_dynamic,
+					'parent'	=> 'edit'
+					);
 
 			$wp_admin_bar->add_menu($menu);
 		}
-	}
 
-
-	//dynamic tempalte edit for current entry, in case a dynamic tempalte is applied
-
-	if($real_id && $template = avia_is_dynamic_template())
-	{
-		$safeSlug = avia_backend_safe_string($template);
-
-		$menu = array(
-			'id' => 'avia_edit',
-			'title' => __('Edit this entry','avia_framework'),
-			'href' => admin_url('post.php?post='.$real_id.'&action=edit'),
-			'meta' => array('target' => 'blank'),
-			'parent'=> 'edit'
-		);
-		$wp_admin_bar->add_menu($menu);
-
-		$menu = array(
-			'id' => 'avia_edit_dynamic',
-			'title' => __('Edit Dynamic Template of this entry','avia_framework'),
-			'href' => admin_url( "admin.php?page=templates#goto_".$safeSlug ),
-			'meta' => array('target' => 'blank'),
-			'parent'=> 'edit'
-		);
-
-		$wp_admin_bar->add_menu($menu);
-	}
-
-
-
-	// add all option pages
-
-	if(empty($avia->option_pages)) return;
+		/**
+		 * add all option pages
+		 */
+		if( empty( $avia->option_pages ) ) 
+		{
+			return;
+		}
 
 		$urlBase = admin_url( 'admin.php' );
 
-		foreach($avia->option_pages as $avia_page)
+		foreach( $avia->option_pages as $avia_page )
 		{
-			$safeSlug = avia_backend_safe_string($avia_page['title']);
+			$safeSlug = avia_backend_safe_string( $avia_page['title'] );
 
 			$menu = array(
-				'id' => $avia_page['slug'],
-				'title' => strip_tags($avia_page['title']),
-				'href' => $urlBase."?page=".$avia_page['slug'],
-				'meta' => array('target' => 'blank')
-			);
+					'id'		=> $avia_page['slug'],
+					'title'		=> strip_tags($avia_page['title']),
+					'href'		=> $urlBase."?page=".$avia_page['slug'],
+					'meta'		=> $meta_target_options
+				);
 
-			if($avia_page['slug'] != $avia_page['parent']  )
+			if( $avia_page['slug'] != $avia_page['parent']  )
 			{
 				 $menu['parent'] = $avia_page['parent'];
-				 $menu['href'] = $urlBase."?page=".$avia_page['parent']."#goto_".$avia_page['slug'];
+				 $menu['href'] = $urlBase . "?page=" . $avia_page['parent'] . "#goto_" . $avia_page['slug'];
 			}
 
-			if(is_admin()) $menu['meta'] = array('onclick' => 'self.location.replace(encodeURI("'.$menu['href'].'")); window.location.reload(true);  ');
+            /* removed by tinabillinger - breaks theme option links in Safari */
+		    // if(is_admin()) $menu['meta'] = array('onclick' => 'self.location.replace(encodeURI("'.$menu['href'].'")); window.location.reload(true);  ');
 
-			$wp_admin_bar->add_menu($menu);
+			$wp_admin_bar->add_menu( $menu );
 		}
 	}
 }
-
 

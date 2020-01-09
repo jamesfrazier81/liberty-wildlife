@@ -43,4 +43,41 @@
         <key name="icl_post_availability_text">This post is also available in: %s</key>
         <key name="icl_additional_css">#lang_sel img, #lang_sel_list img, #lang_sel_footer img { display: inline; }</key>
     </language-switcher-settings>
+    <admin-texts>
+        <key name="avia_options_enfold_child">
+            <key name="avia">
+                <key name="privacy_message_login"/>
+                    <key name="cookie_content"/>
+                    <key name="msg_bar_buttons">
+                    <key name="0">
+                        <key name="msg_bar_button_label"/>
+                    </key>
+                    <key name="1">
+                        <key name="msg_bar_button_label"/>
+                    </key>
+                    </key>
+                    <key name="cookie_info_content_heading"/>
+                    <key name="cookie_info_content">
+                        <key name="0">
+                        <key name="1">
+                        <key name="label"/>
+                        <key name="content"/>
+                    </key>
+                        <key name="2">
+                        <key name="label"/>
+                        <key name="content"/>
+                    </key>
+                        <key name="3">
+                        <key name="label"/>
+                        <key name="content"/>
+                    </key>
+                        <key name="4">
+                        <key name="label"/>
+                        <key name="content"/>
+                    </key>
+                    </key>
+                </key>
+            </key>
+        </key>
+    </admin-texts>
 </wpml-config>

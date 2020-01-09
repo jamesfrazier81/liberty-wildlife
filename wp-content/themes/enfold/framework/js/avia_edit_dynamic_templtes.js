@@ -42,7 +42,7 @@ jQuery(function($) { $('.avia_sortable').avia_edit_dynamic_templates(); });
 			//disable text selection in the header	
 			$( ".avia-row-portlet-header" ).disableSelection();	
 			
-			$('.avia-item-edit', container).live('click', function()
+			$('.avia-item-edit', container).on('click', function()
 			{
 				var edit_link = $(this),
 					container = edit_link.parents('.avia_row:eq(0)'),

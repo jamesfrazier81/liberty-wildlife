@@ -1,5 +1,5 @@
 <?php
-	if ( !defined('ABSPATH') ){ die(); }
+	if ( ! defined('ABSPATH') ){ die(); }
 	
 	global $avia_config;
 
@@ -47,4 +47,6 @@
 
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();
+		

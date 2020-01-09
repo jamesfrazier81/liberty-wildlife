@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 /**
  *
  *  This function is the function that iterates over each comment entry and displays it.

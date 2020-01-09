@@ -17,31 +17,12 @@ class Tribe__Main {
 	const OPTIONNAME          = 'tribe_events_calendar_options';
 	const OPTIONNAMENETWORK   = 'tribe_events_calendar_network_options';
 
-	const VERSION             = '4.5.11';
+	const VERSION             = '4.10.2';
 
 	const FEED_URL            = 'https://theeventscalendar.com/feed/';
 
 	protected $plugin_context;
 	protected $plugin_context_class;
-	protected $doing_ajax = false;
-
-	/**
-	 * @var Tribe__Log
-	 */
-	protected $log;
-
-	/**
-	 * Manages PUE license key notifications.
-	 *
-	 * It's important for the sanity of our users that only one instance of this object
-	 * be created. However, multiple Tribe__Main objects can and will be instantiated, hence
-	 * why for the time being we need to make this field static.
-	 *
-	 * @see https://central.tri.be/issues/65755
-	 *
-	 * @var Tribe__PUE__Notices
-	 */
-	protected static $pue_notices;
 
 	public static $tribe_url = 'http://tri.be/';
 	public static $tec_url = 'https://theeventscalendar.com/';
@@ -86,7 +67,11 @@ class Tribe__Main {
 		}
 
 		// the 5.2 compatible autoload file
-		require_once dirname( dirname( dirname( __FILE__ ) ) ) . '/vendor/autoload_52.php';
+		if ( version_compare( PHP_VERSION, '5.2.17', '<=' ) ) {
+			require_once realpath( dirname( dirname( dirname( __FILE__ ) ) ) . '/vendor/autoload_52.php' );
+		} else {
+			require_once realpath( dirname( dirname( dirname( __FILE__ ) ) ) . '/vendor/autoload.php' );
+		}
 
 		// the DI container class
 		require_once dirname( __FILE__ ) . '/Container.php';
@@ -98,43 +83,41 @@ class Tribe__Main {
 
 		$this->plugin_path = trailingslashit( dirname( dirname( dirname( __FILE__ ) ) ) );
 		$this->plugin_dir  = trailingslashit( basename( $this->plugin_path ) );
-
 		$parent_plugin_dir = trailingslashit( plugin_basename( $this->plugin_path ) );
-
 		$this->plugin_url  = plugins_url( $parent_plugin_dir === $this->plugin_dir ? $this->plugin_dir : $parent_plugin_dir );
+
+		$this->promoter_connector();
+
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ), 1 );
+		add_action( 'tribe_common_loaded', array( $this, 'tribe_common_app_store' ), 10 );
+	}
+
+	/**
+	 *
+	 */
+	public function plugins_loaded() {
 
 		$this->load_text_domain( 'tribe-common', basename( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) . '/common/lang/' );
 
 		$this->init_autoloading();
 
 		$this->bind_implementations();
-
 		$this->init_libraries();
 		$this->add_hooks();
 
-		$this->doing_ajax = defined( 'DOING_AJAX' ) && DOING_AJAX;
-
-		Tribe__Extension_Loader::instance();
 		/**
 		 * Runs once all common libs are loaded and initial hooks are in place.
 		 *
 		 * @since 4.3
 		 */
 		do_action( 'tribe_common_loaded' );
-	}
 
-	/**
-	 * Get's the instantiated context of this class. I.e. the object that instantiated this one.
-	 */
-	public function context() {
-		return $this->plugin_context;
-	}
-
-	/**
-	 * Get's the class name of the instantiated plugin context of this class. I.e. the class name of the object that instantiated this one.
-	 */
-	public function context_class() {
-		return $this->plugin_context_class;
+		/**
+		 * Runs to register loaded plugins
+		 *
+		 * @since 4.9
+		 */
+		do_action( 'tribe_plugins_loaded ' );
 	}
 
 	/**
@@ -158,24 +141,46 @@ class Tribe__Main {
 		$autoloader->register_autoloader();
 	}
 
+	public function tribe_common_app_store() {
+		Tribe__Extension_Loader::instance();
+	}
+
+	/**
+	 * Get's the instantiated context of this class. I.e. the object that instantiated this one.
+	 */
+	public function context() {
+		return $this->plugin_context;
+	}
+
+	/**
+	 * Get's the class name of the instantiated plugin context of this class. I.e. the class name of the object that instantiated this one.
+	 */
+	public function context_class() {
+		return $this->plugin_context_class;
+	}
+
 	/**
 	 * initializes all required libraries
 	 */
 	public function init_libraries() {
+		require_once $this->plugin_path . 'src/functions/utils.php';
+		require_once $this->plugin_path . 'src/functions/url.php';
+		require_once $this->plugin_path . 'src/functions/query.php';
+		require_once $this->plugin_path . 'src/functions/multibyte.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/general.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/date.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/html.php';
+		require_once $this->plugin_path . 'src/functions/template-tags/post.php';
+
 		Tribe__Debug::instance();
+		tribe( 'assets' );
+		tribe( 'assets.pipeline' );
 		tribe( 'settings.manager' );
 		tribe( 'tracker' );
 		tribe( 'plugins.api' );
-		$this->pue_notices();
-
-		require_once $this->plugin_path . 'src/functions/utils.php';
-		require_once $this->plugin_path . 'src/functions/template-tags/general.php';
-		require_once $this->plugin_path . 'src/functions/template-tags/date.php';
-
+		tribe( 'pue.notices' );
 		tribe( 'ajax.dropdown' );
-
-		// Starting the log manager needs to wait until after the tribe_*_option() functions have loaded
-		$this->log = new Tribe__Log();
+		tribe( 'logger' );
 	}
 
 	/**
@@ -185,29 +190,37 @@ class Tribe__Main {
 		// These ones are only registered
 		tribe_assets(
 			$this,
-			array(
-				array( 'tribe-clipboard', 'vendor/clipboard/clipboard.js' ),
-				array( 'datatables', 'vendor/datatables/media/js/jquery.dataTables.js', array( 'jquery' ) ),
-				array( 'tribe-select2', 'vendor/select2/select2.js', array( 'jquery' ) ),
-				array( 'tribe-select2-css', 'vendor/select2/select2.css' ),
-				array( 'datatables-css', 'datatables.css' ),
-				array( 'datatables-responsive', 'vendor/datatables/extensions/Responsive/js/dataTables.responsive.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-responsive-css', 'vendor/datatables/extensions/Responsive/css/responsive.dataTables.css' ),
-				array( 'datatables-select', 'vendor/datatables/extensions/Select/js/dataTables.select.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-select-css', 'vendor/datatables/extensions/Select/css/select.dataTables.css' ),
-				array( 'datatables-scroller', 'vendor/datatables/extensions/Scroller/js/dataTables.scroller.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-scroller-css', 'vendor/datatables/extensions/Scroller/css/scroller.dataTables.css' ),
-				array( 'datatables-fixedheader', 'vendor/datatables/extensions/FixedHeader/js/dataTables.fixedHeader.js', array( 'jquery', 'datatables' ) ),
-				array( 'datatables-fixedheader-css', 'vendor/datatables/extensions/FixedHeader/css/fixedHeader.dataTables.css' ),
-				array( 'tribe-datatables', 'tribe-datatables.js', array( 'datatables', 'datatables-select' ) ),
-				array( 'tribe-bumpdown', 'bumpdown.js', array( 'jquery', 'underscore', 'hoverIntent' ) ),
-				array( 'tribe-bumpdown-css', 'bumpdown.css' ),
-				array( 'tribe-buttonset-style', 'buttonset.css' ),
-				array( 'tribe-dropdowns', 'dropdowns.js', array( 'jquery', 'underscore', 'tribe-select2' ) ),
-				array( 'tribe-jquery-timepicker', 'vendor/jquery-timepicker/jquery.timepicker.js', array( 'jquery' ) ),
-				array( 'tribe-jquery-timepicker-css', 'vendor/jquery-timepicker/jquery.timepicker.css' ),
+			[
+				[ 'tribe-accessibility-css', 'accessibility.css' ],
+				[ 'tribe-query-string', 'utils/query-string.js' ],
+				[ 'tribe-clipboard', 'vendor/clipboard/clipboard.js' ],
+				[ 'datatables', 'vendor/datatables/datatables.js', [ 'jquery' ] ],
+				[ 'tribe-select2', 'vendor/tribe-select2/select2.js', [ 'jquery' ] ],
+				[ 'tribe-select2-css', 'vendor/tribe-select2/select2.css' ],
+				[ 'tribe-utils-camelcase', 'utils-camelcase.js', [ 'underscore' ] ],
+				[ 'tribe-moment', 'vendor/momentjs/moment.js' ],
+				[ 'tribe-tooltipster', 'vendor/tooltipster/tooltipster.bundle.js', [ 'jquery' ] ],
+				[ 'tribe-tooltipster-css', 'vendor/tooltipster/tooltipster.bundle.css' ],
+				[ 'datatables-css', 'datatables.css' ],
+				[ 'tribe-datatables', 'tribe-datatables.js', [ 'datatables' ] ],
+				[ 'tribe-bumpdown', 'bumpdown.js', [ 'jquery', 'underscore', 'hoverIntent' ] ],
+				[ 'tribe-bumpdown-css', 'bumpdown.css' ],
+				[ 'tribe-buttonset-style', 'buttonset.css' ],
+				[ 'tribe-dropdowns', 'dropdowns.js', [ 'jquery', 'underscore', 'tribe-select2', 'tribe-common' ] ],
+				[ 'tribe-jquery-timepicker', 'vendor/jquery-tribe-timepicker/jquery.timepicker.js', [ 'jquery' ] ],
+				[ 'tribe-jquery-timepicker-css', 'vendor/jquery-tribe-timepicker/jquery.timepicker.css' ],
+				[ 'tribe-timepicker', 'timepicker.js', [ 'jquery', 'tribe-jquery-timepicker' ] ],
+				[ 'tribe-attrchange', 'vendor/attrchange/js/attrchange.js' ],
+			]
+		);
 
-			)
+		tribe_assets(
+			$this,
+			[
+				[ 'tribe-common-skeleton-style', 'common-skeleton.css' ],
+				[ 'tribe-common-full-style', 'common-full.css', [ 'tribe-common-skeleton-style' ] ],
+			],
+			null
 		);
 
 		// These ones will be enqueued on `admin_enqueue_scripts` if the conditional method on filter is met
@@ -215,51 +228,72 @@ class Tribe__Main {
 			$this,
 			array(
 				array( 'tribe-buttonset', 'buttonset.js', array( 'jquery', 'underscore' ) ),
-				array( 'tribe-common-admin', 'tribe-common-admin.css', array( 'tribe-dependency-style', 'tribe-bumpdown-css', 'tribe-buttonset-style' ) ),
-				array( 'tribe-dependency', 'dependency.js', array( 'jquery', 'underscore' ) ),
-				array( 'tribe-dependency-style', 'dependency.css' ),
+				array( 'tribe-common-admin', 'tribe-common-admin.css', array( 'tribe-dependency-style', 'tribe-bumpdown-css', 'tribe-buttonset-style', 'tribe-select2-css' ) ),
+				array( 'tribe-validation', 'validation.js', array( 'jquery', 'underscore', 'tribe-common', 'tribe-utils-camelcase', 'tribe-tooltipster' ) ),
+				array( 'tribe-validation-style', 'validation.css', array( 'tribe-tooltipster-css' ) ),
+				array( 'tribe-dependency', 'dependency.js', array( 'jquery', 'underscore', 'tribe-common' ) ),
+				array( 'tribe-dependency-style', 'dependency.css', array( 'tribe-select2-css' ) ),
 				array( 'tribe-pue-notices', 'pue-notices.js', array( 'jquery' ) ),
 				array( 'tribe-datepicker', 'datepicker.css' ),
 			),
 			'admin_enqueue_scripts',
 			array(
 				'conditionals' => array( $this, 'should_load_common_admin_css' ),
+				'priority' => 5,
 			)
 		);
-
-		$datepicker_months = array_values( Tribe__Date_Utils::get_localized_months_full() );
 
 		tribe_asset(
 			$this,
 			'tribe-common',
 			'tribe-common.js',
-			array( 'tribe-clipboard' ),
+			[],
 			'admin_enqueue_scripts',
-			array(
-				'localize' => (object) array(
-					'name' => 'tribe_system_info',
-					'data' => array(
-						'sysinfo_optin_nonce'   => wp_create_nonce( 'sysinfo_optin_nonce' ),
-						'clipboard_btn_text'    => __( 'Copy to clipboard', 'tribe-common' ),
-						'clipboard_copied_text' => __( 'System info copied', 'tribe-common' ),
-						'clipboard_fail_text'   => __( 'Press "Cmd + C" to copy', 'tribe-common' ),
-					),
-				),
-			)
+			[
+				'priority' => 0,
+			]
 		);
 
-		tribe( 'tribe.asset.data' )->add( 'tribe_l10n_datatables', array(
+		tribe_asset(
+			$this,
+			'tribe-admin-url-fragment-scroll',
+			'admin/url-fragment-scroll.js',
+			[ 'tribe-common' ],
+			'admin_enqueue_scripts',
+			[
+				'conditionals' => [ $this, 'should_load_common_admin_css' ],
+				'priority' => 5,
+			]
+		);
+
+		tribe( Tribe__Admin__Help_Page::class )->register_assets();
+	}
+
+	/**
+	 * Load All localization data create by `asset.data`
+	 *
+	 * @since  4.7
+	 *
+	 * @return void
+	 */
+	public function load_localize_data() {
+		$datepicker_months = array_values( Tribe__Date_Utils::get_localized_months_full() );
+
+		tribe( 'asset.data' )->add( 'tribe_l10n_datatables', array(
 			'aria' => array(
 				'sort_ascending' => __( ': activate to sort column ascending', 'tribe-common' ),
 				'sort_descending' => __( ': activate to sort column descending', 'tribe-common' ),
 			),
-			'length_menu'   => __( 'Show _MENU_ entries', 'tribe-common' ),
-			'empty_table'   => __( 'No data available in table', 'tribe-common' ),
-			'info'          => __( 'Showing _START_ to _END_ of _TOTAL_ entries', 'tribe-common' ),
-			'info_empty'    => __( 'Showing 0 to 0 of 0 entries', 'tribe-common' ),
-			'info_filtered' => __( '(filtered from _MAX_ total entries)', 'tribe-common' ),
-			'zero_records'  => __( 'No matching records found', 'tribe-common' ),
-			'search'        => __( 'Search:', 'tribe-common' ),
+			'length_menu'       => __( 'Show _MENU_ entries', 'tribe-common' ),
+			'empty_table'       => __( 'No data available in table', 'tribe-common' ),
+			'info'              => __( 'Showing _START_ to _END_ of _TOTAL_ entries', 'tribe-common' ),
+			'info_empty'        => __( 'Showing 0 to 0 of 0 entries', 'tribe-common' ),
+			'info_filtered'     => __( '(filtered from _MAX_ total entries)', 'tribe-common' ),
+			'zero_records'      => __( 'No matching records found', 'tribe-common' ),
+			'search'            => __( 'Search:', 'tribe-common' ),
+			'all_selected_text' => __( 'All items on this page were selected. ', 'tribe-common' ),
+			'select_all_link'   => __( 'Select all pages', 'tribe-common' ),
+			'clear_selection'   => __( 'Clear Selection.', 'tribe-common' ),
 			'pagination' => array(
 				'all' => __( 'All', 'tribe-common' ),
 				'next' => __( 'Next', 'tribe-common' ),
@@ -277,11 +311,14 @@ class Tribe__Main {
 				'dayNamesShort'   => Tribe__Date_Utils::get_localized_weekdays_short(),
 				'dayNamesMin'     => Tribe__Date_Utils::get_localized_weekdays_initial(),
 				'monthNames'      => $datepicker_months,
-				'monthNamesShort' => $datepicker_months, // We deliberately use full month names here
-				'nextText'        => esc_html__( 'Next', 'the-events-calendar' ),
+				'monthNamesShort' => $datepicker_months, // We deliberately use full month names here,
+				'monthNamesMin'   => array_values( Tribe__Date_Utils::get_localized_months_short() ),
+ 				'nextText'        => esc_html__( 'Next', 'the-events-calendar' ),
 				'prevText'        => esc_html__( 'Prev', 'the-events-calendar' ),
 				'currentText'     => esc_html__( 'Today', 'the-events-calendar' ),
 				'closeText'       => esc_html__( 'Done', 'the-events-calendar' ),
+				'today'           => esc_html__( 'Today', 'the-events-calendar' ),
+				'clear'           => esc_html__( 'Clear', 'the-events-calendar' ),
 			),
 		) );
 	}
@@ -291,11 +328,11 @@ class Tribe__Main {
 	 */
 	public function add_hooks() {
 		add_action( 'plugins_loaded', array( 'Tribe__App_Shop', 'instance' ) );
-		add_action( 'plugins_loaded', array( 'Tribe__Assets', 'instance' ), 1 );
 		add_action( 'plugins_loaded', array( $this, 'tribe_plugins_loaded' ), PHP_INT_MAX );
 
 		// Register for the assets to be available everywhere
-		add_action( 'init', array( $this, 'load_assets' ), 1 );
+		add_action( 'tribe_common_loaded', array( $this, 'load_assets' ), 1 );
+		add_action( 'init', array( $this, 'load_localize_data' ) );
 		add_action( 'plugins_loaded', array( 'Tribe__Admin__Notices', 'instance' ), 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'store_admin_notices' ) );
 
@@ -367,44 +404,26 @@ class Tribe__Main {
 		}
 
 		$locale = get_locale();
-		$mofile = WP_LANG_DIR . '/plugins/' . $domain . '-' . $locale . '.mo';
+		$plugin_rel_path = WP_LANG_DIR . '/plugins/';
 
 		/**
-		 * Allows users to filter which file will be loaded for a given text domain
+		 * Allows users to filter the file location for a given text domain
 		 * Be careful when using this filter, it will apply across the whole plugin suite.
 		 *
-		 * @param string      $mofile The path for the .mo File
+		 * @param string      $plugin_rel_path The relative path for the language files
 		 * @param string      $domain Which plugin domain we are trying to load
 		 * @param string      $locale Which Language we will load
 		 * @param string|bool $dir    If there was a custom directory passed on the method call
 		 */
-		$mofile = apply_filters( 'tribe_load_text_domain', $mofile, $domain, $locale, $dir );
+		$plugin_rel_path = apply_filters( 'tribe_load_text_domain', $plugin_rel_path, $domain, $locale, $dir );
 
-		$loaded = load_plugin_textdomain( $domain, false, $mofile );
+		$loaded = load_plugin_textdomain( $domain, false, $plugin_rel_path );
 
 		if ( $dir !== false && ! $loaded ) {
 			return load_plugin_textdomain( $domain, false, $dir );
 		}
 
 		return $loaded;
-	}
-
-	/**
-	 * @return Tribe__Log
-	 */
-	public function log() {
-		return $this->log;
-	}
-
-	/**
-	 * @return Tribe__PUE__Notices
-	 */
-	public function pue_notices() {
-		if ( empty( self::$pue_notices ) ) {
-			self::$pue_notices = new Tribe__PUE__Notices;
-		}
-
-		return self::$pue_notices;
 	}
 
 	/**
@@ -459,24 +478,20 @@ class Tribe__Main {
 	}
 
 	/**
-	 * Helper function for getting Post Id. Accepts null or a post id. If no $post object exists, returns false to avoid a PHP NOTICE
+	 * Get the Post ID from a passed integer, a passed WP_Post object, or the current post.
 	 *
-	 * @param int $post (optional)
+	 * Helper function for getting Post ID. Accepts `null` or a Post ID. If attempting
+	 * to detect $post object and it is not found, returns `false` to avoid a PHP Notice.
 	 *
-	 * @return int post ID or False
+	 * @param  null|int|WP_Post  $candidate  Post ID or object, `null` to get the ID of the global post object.
+	 *
+	 * @return int|false The ID of the passed or global post, `false` if the passes object is not a post or the global
+	 *                   post is not set.
 	 */
-	public static function post_id_helper( $post = null ) {
-		if ( ! is_null( $post ) && is_numeric( $post ) > 0 ) {
-			return (int) $post;
-		} elseif ( is_object( $post ) && ! empty( $post->ID ) ) {
-			return (int) $post->ID;
-		} else {
-			if ( ! empty( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) {
-				return get_the_ID();
-			} else {
-				return false;
-			}
-		}
+	public static function post_id_helper( $candidate = null ) {
+		$candidate_post = get_post( $candidate );
+
+		return $candidate_post instanceof WP_Post ? $candidate_post->ID : false;
 	}
 
 	/**
@@ -486,14 +501,17 @@ class Tribe__Main {
 	 * context.
 	 *
 	 * @since 4.0
+	 *
+	 * @todo Add warning with '_deprecated_function'
+	 *
+	 * @param bool $doing_ajax An injectable status to override the `DOING_AJAX` check.
+	 *
+	 * @deprecated 4.7.12
+	 *
 	 * @return boolean
 	 */
 	public function doing_ajax( $doing_ajax = null ) {
-		if ( ! is_null( $doing_ajax ) ) {
-			$this->doing_ajax = $doing_ajax;
-		}
-
-		return $this->doing_ajax;
+		return tribe( 'context' )->doing_ajax( $doing_ajax );
 	}
 
 	/**
@@ -512,6 +530,14 @@ class Tribe__Main {
 	 * Runs tribe_plugins_loaded action, should be hooked to the end of plugins_loaded
 	 */
 	public function tribe_plugins_loaded() {
+		tribe( 'admin.notice.php.version' );
+		tribe_singleton( 'feature-detection', 'Tribe__Feature_Detection' );
+		tribe_register_provider( 'Tribe__Service_Providers__Processes' );
+
+		if ( ! defined( 'TRIBE_HIDE_MARKETING_NOTICES' ) ) {
+			tribe( 'admin.notice.marketing' );
+		}
+
 		/**
 		 * Runs after all plugins including Tribe ones have loaded
 		 *
@@ -526,12 +552,93 @@ class Tribe__Main {
 	public function bind_implementations() {
 		tribe_singleton( 'settings.manager', 'Tribe__Settings_Manager' );
 		tribe_singleton( 'settings', 'Tribe__Settings', array( 'hook' ) );
-		tribe_singleton( 'tribe.asset.data', 'Tribe__Asset__Data', array( 'hook' ) );
 		tribe_singleton( 'ajax.dropdown', 'Tribe__Ajax__Dropdown', array( 'hook' ) );
+		tribe_singleton( 'assets', 'Tribe__Assets' );
+		tribe_singleton( 'assets.pipeline', 'Tribe__Assets_Pipeline', array( 'hook' ) );
+		tribe_singleton( 'asset.data', 'Tribe__Asset__Data', array( 'hook' ) );
+		tribe_singleton( 'admin.helpers', 'Tribe__Admin__Helpers' );
 		tribe_singleton( 'tracker', 'Tribe__Tracker', array( 'hook' ) );
 		tribe_singleton( 'chunker', 'Tribe__Meta__Chunker', array( 'set_post_types', 'hook' ) );
 		tribe_singleton( 'cache', 'Tribe__Cache' );
+		tribe_singleton( 'languages.locations', 'Tribe__Languages__Locations' );
 		tribe_singleton( 'plugins.api', new Tribe__Plugins_API );
-		tribe_singleton( 'logger', array( $this, 'log' ) );
+		tribe_singleton( 'logger', 'Tribe__Log' );
+		tribe_singleton( 'cost-utils', array( 'Tribe__Cost_Utils', 'instance' ) );
+		tribe_singleton( 'post-duplicate.strategy-factory', 'Tribe__Duplicate__Strategy_Factory' );
+		tribe_singleton( 'post-duplicate', 'Tribe__Duplicate__Post' );
+		tribe_singleton( 'context', 'Tribe__Context' );
+		tribe_singleton( 'post-transient', 'Tribe__Post_Transient' );
+		tribe_singleton( 'db', 'Tribe__Db' );
+		tribe_singleton( 'freemius', 'Tribe__Freemius' );
+
+		tribe_singleton( Tribe__Dependency::class, Tribe__Dependency::class );
+
+		tribe_singleton( 'callback', 'Tribe__Utils__Callback' );
+		tribe_singleton( 'pue.notices', 'Tribe__PUE__Notices' );
+
+		tribe_singleton( Tribe__Admin__Help_Page::class, Tribe__Admin__Help_Page::class );
+
+		tribe_singleton( 'admin.notice.php.version', 'Tribe__Admin__Notice__Php_Version', array( 'hook' ) );
+		tribe_singleton( 'admin.notice.marketing', 'Tribe__Admin__Notice__Marketing', array( 'hook' ) );
+
+		tribe_register_provider( Tribe__Editor__Provider::class );
+		tribe_register_provider( Tribe__Service_Providers__Debug_Bar::class );
+		tribe_register_provider( Tribe__Service_Providers__Promoter::class );
+		tribe_register_provider( Tribe\Service_Providers\Tooltip::class );
+		tribe_register_provider( Tribe\Service_Providers\Dialog::class );
+		tribe_register_provider( Tribe\Service_Providers\PUE::class );
+		tribe_register_provider( Tribe\Log\Service_Provider::class );
 	}
+
+	/**
+	 * Create the Promoter connector singleton early to allow hook into the filters early.
+	 *
+	 * Add a filter to determine_current_user during the setup of common library.
+	 *
+	 * @since 4.9.20
+	 */
+	public function promoter_connector() {
+		tribe_singleton( 'promoter.connector', 'Tribe__Promoter__Connector' );
+
+		add_filter(
+			'determine_current_user',
+			tribe_callback( 'promoter.connector', 'authenticate_user_with_connector' )
+		);
+	}
+
+
+	/************************
+	 *                      *
+	 *  Deprecated Methods  *
+	 *                      *
+	 ************************/
+	// @codingStandardsIgnoreStart
+
+	/**
+	 * Manages PUE license key notifications.
+	 *
+	 * It's important for the sanity of our users that only one instance of this object
+	 * be created. However, multiple Tribe__Main objects can and will be instantiated, hence
+	 * why for the time being we need to make this field static.
+	 *
+	 * @see https://central.tri.be/issues/65755
+	 *
+	 * @deprecated 4.7.10
+	 *
+	 * @return Tribe__PUE__Notices
+	 */
+	public function pue_notices() {
+		return tribe( 'pue.notices' );
+	}
+
+	/**
+	 *
+	 * @deprecated 4.7.10
+	 *
+	 * @return Tribe__Log
+	 */
+	public function log() {
+		return tribe( 'logger' );
+	}
+	// @codingStandardsIgnoreEnd
 }

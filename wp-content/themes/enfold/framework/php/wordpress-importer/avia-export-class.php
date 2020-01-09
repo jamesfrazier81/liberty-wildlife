@@ -21,7 +21,8 @@ if( !class_exists( 'avia_wp_export' ) )
 		function __construct($avia_superobject)
 		{
 			if(!isset($_GET['avia_export'])) return;
-		
+			if (defined('DOING_AJAX') && DOING_AJAX) return;
+			
 			$this->avia_superobject = $avia_superobject;
 			$this->subpages = $avia_superobject->subpages;
 			$this->options  = apply_filters( 'avia_filter_global_options_export', $avia_superobject->options );

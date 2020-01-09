@@ -34,7 +34,13 @@ jQuery(function($) {
 
 	$('.ls-revisions-options').click(function(e) {
 		e.preventDefault();
-		kmUI.modal.open('#tmpl-revisions-options', { width: 700, height: 560 });
+
+		kmw.modal.open({
+			content: '#tmpl-revisions-options',
+			minWidth: 500
+		});
+
+
 		$('#ls-revisions-modal-window input:checkbox').customCheckbox();
 
 		$('#ls-revisions-modal-window .ls-checkbox').click(function(e) {

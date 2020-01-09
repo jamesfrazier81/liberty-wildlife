@@ -30,6 +30,34 @@ if( ! defined('AVIA_BASE' ) ) 	 { 	define( 'AVIA_BASE', get_template_directory()
 if( ! defined('AVIA_BASE_URL' ) ){	define( 'AVIA_BASE_URL', get_template_directory_uri() . '/'); }
 
 
+/**
+ * To fix a problem with Envato updater API 3.0 we add the Envato product ID to style.ccs - e.g.:
+ * Envato ID: 4519990
+ * 
+ * This allows us to support multiple themes in case we add new themes in future
+ * 
+ * @since 4.5.3
+ */
+if( ! function_exists( 'handler_avia_extra_theme_headers' ) )
+{
+	add_filter( 'extra_theme_headers', 'handler_avia_extra_theme_headers', 10, 1 );
+	
+	/**
+	 * 
+	 * @since 4.5.3
+	 * @param array $extra_headers
+	 * @return array
+	 */
+	function handler_avia_extra_theme_headers( array $extra_headers )
+	{
+		/**
+		 * WP Bug 5.0.2: uses array_combine and makes keys = values
+		 * This does not allow us to use a different key
+		 */
+		$extra_headers[] = 'Envato_ID';
+		return $extra_headers;
+	}
+}
 
 // get themedata version wp 3.4+
 if(function_exists('wp_get_theme'))
@@ -161,7 +189,12 @@ require( AVIA_PHP.'class-form-generator.php' );
 /**
 * The google maps api source and key check (backend)
 */
-	require( AVIA_PHP.'class-gmaps.php' );
+require( AVIA_PHP.'class-gmaps.php' );
+
+/**
+* The google reCAPTCHA api source 
+*/
+require( AVIA_PHP.'class-grecaptcha.php' );
 	
 /**
 * This file holds the class that creates several framework specific widgets
@@ -185,7 +218,15 @@ require( AVIA_PHP.'class-queryfilter.php' );
 */
 require( AVIA_PHP.'class-sidebar-generator.php' );
 	
-	
+
+/**
+ * These files load the classes necessary to manage type fonts (and icon fonts in future releases
+ */
+require( AVIA_PHP.'font-management/class-avia-font-management-base.php' );
+require( AVIA_PHP.'font-management/class-avia-type-fonts.php' );
+//require( AVIA_PHP.'font-management/class-avia-icon-fonts.php' );
+
+
 if(is_admin())
 {
 
@@ -231,7 +272,7 @@ if(is_admin())
 	*/
 	require( AVIA_PHP.'auto-updates/auto-updates.php' );
 		
-	
+
 	/**
 	* This file loads the option set class to create new backend options on the fly
 	*/

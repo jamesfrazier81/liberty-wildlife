@@ -216,3 +216,410 @@ left: 0!important;
     left: auto;
     right: 50px;
 }
+
+
+/* Columns for better content separation
+================================================== */
+body.rtl.rtl_columns  div .first,
+body.rtl.rtl_columns  div .no_margin {
+  margin-right: 0;
+}
+
+.rtl.rtl_columns div .flex_column {
+	margin-left: 0;				/*	reset margins from standard grid   */
+	float: right;
+}
+
+.rtl.rtl_columns div.flex_column.first{
+	margin-right: 0;
+	clear: right;
+}
+
+.rtl.rtl_columns div .av_one_fifth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_fourth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_third {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_two_fifth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_half {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_three_fifth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_two_third {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_three_fourth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_four_fifth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_sixth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_seventh {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_eighth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_nineth {
+  margin-right: 6%;
+}
+.rtl.rtl_columns div .av_one_tenth {
+  margin-right: 6%;
+}
+
+/* Fix for Layerslider text not displayed correctly (https://github.com/KriesiMedia/wp-themes/issues/1903)
+================================================== */
+.rtl .ls-layers * {
+	direction: rtl;
+}
+
+
+
+
+/* ========================= Mobile Styles ========================= */
+/* Note: Add new css to the media query below that you want to only effect the Mobile and Tablet Portrait view */
+
+@media only screen and (max-width: 767px) {
+  /* Add your Mobile Styles here */
+
+.responsive.html_cart_at_menu #top .main_menu .menu>li:last-child {
+    padding-left: inherit;
+    margin-left: inherit;
+}
+
+.rtl .avia-menu.av_menu_icon_beside {
+    border-right: none;
+    border-left: none;
+    margin-right: 25px;
+    padding-right: 25px;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.responsive #top #wrap_all .main_menu {
+    top: 0;
+    height: 80px;
+    left: 0;
+    right: auto;
+    display: block;
+    position: absolute;
+}
+
+.html_cart_at_menu.html_main_nav_header #top .main_menu .menu>li:last-child {
+    padding-right: inherit;
+    margin-right: inherit;
+}
+
+#menu-item-shop .dropdown_widget {
+    left: -10px;
+    right: auto;
+    top: 100%;
+    padding: 0;
+    margin-top: -1px;
+}
+
+#menu-item-shop .dropdown_widget .avia-arrow {
+    top: -5px;
+    left: 12px;
+    right: auto;
+}
+
+#menu-item-shop .cart_dropdown_link {
+    padding: 0 10px 0 48px;
+}
+
+.responsive #top #header_main > .container .main_menu .av-main-nav > li > a {
+    padding: 0 10px 0 16px;
+}
+
+.avia-arrow {
+    display: none;
+}
+
+.html_av-overlay-side .av-burger-overlay-scroll {
+    width: 100%;
+}
+
+.html_av-submenu-hidden .av-submenu-indicator {
+    float: left;
+    left: 30px;
+    right: inherit;
+}
+
+.html_av-submenu-hidden .av-submenu-indicator:before {
+    content: "\E87c";
+    font-family: 'entypo-fontello';
+}
+
+}
+
+/* ========================= Mobile Styles ========================= */
+
+
+.avia-search-tooltip {
+    top: 100% !important;
+}
+
+#socket .social_bookmarks {
+    float: left;
+    margin: -5px 30px 0px 0px;
+    position: relative;
+}
+
+.responsive #top .logo {
+    float: right;
+}
+
+.iconbox_left .iconbox_icon {
+    right: -5px;
+    left: inherit;
+}
+
+input.button {
+    font-family: iransanswebfanum-light;
+}
+
+#top div .av-light-form .input-text, #top div .av-light-form input[type='text'], #top div .av-light-form input[type='input'], #top div .av-light-form input[type='password'], #top div .av-light-form input[type='email'], #top div .av-light-form input[type='number'], #top div .av-light-form input[type='url'], #top div .av-light-form input[type='tel'], #top div .av-light-form input[type='search'], #top div .av-light-form textarea, #top div .av-light-form select, div div .av-light-form .button {
+    font-family: iransanswebfanum-light;
+}
+
+#top .av-large-testimonial-slider .avia-testimonial-meta-mini {
+    text-align: right;
+}
+
+.av-main-nav-wrap {
+    float: right;
+}
+
+.avia-search-tooltip .avia-arrow-wrap {
+    right: 20px;
+}
+
+#top #searchsubmit, .ajax_load {
+    left: 0;
+    right: inherit;
+}
+
+#top .av_minimal_header #s {
+    padding: 12px 5px 12px 47px;
+    font-family: iransanswebfanum-light;
+}
+
+.ajax_search_image {
+    float: right;
+    margin-left: 8px;
+    margin-right: inherit;
+}
+
+#header .avia_mega_div {
+    left: 0;
+    right: inherit;
+    text-align: right;
+}
+
+.av-tab-arrow-container {
+    top: 10px;
+}
+
+#top .single-product-main-image .onsale {
+    top: 8px;
+    left: 8px;
+    right: inherit;
+}
+
+div.product .woocommerce-tabs ul.tabs li {
+    margin-right: 0px;
+}
+
+.main_color div.product .woocommerce-tabs ul.tabs li.active a, .main_color .cart_dropdown .dropdown_widget .widget_shopping_cart_content, .main_color .cart_dropdown_link, .main_color .inner_product_header, .main_color .avia-arrow, #top .main_color .variations select, #top .main_color .variations input, #top .main_color #reviews input[type='text'], #top .main_color #reviews input[type='email'], .main_color #reviews .comment-text, .main_color #reviews #comment, .main_color .single-product-main-image .images a, #top .main_color .shop_table.cart .input-text, #top .main_color form.login .input-text, #top .main_color form.register .input-text, .main_color .chosen-container-single .chosen-search, .main_color .products .product-category h3:before, #top .main_color .quantity input.qty {
+    font-family: iransanswebfanum-light;
+}
+
+#top div form .form-row input.input-text, #top div #content .form-row input.input-text, #top div form .form-row textarea, #top div #content .form-row textarea {
+    font-family: "iransanswebfanum-light",Helvetica,Arial,sans-serif;
+}
+
+#top .av-masonry-entry .onsale {
+    top: 20px;
+    left: 20px;
+    right: inherit;
+}
+
+.html_modern-blog #top .post-entry .blog-categories {
+    text-align: right;
+}
+
+.html_modern-blog #top .post-entry .post-meta-infos, .html_modern-blog .avia-content-slider .slide-meta {
+    text-align: right;
+}
+
+.html_modern-blog .blog-tags.minor-meta, .html_modern-blog .av-share-link-description, .html_modern-blog .related_title {
+    text-align: right;
+}
+
+.av-share-box ul li {
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-left-style: none;
+}
+
+#top .av-related-style-full .av-related-title {
+    text-align: right;
+}
+
+input[type="submit"], #submit, .button {
+    font-family: iransanswebfanum-light;
+}
+
+#top .main_color .input-text, #top .main_color input[type='text'], #top .main_color input[type='input'], #top .main_color input[type='password'], #top .main_color input[type='email'], #top .main_color input[type='number'], #top .main_color input[type='url'], #top .main_color input[type='tel'], #top .main_color input[type='search'], #top .main_color textarea, #top .main_color select {
+    font-family: iransanswebfanum-light;
+}
+
+#top #s {
+    padding: 11px 5px 11px 47px;
+}
+
+.template-blog .blog-meta {
+    float: right;
+    margin-left: 50px;
+    margin-right: inherit;
+}
+
+.multi-big .post_author_timeline, .single-small .post_author_timeline {
+    right: 40px;
+    left: inherit;
+}
+
+.avia-menu.av_menu_icon_beside {
+    padding-left: 25px;
+    padding-right: inherit;
+    margin-left: 25px;
+    margin-right: inherit;
+    border-left-width: 1px;
+    border-right-width: inherit;
+    border-left-style: solid;
+    border-right-style: none;
+}
+
+.av-non-fullwidth-hotspot-image .av-hotspot-fallback-tooltip-count {
+    right: 0px;
+    left: inherit;
+}
+
+.av-hotspot-fallback-tooltip-inner {
+    margin-right: 60px;
+    margin-left: inherit;
+}
+
+.more-link-arrow:after {
+    content: "\E87c";
+}
+
+.av-magazine-thumbnail {
+    float: right;
+    margin-left: 15px;
+    margin-right: inherit;
+}
+
+.av-magazine-top-heading {
+    float: right;
+}
+
+.av-magazine .av-magazine-sideshow.av_one_half {
+    padding-right: 3%;
+    padding-left: inherit;
+    border-right-width: 1px;
+    border-left-width: inherit;
+    border-right-style: solid;
+    border-left-style: none;
+}
+
+#top #wrap_all .av-social-link-Telegram:hover a{
+    color:#fff; 
+    background-color:#11abd6; 
+}
+
+.av_seperator_small_border .av-main-nav > li > a > .avia-menu-text {
+    border-right-style: solid;
+    border-left-style: none;
+    border-right-width: 1px;
+    padding-right: 13px;
+    margin-right: -13px;
+}
+
+#top .input-text, #top input[type="text"], #top input[type="input"], #top input[type="password"], #top input[type="email"], #top input[type="number"], #top input[type="url"], #top input[type="tel"], #top input[type="search"], #top textarea, #top select {
+    font: 1em "iransanswebfanum-light","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.av-magazine-sort {
+    float: left;
+    font-size: 12px;
+}
+
+.avia-button-wrap.avia-button-left.avia-builder-el-21.el_after_av_hr.avia-builder-el-last {
+    float: left;
+}
+
+.av_secondary_right .sub_menu>ul>li:last-child, .av_secondary_right .sub_menu>div>ul>li:last-child {
+    border: none;
+    margin-right: 0px;
+    padding-right: 10px;
+    padding-left: 0px;
+}
+
+#top .social_bookmarks li {
+    border-right-style: none;
+	border-left-style: none;
+}
+
+.search-result-counter {
+    right: 0;
+    left: auto;
+}
+
+.html_elegant-blog #top .template-search .post-title {
+    text-align: right;
+}
+
+.avia-button-wrap.avia-button-left.el_after_av_hr.avia-builder-el-last {
+    float: left;
+}
+
+.woocommerce-MyAccount-navigation {
+    float: right;
+    border-style: solid;
+    border-width: 1px;
+    margin-left: 50px;
+    margin-right: inherit;
+}
+
+.template-blog .blog-meta {
+    float: right;
+    margin-right: 50px;
+    margin-left: inherit;
+}
+
+.multi-big .post_author_timeline, .single-small .post_author_timeline {
+    right: 90px;
+    left: inherit;
+}
+
+cite.comment_author_name {
+    font-family: iransanswebfanum-light;
+}
+
+.entry-content-wrapper li {
+    margin-right: inherit;
+    margin-left: auto;
+}

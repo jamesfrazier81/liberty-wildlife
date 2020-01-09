@@ -1,6 +1,11 @@
 <?php
 
 /* Parent class for all admin menu classes */
+
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
+
 abstract class AIOWPSecurity_Admin_Menu
 {
     /**
@@ -89,5 +94,16 @@ abstract class AIOWPSecurity_Admin_Menu
         $output = ob_get_contents();
         ob_end_clean();
         return $output;
+    }
+    
+    static function display_bulk_result_message()
+    {
+        if(isset($_GET['bulk_count'])) {
+            AIOWPSecurity_Admin_Menu::show_msg_updated_st(__('The bulk action was successful', 'all-in-one-wp-security-and-firewall'));
+        }
+        
+        if(isset($_GET['bulk_error'])) {
+            AIOWPSecurity_Admin_Menu::show_msg_error_st(__('The bulk action failed', 'all-in-one-wp-security-and-firewall'));            
+        }
     }
 }

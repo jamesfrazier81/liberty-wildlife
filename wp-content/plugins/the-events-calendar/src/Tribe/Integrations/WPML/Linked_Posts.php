@@ -126,7 +126,7 @@ class Tribe__Events__Integrations__WPML__Linked_Posts {
 		}
 
 		// IDs only and drop the order to avoid wasting time on something we'll account for later
-		$sub_query_args = array_merge( $args, array( 'fields' => 'ids', 'order' => false ) );
+		$sub_query_args = array_merge( $args, array( 'fields' => 'ids', 'orderby' => false ) );
 
 		$linked_posts_ids = $this->get_current_language_linked_posts_ids( $sub_query_args );
 
@@ -203,7 +203,7 @@ class Tribe__Events__Integrations__WPML__Linked_Posts {
 
 		$posts = $query->have_posts() ? $query->posts : array();
 
-		$sitepress->switch_lang( $sitepress->get_current_language() );
+		$sitepress->switch_lang( ICL_LANGUAGE_CODE );
 
 		$not_translated = array_filter( $posts, array( $this, 'is_not_translated' ) );
 		$assigned = $this->get_linked_post_assigned_to_current( $args );

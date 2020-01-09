@@ -19,11 +19,11 @@ class Tribe__Events__Admin__Event_Meta_Box {
 	 * @var array
 	 */
 	protected $vars = array(
-		'_EventAllDay' => false,
-		'_EventEndDate' => null,
-		'_EventStartDate' => null,
+		'_EventAllDay'      => false,
+		'_EventEndDate'     => null,
+		'_EventStartDate'   => null,
 		'_EventOrganizerID' => null,
-		'_EventVenueID' => null,
+		'_EventVenueID'     => null,
 	);
 
 
@@ -58,7 +58,7 @@ class Tribe__Events__Admin__Event_Meta_Box {
 		$this->get_event( $event );
 		$this->setup_data();
 
-		$variables = $this->vars;
+		$variables          = $this->vars;
 		$variables['event'] = $this->event;
 
 		return $variables;
@@ -266,7 +266,7 @@ class Tribe__Events__Admin__Event_Meta_Box {
 		 * @param string $date
 		 * @param self   $metabox
 		 */
-		$time = apply_filters( 'tribe_events_meta_box_timepicker_default', $default, $type, $date, $this );
+		$time     = apply_filters( 'tribe_events_meta_box_timepicker_default', $default, $type, $date, $this );
 		$time_str = Tribe__Date_Utils::time_only( $date . ' ' . $time );
 
 		// If we couldn't set we apply the default
@@ -333,5 +333,17 @@ class Tribe__Events__Admin__Event_Meta_Box {
 		$metabox = $this;
 
 		include( $events_meta_box_template );
+	}
+
+	/**
+	 * Disable WordPress Custom Fields in Events
+	 *
+	 * @since 4.6.23
+	 */
+	public function display_wp_custom_fields_metabox() {
+		$show_box = tribe_get_option( 'disable_metabox_custom_fields' );
+		if ( ! tribe_is_truthy( $show_box ) ) {
+			remove_post_type_support( Tribe__Events__Main::POSTTYPE, 'custom-fields' );
+		}
 	}
 }

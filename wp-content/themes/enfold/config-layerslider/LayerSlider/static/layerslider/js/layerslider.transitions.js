@@ -2,7 +2,7 @@
 /*
 	* 2D & 3D Transitions for LayerSlider
 	*
-	* (c) 2011-2017 George Krupa, John Gera & Kreatura Media
+	* (c) 2011-2019 George Krupa, John Gera & Kreatura Media
 	*
 	* Plugin web:			https://layerslider.kreaturamedia.com/
 	* Licenses: 			http://codecanyon.net/licenses/

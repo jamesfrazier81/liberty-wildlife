@@ -343,37 +343,70 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 		}
 
 		
-		
-		function verification_field( $element )
+		/**
+		 * Output a verification field with a callback button or 
+		 * a simple verification button for a group of option fields
+		 * 
+		 * @since < 4.0
+		 * @param array $element
+		 * @return string
+		 */
+		public function verification_field( $element )
 		{
 			$callback 			= $element['ajax'];
 			$js_callback 		= isset($element['js_callback']) ? $element['js_callback'] : "";
 			$element['simple'] 	= true;
-			$output  			= "";
+			$output  			= '';
 			$ajax				= false;
+			
+			$ids_data = '';
+			
+			if( ! empty( $element['input_ids'] ) )
+			{
+				$ids_data = 'data-av-verify-fields="' . implode( ',', $element['input_ids'] ) . '"';
+			}
+			
 			
 			if(isset($element['button-relabel']) && !empty($element['std']))
 			{
 				$element['button-label'] = $element['button-relabel'];
 			}
 			
-			$output .= '<span class="avia_style_wrap avia_verify_input avia_upload_style_wrap">';
-			$output .= $this->text($element);
-			$output .= '<a href="#" data-av-verification-callback="'.$callback.'" data-av-verification-callback-javascript="'.$js_callback.'" class="avia_button avia_verify_button" id="avia_check'.$element['id'].'">'.$element['button-label'].'</a>';
-			$output .= '</span>';
-			$output .= isset($element['help']) ? "<small>".$element['help']."</small>" : "";
+			$input_field = ( empty( $ids_data ) ) ? $this->text( $element ) : $this->hidden( $element );
 			
-			$output .= "<div class='av-verification-result'>";
-			
-			if($element['std'] != "")
+			/**
+			 * Filter to replace normal input field with a password input field
+			 * 
+			 * @since 4.5.6.2
+			 * @param boolean
+			 * @param array $element
+			 * @return boolean
+			 */
+			if( false !== apply_filters( 'avf_verification_password_field', false, $element ) )
 			{
-				$output .= str_replace('avia_trigger_save' ,"",$callback( $element['std'] , $ajax));
+				$input_field = str_replace( 'type="text"', 'type="password"', $input_field );
 			}
 			
-			$output .= "</div>";
+			$output .=	'<span class="avia_style_wrap avia_verify_input avia_upload_style_wrap">';
+			$output .=		$input_field;
+			$output .=		'<a href="#" ' . $ids_data . ' data-av-verification-callback="' . $callback . '" data-av-verification-callback-javascript="' . $js_callback . '" class="avia_button avia_verify_button" id="avia_check' . $element['id'] . '">' . $element['button-label'] . '</a>';
+			$output .=	'</span>';
+			
+			$output .= isset($element['help']) ? "<small>{$element['help']}</small>" : "";
+			
+			$output .=	"<div class='av-verification-result'>";
+			
+			if( ( $element['std'] != "" ) || ( ! empty( $element['force_callback'] ) ) )
+			{
+				$output .= str_replace( 'avia_trigger_save', '', $callback( $element['std'] , $ajax, null, $element ) );
+			}
+			
+			$output .=	'</div>';
 			
 			return $output;
 		}
+				
+
 		
 		
 		
@@ -388,7 +421,9 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			$extraClass = "";
 			if(isset($element['class_on_value']) && !empty($element['std'])) $extraClass = " ".$element['class_on_value'];
 			
-			$text = '<input type="text" class="'.$element['class'].$extraClass.'" value="'.$element['std'].'" id="'.$element['id'].'" name="'.$element['id'].'"/>';
+			$attr = ! empty( $element['readonly'] ) ? 'readonly="readonly"' : '';
+			
+			$text = '<input type="text" class="'.$element['class'].$extraClass.'" value="'.$element['std'].'" id="'.$element['id'].'" name="'.$element['id'].'" '. $attr . '/>';
 			
 			if(isset($element['simple'])) return $text;
 			return '<span class="avia_style_wrap">'.$text.'</span>';
@@ -409,19 +444,36 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 		
 		
 		/**
-         * 
          * The checkbox method renders a single input type:checkbox element
-         * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
-         * @return string $output the string returned contains the html code generated within the method
+		 * 
+		 * @since 4.6.3 extended with toggle
+         * @param array $element	the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+         * @return string $output	the string returned contains the html code generated within the method
          * @todo: fix: checkboxes at metaboxes currently dont work
          */
   		function checkbox( $element )
 		{	
-			$checked = "";
-			if( $element['std'] != "" && $element['std'] != "disabled" ) { $checked = 'checked = "checked"'; }
+			$output = '';
+			
+			$checked = '';
+			if( $element['std'] != '' && $element['std'] != 'disabled' ) 
+			{ 
+				$checked = 'checked = "checked"';
+			}
+			
+			$input = '<input ' . $checked . ' type="checkbox" class="' . $element['class'] . '" value="' . $element['id'] . '" id="' . $element['id'] . '" name="' . $element['id'] . '" />';
 				
-			$output   = '<input '.$checked.' type="checkbox" class="'.$element['class'].'" ';
-			$output  .= 'value="'.$element['id'].'" id="'.$element['id'].'" name="'.$element['id'].'"/>';
+			if( ! current_theme_supports( 'avia_option_pages_toggles' ) )
+			{
+				return $input;
+			}
+			
+			$output .=	'<div class="av-switch-' . $element['id'] . ' av-toggle-switch active ' . $element['class'] . '">';
+			$output .=		'<label>';
+			$output .=			$input;
+			$output .=			'<span class="toggle-track"></span>';
+			$output .=		'</label>';
+			$output .=	'</div>';
 			
 			return $output;
 		}
@@ -434,29 +486,75 @@ if( ! class_exists( 'avia_htmlhelper' ) )
          * @return string $output the string returned contains the html code generated within the method
          */
 		function radio( $element )
-		{	
+		{
+
 			$output = "";
 			$counter = 1;
 			foreach($element['buttons'] as $radiobutton)
-			{	
+			{
 				$checked = "";
 				if( $element['std'] == $counter ) { $checked = 'checked = "checked"'; }
-				
+
 				$output  .= '<span class="avia_radio_wrap">';
 				$output  .= '<input '.$checked.' type="radio" class="'.$element['class'].'" ';
 				$output  .= 'value="'.$counter.'" id="'.$element['id'].$counter.'" name="'.$element['id'].'"/>';
-				
+
 				$output  .= '<label for="'.$element['id'].$counter.'">'.$radiobutton.'</label>';
 				$output  .= '</span>';
-				
+
 				$counter++;
-			}	
-				
+			}
+
 			return $output;
 		}
-		
-		
-		/**
+
+
+        /**
+         *
+         * The imgselect method renders one or more input type:radio elements, based on the definition of the $elements array with images
+         * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+         * @return string $output the string returned contains the html code generated within the method
+         */
+        function imgselect( $element )
+        {
+            $output = "";
+            $counter = 1;
+            foreach($element['buttons'] as $key => $radiobutton)
+            {
+                $checked = "";
+                $image = "";
+                $extra_class = "";
+
+                if( $element['std'] == $key ) {
+                    $checked = 'checked = "checked"';
+                }
+
+                $output  .= '<span class="avia_radio_wrap'.$extra_class .'">';
+
+
+                $output  .= '<input '.$checked.' type="radio" class="'.$element['class'].'" ';
+                $output  .= 'value="'.$key.'" id="'.$element['id'].$counter.'" name="'.$element['id'].'"/>';
+
+                $output  .= '<label for="'.$element['id'].$counter.'">';
+
+                if( isset($element['images']) &&  !empty($element['images'][$key]) ) {
+
+                    $output  .= "<img class='radio_image' src='".$element['images'][$key]."' />";
+                    $extra_class = ' avia-image-radio';
+                }
+
+                $output  .= '<span>'.$radiobutton.'</span>';
+                $output  .= '</label>';
+                $output  .= '</span>';
+
+                $counter++;
+            }
+
+            return $output;
+        }
+
+
+        /**
          * 
          * The textarea method renders a single textarea element
          * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
@@ -644,8 +742,10 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			$output .= '<div class="avia_upload_container avia_upload_container_'.$postId.$mode.'">';
 			$output .= '	<span class="avia_style_wrap avia_upload_style_wrap">';
 			
+			$id = $element['id'];
+			$id_name = empty( $element['id_name'] ) ? $element['id'] : $element['id_name'];
 
-			$output .= '	<input type="text" class="avia_upload_input '.$element['class'].'" value="'.$element['std'].'" name="'.$element['id'].'" id="'.$element['id'].'" />';
+			$output .= '	<input type="text" class="avia_upload_input '.$element['class'].'" value="'.$element['std'].'" name="'. $id_name .'" id="'. $id .'" />';
 			$output .= '	<a '.$data.' href="#'.$postId.'" class="avia_button '.$upload_class.'" title="'.$element['name'].'" id="avia_upload'.$element['id'].'">'.$element['button-label'].'</a>';
 			$output .= '	</span>';
 			$output .= '	<div class="avia_preview_pic" id="div_'.$element['id'].'">'.$prevImg.'</div>';
@@ -893,39 +993,199 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 		
 		
 		/**
-         * 
          * The select method renders a single select element: it either lists custom values, all wordpress pages or all wordpress categories
-         * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
-         * @return string $output the string returned contains the html code generated within the method
+         * 
+		 * @since 4.2.7 - by Günter:
+		 *		- Support for hierarchical display of pages, posts, custom post types and taxonomies was added by default (can be deselected)
+		 *		- Filter for post_status other than publish is now possible - title is extended for those post_status
+		 * 
+         * @param array $element	the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+         * @return string $output	the string returned contains the html code generated within the method
          */
-		function select( $element )
+		public function select( $element )
 		{	
 			$base_url	 = "";
 			$folder_data = "";
 		
-			if($element['subtype'] == 'page')
+			if( $element['subtype'] == 'page' )
 			{
-				$select = 'Select page';
-				$entries = get_pages('title_li=&orderby=name');
+				$select = isset( $element['option_none_text'] ) ? $element['option_none_text'] : __( 'Select page', 'avia_framework' );
+				
+				if( ! isset( $element['hierarchical'] ) || ( 'no' != $element['hierarchical'] ) )
+				{
+					$args = array(
+								'option_none_text'	=> $select,
+								'option_none_value'	=> '',
+								'option_no_change'	=> ''
+							);
+					
+					$element = wp_parse_args( $element, $args );
+					
+					$html = $this->select_hierarchical_post_types( $element, 'page' );
+					
+					if( false !== $html )
+					{
+						return $html;
+					}
+				}
+				
+				/**
+				 * @since 4.2.7
+				 */
+				$limit = apply_filters( 'avf_dropdown_post_number', 9999, $element['subtype'], $element, 'avia_fw_select' );
+				
+				/**
+				 * Make sure we have no spaces
+				 */
+				$post_status = is_array( $element['post_status'] ) ? $element['post_status'] : explode( ',', (string) $element['post_status'] );
+				$element['post_status'] = array_map( function( $value ) { $value = trim($value); return $value;}, $post_status );
+				
+				$args = array(
+							'post_type'		=> $element['subtype'],
+							'post_status'	=> empty( $element['post_status'] ) ? 'publish' : $element['post_status'],
+							'sort_column'	=> 'post_title',
+							'sort_order'	=> 'ASC',
+							'number'		=> $limit
+						);
+				
+				$entries = get_pages( $args );
 			}
-			else if($element['subtype'] == 'post')
+			else if( $element['subtype'] == 'post' )
 			{
-				$select = 'Select post';
-				$entries = get_posts('title_li=&orderby=name&numberposts=9999');
+				$select = isset( $element['option_none_text'] ) ? $element['option_none_text'] : __( 'Select post', 'avia_framework' );
+				
+				if( ! isset ( $element['hierarchical'] ) || ( 'no' != $element['hierarchical'] ) )
+				{
+					$args = array(
+								'option_none_text'	=> $select,
+								'option_none_value'	=> '',
+								'option_no_change'	=> ''
+							);
+					
+					$element = wp_parse_args( $element, $args );
+					
+					$html = $this->select_hierarchical_post_types( $element, 'portfolio' );
+					
+					if( false !== $html )
+					{
+						return $html;
+					}
+				}
+				
+				/**
+				 * @since 4.2.7
+				 */
+				$limit = apply_filters( 'avf_dropdown_post_number', 9999, $element['subtype'], $element, 'avia_fw_select' );
+				
+				$args = array(
+							'post_type'		=> $element['subtype'],
+							'post_status'	=> empty( $element['post_status'] ) ? 'publish' : $element['post_status'],
+							'orderby'		=> 'post_title',
+							'order'			=> 'ASC',
+							'numberposts'	=> $limit
+					);
+				
+				$entries = get_posts( $args );
 			}
-			else if($element['subtype'] == 'cat')
+			else if( $element['subtype'] == 'cat' )
 			{
 				$add_taxonomy = "";
+				$sel_tax = 'category';		//	default taxonomy
 				
-				if(!empty($element['taxonomy'])) $add_taxonomy = "&taxonomy=".$element['taxonomy'];
+				if( ! empty( $element['taxonomy'] ) ) 
+				{
+					$add_taxonomy = "&taxonomy=" . $element['taxonomy'];
+					$sel_tax = $element['taxonomy'];
+				}
 			
-				$select = 'Select category';
-				$entries = get_categories('title_li=&orderby=name&hide_empty=0'.$add_taxonomy);
+				$select = isset ( $element['option_none_text'] ) ? $element['option_none_text'] : __( 'Select category', 'avia_framework' );
 				
+				if( ! isset ( $element['hierarchical'] ) || ( 'no' != $element['hierarchical'] ) )
+				{
+					$args = array(
+								'option_none_text'	=> $select,
+								'option_none_value'	=> '',
+								'option_no_change'	=> ''
+							);
+					
+					$element = wp_parse_args( $element, $args );
+					
+					$html = $this->select_hierarchical_taxonomy( $element, $sel_tax );
+					
+					if( false !== $html )
+					{
+						return $html;
+					}
+				}
+				
+				$entries = get_categories('title_li=&orderby=name&hide_empty=0' . $add_taxonomy );
+				
+			}
+			else if( $element['subtype'] == 'post_type' )
+			{
+				$select = isset( $element['option_none_text'] ) ? $element['option_none_text'] : __( 'Select post types...', 'avia_framework' );
+				
+				$args = array(
+								'_builtin' => true,
+								'public'   => true
+							);
+				$post_types = get_post_types( $args, 'objects', 'or' );
+				
+				$entries = array();
+				foreach ( $post_types  as $post_type )
+				{
+					if( isset( $element['features'] ) && is_array( $element['features'] ) )
+					{
+						$skip = false;
+						foreach( $element['features'] as $feature ) 
+						{
+							if( ! post_type_supports( $post_type->name, $feature ) ) 
+							{
+								$skip = true;
+								break;
+							}
+						}
+						
+						/**
+						 * @used_by			Avia_Gutenberg					10
+						 * @since 4.5.2
+						 */
+						$skip = apply_filters( 'avf_select_post_types', $skip, $post_type, 'option_page', $element );
+						
+						if( $skip )
+						{
+							continue;
+						}
+					}
+					
+					$label = array();
+					if( $post_type->_builtin )
+					{
+						$label[] = __( 'built in', 'avia_framework' );
+					}
+					
+					/**
+					 * @used_by				Avia_Gutenberg				10
+					 * @since 4.5.2
+					 */
+					$label = apply_filters( 'avf_select_post_types_status', $label, $post_type, 'option_page', $element );
+					
+					if( empty( $label ) )
+					{
+						$label = '';
+					}
+					else
+					{
+						$label = ' (' . implode( ', ', $label ) . ')';
+					}
+					
+					$label = $post_type->label . $label;
+					$entries[ $label ] = $post_type->name;
+				}
 			}
 			else
 			{	
-				$select = 'Select...';
+				$select = __( 'Select...', 'avia_framework' );
 				$entries = $element['subtype'];
 				$add_entries = array();
 				
@@ -977,6 +1237,13 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 				$element['class'] .= " avia_onchange";
 			}
 			
+			if( isset( $element['option_all_text'] ) )
+			{
+				$select_all_val = is_string( $element['option_all_text'] ) ? $element['option_all_text'] : __( 'Select all ......', 'avia_framework' );
+				$all = array( $select_all_val => 'avia_all_elements' );
+				$entries = array_merge( $all, $entries );
+			}
+			
 			$multi = $multi_class = "";
 			if(isset($element['multiple'])) 
 			{
@@ -993,7 +1260,11 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			$output .= '<select '.$folder_data.' '.$onchange.' '.$multi.' class="'.$element['class'].'" id="'. $element['id'] .'" name="'. $element['id'] . '"> ';
 			
 			
-			if(!isset($element['no_first'])) { $output .= '<option value="">'.$select .'</option>  '; $fake_val = $select; }
+			if( ! isset( $element['no_first'] ) ) 
+			{ 
+				$output .= '<option value="">' . $select . '</option>  '; 
+				$fake_val = $select; 
+			}
 			
 			$real_entries = array();
 			foreach ($entries as $key => $entry)
@@ -1020,10 +1291,10 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			foreach ($entries as $key => $entry)
 			{
 				
-				if($element['subtype'] == 'page' || $element['subtype'] == 'post')
+				if( $element['subtype'] == 'page' || $element['subtype'] == 'post' )
 				{
 					$id = $entry->ID;
-					$title = $entry->post_title;
+					$title = $this->handler_wp_list_pages( $entry->post_title, $entry );
 				}
 				else if($element['subtype'] == 'cat')
 				{
@@ -1058,7 +1329,6 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 					{
 						$output .= "<option $selected value='". $id."'>". $title."</option>";
 					}
-					
 				}
 			}
 			$output .= '</select>';
@@ -1070,6 +1340,319 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			return $output;
 		}
 		
+		/**
+		 * Return an indented dropdown list for hierarchical post types
+		 * Takes care of complete output
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param array $element
+		 * @param string $post_type
+		 * @return string|false
+		 */
+		 
+		protected function select_hierarchical_post_types( array $element, $post_type = 'page' )
+		{
+			$defaults = array(
+								'id'				=> '',
+								'std'				=> 0,
+								'label'				=> false,			//	for option group
+								'class'				=> '',
+								'hierarchical'		=> 'yes',			//	'yes' | 'no'
+								'post_status'		=> 'publish',		//	array or seperated by comma,
+								'option_none_text'	=> '',				//	text to display for "Nothing selected"
+								'option_none_value'	=> '',				//	value for 'option_none_text'
+								'option_no_change'	=> ''				//	value for 'no change' - set to -1 by WP default
+							);
+
+			$element = array_merge( $defaults, $element );
+			
+			/**
+			 * return, if element should not display a hierarchical structure
+			 */
+			if( 'no' == $element['hierarchical'] )
+			{
+				return false;
+			}
+			
+			/**
+			 * wp_dropdown_pages() does not support multiple selection by default.
+			 * Would need to overwrite Walker_PageDropdown to add this feature.
+			 * 
+			 * Can be done in future if necessary.
+			 */
+			if( isset( $element['multiple'] ) )
+			{
+				return false;
+			}
+
+			$post_type_object = get_post_type_object( $post_type );
+
+			if ( ! ( $post_type_object instanceof WP_Post_Type && $post_type_object->hierarchical ) )
+			{
+				return false;
+			}
+			
+			/**
+			 * If too many entries limit output and only show non hierarchical
+			 * 
+			 * @since 4.2.7
+			 */
+			$limit = apply_filters( 'avf_dropdown_post_number', 4000, $post_type, $element, 'avia_fw_select_hierarchical' );
+			$count = wp_count_posts( $post_type );
+			if( ! isset( $count->publish ) || ( $count->publish > $limit ) )
+			{
+				return false;
+			}
+			
+			/**
+			 * Make sure we have no spaces
+			 */
+			$post_status = is_array( $element['post_status'] ) ? $element['post_status'] : explode( ',', (string) $element['post_status'] );
+			$element['post_status'] = array_map( function( $value ) { $value = trim($value); return $value;}, $post_status );
+			
+			/**
+			 * check for onchange function
+			 */
+			$onchange = "";
+			if(isset($element['onchange'])) 
+			{
+				$onchange = " data-avia-onchange='".$element['onchange']."' ";
+				$element['class'] .= " avia_onchange";
+			}
+			
+			$selected = $element['std'];
+			$fake_val = '';
+			
+			if( isset( $element['no_first'] ) ) 
+			{ 
+				$element['option_none_text'] = '';
+				$element['option_none_value'] = '';
+			}
+			else 
+			{
+				$fake_val = $element['option_none_text'];
+			}
+			
+			if( ! empty( $selected ) )
+			{
+				$post = get_post( $selected );
+				if( $post instanceof WP_Post )
+				{
+					$fake_val = $this->handler_wp_list_pages( $post->post_title, $post );
+				}
+			}
+			
+			$multi = $multi_class = '';
+			if( isset( $element['multiple'] ) ) 
+			{
+				$multi_class = " avia_multiple_select";
+				$multi = ' multiple="multiple" size="' . $element['multiple'] . '" ';
+			}
+			
+			$dropdown_args = array(
+							'post_type'				=> $post_type,
+							'exclude_tree'			=> false,
+							'selected'				=> $selected,
+							'name'					=> $element['id'],
+							'id'					=> $element['id'],
+							'show_option_none'		=> $element['option_none_text'],
+							'option_none_value'		=> $element['option_none_value'],
+							'show_option_no_change' => $element['option_no_change'],
+							'sort_column'			=> 'post_title',
+							'echo'					=> 0,
+							'class'					=> $element['class'] . $multi_class,	
+							'post_status'			=> $element['post_status'],
+					//		'depth'					=> 0, 
+					//		'child_of'				=> 0,
+					//		'value_field'			=> 'ID',	
+							);
+			
+			/**
+			 * Allow to add info for non public post status
+			 */
+			add_filter( 'list_pages', array( $this, 'handler_wp_list_pages' ), 10, 2 );
+			
+			$html = wp_dropdown_pages( $dropdown_args );
+			
+			remove_filter( 'list_pages', array( $this, 'handler_wp_list_pages' ), 10, 2 );
+
+			$html = str_replace( '<select', '<select ' . $multi . $onchange, $html );
+			
+			return $this->get_hierarchical_select_template( $element, $html, $multi_class, $fake_val );
+		}
+		
+		/**
+		 * Add post status in case of non public 
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param string $title
+		 * @param object $page
+		 * @return string
+		 */
+		public function handler_wp_list_pages( $title, $page )
+		{
+			if( $page instanceof WP_Post || ( isset( $page->ID ) && isset( $page->post_status ) ) )
+			{
+				if( 'publish' != $page->post_status )
+				{
+					$title .= ' ( ----> ' . ucfirst( get_post_status( $page->ID ) ) . ' )';
+				}
+			}
+			
+			return $title;
+		}		
+		
+		
+		/**
+		 * Return an indented dropdown list of terms for hierarchical $taxonomy
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param array $element
+		 * @param string $taxonomy
+		 * @return string|false
+		 */
+		protected function select_hierarchical_taxonomy( array $element, $taxonomy = 'category' )
+		{
+			$defaults = array(
+								'id'				=> '',
+								'std'				=> array( '', 0 ),
+								'label'				=> false,			//	for option group
+								'class'				=> '',
+								'hierarchical'		=> 'yes',			//	'yes' | 'no'
+								'option_none_text'	=> '',				//	text to display for "Nothing selected"
+								'option_none_value'	=> '',				//	value for 'option_none_text'
+								'option_no_change'	=> ''				//	value for 'no change' - set to -1 by WP default
+							);
+
+			$element = array_merge( $defaults, $element );
+			
+			/**
+			 * return, if element should not display a hierarchical structure
+			 */
+			if( 'no' == $element['hierarchical'] )
+			{
+				return false;
+			}
+			
+			/**
+			 * wp_dropdown_pages() does not support multiple selection by default.
+			 * Would need to overwrite Walker_CategoryDropdown to add this feature.
+			 * 
+			 * Can be done in future if necessary.
+			 */
+			if( isset( $element['multiple'] ) )
+			{
+				return false;
+			}
+			
+			$obj_ta = get_taxonomy( $taxonomy );
+			
+			if ( ! $obj_ta instanceof WP_Taxonomy )
+			{
+				return false;
+			}
+			
+			/**
+			 * check for onchange function
+			 */
+			$onchange = "";
+			if(isset($element['onchange'])) 
+			{
+				$onchange = " data-avia-onchange='".$element['onchange']."' ";
+				$element['class'] .= " avia_onchange";
+			}
+			
+			$selected = $element['std'];
+			$fake_val = '';
+			
+			if( isset( $element['no_first'] ) ) 
+			{ 
+				$element['option_none_text'] = '';
+				$element['option_none_value'] = '';
+			}
+			else 
+			{
+				$fake_val = $element['option_none_text'];
+			}
+			
+			if( ! empty( $selected ) )
+			{
+				$term = get_term_by( 'term_id', $selected, $taxonomy );
+				if( $term instanceof WP_Term )
+				{
+					$fake_val = $term->name;
+				}
+			}
+				
+			$multi = $multi_class = '';
+			if( isset( $element['multiple'] ) ) 
+			{
+				$multi_class = " avia_multiple_select";
+				$multi = ' multiple="multiple" size="' . $element['multiple'] . '" ';
+			}
+			
+			$args = array(
+						'taxonomy'				=> $taxonomy,
+						'hierarchical'			=> true,
+						'depth'					=> 20,
+						'selected'				=> $selected,
+						'name'					=> $element['id'],
+						'id'					=> $element['id'],
+						'show_option_none'		=> $element['option_none_text'],
+						'option_none_value'		=> $element['option_none_value'],
+						'show_option_no_change' => $element['option_no_change'],
+						'orderby'				=> 'name',
+						'order'					=> 'ASC',
+						'echo'					=> false,
+						'class'					=> $element['class'] . $multi_class,
+						'hide_empty'			=> false,
+						'show_count'			=> true,
+						'hide_if_empty'			=> false,
+//						'child_of'				=> 0,
+//						'exclude'				=> '',
+//						'include'				=> '',
+//						'tab_index'				=> 0,
+//						'value_field'			=> 'term_id',
+					);
+			
+			$html = wp_dropdown_categories( $args );
+
+			$html = str_replace( '<select', '<select ' . $multi . $onchange, $html );
+			
+			return $this->get_hierarchical_select_template( $element, $html, $multi_class, $fake_val );
+		}
+
+		/**
+		 * Returns the HTML template for a hierarchical select dropdown
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param array $element
+		 * @param string $html
+		 * @param string $multi_class
+		 * @param string $fake_val
+		 * @return string
+		 */
+		protected function get_hierarchical_select_template( array $element, $html, $multi_class, $fake_val )
+		{
+			$output  = '<span class="avia_style_wrap avia_select_style_wrap' . $multi_class . '">';
+			$output .=		'<span class="avia_select_unify">';
+			$output .=			$html;
+			$output .=			'<span class="avia_select_fake_val">' . $fake_val . '</span>';
+			$output .=		'</span>';
+			$output .=	'</span>';
+			
+			if( isset( $element['hook'] ) ) 
+			{
+				$output.= '<input type="hidden" name="' . $element['hook'] . '" value="' . $element['hook'] . '" />';
+			}
+			
+			return $output;
+		}
+				
 		
 		function select_sidebar( $element )
 		{
@@ -1096,9 +1679,59 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			return $this->select($element);
 		}
 		
-		
-		
-		
+		/**
+		 * Returns a selectbox of available menus
+		 * In case you need extra options in front add them to subtype array. Menus will be appended.
+		 * 
+		 * @since 4.5
+		 * @added_by Günter
+		 * @param array $element
+		 * @return string
+		 */
+		public function select_menu( array $element )
+		{
+			$locations = get_registered_nav_menus();
+			$nav_menus = wp_get_nav_menus();
+			
+			/**
+			 * array_flip does not work because plugins like WPML might return '' or null for value which throws a warning
+			 * 
+			 * $menu_locations = array_flip( get_nav_menu_locations() );
+			 */
+			$menu_locations = array();
+			$temp = get_nav_menu_locations();
+			foreach ( $temp as $loc => $term_id ) 
+			{
+				if( is_numeric( $term_id ) && ( $term_id > 0 ) )
+				{
+					$menu_locations[ $term_id ] = $loc;
+				}
+			}
+			
+			if( ! isset( $element['subtype'] ) || ! is_array( $element['subtype'] ) )
+			{
+				$element['subtype'] = array();
+			}
+			
+			foreach( $nav_menus as $menu ) 
+			{
+				$key = wp_html_excerpt( $menu->name, 40, '&hellip;' );
+				if( isset( $menu_locations[ $menu->term_id ] ) )
+				{
+					if( isset( $locations[ $menu_locations[ $menu->term_id ] ] ) )
+					{
+						$key .= ' (--&gt; ' . wp_html_excerpt( $locations[ $menu_locations[ $menu->term_id ] ], 70, '&hellip;' ) . ')';
+					}
+				}
+				
+				$element['subtype'][ $key ] = $menu->term_id;
+			}
+			
+			return $this->select( $element );
+		}
+
+
+
 		/**
          * 
          * The hidden method renders a div for a visually conected group
@@ -1281,6 +1914,232 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			return $output;
 		}
 		
+		/**
+		 * The plugin_check method checks if a type of plugin is active and displays a suggestion to activate the plugin if not
+		 *
+         * @since 4.3 - by Kriesi
+         * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+         * @return string $output the string returned contains the html code generated within the method
+         */
+		function plugin_check( $element )
+		{	
+			//check if a plugin is active
+			$active = array();
+			$recommend_count = isset($element['recommend_count']) ? $element['recommend_count'] : 2;
+			
+			//store the plugins in an extra unfilterable array so that no one can mess with our recommendations
+			$recommend = $element['plugins'];
+			
+			//filter the plugins. allows plugin authors to add their plugin to the list of checked plugins
+			$element['plugins'] = apply_filters( 'avf_plugin_check_plugins', $element['plugins'] , $element['id'] );
+
+			
+			foreach($element['plugins'] as $name => $plugin)
+			{
+				if(is_plugin_active($plugin['file'])) {
+		            $active[$name] = $element['plugins'][$name];
+		        }
+			}
+			
+			$extraclass = $required = "";	
+			if(isset($element['required'])) 
+			{ 
+				$required = '<input type="hidden" value="'.$element['required'][0].'::'.$element['required'][1].'" class="avia_required" />';  
+				$extraclass = ' avia_hidden avia_required_container';
+			} 
+			
+			if(isset($element['class'])) $extraclass .= ' '.$element['class'];
+		
+			$output  = '<div class="avia_section avia_'.$element['type'].' '.$extraclass.'"  id="avia_'.$element['id'].'">';
+			$output .= $required;
+			if($element['name'] != "") $output .= '<h4>'.$element['name'].'</h4>';
+			$output .= $element['desc'];
+
+			//no plugin active. lets recommend something
+			if(empty($active))
+			{
+				$output .= "<div class='av-plugin-result-title av-text-notice'>";
+				$output .=  $element['no_found'];
+				$output .= "</div>";
+				
+				$iteration = 0;
+				
+				foreach($recommend as $name => $plugin)
+				{
+					if($recommend_count > $iteration ){
+						$iteration++;
+						
+						$output .= "<div class='av-plugin-check-wrap av-plugin-check-wrap-recommend'>";
+						$output .= "<div class='av-plugin-check-wrap-inner'>";
+						$output .= "<div class='av-plugin-check-wrap-image'>";
+						
+						if(!empty($plugin['download'])){
+						$output .= "<img src='https://ps.w.org/{$plugin['download']}/assets/icon-128x128.png' />";
+						}
+						
+						$output .= "</div>";
+						$output .= "<div class='av-plugin-check-wrap-content'>";
+						$output .= '<h3>'.$name.'</h3>';
+						$output .= "</div>";
+						$output .= "</div>";
+						
+						if(!empty($plugin['desc'])){
+						$output .= "<div class='av-plugin-check-wrap-desc'>";
+						$output .= $plugin['desc'];
+						$output .= "</div>";
+						}
+						
+						//does not work in thickbox
+						//$output .= '<a href="' . esc_url( network_admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin['download'] . '&TB_iframe=true&width=600&height=550' ) ) . '" class="thickbox">'.__('Install','avia_framework').'</a>';
+						
+						if($plugin['download']){
+						
+						$action = 'install-plugin';
+						$url = wp_nonce_url(
+						    add_query_arg(
+						        array(
+						            'action' => $action,
+						            'plugin' => $plugin['download'],
+						        ), 
+						    
+						    admin_url( 'update.php' ) ), $action.'_'.$plugin['download']);
+						$label = __('Install Plugin','avia_framework');
+						
+						
+						if(isset($plugin['file']) && file_exists(trailingslashit(WP_PLUGIN_DIR) . $plugin['file']))
+						{
+							$action = 'activate';
+							$url = wp_nonce_url(
+							    add_query_arg(
+							        array(
+							            'action' => $action,
+							            'plugin' => $plugin['file'],
+							        ), 
+							    
+							    admin_url( 'plugins.php' ) ), 'activate-plugin_'.$plugin['file']);
+							$label = __('Activate Plugin','avia_framework');
+						}
+					
+									
+						$output .= "<div class='av-plugin-check-wrap-button'>";
+						$output .= avia_targeted_link_rel( '<a class="avia_button avia_button_small" target="_blank" href="' . esc_url( $url ) . '">' . $label . '</a>' );
+						$output .= '<a class="avia_button avia_button_small" target="_blank" href="https://wordpress.org/plugins/'.$plugin['download'].'/" rel="noopener noreferrer">'.__('Plugin Details', 'avia_framework').'</a>';
+						$output .= "</div>";
+						}
+						
+						$output .= "</div>";
+					}
+				}
+				
+				
+			}
+			else
+			{
+				$output .= "<div class='av-plugin-result-title av-text-notice'>";
+
+				if(count($active) > 1)
+				{
+					$output .=  $element['too_many'];
+				}
+				else
+				{
+					$output .=  $element['found'];
+				}
+				
+				$output .= "</div>";
+
+				foreach($active as $name => $plugin)
+				{
+					$output .= "<div class='av-plugin-check-wrap'>";
+					$output .= "<div class='av-plugin-check-wrap-inner'>";
+					$output .= "<div class='av-plugin-check-wrap-image'>";
+					
+					if($plugin['download']){
+					$output .= "<img src='https://ps.w.org/{$plugin['download']}/assets/icon-128x128.png' />";
+					}
+					
+					$output .= "</div>";
+					$output .= "<div class='av-plugin-check-wrap-content'>";
+					$output .= '<h4>'.__("Currently active:",'avia_framework').'</h4>';
+					$output .= $name;
+					$output .= "</div>";
+					$output .= "</div>";
+					$output .= "</div>";
+				}
+			}
+			
+			
+			$output .= '</div>';
+			return $output;
+		}
+		
+		
+		
+		
+		/**
+		 * The template_builder_element_loader iterates over all template builder elements that can be disabled and lists them
+		 *
+         * @since 4.3 - by Kriesi
+         * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+         * @return string $output the string returned contains the html code generated within the method
+         */
+		function template_builder_element_loader( $element )
+		{
+			$extraclass = $required = "";	
+			if(isset($element['required'])) 
+			{ 
+				$required = '<input type="hidden" value="'.$element['required'][0].'::'.$element['required'][1].'" class="avia_required" />';  
+				$extraclass = ' avia_hidden avia_required_container';
+			} 
+			
+			$iteration = 1;
+			$checkboxes = "";
+			
+			foreach(Avia_Builder()->shortcode_class as $shortcode)
+			{
+				if( !empty( $shortcode->config['disabling_allowed'] ) )
+				{
+					if( "manually" !== $shortcode->config['disabling_allowed'] )
+					{
+						$checkbox[ $shortcode->config['name'] ] = array(
+						"name" 	=> $shortcode->config['name']." ".__("Element", 'avia_framework'),
+						"desc" 	=> __("Check to disable the Element", 'avia_framework'),
+						"id" 	=> "av_alb_disable_" . $shortcode->config['shortcode'],
+						"type" 	=> "checkbox",
+						"std"	=> "",
+						"slug" => $element['slug'] /*needs to inherit the original slug*/
+						);
+					}
+				}
+			}
+			
+			//sort all elements
+			ksort($checkbox);
+			
+			foreach($checkbox as $single_checkbox)
+			{
+				$single_checkbox['class'] = "av_3col av_col_".$iteration;
+				
+				//iterate over checkbox by name
+				$checkboxes .= $this->render_single_element( $single_checkbox );
+				
+				$iteration++;
+				if($iteration > 3) $iteration = 1;
+			}
+			
+			
+			
+			
+			if(isset($element['class'])) $extraclass .= ' '.$element['class'];
+		
+			$output  = '<div class="avia_section avia_'.$element['type'].' '.$extraclass.'"  id="avia_'.$element['id'].'">';
+			$output .= $required;
+			$output .= $checkboxes;
+			$output .= '</div>';
+			return $output;
+		}
+		
+		
 	
 		
 		/**
@@ -1372,8 +2231,9 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 		function page_header()
 		{
 			$the_title = apply_filters( 'avia_filter_backend_page_title', $this->avia_superobject->base_data['Title'] );
+			$class = current_theme_supports( 'avia_option_pages_toggles' ) ? 'av-use-toggles' : 'av-use-checkbox';
 			
-			$output  = '<form id="avia_options_page" action="#" method="post">';
+			$output  = '<form id="avia_options_page" action="#" method="post" class="' . $class . '">';
 			$output .= '	<div class="avia_options_page_inner avia_sidebar_active">';
 			$output .= '	<div class="avia_options_page_sidebar"><div class="avia_header">';
 			$output .=      apply_filters('avia_options_page_header', "");
@@ -1383,7 +2243,7 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			$output .= '			<h2 class="avia_logo">'.$the_title.' '.$this->avia_superobject->currentpage.'</h2>';
 			$output .= '				<ul class="avia_help_links">';
 			$output .= '					<li><a class="thickbox" onclick="return false;" href="http://docs.kriesi.at/'.avia_backend_safe_string($this->avia_superobject->base_data['prefix']).'/changelog/index.php?TB_iframe=1">Changelog</a> |</li>';
-			$output .= '					<li><a target="_blank" href="http://docs.kriesi.at/'.avia_backend_safe_string($this->avia_superobject->base_data['prefix']).'/documentation/">Docs</a></li>';
+			$output .= '					<li><a target="_blank" href="http://docs.kriesi.at/'.avia_backend_safe_string($this->avia_superobject->base_data['prefix']).'/documentation/" rel="noopener noreferrer">Docs</a></li>';
 			$output .= '				</ul>';
 			$output .= '				<a class="avia_shop_option_link" href="#">Show all Options [+]</a>';
 			$output .= '				<span class="avia_loading"></span>';
@@ -1730,6 +2590,18 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 			$output .= "</div>";
 		}
 		
+		if(isset($active) && $active)
+		{
+			$key 					= 'item_active';
+			$element['name']  		= __('Apply only to active state','avia_framework');
+			$element['html_name']  	= $name_string.$key;
+			$element['data_tmpl']  	= $blank_string.$key;
+			$element['std'] 		= isset($element['std_a'][$key]) ? $element['std_a'][$key] : "";
+			$output .= "<div class='av-wizard-subcontainer av-wizard-subcontainer-checkbox av-wizard-subcontainer-bottom-box'>";
+			$output .= $this->styling_wizard_checkbox($element);
+			$output .= "</div>";
+		}
+		
 			
 			
 		$output .= 		'<a class="avia_remove_wizard_set" href="#">×</a>';
@@ -1806,17 +2678,39 @@ if( ! class_exists( 'avia_htmlhelper' ) )
 	}
 	
 	
-	
+	/**
+	 * Displays a selectbox and supports optgroup tag
+	 * 
+	 * @param array $element
+	 * @return string
+	 */
 	function styling_wizard_select($element)
 	{
 		extract($element);
 		$output  = "";
 		$output .= "<span class='avia_style_wrap avia_select_style_wrap'><span class='avia_select_unify'><select name='{$html_name}' data-recalc='{$data_tmpl}'>";
 		
-		foreach($sub_values['options'] as $key => $option)
+		foreach( $sub_values['options'] as $key => $option )
 		{
-			$selected = $option == $std ? "selected='selected'" : "";
-			$output .= "<option {$selected} value='{$option}'>{$key}</option>";
+			$is_optgroup = is_array( $option );
+			$optgroup_sub = $is_optgroup ? $option : array( $key => $option );
+			
+			if( $is_optgroup )
+			{
+				$output .= '<optgroup label="' . $key . '">';
+			}
+			
+			foreach( $optgroup_sub as $show => $value ) 
+			{
+				$selected = $value == $std ? "selected='selected'" : "";
+				$output .= "<option {$selected} value='{$value}'>{$show}</option>";
+			}
+			
+			if( $is_optgroup )
+			{
+				$output .= '</optgroup>';
+			}
+			
 		}
 		
 		$output .= "</select><span class='avia_select_fake_val'>Default</span></span></span>";

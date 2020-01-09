@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
 
 if(!function_exists('avia_modify_front'))
 {
@@ -173,6 +175,8 @@ if(!function_exists('avia_modify_breadcrumb'))
 
 
 
+
+
 if(!function_exists('avia_layout_class'))
 {
 
@@ -290,3 +294,28 @@ if(!function_exists('avia_has_sidebar'))
 		return strpos($avia_config['layout']['current']['main'], 'sidebar') !== false ? true : false;
 	}
 }
+
+
+
+/*
+* Function that disbales the session cookie for breadcrumb when breadcrumb navigation is disabled globaly 
+ 
+* @author Kriesi
+* @since 4.4
+*/
+
+if(!function_exists('avia_disable_portfolio_sessions'))
+{
+	function avia_disable_portfolio_sessions()
+	{
+		$bc = avia_get_option('header_title_bar');
+		
+		if( strpos($bc, 'breadcrumb') === false )
+		{
+			add_theme_support( 'avia_no_session_support' );
+		}
+	}
+	
+	add_action('init', 'avia_disable_portfolio_sessions', 10);
+}
+

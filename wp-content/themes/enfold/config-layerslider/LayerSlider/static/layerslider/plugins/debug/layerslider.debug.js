@@ -2,7 +2,7 @@
 /*
 	* LayerSlider Plugin: Debug
 	*
-	* (c) 2011-2017 George Krupa, John Gera & Kreatura Media
+	* (c) 2011-2019 George Krupa, John Gera & Kreatura Media
 	*
 	* LayerSlider web:		https://layerslider.kreaturamedia.com/
 	* licenses:				http://codecanyon.net/licenses/standard

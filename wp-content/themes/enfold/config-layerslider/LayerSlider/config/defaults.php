@@ -41,7 +41,7 @@ $lsDefaults = array(
 <span>IMPORTANT:</span>
 <ul>
 	<li>You will still need to set the slider status as published,</li>
-	<li>and insert the slider to the target page with one of the methods described in the <a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-shortcode" target="_blank">documentation</a>.</li>
+	<li>and insert the slider to the target page with one of the methods described in the <a href="https://layerslider.kreaturamedia.com/documentation/#publish-shortcode" target="_blank">documentation</a>.</li>
 </ul>', 'LayerSlider'),
 			'attrs' => array(
 				'placeholder' => __('No schedule', 'LayerSlider')
@@ -865,6 +865,14 @@ $lsDefaults = array(
 		),
 
 
+		'rememberUnmuteState' => array(
+			'value' => true,
+			'name' => __('Remember unmute state', 'LayerSlider'),
+			'keys' => 'rememberUnmuteState',
+			'desc' => __('After a visitor has clicked on the Unmute button the slider will assume that all later media can play with sound. Disable this option if you want to display the Unmute button on each slide separately.', 'LayerSlider')
+		),
+
+
 		// =========== //
 		// |  Popup  | //
 		// =========== //
@@ -998,7 +1006,7 @@ $lsDefaults = array(
 				'min' => 0,
  			),
 			'props' => array(
-				'output' => true
+				'meta' => true
 			)
 		),
 
@@ -1011,7 +1019,7 @@ $lsDefaults = array(
 				'min' => 0,
  			),
 			'props' => array(
-				'output' => true
+				'meta' => true
 			)
 		),
 
@@ -1351,6 +1359,13 @@ $lsDefaults = array(
 			'props' => array( 'meta' => true )
 		),
 
+		'popupRolesCustomer' => array(
+			'value' => true,
+			'name' => __('Customers', 'LayerSlider'),
+			'keys' => 'popup_roles_customer',
+			'props' => array( 'meta' => true )
+		),
+
 		'popupRolesVisitor' => array(
 			'value' => true,
 			'name' => __('Visitors', 'LayerSlider'),
@@ -1423,6 +1438,17 @@ $lsDefaults = array(
 			'desc' => __('The srcset attribute allows loading dynamically scaled images based on screen resolution. It can save bandwidth and allow using retina-ready images on high resolution devices. In some rare edge cases, this option might cause blurry images.', 'LayerSlider')
 		),
 
+		'enhancedLazyLoad' => array(
+			'value' => false,
+			'name' => 'Enhanced lazy load',
+			'keys' => 'enhancedLazyLoad',
+			'desc' => __('The default lazy loading behavior makes a compromise to ensure maximum compatibility while offering a solution that works ideally in almost all cases. However, by leaving the image ’src’ and ’srcset’ attributes untouched, there is a slight chance that the browser might start downloading some assets for a split second before LayerSlider cancels them. Enabling this option will eliminate any chance of generating even a minuscule amount of unwanted traffic, but it can also cause issues for search engine indexing and other WP themes/plugins.', 'LayerSlider'),
+			'advanced' => true,
+			'props' => array(
+				'meta' => true
+			)
+		),
+
 
 		'preferBlendMode' => array(
 			'value' => 'disabled',
@@ -1440,6 +1466,12 @@ $lsDefaults = array(
 		// ============== //
 		// |  YourLogo  | //
 		// ============== //
+
+		'yourLogoId' => array (
+			'value' => '',
+			'keys' => 'yourlogoId',
+			'props' => array( 'meta' => true )
+		),
 
 		// Places a fixed image on the top of the slider.
 		'yourLogoImage' => array(
@@ -1724,6 +1756,14 @@ $lsDefaults = array(
 			'keys' => array('custom_3d_transitions', 'customtransition3d')
 		),
 
+		'customProperties' => array(
+			'value' => '',
+			'keys' => 'customProperties',
+			'props' => array(
+				'meta' => true
+			)
+		),
+
 		'transitionOrigami' => array(
 			'value' => false,
 			'name' => __('Origami', 'LayerSlider'),
@@ -1762,6 +1802,9 @@ $lsDefaults = array(
 			'tooltip' => __('If you want to link the whole slide, type the URL here. You can choose a WordPress page/post/attachment or use one of the pre-defined options from the dropdown list when you click into this field. You can also type a hash mark followed by a number to link this layer to another slide. Example: #3 - this will switch to the third slide.', 'LayerSlider'),
 			'attrs' => array(
 				'data-options' => '[{
+					"name": "'.__('Switch to a certain slide', 'LayerSlider').'",
+					"value": "#1"
+				},{
 					"name": "'.__('Switch to the next slide', 'LayerSlider').'",
 					"value": "#next",
 					"linkAction": true
@@ -1787,11 +1830,23 @@ $lsDefaults = array(
 					"linkAction": true
 				},{
 					"name": "'.__('Reverse the slide, then replay it', 'LayerSlider').'",
-					"value": "#reverse-replay",
+					"value": "#reverseReplay",
 					"linkAction": true
 				},{
 					"name": "'.__('Close the Popup', 'LayerSlider').'",
-					"value": "#closepopup",
+					"value": "#closePopup",
+					"linkAction": true
+				},{
+					"name": "'.__('Start media playback on slide', 'LayerSlider').'",
+					"value": "#playMedia",
+					"linkAction": true
+				},{
+					"name": "'.__('Pause media playback on slide', 'LayerSlider').'",
+					"value": "#pauseMedia",
+					"linkAction": true
+				},{
+					"name": "'.__('Unmute media playback', 'LayerSlider').'",
+					"value": "#unmuteMedia",
 					"linkAction": true
 				}]'
 			),
@@ -1858,7 +1913,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Deeplink', 'LayerSlider'),
 			'keys' => 'deeplink',
-			'tooltip' => __('You can specify a slide alias name which you can use in your URLs with a hash mark, so LayerSlider will start with the correspondig slide.', 'LayerSlider')
+			'tooltip' => __('A slide alias name, which you can use in your URLs with a hash tag so LayerSlider will start with the corresponding slide when visitors arrive to the page. Example: domain.com/page/#welcome<br><br>Use only lowercase alphanumeric values. You can also use this feature to implement slide navigation with links.', 'LayerSlider')
 		),
 
 		'globalHover' => array(
@@ -2186,7 +2241,8 @@ $lsDefaults = array(
 			'value' => '',
 			'keys' => 'html',
 			'props' => array(
-				'meta' => true
+				'meta' => true,
+				'forceoutput' => true
 			)
 		),
 
@@ -2203,7 +2259,7 @@ $lsDefaults = array(
 
 		'mediaInfo' => array(
 			'value' => 'auto',
-			'name' => __('Show Info', 'LayerSlider'),
+			'name' => __('Show info', 'LayerSlider'),
 			'keys' => 'showinfo',
 			'options' => array(
 				'auto' => __('Auto', 'LayerSlider'),
@@ -2253,16 +2309,40 @@ $lsDefaults = array(
 			)
 		),
 
+		'mediaMuted' => array(
+			'value' => 'auto',
+			'name' => __('Play muted', 'LayerSlider'),
+			'keys' => 'muted',
+			'options' => array(
+				'auto'  => __('Auto', 'LayerSlider'),
+				'enabled'  => __('Enabled', 'LayerSlider'),
+				'disabled'  => __('Disabled', 'LayerSlider'),
+				'offerToUnmute'  => __('Offer to unmute', 'LayerSlider'),
+			)
+		),
+
+
+		'mediaLoop' => array(
+			'value' => 'auto',
+			'name' => __('Loop', 'LayerSlider'),
+			'keys' => 'loopmedia',
+			'options' => array(
+				'auto' => __('Auto', 'LayerSlider'),
+				'enabled' => __('Enabled', 'LayerSlider'),
+				'disabled' => __('Disabled', 'LayerSlider')
+			)
+		),
+
 		'mediaBackgroundVideo' => array(
 			'value' => false,
 			'name' => __('Use this video as slide background', 'LayerSlider'),
 			'keys' => 'backgroundvideo',
-			'tooltip' => __('Forces this layer to act like the slide background by covering the whole slider and ignoring some transitions. Please make sure to provide your own poster image with the option above, so the slider can display it immediately on page load.', 'LayerSlider')
+			'tooltip' => __('Forces this layer to act like the slide background by covering the whole slider and ignoring some transitions. Please make sure to provide your own poster image, so the slider can display it immediately on page load.', 'LayerSlider')
 		),
 
 		'mediaOverlay' => array(
 			'value' => 'disabled',
-			'name' => __('Choose an overlay image:', 'LayerSlider'),
+			'name' => __('Overlay image', 'LayerSlider'),
 			'keys' => 'overlay',
 			'tooltip' => __('Cover your videos with an overlay image to have dotted or striped effects on them.', 'LayerSlider')
 		),
@@ -4187,6 +4267,9 @@ $lsDefaults = array(
 			'tooltip' => __('If you want to link your layer, type the URL here. You can choose a WordPress page/post/attachment or use one of the pre-defined options from the dropdown list when you click into this field. You can also type a hash mark followed by a number to link this layer to another slide. Example: #3 - this will switch to the third slide.', 'LayerSlider'),
 			'attrs' => array(
 				'data-options' => '[{
+					"name": "'.__('Switch to a certain slide', 'LayerSlider').'",
+					"value": "#1"
+				},{
 					"name": "'.__('Switch to the next slide', 'LayerSlider').'",
 					"value": "#next",
 					"linkAction": true
@@ -4212,11 +4295,23 @@ $lsDefaults = array(
 					"linkAction": true
 				},{
 					"name": "'.__('Reverse the slide, then replay it', 'LayerSlider').'",
-					"value": "#reverse-replay",
+					"value": "#reverseReplay",
 					"linkAction": true
 				},{
 					"name": "'.__('Close the Popup', 'LayerSlider').'",
-					"value": "#closepopup",
+					"value": "#closePopup",
+					"linkAction": true
+				},{
+					"name": "'.__('Start media playback on slide', 'LayerSlider').'",
+					"value": "#playMedia",
+					"linkAction": true
+				},{
+					"name": "'.__('Pause media playback on slide', 'LayerSlider').'",
+					"value": "#pauseMedia",
+					"linkAction": true
+				},{
+					"name": "'.__('Unmute media playback', 'LayerSlider').'",
+					"value": "#unmuteMedia",
 					"linkAction": true
 				}]'
 			),
@@ -4425,11 +4520,12 @@ $lsDefaults = array(
 		),
 
 		'fontWeight' => array(
-			'value' => 400,
+			'value' => 'unset',
 			'name' => __('Font weight', 'LayerSlider'),
 			'keys' => 'font-weight',
 			'tooltip' => __('Sets the font boldness. Please note, not every font supports all the listed variants, thus some settings may have the same result.', ''),
 			'options' => array(
+				'unset' => __('Inherit from theme', 'LayerSlider'),
 				'100' => __('100 (UltraLight)', 'LayerSlider'),
 				'200' => __('200 (Thin)', 'LayerSlider'),
 				'300' => __('300 (Light)', 'LayerSlider'),
@@ -4446,11 +4542,12 @@ $lsDefaults = array(
 		),
 
 		'fontStyle' => array(
-			'value' => 'normal',
+			'value' => 'unset',
 			'name' => __('Font style', 'LayerSlider'),
 			'keys' => 'font-style',
 			'tooltip' => __('Oblique is an auto-generated italic version of your chosen font and can force slating even if there is no italic font variant available. However, you should use the regular italic option whenever is possible. Please double check to load italic font variants when using Google Fonts.', ''),
 			'options' => array(
+				'unset' => __('Inherit from theme', 'LayerSlider'),
 				'normal' => __('Normal', 'LayerSlider'),
 				'italic' => __('Italic', 'LayerSlider'),
 				'oblique' => __('Oblique (Forced slant)', 'LayerSlider')
@@ -4461,11 +4558,12 @@ $lsDefaults = array(
 		),
 
 		'textDecoration' => array(
-			'value' => 'none',
+			'value' => 'unset',
 			'name' => __('Text decoration', 'LayerSlider'),
 			'keys' => 'text-decoration',
 			'options' => array(
-				'none' => 'None',
+				'unset' => __('Inherit from theme', 'LayerSlider'),
+				'none' => __('None', 'LayerSlider'),
 				'underline' => __('Underline', 'LayerSlider'),
 				'overline' => __('Overline', 'LayerSlider'),
 				'line-through' => __('Line through', 'LayerSlider')
@@ -4491,10 +4589,11 @@ $lsDefaults = array(
 		),
 
 		'textAlign' => array(
-			'value' => 'none',
+			'value' => 'unset',
 			'name' => __('Text align', 'LayerSlider'),
 			'keys' => 'text-align',
 			'options' => array(
+				'unset' => __('Inherit from theme', 'LayerSlider'),
 				'initial' => __('Initial (Language default)', 'LayerSlider'),
 				'left' => __('Left', 'LayerSlider'),
 				'right' => __('Right', 'LayerSlider'),
@@ -4548,13 +4647,59 @@ $lsDefaults = array(
 			)
 		),
 
-		'background' => array(
+		'background' => array (
 			'value' => '',
-			'name' => __('Background', 'LayerSlider'),
-			'keys' => 'background',
+			'keys' => 'layerBackground',
+			'tooltip' => __('The background image of this layer. Click on the image to open the WordPress Media Library to choose or upload an image.', 'LayerSlider'),
+			'props' => array( 'meta' => true )
+		),
+
+		'backgroundId' => array (
+			'value' => '',
+			'keys' => 'layerBackgroundId',
+			'props' => array( 'meta' => true )
+		),
+
+		'backgroundColor' => array(
+			'value' => '',
+			'name' => __('Color', 'LayerSlider'),
+			'keys' => 'background-color',
 			'tooltip' => __('The background color of your layer. You can use color names, hexadecimal, RGB or RGBA values as well as the “transparent” keyword. Example: #FFF', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
+			)
+		),
+
+		'backgroundSize' => array(
+			'value' => 'inherit',
+			'name' => __('Size', 'LayerSlider'),
+			'keys' => 'background-size',
+			'tooltip' => __('The size of the slide background image. Leave this option on inherit if you want to set it globally from Slider Settings.', 'LayerSlider'),
+			'options' => array(
+				'inherit' => __('Inherit from theme', 'LayerSlider'),
+				'auto' => __('Auto', 'LayerSlider'),
+				'cover' => __('Cover', 'LayerSlider'),
+				'contain' => __('Contain', 'LayerSlider'),
+				'100% 100%' => __('Stretch', 'LayerSlider')
+			)
+		),
+
+		'backgroundPosition' => array(
+			'value' => 'inherit',
+			'name' => __('Position', 'LayerSlider'),
+			'keys' => 'background-position',
+			'tooltip' => __('The position of the slide background image. Leave this option on inherit if you want to set it globally from Slider Settings.', 'LayerSlider'),
+			'options' => array(
+				'inherit' => __('Inherit from theme', 'LayerSlider'),
+				'0% 0%' => __('left top', 'LayerSlider'),
+				'0% 50%' => __('left center', 'LayerSlider'),
+				'0% 100%' => __('left bottom', 'LayerSlider'),
+				'50% 0%' => __('center top', 'LayerSlider'),
+				'50% 50%' => __('center center', 'LayerSlider'),
+				'50% 100%' => __('center bottom', 'LayerSlider'),
+				'100% 0%' => __('right top', 'LayerSlider'),
+				'100% 50%' => __('right center', 'LayerSlider'),
+				'100% 100%' => __('right bottom', 'LayerSlider')
 			)
 		),
 
@@ -4562,7 +4707,7 @@ $lsDefaults = array(
 			'value' => '',
 			'name' => __('Rounded corners', 'LayerSlider'),
 			'keys' => 'border-radius',
-			'tooltip' => __('If you want rounded corners, you can set its radius here. Example: 5px', 'LayerSlider'),
+			'tooltip' => __('If you want rounded corners, you can set its radius here. You can use both pixel and percentage values. Example: 5px', 'LayerSlider'),
 			'props' => array(
 				'meta' => true
 			)
@@ -4675,13 +4820,23 @@ $lsDefaults = array(
 			)
 		),
 
+
+		'pointerEvents' => array(
+			'value' => false,
+			'name' => __('Prevent mouse events', 'LayerSlider'),
+			'keys' => 'pointerEvents',
+			'tooltip' => __('Disables hover and click events, and makes it possible to click through the layer. Can be useful if you have overlapping layers or you want to prevent hover triggered effects like showing controls and overlays in a video player.', 'LayerSlider')
+		),
+
+
 		'blendMode' => array(
-			'value' => 'normal',
+			'value' => 'unset',
 			'name' => __('Blend mode', 'LayerSlider'),
 			'keys' => 'mix-blend-mode',
 			'tooltip' => __('Choose how layers and the slide background should blend into each other. Blend modes are an easy way to add eye-catching effects and is one of the most frequently used features in graphic and print design.', 'LayerSlider'),
 			'premium' => true,
 			'options' => array(
+				'unset' => __('Inherit from theme', 'LayerSlider'),
 				'normal' => 'Normal',
 				'multiply' => 'Multiply',
 				'screen' => 'Screen',

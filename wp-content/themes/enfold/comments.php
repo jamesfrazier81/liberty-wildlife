@@ -1,4 +1,4 @@
-<?php
+<?php 
 	
 	if ( !defined('ABSPATH') ){ die(); }
 	
@@ -158,22 +158,52 @@ endif; // end have_comments()
 	 * if you want to modify the submission form check the documentation here:
 	 * http://codex.wordpress.org/Function_Reference/comment_form
 	 */
-	 if(comments_open()){
-		
+	 if(comments_open())
+	 {
+		$default_heading = 'h3';
+		$args = array(
+					'heading'		=> $default_heading,
+					'extra_class'	=> ''
+				);
+
+		/**
+		 * @since 4.5.5
+		 * @return array
+		 */
+		$args = apply_filters( 'avf_customize_heading_settings', $args, 'comments_open', array() );
+
+		$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+		$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
 		 
 		 echo "<div class='comment_container'>";
-		 echo "<h3 class='miniheading'>".__('Leave a Reply','avia_framework')."</h3>";
+		 echo "<{$heading} class='miniheading {$css}'>".__('Leave a Reply','avia_framework')."</{$heading}>";
 		 echo "<span class='minitext'>".__('Want to join the discussion?','avia_framework')." <br/>".__('Feel free to contribute!','avia_framework')."</span>";
 		 comment_form();
 		 echo "</div>";
 	 }
 	 else if(get_comments_number())
 	 {
+		$default_heading = 'h3';
+		$args = array(
+					'heading'		=> $default_heading,
+					'extra_class'	=> ''
+				);
+
+		/**
+		 * @since 4.5.5
+		 * @return array
+		 */
+		$args = apply_filters( 'avf_customize_heading_settings', $args, 'comments_closed', array() );
+
+		$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+		$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+		
+		
 		 /* If there are no comments and comments are closed,
 		 * let's leave a little note, shall we?
 		 */
 	 	
-	 	echo "<h3 class=' commentsclosed'>".__( 'Comments are closed.', 'avia_framework' )."</h3>";
+	 	echo "<{$heading} class='commentsclosed {$css}'>".__( 'Comments are closed.', 'avia_framework' )."</{$heading}>";
 	 } 
 	  
 	  ?>

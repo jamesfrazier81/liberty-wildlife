@@ -17,7 +17,6 @@ class Tribe__Events__Aggregator__API__Import extends Tribe__Events__Aggregator__
 		'url'               => 'EventURL',
 		'parent_id'         => 'parent_id',
 		'uid'               => 'uid',
-		'facebook_id'       => 'facebook_id',
 		'dev_start'         => 'dev_start',
 		'dev_end'           => 'dev_end',
 		'all_day'           => 'EventAllDay',
@@ -30,7 +29,6 @@ class Tribe__Events__Aggregator__API__Import extends Tribe__Events__Aggregator__
 	);
 
 	public $organizer_field_map = array(
-		'facebook_id' => 'FacebookID',
 		'organizer'   => 'Organizer',
 		'phone'       => 'Phone',
 		'website'     => 'Website',
@@ -38,7 +36,6 @@ class Tribe__Events__Aggregator__API__Import extends Tribe__Events__Aggregator__
 	);
 
 	public $venue_field_map = array(
-		'facebook_id'           => 'FacebookID',
 		'venue'                 => 'Venue',
 		'address'               => 'Address',
 		'city'                  => 'City',
@@ -74,8 +71,8 @@ class Tribe__Events__Aggregator__API__Import extends Tribe__Events__Aggregator__
 					'message_code' => 'queued',
 					'message'      => tribe( 'events-aggregator.service' )->get_service_message( 'queued' ),
 					'data'         => (object) array(
-						'import_id' => $import_id
-					)
+						'import_id' => $import_id,
+					),
 				);
 			}
 
@@ -85,7 +82,8 @@ class Tribe__Events__Aggregator__API__Import extends Tribe__Events__Aggregator__
 		// let's try to use the localized version of the message if available
 		if ( ! empty( $response->message_code ) ) {
 			$default = ! empty( $response->message ) ? $response->message : $this->service->get_unknown_message();
-			$response->message = $this->service->get_service_message( $response->message_code, array(), $default );
+			$message_args = is_array( $response->data ) ? $response->data : array();
+			$response->message = $this->service->get_service_message( $response->message_code, $message_args, $default );
 		}
 
 		if ( 'success_import-complete' !== $response->message_code ) {

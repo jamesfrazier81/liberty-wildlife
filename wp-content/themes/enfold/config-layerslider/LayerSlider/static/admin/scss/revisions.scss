@@ -103,10 +103,6 @@
 		margin-right: 10px;
 	}
 
-	div {
-		text-align: left;
-	}
-
 	h2 {
 		margin: 50px 0 10px 0;
 		font-size: 18px;
@@ -121,11 +117,7 @@
 	}
 
 	button {
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		width: 300px;
-		margin-left: -150px !important;
+
 	}
 
 	.ls-notification-info {
@@ -271,10 +263,10 @@
 	display:none !important;
 }
 
-#ls-layer-tabs {
+#ls-slide-tabs {
 	z-index: 99999;
 }
 
-#ls-layer-tabs .dashicons-dismiss {
+#ls-slide-tabs .dashicons-dismiss {
 	display: none !important;
 }

@@ -105,3 +105,55 @@
 
 	
 })(jQuery);	 
+
+(function($)
+{
+	var objAviaWidgetConditionalHide = null;
+
+	/*
+	 * Implement an easy CSS solution for conditional hiding of input elements in widget backend page
+	 * 
+	 * Currently only supports select boxes
+	 */
+	var AviaWidgetConditionalHide = function(){
+		
+		objAviaWidgetConditionalHide = this;
+		
+		this.body = $( "body" );
+			
+		this.bind_events();
+		
+		this.body.find('form .widget-content .avia-coditional-widget-select').trigger('change');
+	};
+	
+	AviaWidgetConditionalHide.prototype = {
+		
+		bind_events: function()
+		{
+			this.body.on( 'change', 'form .widget-content .avia-coditional-widget-select', this.select_changed );
+		},
+		
+		select_changed: function( event )
+		{
+			var select = $(this);
+			var form_container = select.closest( '.avia_widget_conditional_form' ).first();
+			
+			select.find('option').each( function(){
+						var value = $(this).val();
+						form_container.removeClass( value );
+					});
+					
+			var option_selected = select.find('option:selected');
+			var value = option_selected.val();
+			form_container.addClass( value );
+		}
+
+		
+	};
+	
+	$(function()
+	{
+		new AviaWidgetConditionalHide();
+ 	});
+	
+})(jQuery);	 

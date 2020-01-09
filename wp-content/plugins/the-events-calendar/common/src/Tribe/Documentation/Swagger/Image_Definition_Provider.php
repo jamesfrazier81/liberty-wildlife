@@ -19,30 +19,33 @@ class Tribe__Documentation__Swagger__Image_Definition_Provider
 		$documentation = array(
 			'type'       => 'object',
 			'properties' => array(
-				'url' => array(
-					'type' =>'string',
-					'description' =>__('The URL to the full size version of the image', 'tribe-common'),
+				'url'       => array(
+					'type'        => 'string',
+					'format'      => 'uri',
+					'description' => __( 'The URL to the full size version of the image', 'tribe-common' ),
 				),
-				'id' => array(
-					'type' => 'int',
+				'id'        => array(
+					'type'        => 'integer',
 					'description' => __( 'The image WordPress post ID', 'tribe-common' ),
 				),
 				'extension' => array(
-					'type' =>'string',
-					'description' =>__('The image file extension', 'tribe-common'),
+					'type'        => 'string',
+					'description' => __( 'The image file extension', 'tribe-common' ),
 				),
-				'width' => array(
-					'type' => 'int',
+				'width'     => array(
+					'type'        => 'integer',
 					'description' => __( 'The image natural width in pixels', 'tribe-common' ),
 				),
-				'height' => array(
-					'type' => 'int',
+				'height'    => array(
+					'type'        => 'integer',
 					'description' => __( 'The image natural height in pixels', 'tribe-common' ),
 				),
-				'sizes' => array(
-					'type' => 'array',
+				'sizes'     => array(
+					'type'        => 'array',
 					'description' => __( 'The details about each size available for the image', 'tribe-common' ),
-					'$ref' => '#/definitions/ImageSize',
+					'items'       => array(
+						'$ref' => '#/components/schemas/ImageSize',
+					),
 				),
 			),
 		);

@@ -1,4 +1,8 @@
 <?php
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
+
 class AIOWPSecurity_Backup
 {
     var $last_backup_file_name;//Stores the name of the last backup file when execute_backup function is called
@@ -330,9 +334,6 @@ class AIOWPSecurity_Backup
 
     function aiowps_scheduled_db_cleanup_handler()
     {
-        global $aio_wp_security;
-
-        $aio_wp_security->debug_logger->log_debug_cron("DB Cleanup - checking if a cleanup needs to be done now...");
         //Check the events table because this can grow quite large especially when 404 events are being logged
         $events_table_name = AIOWPSEC_TBL_EVENTS;
         $max_rows_event_table = '5000'; //Keep a max of 5000 rows in the events table

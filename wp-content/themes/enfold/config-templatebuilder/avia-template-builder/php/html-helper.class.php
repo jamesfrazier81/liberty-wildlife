@@ -6,7 +6,8 @@
 // Don't load directly
 if ( !defined('ABSPATH') ) { die('-1'); }
 
-if ( !class_exists( 'AviaHtmlHelper' ) ) {
+if ( ! class_exists( 'AviaHtmlHelper' ) ) 
+{
 
 	class AviaHtmlHelper 
 	{
@@ -48,7 +49,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		
 		static function ajax_modify_id($element)
 		{
-			// check if its an ajax request. if so prepend a string to ensure that the ids are unqiue. 
+			// check if its an ajax request. if so prepend a string to ensure that the ids are unique. 
 			// If there are multiple modal windows called prepend the string multiple times
 			if(isset($_POST['ajax_fetch'])) 
 			{ 
@@ -63,14 +64,45 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			return $element;
 		}
 		
-		
-	
-		static function render_element($element, $parent_class = false)
+		/**
+		 * Returns an element with all needed default keys
+		 * 
+		 * @since 4.5.7.2
+		 * @param array $element
+		 * @return array
+		 */
+		static public function validate_element( array $element = array() )
 		{
-		
-			$defaults		= array('id'=>'', 'name'=>'', 'label' => '', 'std' => '', 'class' =>'', 'container_class'=>'', 'desc' =>'', 'required'=>array(), 'target'=>array(), 'shortcode_data'=>array(), 'builder_active' => '');
-			$element		= array_merge($defaults, $element);
-			$output			= "";
+			$defaults = array(
+								'id'				=> '', 
+								'name'				=> '', 
+								'label'				=> '', 
+								'std'				=> '', 
+								'class'				=> '', 
+								'container_class'	=> '', 
+								'desc'				=> '', 
+								'required'			=> array(), 
+								'target'			=> array(), 
+								'shortcode_data'	=> array(), 
+								'builder_active'	=> ''
+							);
+			
+			$element = array_merge( $defaults, $element );
+			
+			return $element;
+		}
+
+		/**
+		 * 
+		 * @since < 4.0
+		 * @param array $element
+		 * @param aviaShortcodeTemplate|mixed $parent_class
+		 * @return string
+		 */
+		static public function render_element( $element, $parent_class = false )
+		{
+			$element = AviaHtmlHelper::validate_element( $element );
+			$output	= '';
 			
 			if( $element['builder_active'] )
 			{
@@ -83,7 +115,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			extract(self::check_dependencies($element));
 			
 			
-			// check if its an ajax request. if so prepend a string to ensure that the ids are unqiue. 
+			// check if its an ajax request. if so prepend a string to ensure that the ids are unique. 
 			// If there are multiple modal windows called prepend the string multiple times
 			$element = self::ajax_modify_id($element);
 			
@@ -130,7 +162,10 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				$output .= "<div class='avia-form-element ".$element['class']."'>";
 				//$output .= self::{$element['type']}($element, $parent_class);
 				
-				$output .= call_user_func(array('self', $element['type']), $element, $parent_class);
+				if( method_exists( __CLASS__, $element['type'] ) )
+				{
+					$output .= call_user_func(array('self', $element['type']), $element, $parent_class);
+				}
 				
 				if(!empty($element['fetchTMPL']))
 				{
@@ -146,7 +181,10 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			else
 			{
 				//$output .= self::{$element['type']}($element, $parent_class);
-				$output .= call_user_func(array('self', $element['type']), $element, $parent_class);
+				if( method_exists( __CLASS__, $element['type'] ) )
+				{
+					$output .= call_user_func(array('self', $element['type']), $element, $parent_class);
+				}
 			}
 			
 			if( $element['builder_active'] )
@@ -203,17 +241,17 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 							case 'doesnt_contain': 	if(strpos($value1,$value2) === false) $return = true; break;
 							case 'is_empty_or': 	if(empty($value1) || $value1 == $value2) $return = true; break;
 							case 'not_empty_and': 	if(!empty($value1) && $value1 != $value2) $return = true; break;
-							case 'parent_in_array':			//	$value1 = "value,id"
+							case 'parent_in_array':			//	$value1 = "value,id" or "value"
 										$sep = strpos( $value1, ',' );
-										$val = ( false !== $sep ) ? substr( $value1, 0, $sep ) : '';
+										$val = ( false !== $sep ) ? substr( $value1, 0, $sep ) : $value1;
 										if( ! empty( $val ) )
 										{
 											$return = in_array( $val, explode( ' ', $value2 ) );
 										}
 										break;
-							case 'parent_not_in_array';		//	$value1 = "value,id"
+							case 'parent_not_in_array';		//	$value1 = "value,id" or "value"
 										$sep = strpos( $value1, ',' );
-										$val = ( false !== $sep ) ? substr( $value1, 0, $sep ) : '';
+										$val = ( false !== $sep ) ? substr( $value1, 0, $sep ) : $value1;
 										if( ! empty( $val ) )
 										{
 											$return = ! in_array( $val, explode( ' ', $value2 ) );
@@ -297,24 +335,34 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			return $output;
 		}
 		
-		
+		/**
+		 * 
+		 * @param array						$element
+		 * @param aviaShortcodeTemplate		$parent_class
+		 * @param int|false					$i					false, if we need a new empty template to clone if user clicks "Add New"
+		 * @return string
+		 */
 		static function modal_group_sub($element, $parent_class, $i = false)
 		{
 			$output = "";
 			
 			$args = array();
-			$content = NULL;
+			$content = null;
 			
-			//iterate over the subelements and set the default values
+			//iterate over the subelements and set user selected values or leave the predefined default values
 			foreach($element['subelements'] as $key => $subelement)
 			{
-				if(isset($element['std']) && isset($subelement['id']) && is_array($element['std']) && isset($element['std'][$i][$subelement['id']]))
+				/**
+				 * New WP way: we add an "empty" template filled with predefined default values that we can clone if user wants to add a new item,
+				 * if we have already existing items overwrite default values with user selected values
+				 */
+				if( false !== $i )
 				{
-					$subelement['std'] = $element['std'][$i][$subelement['id']];
+					if(isset($element['std']) && isset($subelement['id']) && is_array($element['std']) && isset($element['std'][$i][$subelement['id']]))
+					{
+						$subelement['std'] = $element['std'][$i][$subelement['id']];
+					}
 				}
-				
-				//if $i is not set, meaning we need a totaly empty template reset the std values
-				if($i === false) $subelement['std'] = "";
 				
 				if(isset($subelement['id']))
 				{
@@ -348,6 +396,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			$data['modal_open']			= isset( $element['modal_open'] ) ? $element['modal_open'] : 'yes';
 			$data['trigger_button']			= isset( $element['trigger_button'] ) ? $element['trigger_button'] : '';
 			$data['shortcodehandler'] 	= $parent_class->config['shortcode_nested'][0];
+			$data['closing_tag']		= $parent_class->is_nested_self_closing( $parent_class->config['shortcode_nested'][0] ) ? 'no' : 'yes';
 			$data['modal_ajax_hook'] 	= $parent_class->config['shortcode_nested'][0];
 			$data['modal_on_load'] 		= array();
 			
@@ -395,6 +444,12 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
          * Tab Container Elements 
          */
          
+        static function close_div( $element )
+		{	
+			$output = "</div>";
+			return $output;
+		}
+         
 		static function tab_container( $element )
 		{	
 			$output = "<div class='avia-modal-tab-container'>";
@@ -407,14 +462,72 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			return $output;
 		}
 		
-		static function close_div( $element )
+		static function close_tab( $element )
 		{	
-			$output = "</div>";
-			return $output;
+			return self::close_div( $element );
+		}
+		
+		static function close_tab_container( $element )
+		{	
+			return self::close_div( $element );
 		}
 		
 		
 		
+		/**
+         * Toggle Container Elements 
+         */
+		static function toggle_container( $element )
+		{	
+			$output = "<div class='avia-modal-toggle-container' data-toggles-closed='".$element['all_closed']."'>";
+			return $output;
+		}
+		
+		static function toggle( $element )
+		{	
+			$output   = "<div class='avia-modal-toggle-container-inner' data-toggle-name='".$element['name']."' data-toggle-desc='".$element['desc']."'>";
+			$output  .= '<div class="avia-toggle-description avia-name-description av-builder-note av-neutral"><strong>'.$element['name'].'</strong><div>'.$element['desc'].'</div></div>';
+			
+			return $output;
+		}
+		
+		static function close_toggle( $element )
+		{	
+			return self::close_div( $element );
+		}
+		
+		static function close_toggle_container( $element )
+		{	
+			return self::close_div( $element );
+		}
+		
+		
+		
+		/**
+         * Switcher Container Elements 
+         */
+		static function icon_switcher_container( $element )
+		{	
+			$output = "<div class='avia-modal-iconswitcher-container'>";
+			return $output;
+		}
+		
+		static function icon_switcher( $element )
+		{	
+			$output   = "<div class='avia-modal-iconswitcher-container-inner' data-switcher-name='".$element['name']."' data-switcher-icon='".AVIA_BASE_URL . "config-templatebuilder/avia-template-builder/images/iconswitcher/" .$element['icon'].".png"."'>";
+			
+			return $output;
+		}
+		
+		static function close_icon_switcher_container( $element )
+		{	
+			return self::close_div( $element );
+		}
+		
+		static function close_icon_switcher( $element )
+		{	
+			return self::close_div( $element );
+		}
 		
 		
 		
@@ -541,7 +654,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		{
 			$output = "";
 			$count = 0;
-			$element['std'] = explode(",", $element['std']);
+			$element['std'] = explode(",", $element['std'] );
 			$value = "";
 			$checked = count(array_unique($element['std'], SORT_STRING));
 			
@@ -561,7 +674,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			}
 			$output .= "</div>";
 			
-			if(!empty($element['sync']))
+			if(isset($element['sync']))
 			{
 				$checked = $checked === 1 ? "checked='checked'" : "";
 				$label	 = __('Apply the same value to all?','avia_framework');
@@ -716,14 +829,57 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		}
 		
 		/**
-         * 
-         * The datepicker method renders a datepicker element that allows you to select a date of your choice
-         * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
-         * @return string $output the string returned contains the html code generated within the method
-         */
-		static function datepicker($element)
+		 * The datepicker method renders a datepicker element that allows you to select a date of your choice.
+		 * See http://api.jqueryui.com/datepicker/ for possible parameters and values. If you want to extend parmeters also adjust list in 
+		 * enfold\config-templatebuilder\avia-template-builder\assets\js\avia-modal.js function $.AviaModal.register_callback.modal_load_datepicker.
+		 * 
+		 * Add parameters to modify to array 'dp_params' when defining the datepicker in popup editor. 
+		 * Values are rendered 1:1 with js. Arrays must be defined as array.
+		 * Default parameters do not need to be set.
+		 * 
+		 * @since < 4.0  
+		 * @modified 4.5.6.1  by Günter
+		 * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
+		 * @return string $output the string returned contains the html code generated within the method
+		 */
+		static public function datepicker( array $element )
 		{
-			$output = '<input type="text" class="av-datepicker av-no-autoselect '.$element['class'].'" value="'.$element['std'].'" id="'.$element['id'].'" name="'.$element['id'].'"/>';
+			global $wp_locale;
+			
+			/**
+			 * Default values are set to be backwards comp. befor
+			 */
+			$args = array(
+						'showButtonPanel'	=> false,
+						'closeText'         => __( 'Close', 'avia_framework' ),
+						'currentText'       => __( 'Today', 'avia_framework' ),
+						'nextText'			=> __( 'Next', 'avia_framework' ),
+						'prevText'			=> __( 'Prev', 'avia_framework' ),
+						'monthNames'        => array_values( $wp_locale->month ),
+						'monthNamesShort'   => array_values( $wp_locale->month_abbrev ),
+						'dayNames'          => array_values( $wp_locale->weekday ),
+						'dayNamesShort'     => array_values( $wp_locale->weekday_abbrev ),
+						'dayNamesMin'       => array_values( $wp_locale->weekday_initial ),
+						'dateFormat'        => 'mm / dd / yy',
+						'firstDay'          => get_option( 'start_of_week' ),
+						'isRTL'             => $wp_locale->is_rtl(),
+						'changeMonth'		=> false,
+						'changeYear'		=> false,
+//						'minDate'			=> -0,						//	'mm / dd / yy' | number
+//						'maxDate'			=> '',						//
+//						'yearRange'			=> "c-80:c+10",
+//						'container_class'	=> ''						//	'select_dates_30' | ''
+					);
+			
+			if( is_array( $element['dp_params'] ) )
+			{
+				$args = array_merge( $args, $element['dp_params'] );
+			}
+	
+			$data_params = AviaHelper::create_data_string( $args );
+		
+			$output = '<input type="text" class="av-datepicker av-no-autoselect '.$element['class'].'" value="'.$element['std'].'" id="'.$element['id'].'" name="'.$element['id'].'" ' . $data_params . ' />';
+			
 			return $output;
 		}
 		
@@ -756,16 +912,28 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			$allowed_pts = isset($original['posttype']) ? $original['posttype'] : $pt;
 			$allowed_tas = isset($original['taxtype']) ? $original['taxtype'] : $ta;
 			
-			if(in_array('single', $element['subtype']))
+			if( in_array('single', $element['subtype'] ) )
 			{
-				foreach($pt as $key => $type)
+				foreach( $pt as $key => $type )
 				{
-					if(in_array($type, $allowed_pts))
+					if( in_array( $type, $allowed_pts ) )
 					{
-						$original['subtype'] = $type;
-						$html = self::select($original); 
+						$html = AviaHtmlHelper::select_hierarchical_post_types( $element, $type );
 						
-						if( $html ) { AviaHelper::register_template($original['id'].'-'.$type, $html); } else { unset($pt[$key] ); }
+						if( false === $html )
+						{
+							$original['subtype'] = $type;
+							$html = self::select( $original ); 
+						}
+						
+						if( ! empty( $html ) )
+						{ 
+							AviaHelper::register_template( $original['id'] . '-' . $type, $html ); 
+						} 
+						else 
+						{ 
+							unset($pt[$key] ); 
+						}
 					}
 					else
 					{
@@ -780,11 +948,24 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				{
 					if(in_array($type, $allowed_tas))
 					{
-						$original['subtype'] = 'cat';
-						$original['taxonomy'] = $type;
-					
-						$html = self::select($original); 
-						if( $html ) {AviaHelper::register_template($original['id'].'-'.$type, $html); } else { unset($ta[$key] ); }
+						$html = AviaHtmlHelper::select_hierarchical_taxonomy( $element, $type );
+
+						if( false === $html )
+						{
+							$original['subtype'] = 'cat';
+							$original['taxonomy'] = $type;
+
+							$html = self::select( $original ); 
+						}
+						
+						if( ! empty( $html ) )
+						{
+							AviaHelper::register_template( $original['id'] . '-' . $type, $html ); 
+						} 
+						else 
+						{ 
+							unset( $ta[ $key ] ); 
+						}
 					}
 					else
 					{
@@ -881,8 +1062,10 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			
 			$attachmentids 	= !empty($element['shortcode_data']['attachment']) ? explode(',', $element['shortcode_data']['attachment']) : array();
 			$attachmentid 	= !empty($attachmentids[self::$imageCount]) ? $attachmentids[self::$imageCount] : '';
-			$attachmentsize = !empty($element['shortcode_data']['attachment_size']) ? $element['shortcode_data']['attachment_size'] : "";		
-				
+			
+			$attachmentsizes = ! empty( $element['shortcode_data']['attachment_size'] ) ? explode( ',', $element['shortcode_data']['attachment_size'] ) : array();	
+			$attachmentsize = ! empty( $attachmentsizes[ self::$imageCount ] ) ? $attachmentsizes[ self::$imageCount ] : "";		
+						
 			//get image based on id if possible - use the force_id_fetch param in conjunction with the secondary_img when you need a secondary image based on id and not on url like pattern overlay. size of a secondary image can not be stored. tab section element is a working example
 			if(!empty($attachmentid) && !empty($attachmentsize) && empty($element['force_id_fetch']))
 			{
@@ -931,7 +1114,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 
 			if(empty($element['force_id_fetch']))
 			{
-				self::$imageCount++;
+				if($element['type'] != 'video') self::$imageCount++;
 			}
 			return $output;
 		}
@@ -1042,7 +1225,14 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				$fetch = isset($element['fetch']) ? $element['fetch'] : "template";
 				$state = isset($element['state']) ? $element['state'] : "avia_insert_multi";
 				
-				$class = $fetch == "template" ? "avia-media-img-only-no-sidebars" : "avia-media-img-only";
+				if( empty( $element['show_options'] ) )
+				{
+					$class = $fetch == "template" ? "avia-media-img-only-no-sidebars" : "avia-media-img-only";
+				}
+				else if( $element['show_options'] == true )
+				{
+					$class = "avia-media-img-only";
+				}
 				
 				$element['data'] =  array(	'target' => $element['id'], 
 											'title'  => $element['title'], 
@@ -1065,11 +1255,275 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		}
 		
 		
+		/**
+		 * Return an indented dropdown list for hierarchical post types
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param array $element
+		 * @param string $post_type
+		 * @return string|false
+		 */
+		static public function select_hierarchical_post_types( array $element, $post_type = 'page' )
+		{
+			$defaults = array(
+								'id'				=> '',
+								'std'				=> array( '', 0 ),
+								'label'				=> false,			//	for option group
+								'class'				=> '',
+								'hierarchical'		=> 'yes',			//	'yes' | 'no'
+								'post_status'		=> 'publish',		//	array or seperated by comma
+								'option_none_text'	=> '',				//	text to display for "Nothing selected"
+								'option_none_value'	=> '',				//	value for 'option_none_text'
+								'option_no_change'	=> ''				//	value for 'no change' - set to -1 by WP default
+							);
+
+			$element = array_merge( $defaults, $element );
+
+			
+			/**
+			 * return, if element should not display a hierarchical structure
+			 */
+			if( 'no' == $element['hierarchical'] )
+			{
+				return false;
+			}
+			
+			/**
+			 * wp_dropdown_pages() does not support multiple selection by default.
+			 * Would need to overwrite Walker_PageDropdown to add this feature.
+			 * 
+			 * Can be done in future if necessary.
+			 */
+			if( isset( $element['multiple'] ) )
+			{
+				return false;
+			}
+
+			$post_type_object = get_post_type_object( $post_type );
+
+			if ( ! ( $post_type_object instanceof WP_Post_Type && $post_type_object->hierarchical ) )
+			{
+				return false;
+			}
+			
+			/**
+			 * If too many entries limit output and only show non hierarchical
+			 * 
+			 * @since 4.2.7
+			 */
+			$limit = apply_filters( 'avf_dropdown_post_number', 4000, $post_type, $element, 'alb_select_hierarchical' );
+			$count = wp_count_posts( $post_type );
+			if( ! isset( $count->publish ) || ( $count->publish > $limit ) )
+			{
+				return false;
+			}
+			
+			/**
+			 * Make sure we have no spaces
+			 */
+			$post_status = is_array( $element['post_status'] ) ? $element['post_status'] : explode( ',', (string) $element['post_status'] );
+			$element['post_status'] = array_map( function( $value ) { $value = trim($value); return $value;}, $post_status );
+			
+			
+			$new_std = explode( ',', $element['std'], 2 );
+			$selected = ( ( $new_std[0] == $post_type ) && isset( $new_std[1] ) ) ? $new_std[1] : 0;
+			
+			/**
+			 * @used_by				config-wpml\config.php	avia_wpml_alb_options_select_hierarchical_post_type_id()					10
+			 * 
+			 * @since 4.5.7.2
+			 * @param int $selected
+			 * @param string $post_type
+			 * @param array $new_std
+			 * @param array $element
+			 * @return int
+			 */
+			$selected = apply_filters( 'avf_alb_options_select_hierarchical_post_type_id', $selected, $post_type, $new_std, $element );
+			
+			$data_string = "";
+			if( isset( $element['data'] ) ) 
+			{
+				foreach( $element['data'] as $key => $data )
+				{
+					$data_string .= " data-" . $key . "='" . $data . "'";
+				}
+			}
+			
+			$multi = $multi_class = '';
+			if( isset( $element['multiple'] ) ) 
+			{
+				$multi_class = " avia_multiple_select";
+				$multi = ' multiple="multiple" size="' . $element['multiple'] . '" ';
+			}
+
+			$dropdown_args = array(
+							'post_type'				=> $post_type,
+							'exclude_tree'			=> false,
+							'selected'				=> $selected,
+							'name'					=> $element['id'],
+							'id'					=> $element['id'],
+							'show_option_none'		=> $element['option_none_text'],
+							'option_none_value'		=> $element['option_none_value'],
+							'show_option_no_change' => $element['option_no_change'],
+							'sort_column'			=> 'post_title',
+							'echo'					=> 0,
+							'class'					=> $element['class'] . $multi_class,	
+							'post_status'			=> $element['post_status']
+					//		'depth'					=> 0, 
+					//		'child_of'				=> 0,
+					//		'value_field'			=> 'ID',	
+							);
+			
+			/**
+			 * Allow to add info for non public post status
+			 */
+			add_filter( 'list_pages', __CLASS__ . '::handler_wp_list_pages', 99, 2 );
+			
+			$html = wp_dropdown_pages( $dropdown_args );
+			
+			remove_filter( 'list_pages', __CLASS__ . '::handler_wp_list_pages', 99, 2 );
+
+			$html = str_replace( '<select', '<select ' . $multi . $data_string, $html );
+			
+			return $html;
+		}		
 		
 		
+		/**
+		 * Add post status in case of non public 
+		 * WP hooks into this filter with _wp_privacy_settings_filter_draft_page_titles since 4.9.8 with WP_Post as $page 
+		 * and adds (Draft)
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param string $title
+		 * @param WP_Post $page
+		 * @return string
+		 */
+		static public function handler_wp_list_pages( $title, WP_Post $page )
+		{
+			if(  ! in_array( $page->post_status, array( 'publish' ) ) )
+			{
+				$title .= ' (' . ucfirst( $page->post_status ) . ')';
+			}
+			
+			return $title;
+		}
+
+		/**
+		 * Return an indented dropdown list of terms for hierarchical $taxonomy
+		 * 
+		 * @since 4.2.7
+		 * @added_by Günter
+		 * @param array $element
+		 * @param string $taxonomy
+		 * @return string|false
+		 */
+		static public function select_hierarchical_taxonomy( array $element, $taxonomy = 'category' )
+		{
+			$defaults = array(
+								'id'				=> '',
+								'std'				=> array( '', 0 ),
+								'label'				=> false,			//	for option group
+								'class'				=> '',
+								'hierarchical'		=> 'yes',			//	'yes' | 'no'
+								'option_none_text'	=> '',				//	text to display for "Nothing selected"
+								'option_none_value'	=> '',				//	value for 'option_none_text'
+								'option_no_change'	=> ''				//	value for 'no change' - set to -1 by WP default
+							);
+
+			$element = array_merge( $defaults, $element );
+			
+			/**
+			 * return, if element should not display a hierarchical structure
+			 */
+			if( 'no' == $element['hierarchical'] )
+			{
+				return false;
+			}
+			
+			/**
+			 * wp_dropdown_pages() does not support multiple selection by default.
+			 * Would need to overwrite Walker_CategoryDropdown to add this feature.
+			 * 
+			 * Can be done in future if necessary.
+			 */
+			if( isset( $element['multiple'] ) )
+			{
+				return false;
+			}
+			
+			$obj_ta = get_taxonomy( $taxonomy );
+			
+			if ( ! $obj_ta instanceof WP_Taxonomy )
+			{
+				return false;
+			}
+			
+			$new_std = explode( ',', $element['std'], 2 );
+			$selected = ( ( $new_std[0] == $taxonomy ) && isset( $new_std[1] ) ) ? $new_std[1] : 0;
+			
+			/**
+			 * @used_by				config-wpml\config.php	avia_wpml_alb_options_select_hierarchical_post_type_id()					10
+			 * 
+			 * @since 4.5.7.2
+			 * @param int $selected
+			 * @param string $post_type
+			 * @param array $new_std
+			 * @param array $element
+			 * @return int
+			 */
+			$selected = apply_filters( 'avf_alb_options_select_hierarchical_post_type_id', $selected, $taxonomy, $new_std, $element );
+			
+			$data_string = "";
+			if( isset( $element['data'] ) ) 
+			{
+				foreach( $element['data'] as $key => $data )
+				{
+					$data_string .= " data-" . $key . "='" . $data . "'";
+				}
+			}
+			
+			$multi = $multi_class = '';
+			if( isset( $element['multiple'] ) ) 
+			{
+				$multi_class = " avia_multiple_select";
+				$multi = ' multiple="multiple" size="' . $element['multiple'] . '" ';
+			}
+			
+			$args = array(
+						'taxonomy'				=> $taxonomy,
+						'hierarchical'			=> true,
+						'depth'					=> 20,
+						'selected'				=> $selected,
+						'name'					=> $element['id'],
+						'id'					=> $element['id'],
+						'show_option_none'		=> $element['option_none_text'],
+						'option_none_value'		=> $element['option_none_value'],
+						'show_option_no_change' => $element['option_no_change'],
+						'orderby'				=> 'name',
+						'order'					=> 'ASC',
+						'echo'					=> false,
+						'class'					=> $element['class'] . $multi_class,
+						'hide_empty'			=> false,
+						'show_count'			=> true,
+						'hide_if_empty'			=> false,
+//						'child_of'				=> 0,
+//						'exclude'				=> '',
+//						'include'				=> '',
+//						'tab_index'				=> 0,
+//						'value_field'			=> 'term_id',
+					);
+			
+			$html = wp_dropdown_categories( $args );
+
+			$html = str_replace( '<select', '<select ' . $multi . $data_string, $html );
+			
+			return $html;
+		}
 		
-		
-		
+
 		/**
          * 
          * The select method renders a single select element: it either lists custom values, all wordpress pages or all wordpress categories
@@ -1077,11 +1531,12 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
          * @return string $output the string returned contains the html code generated within the method
          */
         
-		static function select( $element )
+		static public function select( $element )
 		{	
 			$select 	= __('Select','avia_framework' );
 			$parents 	= array();
 			$fake_val 	= "";
+			$entries	= array();
 			
 			if($element['subtype'] == 'cat')
 			{
@@ -1106,7 +1561,7 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			{
 				global $wpdb;
 				$table_name = $wpdb->prefix . "posts";
-	 			$limit 		= apply_filters( 'avf_dropdown_post_number', 4000 );
+	 			$limit 		= apply_filters( 'avf_dropdown_post_number', 4000, $element['subtype'], $element, 'alb_select' );
 	    		
 	    		if( isset( AviaHtmlHelper::$cache['entry_' . $limit] ) && isset( AviaHtmlHelper::$cache['entry_' . $limit][$element['subtype']] ) )
 	    		{
@@ -1114,9 +1569,35 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 	    		}
 	    		else
 	    		{	
-					$prepare_sql = "SELECT distinct ID, post_title FROM {$table_name} WHERE post_status = 'publish' AND post_type = '".$element['subtype']."' ORDER BY post_title ASC LIMIT {$limit}";
+					$post_status = ( ! empty( $element['post_status'] ) ) ? $element['post_status'] : 'publish';
+					$post_status = explode( ',', $post_status );
+					$post_status = array_map( function( $value ) { $value = trim($value); return "'{$value}'";}, $post_status );
+					$post_status = implode( ', ',$post_status );
+					
+					$prepare_sql = "SELECT distinct ID, post_title, post_status FROM {$table_name} WHERE post_status IN ( {$post_status} ) AND post_type = '".$element['subtype']."' ORDER BY post_title ASC LIMIT {$limit}";
 					$prepare_sql = apply_filters('avf_dropdown_post_query', $prepare_sql, $table_name, $limit, $element);
 					$entries 	= $wpdb->get_results($prepare_sql);
+					
+					/**
+					 * Allow to filter the page titles
+					 * 
+					 * @since 4.2.7
+					 */
+					add_filter( 'list_pages', __CLASS__ . '::handler_wp_list_pages', 99, 2 );
+			
+					foreach ( $entries as &$entry ) 
+					{
+						$p = get_post( $entry->ID );
+						if( $p instanceof WP_Post && ( $p->ID == $entry->ID ) )
+						{
+							$entry->post_title = apply_filters( 'list_pages', $entry->post_title, $p );
+						}
+					}
+				
+					unset( $entry );
+					
+					remove_filter( 'list_pages', __CLASS__ . '::handler_wp_list_pages', 99, 2 );
+					
 					AviaHtmlHelper::$cache['entry_' . $limit][$element['subtype']] = $entries;
 	    		}	
 	    		//$entries 	= $wpdb->get_results( "SELECT ID, post_title FROM {$table_name} WHERE post_status = 'publish' AND post_type = '".$element['subtype']."' ORDER BY post_title ASC LIMIT {$limit}" );
@@ -1164,6 +1645,11 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 				}
 			}
 			
+			if( empty( $entries ) ) 
+			{
+				return;
+			}
+			
 			$data_string = "";
 			if(isset($element['data'])) 
 			{
@@ -1172,8 +1658,6 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 					$data_string .= "data-".$key."='".$data."'";
 				}
 			}
-			
-			if(empty($entries)) return;
 			
 			$multi = $multi_class = "";
 			if(isset($element['multiple'])) 
@@ -1222,7 +1706,19 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			return $output;
 		}
 		
-		static function create_select_option($element, $entries, $fake_val, $parents, $level)
+		
+		/**
+		 * Returns the options part of a select box
+		 * 
+		 * @since < 4.0
+		 * @param array $element
+		 * @param array $entries
+		 * @param string $fake_val
+		 * @param array $parents
+		 * @param int $level
+		 * @return string
+		 */
+		static protected function create_select_option( $element, $entries, $fake_val, $parents, $level )
 		{	
 			$output = "";
 			
@@ -1289,7 +1785,91 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 			return $output;	
 		}
 		
+		/**
+		 * Based on wp_timezone_override_offset() and get_timezone_info()
+		 * Returns the timezone offset from UTC. Defaults to UTC if not available
+		 * 
+		 * @since 4.5.6
+		 * @param string $timezone_string
+		 * @return float						UTC offset in hours
+		 */
+		static public function get_timezone_offset( $timezone_string = '' )
+		{
+			$timezone_string = AviaHtmlHelper::default_wp_timezone_string( $timezone_string );
+			
+			if( false !== stripos( $timezone_string, 'UTC' ) )
+			{
+				$tz = trim( str_ireplace( 'UTC', '', $timezone_string ) );
+				if( empty( $tz ) || ! is_numeric( $tz ) )
+				{
+					$tz = 0;
+				}
+				return (float) $tz;
+			}
+			
+			$timezone_object = timezone_open( $timezone_string );
+			$datetime_object = date_create();
+			if ( false === $timezone_object || false === $datetime_object ) 
+			{
+				return 0.0;
+			}
+			
+			return round( timezone_offset_get( $timezone_object, $datetime_object ) / HOUR_IN_SECONDS, 2 );
+		}
 		
+		/**
+		 * Returns a valid timezone_string for the selectbox.
+		 * Checks for WP default setting if empty.
+		 * 
+		 * @since 4.5.6
+		 * @param string $timezone_string
+		 * @return string
+		 */
+		static public function default_wp_timezone_string( $timezone_string = '' )
+		{
+			if( ! empty( $timezone_string ) )
+			{
+				return $timezone_string;
+			}
+			
+			$timezone_string = get_option( 'timezone_string', '' );
+			if( ! empty( $timezone_string ) )
+			{
+				return $timezone_string;
+			}
+			
+			$offset = get_option( 'gmt_offset', '' );
+			if( '' == trim( $offset ) || ! is_numeric( $offset ) || 0 == $offset )
+			{
+				return 'UTC';
+			}
+			
+			return $offset <= 0 ? 'UTC' . $offset : 'UTC+' . $offset;
+		}
+			
+
+		/**
+		 * Returns a timezone selectbox and preselects the default WP timezone
+		 * 
+		 * @since 4.5.6
+		 * @param array $element
+		 * @return string
+		 */
+		static public function timezone_choice( array $element )
+		{
+			$html = '';
+			
+			$id_string = empty( $element['id'] ) ? '' : "id='{$element['id']}'";
+			$name_string = empty( $element['id'] ) ? '' : "name='{$element['id']}'";
+			$timezone_string = AviaHtmlHelper::default_wp_timezone_string( $element['std'] );
+			
+			$html .=	'<select class="' . $element['class'] . '" ' . $id_string . ' ' . $name_string . '>';
+			$html .=		wp_timezone_choice( $timezone_string );
+			$html .=	'</select>';
+			
+			return $html;
+		}
+
 		
 		/**
          * 
@@ -1297,20 +1877,34 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
          * @param array $element the array holds data like type, value, id, class, description which are necessary to render the whole option-section
          * @return string $output the string returned contains the html code generated within the method
          */
-		static function gmap_adress($element)
+		static public function gmap_adress( $element )
 		{	
-			$defaults = array('address' => '', 'city' => '', 'country' => '', 'long' => '', 'lat' => '');
+			$defaults = array(
+							'address'	=> '', 
+							'postcode'	=> '',
+							'city'		=> '',
+							'state'		=> '',
+							'country'	=> '', 
+							'long'		=> '', 
+							'lat'		=> ''
+						);
+			
 			$subvalues = isset($element['shortcode_data']) ? $element['shortcode_data'] : array();
-			$values = array_merge($defaults, $subvalues);
+			$values = array_merge( $defaults, $subvalues );
 			$visibility = "";
 			
-			if(!empty($subvalues['long']) || !empty($subvalues['lat']) ) $visibility = "av-visible";
+			if( ! empty($subvalues['long'] ) || ! empty( $subvalues['lat'] ) ) 
+			{
+				$visibility = "av-visible";
+			}
 			
 			$output  = '';
 			$output .= '<label class="av-gmap-field av-gmap-addres">'.__('Street address','avia_framework').' <input type="text" class="'.$element['class'].'" value="'.nl2br($values['address']).'" id="address" name="address"/></label>';
 			
-			$output .= '<label class="av-gmap-field av-gmap-addres av_half av_first">'.__('City','avia_framework').' <input type="text" class="'.$element['class'].'" value="'.nl2br($values['city']).'" id="city" name="city"/></label>';
+			$output .= '<label class="av-gmap-field av-gmap-addres av_half av_first">' . __( 'Postcode', 'avia_framework' ) . ' <input type="text" class="' . $element['class'] . '" value="' . nl2br($values['postcode']) . '" id="postcode" name="postcode"/></label>';
+			$output .= '<label class="av-gmap-field av-gmap-addres av_half">'.__('City','avia_framework').' <input type="text" class="'.$element['class'].'" value="'.nl2br($values['city']).'" id="city" name="city"/></label>';
 			
+			$output .= '<label class="av-gmap-field av-gmap-addres av_half av_first">' . __( 'State', 'avia_framework' ) . ' <input type="text" class="' . $element['class'] . '" value="' . nl2br($values['state']) . '" id="state" name="state"/></label>';
 			$output .= '<label class="av-gmap-field av-gmap-addres av_half">'.__('Country','avia_framework').' <input type="text" class="'.$element['class'].'" value="'.nl2br($values['country']).'" id="country" name="country"/></label>';
 			
 			$class 	 = 'button button-primary avia-js-google-coordinates av-google-fetch-button'.$element['class'];
@@ -1338,25 +1932,36 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		static function radio( $element )
 		{	
 			$output = "";
+
 			$counter = 1;
 			foreach($element['options'] as $key => $radiobutton)
-			{	
+			{
 				$checked = "";
+				$extra_class = "";
 				if( $element['std'] == $key ) { $checked = 'checked = "checked"'; }
-				
-				$output  .= '<span class="avia_radio_wrap">';
-				$output  .= '<input '.$checked.' type="radio" class="radio_'.$key.'" ';
-				$output  .= 'value="'.$key.'" id="'.$element['id'].$counter.'" name="'.$element['id'].'"/>';
-				
-				$output  .= '<label for="'.$element['id'].$counter.'"><span class="labeltext">'.$radiobutton.'</span>';
-				if(!empty($element['images'][$key])) $output  .= "<img class='radio_image' src='".$element['images'][$key]."' />";
-				$output  .= '</label>';
+
+				$fields  = '<input '.$checked.' type="radio" class="radio_'.$key.'" ';
+                $fields  .= 'value="'.$key.'" id="'.$element['id'].$counter.'" name="'.$element['id'].'"/>';
+
+                $fields  .= '<label for="'.$element['id'].$counter.'">';
+
+				if( isset($element['images']) &&  !empty($element['images'][$key]) ) {
+                    $fields  .= "<img class='radio_image' src='".$element['images'][$key]."' />";
+                    $extra_class = 'avia-image-radio';
+                }
+
+                $fields .= '<span class="labeltext">'.$radiobutton.'</span>';
+                $fields  .= '</label>';
+
+                $output  .= '<span class="avia_radio_wrap '.$extra_class.'">';
+                $output  .= $fields;
 				$output  .= '</span>';
 				
 				$counter++;
 			}	
 				
 			return $output;
+
 		}
 		
 		
@@ -1618,10 +2223,10 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		
 		
 		
-		static function number_array($from = 0, $to = 100, $steps = 1, $array = array(), $label = "", $value_prefix = "")
+		static function number_array($from = 0, $to = 100, $steps = 1, $array = array(), $label = "", $value_prefix = "", $value_postfix = "")
 		{
 			for ($i = $from; $i <= $to; $i += $steps) {
-			    $array[$i.$label] = $value_prefix.$i;
+			    $array[$i.$label] = $value_prefix.$i.$value_postfix;
 			}
 		
 			return $array;
@@ -1652,26 +2257,40 @@ if ( !class_exists( 'AviaHtmlHelper' ) ) {
 		    return $linkoptions;
 		}
 		
+		/**
+		 * Returns an option array of all registered post types
+		 * 
+		 * @param array $args
+		 * @return array
+		 */
+		static function get_registered_post_type_array( $args = array() )
+		{
+			$post_types = get_post_types( $args, 'objects' );
+			$post_type_option = array();
 
-
-
-        static function get_registered_post_type_array($args = '')
-        {
-            $post_types = get_post_types($args,'objects');
-            $post_type_option = array();
-
-            if(!empty($post_types))
-            {
-                foreach($post_types as $post_type)
-                {
-                    $post_type_option[$post_type->label] = $post_type->name;
-                }
-            }
+			if( ! empty( $post_types ) )
+			{
+				foreach( $post_types as $post_type )
+				{
+					/**
+					 * Fixes a bug with non unique labels  
+					 */
+					if( ! isset( $post_type_option[ $post_type->label ] ) )
+					{
+						$post_type_option[ $post_type->label ] = $post_type->name;
+					}
+					else
+					{
+						$post_type_option[ "{$post_type->label} ({$post_type->name})" ] = $post_type->name;
+					}
+				}
+			}
             
-            $post_type_option = apply_filters('avf_registered_post_type_array', $post_type_option, $args);
+			$post_type_option = apply_filters( 'avf_registered_post_type_array', $post_type_option, $args );
 
-            return $post_type_option;
-        }
+			return $post_type_option;
+		}
+
 
 
 	} // end class

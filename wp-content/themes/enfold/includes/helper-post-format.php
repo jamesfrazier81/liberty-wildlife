@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
 
 /*
  * 	The loop-index.php file is responsible to display wordpress blog posts
@@ -55,11 +57,24 @@ if(!function_exists('avia_default_title_filter'))
 	{
 		if(!empty($current_post['title']))
 		{
-			$heading = is_singular() ? "h1" : "h2";
+			$default_heading = is_singular() ? 'h1' : 'h2';
+			$args = array(
+						'heading'		=> $default_heading,
+						'extra_class'	=> ''
+					);
+			
+			/**
+			 * @since 4.5.5
+			 * @return array
+			 */
+			$args = apply_filters( 'avf_customize_heading_settings', $args, 'avia_default_title_filter', array( $current_post ) );
+			
+			$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+			$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
 	
 			$output  = "";
 			//$output .= "<{$heading} class='post-title entry-title ". avia_offset_class('meta', false). "'>";
-			$output .= "<{$heading} class='post-title entry-title' ".avia_markup_helper(array('context' => 'entry_title','echo'=>false)).">";
+			$output .= "<{$heading} class='post-title entry-title {$css}' ".avia_markup_helper(array('context' => 'entry_title','echo'=>false)).">";
 			$output .= "	<a href='".get_permalink()."' rel='bookmark' title='". __('Permanent Link:','avia_framework')." ".$current_post['title']."'>".$current_post['title'];
 			$output .= "			<span class='post-format-icon minor-meta'></span>";
 			$output .= "	</a>";
@@ -194,15 +209,26 @@ if(!function_exists('avia_image_slideshow_filter'))
 		}
 
 
-			if(!empty($prepend_image) && is_string($prepend_image))
+		if( ! empty( $prepend_image ) && is_string( $prepend_image ) )
+		{
+			if( $image ) 
 			{
-				if($image) $current_post['content'] = str_replace($image, "", $current_post['content']);
-				$current_post['before_content'] = $prepend_image;
-				$current_post['slider']  = "";
+				$current_post['content'] = str_replace( $image, '', $current_post['content'] );
 			}
+			
+			$current_post['before_content'] = $prepend_image;
+			$current_post['slider']  = "";
+		}
 
-		
-		if(is_single(get_the_ID()) && get_post_meta( $current_post['the_id'], '_avia_hide_featured_image', true ) ) $current_post['before_content'] = "";
+		/**
+		 * Backwards comp. to checkbox prior v4.5.3 (now selectbox with '' or '1')
+		 */
+		$hide_featured_image = get_post_meta( get_the_ID(), '_avia_hide_featured_image', true );
+		$hide_featured_image = empty( $hide_featured_image ) ? false : true;
+		if( is_single( get_the_ID() ) && $hide_featured_image ) 
+		{
+			$current_post['before_content'] = '';
+		}
 		
 		return avia_default_title_filter($current_post);
 	}
@@ -262,10 +288,25 @@ if(!function_exists('avia_link_content_filter'))
 			if(is_array($link)) $link = $link[0];
 			if($newlink) $link = $newlink;
 			
-			$heading = is_singular() ? "h1" : "h2";
+			
+			$default_heading = is_singular() ? 'h1' : 'h2';
+			$args = array(
+						'heading'		=> $default_heading,
+						'extra_class'	=> ''
+					);
+			
+			/**
+			 * @since 4.5.5
+			 * @return array
+			 */
+			$args = apply_filters( 'avf_customize_heading_settings', $args, 'avia_link_content_filter', array( $current_post ) );
+			
+			$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+			$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+			
 
 			//$current_post['title'] = "<{$heading} class='post-title entry-title ". avia_offset_class('meta', false). "'>".$current_post['title']."</{$heading}>";
-			$current_post['title'] = "<{$heading} class='post-title entry-title' ".avia_markup_helper(array('context' => 'entry_title','echo'=>false)).">".$current_post['title']."</{$heading}>";
+			$current_post['title'] = "<{$heading} class='post-title entry-title {$css}' ".avia_markup_helper(array('context' => 'entry_title','echo'=>false)).">".$current_post['title']."</{$heading}>";
 			
 			//needs to be set for masonry
 			$current_post['url'] = $link;

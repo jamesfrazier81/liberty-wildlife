@@ -1,4 +1,4 @@
-<div class="wrap about-wrap ls-about-page">
+<div class="wrap ls-about-page">
 
 	<!-- LayerSlider Logo & continue button -->
 	<div class="layerslider-logo"></div>
@@ -13,140 +13,51 @@
 		</a>
 	</div>
 
-	<!-- Share sheet -->
-	<div class="ls-share-template">
-		<a href="https://www.facebook.com/sharer/sharer.php?u=https://layerslider.kreaturamedia.com" target="_blank">
-			<i class="dashicons dashicons-facebook-alt"></i> <?php _e('Share', 'LayerSlider') ?>
-		</a>
-
-		<a href="http://www.twitter.com/share?url=https%3A%2F%2Flayerslider.kreaturamedia.com&amp;text=Check%20out%20LayerSlider%20WP%2C%20an%20awesome%20%23slider%20%23plugin%20for%20%23WordPress&amp;via=kreaturamedia" target="_blank">
-			<i class="dashicons dashicons-twitter"></i> <?php _e('Tweet', 'LayerSlider') ?>
-		</a>
-
-		<a href="https://plus.google.com/share?url=https://layerslider.kreaturamedia.com" target="_blank">
-			<i class="dashicons dashicons-googleplus"></i> +1
-		</a>
-	</div>
-
 	<!-- Tabs -->
 	<div class="km-tabs">
-		<a href="#" class="active"><?php _e('What’s New', 'LayerSlider'); ?></a>
-		<a href="#"><?php _e('First steps', 'LayerSlider'); ?></a>
+		<a href="#" class="active"><?php _e('First steps', 'LayerSlider'); ?></a>
 		<a href="#"><?php _e('Resources', 'LayerSlider'); ?></a>
+		<a href="#"><?php _e('Privacy', 'LayerSlider') ?></a>
 	</div>
 	<div class="km-tabs-content">
 
-		<!-- What's New -->
-		<div class="active">
-			<figure><?php _e('The newest key features introduced in major updates', 'LayerSlider') ?></figure>
-			<div class="km-tabs-inner km-about-news-sections">
-				<div>
-					<img src="">
-					<h2><?php _e('Faster, Better, Prettier', 'LayerSlider') ?></h2>
-					<p><?php _e('Both the admin interface and front-end sliders load faster and perform better. This release has numerous bug fixes and improvements. So much actually, that we can’t even write a complete list. The admin interface has also been redesigned a bit to provide familiar but much cleaner and easier controls.', 'LayerSlider') ?></p>
-				</div>
-
-				<div>
-					<img src="">
-					<h2><?php _e('Reworked Responsive Mode, New Slider Layouts, Device Dependent Layouts', 'LayerSlider') ?></h2>
-					<p><?php _e('The new responsive mode performs significantly better and in most cases it does not require any special configuration. LayerSlider now also have multiple new layout modes like full size, hero screne and full screen sliders. These will allow new use cases such as running slideshows on billboards. It’s also possible to make different layouts for different devices (phones, tables, desktop).', 'LayerSlider') ?></p>
-				</div>
-
-				<div>
-					<img src="">
-					<h2><?php _e('New Transitions, Text Animations, Loop, Hover, Filters and a lot more', 'LayerSlider') ?></h2>
-					<p><?php _e('We’ve added lots of new transition options, which greatly extends the capabilities of your slideshows. You can now create chainable multi-step animations enhanced with stylish text transitions and interactive hover animations. There’s also hidden surprises like the much requested Ken Burns effect, 3D parallax effect, and our new “play by scroll” feature. Oh, and don’t forget to try out filters, which can be used to apply blur, sepia, grayscale etc. effects to your layers among many other.', 'LayerSlider') ?></p>
-				</div>
-
-				<div>
-					<img src="">
-					<h2><?php _e('Static Layers', 'LayerSlider') ?></h2>
-					<p><?php _e('Layers can now enter and leave on any slide. You can easily build more complex animations where layers persist across multiple slides. Or just use it as an “always on top” feature.', 'LayerSlider') ?></p>
-				</div>
-
-
-				<div>
-					<img src="">
-					<h2><?php _e('Undo and Redo', 'LayerSlider') ?></h2>
-					<p><?php _e('Web apps usually don’t have controls to undo unwanted/accidental changes. LayerSlider now has. And it’s even preserved for later use, whenever you need it.', 'LayerSlider') ?></p>
-				</div>
-
-				<div>
-					<img src="">
-					<h2><?php _e('Multi-selection, Resize, Rulers + Guides', 'LayerSlider') ?></h2>
-					<p><?php _e('Do you ever wanted to move around multiple layers and once? LayerSlider 6 now supports multiple selection, which allows you altering groups of layers seamlessly. With rulers and keyboard shortcuts, you can now move/resize/etc your layers with precision. There’s also Guides and a snap to feature built in.', 'LayerSlider') ?></p>
-				</div>
-
-				<div>
-					<img src="">
-					<h2><?php _e('Keyboard shortcuts &amp; Popout Editor', 'LayerSlider') ?></h2>
-					<p><?php _e('The slider builder interface can now be controlled by keyboard shortcuts. These shortcuts also introduces a lot of new features, like editing layers content right in the preview area or copying and pasting layers across slides and sliders. We’ve also introduced the Popout Editor, which transforms the layer options area into a floating window that can be resized and placed wherever you want. This makes it extremely easy to edit everything in one place, without the need to scroll up and down constantly.', 'LayerSlider') ?></p>
-				</div>
-
-
-				<div>
-					<img src="">
-					<h2><?php _e('Image Editor', 'LayerSlider') ?></h2>
-					<p><?php _e('With the help of Adobe’s Creative SDK, LayerSlider 6 now has a built-in image editor. You can perform common tasks like resizing, cropping, rotating images, as well as photo retouching, adding frames, text, effects, stickers and a lot more. It’s like a mini-Photoshop.', 'LayerSlider') ?></p>
-				</div>
-
-				<div>
-					<img src="">
-					<h2><?php _e('And a lot more ...', 'LayerSlider') ?></h2>
-					<p><?php _e('There’s way more new features and improvement that we can list here: scheduled sliders, retina-ready, serving dynamically scaled images to reduce data usage and speed up page loads on mobile devices, redesigned transition builder with import feature, continuous live previews, new interactive timeline, reworked multimedia layer support with custom video poster and controls, custom HTML attributes, drag ’n’ drop image upload, smart links, copy & paste layer styles and transition settings, named slides, new slider/slide background settings, auto-fit zoom, align layers feature. <br><br>The number of new features almost never end, but this list must. :)', 'LayerSlider') ?></p>
-				</div>
-
-				<br><br>
-				<div>
-					<img src="">
-					<h2><?php _e('The future of LayerSlider', 'LayerSlider') ?></h2>
-					<p><?php _e('LayerSlider 6 is just the beginning of our awesome new ideas. One of the main goals was to completely rebuild the plugin architecture and modernize its core. This allows us to implement new features way more faster and improve upon existing functionality with an easily maintainable code base. Beyond the predictable feature updates like the complete overhaul of skins, dynamic contents, etc (which will arrive very soon); we already have an experimental offline slider editor and preliminary support for LayerSlider extensions. This later one will soon be available for anyone to extend the plugins capabilities.', 'LayerSlider') ?></p>
-				</div>
-			</div>
-		</div>
-
 
 		<!-- First Steps -->
-		<div>
-			<figure><?php _e('Considerations before starting to use the plugin', 'LayerSlider') ?></figure>
+		<div class="active">
+			<figure><?php _e('Tips to get started using LayerSlider', 'LayerSlider') ?></figure>
 			<div class="km-tabs-inner">
 				<ul>
 					<li class="gap">
-						<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank">
-							<?php _e('Active the plugin to receive auto updates and premium support', 'LayerSlider') ?>
+						<a href="https://layerslider.kreaturamedia.com/documentation/#activation" target="_blank">
+							<?php _e('Active the plugin to receive auto updates and premium benefits', 'LayerSlider') ?>
 						</a>
-						<p><?php _e('Keep the plugin up-to-date by activating the auto-update feature. We regularly release updates with new features, bug fixes and other improvements.', 'LayerSlider') ?></p>
+						<p><?php _e('Perform license activation, so we can provide you hands on support, automatic updates, premium features, slider templates and other exclusive content & services.', 'LayerSlider') ?></p>
 					</li>
 					<li class="gap">
-						<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#demo-sliders" target="_blank">
-							<?php _e('Check out the included demo sliders', 'LayerSlider') ?>
+						<a href="https://layerslider.kreaturamedia.com/documentation/#demo-sliders" target="_blank">
+							<?php _e('Check out the Template Store', 'LayerSlider') ?>
 						</a>
-						<p><?php _e('We’ve bundled several sample sliders into the plugin, so you can see how they built. You can find really simple sliders as well as compled and content rich ones.', 'LayerSlider') ?></p>
+						<p><?php _e('The Template Store provides quality hand-crafted slider samples, which can be a staring point for your new projects. Templates can also teach a lot of techniques and you can find from really simple ones to the most complex and extreme sliders.', 'LayerSlider') ?></p>
 					</li>
 					<li class="gap">
-						<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#overview" target="_blank">
+						<a href="https://layerslider.kreaturamedia.com/documentation/#overview" target="_blank">
 							<?php _e('Read online resouces to get help', 'LayerSlider') ?>
 						</a>
 						<p><?php _e('We have online resouces where you can find help whether if you get stuck, experience an issue or just have a question about the item.', 'LayerSlider') ?></p>
 						<ul>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/" target="_blank">
 								<?php _e('End-User documentation', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/developers.html" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/developers/" target="_blank">
 								<?php _e('Developer documentation', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="http://codecanyon.net/item/layerslider-responsive-jquery-slider-plugin/922100/comments?ref=kreatura" target="_blank">
-									<?php _e('CodeCanyon discussion', 'LayerSlider') ?>
-								</a>
-							</li>
-							<li>
-								<a href="https://support.kreaturamedia.com/faq/4/layerslider-for-wordpress/" target="_blank">
-									<?php _e('Item FAQs', 'LayerSlider') ?>
+								<a href="https://kreatura.ticksy.com/" target="_blank">
+									<?php _e('Support & FAQs', 'LayerSlider') ?>
 								</a>
 							</li>
 						</ul>
@@ -165,29 +76,29 @@
 						<h3><?php _e('Preface', 'LayerSlider') ?></h3>
 						<ul>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/" target="_blank">
 									<?php _e('Introduction', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#support" targee="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/#support" target="_blank">
 									<?php _e('Support', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/faq/4/layerslider-for-wordpress/#group-1" target="_blank">
+								<a href="https://kreatura.ticksy.com/article/9273/" target="_blank">
 									<?php _e('Support Policies', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://news.kreaturamedia.com/layerslider/" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/release-log/" target="_blank">
 									<?php _e('Release Notes', 'LayerSlider') ?>
 								</a>
 							</li>
 						</ul>
 					</div>
 					<div class="col">
-						<h3><?php _e('Licesing', 'LayerSlider') ?></h3>
+						<h3><?php _e('Licensing', 'LayerSlider') ?></h3>
 						<ul>
 							<li>
 								<a href="https://codecanyon.net/licenses/terms/regular" target="_blank">
@@ -205,12 +116,12 @@
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/faq/4/layerslider-for-wordpress/#group-3" target="_blank">
+								<a href="https://kreatura.ticksy.com/article/9274/" target="_blank">
 									<?php _e('Licensing Questions', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/faq/4/layerslider-for-wordpress/#group-3&entry-18" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/developers/#licensing" target="_blank">
 									<?php _e('In-Stock Usage', 'LayerSlider') ?>
 								</a>
 							</li>
@@ -221,22 +132,22 @@
 						<ul>
 
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#updating" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/#updating" target="_blank">
 									<?php _e('Plugin updates', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#demo-sliders" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/#demo-sliders" target="_blank">
 									<?php _e('Import demo content', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/" target="_blank">
 									<?php _e('Online Documentation', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#troubleshooting" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/#troubleshooting" target="_blank">
 									<?php _e('Troubleshooting', 'LayerSlider') ?>
 								</a>
 							</li>
@@ -246,17 +157,17 @@
 						<h3><?php _e('Resources', 'LayerSlider') ?></h3>
 						<ul>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/documentation/" target="_blank">
 									<?php _e('End-User Documentation', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/docs/layersliderwp/developers.html" target="_blank">
+								<a href="https://layerslider.kreaturamedia.com/developers/" target="_blank">
 									<?php _e('Developer Documentation', 'LayerSlider') ?>
 								</a>
 							</li>
 							<li>
-								<a href="https://support.kreaturamedia.com/faq/4/layerslider-for-wordpress/" target="_blank">
+								<a href="https://kreatura.ticksy.com/" target="_blank">
 									<?php _e('Item FAQs', 'LayerSlider') ?>
 								</a>
 							</li>
@@ -270,10 +181,6 @@
 					<div class="col">
 						<h3><?php _e('Stay Updated', 'LayerSlider') ?></h3>
 						<ul>
-							<li>
-								<a href="http://codecanyon.net/user/kreatura" target="_blank">
-								<?php _e('Follow us on Envato', 'LayerSlider') ?></a>
-							</li>
 							<li>
 								<a href="https://www.facebook.com/kreaturamedia/" target="_blank">
 								<?php _e('Follow us on Facebook', 'LayerSlider') ?></a>
@@ -289,6 +196,39 @@
 						</ul>
 					</div>
 				</div>
+			</div>
+		</div>
+
+
+		<!-- Privacy -->
+		<div>
+			<figure><?php _e('Data protection and handling', 'LayerSlider') ?></figure>
+			<form class="km-tabs-inner ls-about-privacy">
+				<input type="hidden" name="action" value="ls_save_gdpr_settings">
+				<?php wp_nonce_field('ls-save-gdpr-settings'); ?>
+				<p>
+					<?php echo sprintf(__('Thank you for your support and trust in Kreatura when using our products and services. To keep pace with the new data protection laws taking effect on May 25, 2018 in the European Union, we are updating our privacy policies. Please, do visit our %sGeneral Data Protection Regulation%s page for more information.', 'LayerSlider'), '<a href="https://layerslider.kreaturamedia.com/gdpr" target="_blank">', '</a>'); ?>
+				</p>
+				<p>
+					<?php _e('We encourage you to review the new changes to our policies. We appreciate your kind understanding as we offer our users to make the best decisions about the information they share with us.', 'LayerSlider'); ?> <?php _e('By using our products and services you will be agreeing to these terms.', 'LayerSlider') ?>
+				</p>
+
+				<hr>
+
+				<h2><?php _e('Google Fonts: Hundreds of beautiful fonts for the web', 'LayerSlider') ?></h2>
+				<p>
+					<?php echo sprintf( __('%sWhat is it:%s Google Fonts offers hundreds of custom fonts and is one of the most popular web services to customize website appearance with beautiful typography.', 'LayerSlider'), '<strong>', '</strong>') ?>
+				</p>
+				<p>
+					<?php echo sprintf( __('%sWhy is it important:%s Many of our importable content in the Template Store use and rely on Google Fonts. If you disable this feature, you may not be able to add custom fonts and it might compromise the appearance of textual content in sliders. Third parties can offer the same functionality, but they are also subjected to Google’s data processing.', 'LayerSlider') , '<strong>', '</strong>') ?>
+				</p>
+				<p>
+					<?php echo sprintf( __('%sWhy should I care:%s Google might be able to track your activity when using their services. Please review Google’s %sPrivacy Policy%s and %sGDPR Compliance%s. As an external service, you can choose to disable Google Fonts if you disagree with Google’s data processing methods.', 'LayerSlider'), '<strong>', '</strong>', '<a href="https://privacy.google.com/" target="_blank">', '</a>', '<a href="https://privacy.google.com/businesses/compliance" target="_blank">', '</a>') ?>
+				</p>
+				<p>
+					<input type="checkbox" name="ls_gdpr_goole_fonts" class="larger" checked>
+					<label><?php _e('Enable Google Fonts', 'LayerSlider') ?></label>
+				</p>
 			</div>
 		</div>
 

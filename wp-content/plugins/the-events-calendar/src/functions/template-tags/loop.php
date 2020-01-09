@@ -22,21 +22,31 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 */
 	function tribe_is_new_event_day() {
 		global $post;
+
 		$tribe_ecp = Tribe__Events__Main::instance();
 		$retval    = false;
 		$now       = time();
+
 		if ( isset( $post->EventStartDate ) ) {
 			$postTimestamp = strtotime( $post->EventStartDate, $now );
 			$postTimestamp = strtotime( date( Tribe__Date_Utils::DBDATEFORMAT, $postTimestamp ), $now ); // strip the time
+
 			if ( $postTimestamp != $tribe_ecp->currentPostTimestamp ) {
 				$retval = true;
 			}
+
 			$tribe_ecp->currentPostTimestamp = $postTimestamp;
 			$return                          = $retval;
 		} else {
 			$return = true;
 		}
 
+		/**
+		 * Allows for customization of the result of whether the current event is on a different day
+		 * from the one preceding it. Defaults to "true" for first event in the loop.
+		 *
+		 * @param bool $return Whether the current event is on a different day than its antecedent.
+		 */
 		return apply_filters( 'tribe_is_new_event_day', $return );
 	}
 
@@ -48,9 +58,18 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return bool
 	 */
 	function tribe_is_past() {
-		global $wp_query;
+
+		if ( ! $wp_query = tribe_get_global_query_object() ) {
+			return;
+		}
+
 		$is_past = ! empty( $wp_query->tribe_is_past ) && ! tribe_is_showing_all() ? $wp_query->tribe_is_past : false;
 
+		/**
+		 * Allows for customization of the result of whether the current view shows past events.
+		 *
+		 * @param bool $is_past Whether the current view shows upcoming past or not.
+		 */
 		return apply_filters( 'tribe_is_past', $is_past );
 	}
 
@@ -62,9 +81,18 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return bool
 	 */
 	function tribe_is_upcoming() {
-		global $wp_query;
+
+		if ( ! $wp_query = tribe_get_global_query_object() ) {
+			return;
+		}
+
 		$is_upcoming = ( tribe_is_list_view() && ! tribe_is_past() ) ? true : false;
 
+		/**
+		 * Allows for customization of the result of whether the current view shows upcoming events.
+		 *
+		 * @param bool $is_upcoming Whether the current view shows upcoming events or not.
+		 */
 		return apply_filters( 'tribe_is_upcoming', $is_upcoming );
 	}
 
@@ -79,10 +107,16 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	function tribe_is_showing_all() {
 		$tribe_ecp            = Tribe__Events__Main::instance();
 		$tribe_is_showing_all = ( $tribe_ecp->displaying == 'all' ) ? true : false;
+
 		if ( $tribe_is_showing_all ) {
 			add_filter( 'tribe_events_recurrence_tooltip', '__return_false' );
 		}
 
+		/**
+		 * Allows for customization of the result of whether the current view shows all events.
+		 *
+		 * @param bool $tribe_is_showing_all Whether the current view shows all events or not.
+		 */
 		return apply_filters( 'tribe_is_showing_all', $tribe_is_showing_all );
 	}
 
@@ -96,7 +130,11 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	function tribe_is_by_date() {
 		$tribe_ecp        = Tribe__Events__Main::instance();
 		$tribe_is_by_date = ( $tribe_ecp->displaying == 'bydate' ) ? true : false;
-
+		/**
+		 * Allows for customization of the result of whether or not a "bydate" view is being viewed.
+		 *
+		 * @param bool $tribe_is_by_date Whether a "bydate" calendar view is currently being displayed.
+		 */
 		return apply_filters( 'tribe_is_by_date', $tribe_is_by_date );
 	}
 
@@ -108,7 +146,13 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @param bool $depth include linked title
 	 */
 	function tribe_events_title( $depth = true ) {
-		echo apply_filters( 'tribe_events_title', tribe_get_events_title( $depth ) );
+		/**
+		 * Allows for customization of the title on the main "Events" page.
+		 *
+		 * @param string $title The events title as a result of the tribe_get_events_title() template tag.
+		 * @param bool $depth Whether to include the linked title or not.
+		 */
+		echo apply_filters( 'tribe_events_title', tribe_get_events_title( $depth ), $depth );
 	}
 
 	/**
@@ -122,7 +166,10 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @todo move logic to template classes
 	 */
 	function tribe_get_events_title( $depth = true ) {
-		global $wp_query;
+
+		if ( ! $wp_query = tribe_get_global_query_object() ) {
+			return;
+		}
 
 		$events_label_plural = tribe_get_event_label_plural();
 
@@ -180,6 +227,12 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 			$title .= ' &#8250; ' . $cat->name;
 		}
 
+		/**
+		 * Allows for customization of the "Events" page title.
+		 *
+		 * @param string $title The "Events" page title as it's been generated thus far.
+		 * @param bool $depth Whether to include the linked title or not.
+		 */
 		return apply_filters( 'tribe_get_events_title', $title, $depth );
 	}
 
@@ -203,9 +256,13 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return bool
 	 */
 	function tribe_has_previous_event() {
-		global $wp_query;
-
+		$wp_query = tribe_get_global_query_object();
 		$has_previous = false;
+
+		if ( null === $wp_query ) {
+			return apply_filters( 'tribe_has_previous_event', $has_previous );
+		}
+
 		$past         = tribe_is_past();
 		$upcoming     = ! $past;
 		$cur_page     = (int) $wp_query->get( 'paged' );
@@ -227,11 +284,21 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 
 			// Indicate we're interested in past events
 			$args['tribe_is_past'] = true;
-
 			// Make some efficiency savings
 			$args['no_paging']      = true;
 			$args['no_found_rows']  = true;
 			$args['posts_per_page'] = 1;
+
+			/**
+			 * Filters the arguments that will be used to check if there is a previous page/event.
+			 *
+			 * @since 4.9
+			 *
+			 * @param array $args An array of arguments that will be used to check if a previous page/event
+			 *                    is present.
+			 * @param WP_Query $wp_query The query object, if any, the query arguments have been taken from.
+			 */
+			$args = apply_filters( 'tribe_events_has_previous_args', $args, $wp_query );
 
 			$past_event   = tribe_get_events( $args );
 			$has_previous = ( count( $past_event ) >= 1 );
@@ -246,9 +313,14 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	 * @return bool
 	 */
 	function tribe_has_next_event() {
-		global $wp_query;
 
+		$wp_query = tribe_get_global_query_object();
 		$has_next  = false;
+
+		if ( null === $wp_query ) {
+			return apply_filters( 'tribe_has_next_event', $has_next );
+		}
+
 		$past      = tribe_is_past();
 		$upcoming  = ! $past;
 		$cur_page  = (int) $wp_query->get( 'paged' );
@@ -272,6 +344,17 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 			$args['no_paging'] = true;
 			$args['no_found_rows'] = true;
 			$args['posts_per_page'] = 1;
+
+			/**
+			 * Filters the arguments that will be used to check if there is a next page/event.
+			 *
+			 * @since 4.9
+			 *
+			 * @param array $args An array of arguments that will be used to check if a next page/event
+			 *                    is present.
+			 * @param WP_Query $wp_query The query object the query arguments have been taken from.
+			 */
+			$args = apply_filters( 'tribe_events_has_next_args', $args, $wp_query );
 
 			$next_event = tribe_get_events( $args );
 			$has_next   = ( count( $next_event ) >= 1 );
@@ -346,7 +429,7 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 			 *
 			 */
 			if ( $wp_query->current_post === 0 || ( $prev_event_month != $event_month || ( $prev_event_month == $event_month && $prev_event_year != $event_year ) ) ) {
-				$html .= sprintf( "<span class='tribe-events-list-separator-month'><span>%s</span></span>", tribe_get_start_date( $post, false, $month_year_format ) );
+				$html .= sprintf( "<h2 class='tribe-events-list-separator-month'><span>%s</span></h2>", tribe_get_start_date( $post, false, $month_year_format ) );
 			}
 
 			echo apply_filters( 'tribe_events_list_the_date_headers', $html, $event_month, $event_year );
@@ -361,9 +444,9 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	function tribe_left_navigation_classes() {
 
 		$classes     = array();
-		$tribe_paged = ( ! empty( $_REQUEST['tribe_paged'] ) ) ? $_REQUEST['tribe_paged'] : 1;
+		$tribe_paged = absint( ! empty( $_REQUEST['tribe_paged'] ) ) ? $_REQUEST['tribe_paged'] : 1;
 
-		$classes['direction'] = tribe_is_upcoming() ? 'tribe-events-nav-previous' : 'tribe-events-nav-next';
+		$classes['direction'] = 'tribe-events-nav-previous';
 		$classes['side']      = 'tribe-events-nav-left';
 
 		if ( tribe_is_past() || ( ( tribe_is_upcoming() && $tribe_paged == 1 ) ) ) {
@@ -382,9 +465,9 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	function tribe_right_navigation_classes() {
 
 		$classes     = array();
-		$tribe_paged = ( ! empty( $_REQUEST['tribe_paged'] ) ) ? $_REQUEST['tribe_paged'] : 1;
+		$tribe_paged = absint( ! empty( $_REQUEST['tribe_paged'] ) ) ? $_REQUEST['tribe_paged'] : 1;
 
-		$classes['direction'] = tribe_is_upcoming() ? 'tribe-events-nav-next' : 'tribe-events-nav-previous';
+		$classes['direction'] = 'tribe-events-nav-next';
 		$classes['side']      = 'tribe-events-nav-right';
 
 		if ( tribe_is_past() && $tribe_paged > 1 ) {

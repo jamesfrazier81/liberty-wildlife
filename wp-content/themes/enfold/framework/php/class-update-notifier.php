@@ -19,7 +19,7 @@ if ( ! class_exists( 'avia_update_notifier' ) )
         public $latestversion = '';
         public $themeversion = '';
 
-        public function __construct($xmlurl = NULL, $deactivate = FALSE, $check_for_update_interval = 604800, $remind_me_later_interval = 86400)
+        public function __construct($xmlurl = null, $deactivate = false, $check_for_update_interval = 604800, $remind_me_later_interval = 86400)
         {
             if( empty($xmlurl) || !empty($deactivate) ) return;
             if(!is_admin()) return;
@@ -161,12 +161,12 @@ if ( ! class_exists( 'avia_update_notifier' ) )
                         echo '</strong>';
                         echo '<br/>';
 
-                        echo '<a target="_blank" href="'.$themeforesturl.'" title="' . __('Download Update From Themeforest.net', 'avia_framework') . '">'. __('Download Update From Themeforest.net', 'avia_framework') . '</a>';
+                        echo '<a target="_blank" href="'.$themeforesturl.'" title="' . __('Download Update From Themeforest.net', 'avia_framework') . '" rel="noopener noreferrer">'. __('Download Update From Themeforest.net', 'avia_framework') . '</a>';
                         echo $saparator;
 
                         if(!empty($changelogurl))
                         {
-                            echo '<a target="_blank" href="'.$changelogurl.'" title="' . __('View Changelog on http://kriesi.at', 'avia_framework') . '">'. __('View Changelog', 'avia_framework') . '</a>';
+                            echo '<a target="_blank" href="'.$changelogurl.'" title="' . __('View Changelog on http://kriesi.at', 'avia_framework') . '" rel="noopener noreferrer">'. __('View Changelog', 'avia_framework') . '</a>';
                             echo $saparator;
                         }
 

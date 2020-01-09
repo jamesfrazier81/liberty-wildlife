@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
 global $avia_config;
 
 
@@ -29,14 +31,30 @@ if (have_posts()) :
             <header class="entry-content-header">
                 <?php
                 echo "<span class='search-result-counter {$counterclass}'>{$post_loop_count}</span>";
+				
+				$default_heading = 'h2';
+				$args = array(
+							'heading'		=> $default_heading,
+							'extra_class'	=> ''
+						);
+
+				/**
+				 * @since 4.5.5
+				 * @return array
+				 */
+				$args = apply_filters( 'avf_customize_heading_settings', $args, 'loop_search', array() );
+
+				$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+				$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+				
                 //echo the post title
                 $markup = avia_markup_helper(array('context' => 'entry_title','echo'=>false));
-                echo "<h2 class='post-title entry-title'><a title='".the_title_attribute('echo=0')."' href='".get_permalink()."' $markup>".get_the_title()."</a></h2>";
+                echo "<{$heading} class='post-title entry-title {$css}'><a title='".the_title_attribute('echo=0')."' href='".get_permalink()."' $markup>".get_the_title()."</a></{$heading}>";
 
                 ?>
                 <span class='post-meta-infos'>
                     <time class='date-container minor-meta updated' <?php avia_markup_helper(array('context' => 'entry_time')); ?>>
-                        <?php the_time('d M Y'); ?>
+			<?php the_time( get_option( 'date_format' ) ); ?>
                     </time>
                     <?php
                     if(get_post_type() !== "page")
@@ -133,20 +151,22 @@ if (have_posts()) :
                     <li><?php _e('Try a similar keyword, for example: tablet instead of laptop.', 'avia_framework'); ?></li>
                     <li><?php _e('Try using more than one keyword.', 'avia_framework'); ?></li>
                 </ul>
-
-                <div class='hr_invisible'></div>
-                <h3 class=''><?php _e('Feel like browsing some posts instead?', 'avia_framework'); ?></h3>
-
         <?php
-        the_widget('avia_combo_widget', 'error404widget', array('widget_id'=>'arbitrary-instance-'.$id,
-                'before_widget' => '<div class="widget avia_combo_widget">',
-                'after_widget' => '</div>',
-                'before_title' => '<h3 class="widgettitle">',
-                'after_title' => '</h3>'
-            ));
+		
+		/**
+		 * Additional output when nothing found in search
+		 * 
+		 * @since 4.1.2
+		 * @added_by günter
+		 * @return string			cutom HTML escaped for echo | ''
+		 */
+		$custom_no_earch_result = apply_filters( 'avf_search_results_pagecontent', '' );
+		echo $custom_no_earch_result;
+		
+		
         echo '</section>';
 	echo "</article>";
 
 	endif;
 	echo avia_pagination('', 'nav');
-?>
+	

@@ -98,6 +98,14 @@ if( ! class_exists( 'avia_adminpages' ) )
 			}
 		}
 		
+		/**
+		* Print css stylesheets in the framework/css folder to the admin head
+		*/
+		function add_global_styles()
+		{
+			wp_enqueue_style(  'avia_global_admin', AVIA_CSS_URL . 'conditional_load/avia_global_admin.css',  false, AV_FRAMEWORK_VERSION); 
+		}
+		
 		
 		
 		/**
@@ -113,6 +121,8 @@ if( ! class_exists( 'avia_adminpages' ) )
 				$this->add_styles();
 				$this->add_scripts();
 			}
+			
+			$this->add_global_styles();
 		}
 		
 		

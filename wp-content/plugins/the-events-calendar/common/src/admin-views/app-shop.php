@@ -25,8 +25,8 @@
 
 		$button_label = esc_html__( 'Buy This Add-On', 'tribe-common' );
 		$button_class = 'button-primary';
-		if ( 'installed' == $type ) {
-			?><h1><?php esc_html_e( 'Installed Add-Ons', 'tribe-common' ); ?></h1><?php
+		if ( 'installed' === $type ) {
+			?><h1 class="tribe-installed-headline"><?php esc_html_e( 'Installed Add-Ons', 'tribe-common' ); ?></h1><?php
 			$button_class = 'button-disabled';
 			$button_label = '<span class="dashicons dashicons-yes"></span>' . esc_html__( 'Installed', 'tribe-common' );
 		}
@@ -60,15 +60,14 @@
 						$wide_indexes = array( 0 );
 				}
 
-				$i = 0;
-				foreach ( $products as $product ) {
+				foreach ( $products as $i => $product ) {
 					?>
 					<div class="tribe-addon<?php echo in_array( $i, $wide_indexes ) ? ' first' : ''; ?>">
 						<div class="thumb">
-							<a href="<?php echo esc_url( $product->link ); ?>"><img src="<?php echo esc_url( tribe_resource_url( $product->image, false, null, $main ) ); ?>" /></a>
+							<a href="<?php echo esc_url( $product->link ); ?>" target="_blank"><img src="<?php echo esc_url( tribe_resource_url( $product->image, false, null, $main ) ); ?>" /></a>
 						</div>
 						<div class="caption">
-							<h4><a href="<?php echo esc_url( $product->link ); ?>"><?php echo esc_html( $product->title ); ?></a></h4>
+							<h4><a href="<?php echo esc_url( $product->link ); ?>" target="_blank"><?php echo esc_html( $product->title ); ?></a></h4>
 
 							<div class="description">
 								<p><?php echo $product->description; ?></p>
@@ -86,7 +85,6 @@
 					</div>
 
 					<?php
-					$i++;
 				}
 				?>
 			</div>

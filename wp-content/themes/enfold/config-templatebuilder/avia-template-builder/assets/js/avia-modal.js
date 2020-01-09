@@ -19,7 +19,7 @@
         		save_param: {},					//@obj parameters that are passed to the callback function in addition to the form values
         		ajax_param: "",					//@string parameters that are passed to the ajax content fetching function
         		button: "save"					//@string parameter that tells the modal window which button to generate
-        }
+        };
         
         $.AviaModal.openInstance.unshift(this); 
         
@@ -70,7 +70,7 @@
 			// close modal by pressing escape key. modify_binding_order makes sure that this is fired first. 
 			// bind event on keydown instead of keyup cause it will probably not interfere with other plugins
 			//fire save event on ENTER (13)
-			this.doc.bind('keydown'+this.namespace, function(e) 
+			this.doc.on('keydown'+this.namespace, function(e) 
 			{
 				if(obj.media_overlay_closed() && obj.link_overlay_closed())
 				{
@@ -243,7 +243,7 @@
    			
    			this.modal.remove();
    			this.backdrop.remove();
-   			this.doc.trigger('avia_modal_close', [ this ]).unbind('keydown'+this.namespace); 
+   			this.doc.trigger('avia_modal_close', [ this ]).off('keydown'+this.namespace); 
    			
    			if($.AviaModal.openInstance.length == 0)
    			{
@@ -306,7 +306,7 @@
    		
    		link_overlay_closed: function() //check if the tinymce link editor for wordpress (Insert/edit link button) is closed
    		{
-   			var link_overlay = $('#wp-link-wrap:visible')
+   			var link_overlay = $('#wp-link-wrap:visible');
    			return link_overlay.length ? false : true;
    		},
    		
@@ -320,7 +320,7 @@
    			this.body.trigger('avia_modal_finished', this);
    		}
    	
-   	}
+   	};
    	
    	
    	
@@ -340,10 +340,11 @@
         		modal_class: "flexscreen",				
         		modal_title: "<span class='avia-msg-"+ options.mode +"'>" + avia_modal_L10n[options.mode] + "</span>",
         		button: "close"		
-        }
+        };
+		
 		this.options = $.extend({}, defaults, options);
 		return new $.AviaModal(this.options);
-	}
+	};
    	
    	
 
@@ -382,28 +383,33 @@
 			target.sortable(params);
 			
 			
-	}
+	};
    	
    	
    	
    	$.AviaModal.register_callback.modal_load_colorpicker = function()
 	{
-	
+		var palettes = ['#000000','#ffffff','#B02B2C','#edae44','#eeee22','#83a846','#7bb0e7','#745f7e','#5f8789','#d65799','#4ecac2'];
+		if( 'undefined' != typeof avia_globals.color_palettes )
+		{
+			palettes = avia_globals.color_palettes;
+		}
+		
 		var picerOpts 		= {
-				palettes:['#000000','#ffffff','#B02B2C','#edae44','#eeee22','#83a846','#7bb0e7','#745f7e','#5f8789','#d65799','#4ecac2'],
+				palettes: palettes,
 				change: function(event, ui)
 				{
 					$(this).trigger('av-update-preview');
 				},
 				clear: function() {
 	            	$(this).trigger('keyup');
-				},
+				}
 			},
 			self			= this, 
 			scope			= this.modal,
 			colorpicker		= scope.find('.av-colorpicker').avia_wpColorPicker(picerOpts), 
 			picker_button	= scope.find('.wp-color-result');
-			//picker_button.unbind();
+			//picker_button.off();
 			
 			//
 						
@@ -442,28 +448,87 @@
 			//fixes the error caused by removing the modal window from the dom. unbinding the events and recalling the iris function both seems to be necessary
 			$(document).one('avia_modal_before_close_instance'+self.namespace, function()
 			{
-				picker_button.unbind().remove();
-				colorpicker.unbind().remove();
+				picker_button.off().remove();
+				colorpicker.off().remove();
 				colorpicker.iris();
 			});
 			
-	}
+	};
    	
    	
    	$.AviaModal.register_callback.modal_load_datepicker = function()
 	{
 		var scope			= this.modal,
-			datepicker		= scope.find('.av-datepicker').datepicker(
-			{ 
-				dateFormat: 'mm / dd / yy',
-				minDate: -0,
-				beforeShow: function(input, inst) 
+			datepickers		= scope.find('.av-datepicker'),
+			supported		= [ 'showButtonPanel', 
+								'closeText', 
+								'currentText', 
+								'nextText', 
+								'prevText', 
+								'monthNames', 
+								'monthNamesShort', 
+								'dayNames', 
+								'dayNamesShort', 
+								'dayNamesMin', 
+								'dateFormat', 
+								'firstDay', 
+								'isRTL', 
+								'changeMonth', 
+								'changeYear', 
+								'yearRange', 
+								'minDate', 
+								'maxDate' 
+								],
+			array_structur	= [
+								'monthNames', 
+								'monthNamesShort', 
+								'dayNames', 
+								'dayNamesShort', 
+								'dayNamesMin'
+								];
+		
+						    
+		datepickers.each(function()
+		{		
+			var	input = $(this),
+				settings = input.data(),
+				options = {};
+				
+			$.each( supported, function( index, value ){
+				var lc = value.toLowerCase(),
+					val = '';
+					
+				if( 'undefined' == typeof settings[lc] )
 				{
-					inst.dpDiv.addClass("avia-datepicker-div");
+					return;
 				}
+				
+				if( $.inArray( value, array_structur ) >= 0 )
+				{
+					val = settings[lc].split(',');
+					val.map( function(s) { return s.trim() });
+				}
+				else
+				{
+					val = settings[lc];
+				}
+				
+				options[ value ] = val;
 			});
 			
-	}
+			options.beforeShow = function(input, inst) 
+									{
+										inst.dpDiv.addClass("avia-datepicker-div");
+										if( 'undefined' != typeof settings.container_class )
+										{
+											inst.dpDiv.addClass( settings.container_class );
+										}
+									};
+			
+			input.datepicker( options );
+		});
+		
+	};
 	
 	$.AviaModal.register_callback.modal_load_multi_input = function()
 	{
@@ -501,7 +566,7 @@
 			});
 			
 			
-	}
+	};
 	
 	
 	$.AviaModal.register_callback.modal_load_tabs = function()
@@ -543,7 +608,125 @@
 					});	
 				
 			});
-	}
+	};
+	
+
+	$.AviaModal.register_callback.modal_load_toggles = function()
+	{	
+		var scope			= this.modal,
+			tabcontainer	= scope.find('.avia-modal-toggle-container').addClass('avia-modal-toggle-ready'),
+			active 			= "active-modal-toggles",
+			svg_arrow		= '<svg class="avia-modal-toggle-arrow" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false"><g><path fill="none" d="M0,0h24v24H0V0z"></path></g><g><path d="M7.41,8.59L12,13.17l4.59-4.58L18,10l-6,6l-6-6L7.41,8.59z"></path></g></svg>';
+			
+			tabcontainer.each(function(i){
+				
+				var current_container 	= $(this),
+					all_closed	 		= current_container.data('toggles-closed'),
+					tabs				= current_container.find('.avia-modal-toggle-container-inner');
+				
+				
+				tabs.each(function(i)
+				{
+					var current 	= $(this),
+						tab_title 	= current.data('toggle-name'),
+						tab_desc 	= current.data('toggle-desc'),
+						title_link  = $("<a class='avia-modal-toggle-title' href='#'>"+svg_arrow+tab_title+"<span>"+tab_desc+"</span></a>").insertBefore(current);
+						
+						if(i === 0)
+						{
+							tabs.css({display:"none"});
+							
+							if(!all_closed)
+							{
+								title_link.addClass(active);
+								current.css({display:"block"});
+							}
+						}
+						
+						title_link.on('click', function(e)
+						{
+							var clicked = $(this),
+								no_show = clicked.hasClass(active) ? true :false;
+							
+							//hide prev
+							current_container.find('a').removeClass(active);
+							tabs.css({display:"none"});
+							
+							if(!no_show){
+								//show current
+								clicked.addClass(active);
+								current.css({display:"block"});
+							}
+							
+							
+							//prevent default
+							return false;
+						});	
+					
+				});
+				
+				
+			});
+			
+	};
+	
+	
+	$.AviaModal.register_callback.modal_load_iconswitcher = function()
+	{	
+		var scope			= this.modal,
+			tabcontainer	= scope.find('.avia-modal-iconswitcher-container').addClass('avia-modal-switcher-ready'),
+			active 			= "active-modal-icon-switcher";
+			
+			tabcontainer.each(function(i){
+				
+				var current_container 	= $(this),
+					tabs				= current_container.find('.avia-modal-iconswitcher-container-inner'),
+					title_container 	= $('<div class="avia-modal-iconswitcher-titles"></div>').prependTo(current_container);
+				
+				
+				tabs.each(function(i)
+				{
+					var current 	= $(this),
+						tab_title 	= current.data('switcher-name'),
+						tab_icon 	= current.data('switcher-icon'),
+						title_link  = $("<a class='avia-modal-iconswitcher-title' href='#'><span><img src='"+tab_icon+"' /></span><strong>"+tab_title+"</strong></a>").appendTo(title_container);
+						
+						if(i === 0)
+						{
+							tabs.css({display:"none"});
+							title_link.addClass(active);
+							current.css({display:"block"});
+							
+						}
+						
+						title_link.on('click', function(e)
+						{
+							var clicked = $(this);
+							
+							//hide prev
+							current_container.find('a').removeClass(active);
+							tabs.css({display:"none"});
+							
+							//show current
+							clicked.addClass(active);
+							current.css({display:"block"});
+							
+							
+							//prevent default
+							return false;
+						});	
+					
+				});
+				
+				
+			});
+			
+			
+			
+			
+	};
+	
+	
 	
 	
 	$.AviaModal.register_callback.modal_load_mailchimp = function()
@@ -568,17 +751,17 @@
 				//sanitize data in dropdown to circumvent inserting world list with "'" or other invalid values
 				if(current.label)
 				{
-					current.label = current.label.replace(/'/g, "&lsquo;")
+					current.label = current.label.replace(/'/g, "&lsquo;");
 				}
 				
 				if(current.options)
 				{
-					current.options = current.options.replace(/'/g, "&lsquo;")
+					current.options = current.options.replace(/'/g, "&lsquo;");
 				}
 				
 				if(current.value)
 				{
-					current.value = current.value.replace(/'/g, "&lsquo;")
+					current.value = current.value.replace(/'/g, "&lsquo;");
 				}
 				
 				
@@ -596,7 +779,7 @@
 				{
 					group.append(insert);
 				}
-			}
+			};
 			
 			
 			//if the list is empty remove all fields
@@ -708,8 +891,9 @@
 		var _self	 = this,	
 			modal    = textareas.parents('.avia-modal:eq(0)'),
 			save_btn = modal.find('.avia-modal-save'),
-			$doc	 = $(document);
-			
+			$doc	 = $(document),
+			no_indent_fix = $( '#avia_builder' ).find('.avia-builder-main-wrap').first().hasClass( 'avia-ignore-tiny-indent-fix' );
+
 		textareas.each(function()
 		{
 			var el_id		= this.id,
@@ -717,11 +901,16 @@
 				parent		= current.parents('.wp-editor-wrap:eq(0)'),
 				textarea	= parent.find('textarea.avia_tinymce'),
 				switch_btn	= parent.find('.wp-switch-editor').removeAttr("onclick"),
-				settings	= {id: this.id , buttons: "strong,em,link,block,del,ins,img,ul,ol,li,code,spell,close"},
+				settings	= {
+									id: this.id , 
+									buttons: "strong,em,link,block,del,ins,img,ul,ol,li,code,spell,close",
+									menubar :	false
+							},
 				tinyVersion = false,
 				executeAdd  = "mceAddEditor",
 				executeRem	= "mceRemoveEditor",
 				open		= true;
+			
 			
 			if(window.tinyMCE) tinyVersion = window.tinyMCE.majorVersion;
 			
@@ -733,12 +922,12 @@
 			switch_btn.on('click', function()
 			{
 				var button = $(this);
-				
+
 				if(button.is('.switch-tmce'))
 				{
 					parent.removeClass('html-active').addClass('tmce-active');
 					window.tinyMCE.execCommand(executeAdd, true, el_id);
-				
+
 					/**
 					 * fixes problem with caption shortcode that manipulates the HTML and adds some custom temp structure on adding content to editor
 					 * see  wp-includes\js\tinymce\plugins\wpeditimage\plugin.js function parseShortcode 
@@ -750,7 +939,22 @@
 					var result = text.match( /\[caption /i );
 					var format = ( result ) ? 'wpeditimage' : 'raw';
 					
-					window.tinyMCE.get(el_id).setContent(window.switchEditors.wpautop(text), {format: format });
+					/**
+					 * Fixes a problem with lists: indent/dedent with tab and button does not work because there must be no space between list tags when rendering content
+					 */
+					var text_p = window.switchEditors.wpautop( text );
+					
+					if( ! no_indent_fix )
+					{
+						text_p = text_p.replace( />[.\s]+<li>/g, '><li>' );
+						text_p = text_p.replace( />[.\s]+<li /g, '><li ' );
+						text_p = text_p.replace( />[.\s]+<\/ul>/g, '></ul>' );
+						text_p = text_p.replace( />[.\s]+<\/ol>/g, '></ol>' );
+						text_p = text_p.replace( /<\/ul>[.\s]+<\/li>/g, '</ul></li>' );
+						text_p = text_p.replace( /<\/ol>[.\s]+<\/li>/g, '</ol></li>' );
+					}
+					
+					window.tinyMCE.get(el_id).setContent( text_p, {format: format });
 					
 					//trigger updates for preview window
 					tinymce.activeEditor.on('keyup change', function(e) 
@@ -781,8 +985,6 @@
 					textarea.val( window.switchEditors._wp_Nop( the_value ) );
 				}
 			});
-			
-			
 			
 			
 			//activate the visual editor
@@ -1005,7 +1207,7 @@
    		
    		methods.init();
    		
-   	}
+   	};
 	
 	
 	//script that generates the preview
@@ -1016,6 +1218,7 @@
 			iframe_container	= _self.modal.find('.avia-modal-preview-content'),
 			preview_footer		= _self.modal.find('.avia-modal-preview-footer'),
 			preview_bg_stored	= _self.modal.find('#aviaTBadmin_preview_bg'),
+			preview_scale       = "avia-preview-scale-" + iframe_container.attr('data-preview-scale'),
 			iframe				= false,
 			elements			= _self.modal.find('input, select, radio, textarea'),
 			res					= window.avia_preview.paths,
@@ -1097,7 +1300,7 @@
 					newframe = document.createElement('iframe');
 					iframe_container.html("").append(newframe);
 				
-					response = "<html class='responsive'><head>" +res+ "</head><body id='top'><div id='wrap_all'><div id='av-admin-preview' class='entry-content-wrapper main_color all_colors'>" +response+ "</div></div></body></html>";
+					response = "<html class='responsive'><head>" +res+ "</head><body id='top'><div id='wrap_all'><div id='av-admin-preview' class='entry-content-wrapper main_color all_colors "+preview_scale+"'>" +response+ "</div></div></body></html>";
 					
 					newframe.contentWindow.contents = response;
 					newframe.src = 'javascript:window["contents"]'; 
@@ -1115,7 +1318,7 @@
 				}
 			}
 			
-		}
+		};
 		
 		methods.set_frame_content("");
 		methods.update_iframe();
@@ -1129,23 +1332,7 @@
 		_self.modal.on('av-update-preview-tinymce', 'textarea', methods.update_iframe_with_delay);
 		preview_footer.on('click', 'a', methods.change_preview_bg);
 		
-		
-		
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	};
 	
 })(jQuery);	 
 
@@ -1315,7 +1502,7 @@
             });
           }
 
-        }
+        };
         
         var final_options = $.extend( true, {}, new_settings, default_options );
         $this.wpColorPicker( final_options );

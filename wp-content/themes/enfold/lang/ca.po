@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: Enfold 3.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-08 15:54+0100\n"
-"PO-Revision-Date: 2017-08-24 20:53+0300\n"
+"PO-Revision-Date: 2017-11-09 22:29+0200\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
@@ -25,7 +25,7 @@ msgstr "Error 404 - pàgina no trobada"
 
 #: author.php:17
 msgid "Entries by"
-msgstr ""
+msgstr "Entrades per"
 
 #: comments.php:20
 msgid ""
@@ -44,15 +44,15 @@ msgstr "resposta"
 
 #: comments.php:80 comments.php:135
 msgid "&laquo; Older Comments"
-msgstr ""
+msgstr "&laquo; Comentaris anteriors"
 
 #: comments.php:83 comments.php:138
 msgid "Newer Comments &raquo;"
-msgstr ""
+msgstr "Comentaris nous &raquo;"
 
 #: comments.php:114
 msgid "Trackbacks &amp; Pingbacks"
-msgstr ""
+msgstr "Trackbacks i pingbacks"
 
 #: comments.php:165
 msgid "Leave a Reply"
@@ -60,11 +60,11 @@ msgstr "Deixa una resposta"
 
 #: comments.php:166
 msgid "Want to join the discussion?"
-msgstr ""
+msgstr "Vols unir-te a la conversa?"
 
 #: comments.php:166
 msgid "Feel free to contribute!"
-msgstr ""
+msgstr "No dubtis a contribuir!"
 
 #: comments.php:176
 msgid "Comments are closed."
@@ -72,25 +72,27 @@ msgstr "Els comentaris estàn tancats."
 
 #: config-bbpress/config.php:106 forum.php:19
 msgid "Profile for User:"
-msgstr ""
+msgstr "Perfil de l'usuari:"
 
 #: config-events-calendar/config.php:122
 msgid "Additional Functionality"
-msgstr ""
+msgstr "Funcionalitat adicional"
 
 #: config-events-calendar/config.php:143
 msgid ""
 "Looking for additional functionality including recurring events, ticket "
 "sales, publicly submitted events, new views and more?"
 msgstr ""
+"Busques funcionalitat adicional incloent esdeveniments recurrents, venda de "
+"tiquets, esdeveniments públics, noves vistes i més?"
 
 #: config-events-calendar/config.php:144
 msgid "Check out the"
-msgstr ""
+msgstr "Dóna una ullada a"
 
 #: config-events-calendar/config.php:146
 msgid "available add-ons"
-msgstr ""
+msgstr "add-ons disponibles"
 
 #: config-events-calendar/config.php:203 config-events-calendar/config.php:212
 msgid "Events"
@@ -106,21 +108,21 @@ msgstr "Calendari d'esdeveniments"
 
 #: config-events-calendar/views/single-event.php:21
 msgid "&laquo; All Events"
-msgstr ""
+msgstr "&laquo; Tots els esdeveniments"
 
 #: config-events-calendar/views/single-event.php:95
 msgid "Event Navigation"
-msgstr ""
+msgstr "Navegació d'events"
 
 #: config-layerslider/LayerSlider/classes/class.km.autoupdate.v3.php:280
 #: config-layerslider/LayerSlider_old/classes/class.km.autoupdate.v3.php:280
 msgid "Your settings were successfully saved."
-msgstr ""
+msgstr "La teva configuració s'ha desat amb èxit."
 
 #: config-layerslider/LayerSlider/config/defaults.php:14
 #: config-layerslider/LayerSlider_old/config/defaults.php:14
 msgid "Slider width"
-msgstr ""
+msgstr "Amplada del lliscador"
 
 #: config-layerslider/LayerSlider/config/defaults.php:16
 #: config-layerslider/LayerSlider_old/config/defaults.php:16
@@ -128,21 +130,23 @@ msgid ""
 "The width of the slider in pixels. Accepts percents, but is only recommended "
 "for full-width layout."
 msgstr ""
+"L'amplada del lliscador en píxels. Accepta percentatges, però només és "
+"recomanat per dissenys d'ample complet."
 
 #: config-layerslider/LayerSlider/config/defaults.php:28
 #: config-layerslider/LayerSlider_old/config/defaults.php:28
 msgid "Slider height"
-msgstr ""
+msgstr "Altura del lliscador"
 
 #: config-layerslider/LayerSlider/config/defaults.php:30
 #: config-layerslider/LayerSlider_old/config/defaults.php:30
 msgid "The height of the slider in pixels."
-msgstr ""
+msgstr "L'altura del lliscador en píxels."
 
 #: config-layerslider/LayerSlider/config/defaults.php:42
 #: config-layerslider/LayerSlider_old/config/defaults.php:42
 msgid "Responsive"
-msgstr ""
+msgstr "Adaptatiu"
 
 #: config-layerslider/LayerSlider/config/defaults.php:44
 #: config-layerslider/LayerSlider_old/config/defaults.php:44
@@ -151,11 +155,14 @@ msgid ""
 "devices (from desktop to mobile) by adapting and scaling your sliders for "
 "the viewing environment."
 msgstr ""
+"El mode adaptatiu proporciona una experiència òptima de visualització en una "
+"àmplia gamma de dispositius (des de l'escriptori al mòbil) adaptant-se i "
+"escalant els lliscadors per a l'entorn de visualització."
 
 #: config-layerslider/LayerSlider/config/defaults.php:51
 #: config-layerslider/LayerSlider_old/config/defaults.php:51
 msgid "Max-width"
-msgstr ""
+msgstr "Amplada màxima"
 
 #: config-layerslider/LayerSlider/config/defaults.php:53
 #: config-layerslider/LayerSlider_old/config/defaults.php:53
@@ -163,11 +170,13 @@ msgid ""
 "The maximum width your slider can take in pixels when responsive mode is "
 "enabled."
 msgstr ""
+"L'amplada màxima que el teu lliscador pot tenir en píxels quan el mode "
+"adaptatiu està activat."
 
 #: config-layerslider/LayerSlider/config/defaults.php:67
 #: config-layerslider/LayerSlider_old/config/defaults.php:67
 msgid "Full-width"
-msgstr ""
+msgstr "Amplada completa"
 
 #: config-layerslider/LayerSlider/config/defaults.php:69
 #: config-layerslider/LayerSlider_old/config/defaults.php:69
@@ -175,11 +184,13 @@ msgid ""
 "Enable this option to force the slider to become full-width, even if your "
 "theme does not support such layout."
 msgstr ""
+"Activa aquesta opció per forçar que el lliscador passi a ser d'amplada "
+"completa, fins i tot si el vostre tema no és compatible amb aquest disseny."
 
 #: config-layerslider/LayerSlider/config/defaults.php:79
 #: config-layerslider/LayerSlider_old/config/defaults.php:79
 msgid "Responsive under"
-msgstr ""
+msgstr "Adaptatiu per sota de"
 
 #: config-layerslider/LayerSlider/config/defaults.php:81
 #: config-layerslider/LayerSlider_old/config/defaults.php:81
@@ -187,11 +198,14 @@ msgid ""
 "Turns on responsive mode in a full-width slider under the specified value in "
 "pixels. Can only be used with full-width mode."
 msgstr ""
+"Activa el mode adaptatiu en un lliscador d'amplada completa per sota del "
+"valor específic en pixels. Només es pot utilitzar amb el mode d'amplada "
+"completa."
 
 #: config-layerslider/LayerSlider/config/defaults.php:92
 #: config-layerslider/LayerSlider_old/config/defaults.php:92
 msgid "Layers container"
-msgstr ""
+msgstr "Contenidor de capes"
 
 #: config-layerslider/LayerSlider/config/defaults.php:94
 #: config-layerslider/LayerSlider_old/config/defaults.php:94
@@ -203,42 +217,48 @@ msgstr ""
 #: config-layerslider/LayerSlider/config/defaults.php:105
 #: config-layerslider/LayerSlider_old/config/defaults.php:105
 msgid "Hide on mobile"
-msgstr ""
+msgstr "Amaga en mòbils"
 
 #: config-layerslider/LayerSlider/config/defaults.php:107
 #: config-layerslider/LayerSlider_old/config/defaults.php:107
 msgid "Hides the slider on mobile devices."
-msgstr ""
+msgstr "Amaga el lliscador en dispositius mòbils"
 
 #: config-layerslider/LayerSlider/config/defaults.php:115
 #: config-layerslider/LayerSlider_old/config/defaults.php:115
 msgid "Hide under"
-msgstr ""
+msgstr "Amaga per sota de"
 
 #: config-layerslider/LayerSlider/config/defaults.php:117
 #: config-layerslider/LayerSlider_old/config/defaults.php:117
 msgid "Hides the slider under the given value of browser width in pixels."
 msgstr ""
+"Amaga el lliscador per sota del valor donat d'amplada del navegador en "
+"píxels."
 
 #: config-layerslider/LayerSlider/config/defaults.php:127
 #: config-layerslider/LayerSlider_old/config/defaults.php:127
 msgid "Hide over"
-msgstr ""
+msgstr "Amaga per sobre de"
 
 #: config-layerslider/LayerSlider/config/defaults.php:129
 #: config-layerslider/LayerSlider_old/config/defaults.php:129
 msgid "Hides the slider over the given value of browser width in pixel."
 msgstr ""
+"Amaga el lliscador per sobre del valor donat d'amplada del navegador en "
+"píxels."
 
 #: config-layerslider/LayerSlider/config/defaults.php:142
 #: config-layerslider/LayerSlider_old/config/defaults.php:142
 msgid "Start slideshow"
-msgstr ""
+msgstr "Començar pas de diapositives"
 
 #: config-layerslider/LayerSlider/config/defaults.php:144
 #: config-layerslider/LayerSlider_old/config/defaults.php:144
 msgid "Slideshow will automatically start after pages have loaded."
 msgstr ""
+"El pas de diapositives començarà automàticament després que les pàgines "
+"s'hagin carregat."
 
 #: config-layerslider/LayerSlider/config/defaults.php:150
 #: config-layerslider/LayerSlider_old/config/defaults.php:150
@@ -253,7 +273,7 @@ msgstr ""
 #: config-layerslider/LayerSlider/config/defaults.php:158
 #: config-layerslider/LayerSlider_old/config/defaults.php:158
 msgid "Pause on hover"
-msgstr ""
+msgstr "Pausar al passar el cursor"
 
 #: config-layerslider/LayerSlider/config/defaults.php:160
 #: config-layerslider/LayerSlider_old/config/defaults.php:160
@@ -261,11 +281,13 @@ msgid ""
 "Slideshow will temporally pause when someone moves the mouse cursor over the "
 "slider."
 msgstr ""
+"El pas de diapositives es pausarà temporalment quan algú mogui el cursor per "
+"sobre del lliscador."
 
 #: config-layerslider/LayerSlider/config/defaults.php:166
 #: config-layerslider/LayerSlider_old/config/defaults.php:166
 msgid "Start with slide"
-msgstr ""
+msgstr "Començar per la diapositiva"
 
 #: config-layerslider/LayerSlider/config/defaults.php:168
 #: config-layerslider/LayerSlider_old/config/defaults.php:168
@@ -273,11 +295,13 @@ msgid ""
 "The slider will start with the specified slide. You can use the value "
 "\"random\"."
 msgstr ""
+"El lliscador començarà per la diapositiva especificada. Pots utilitzar el "
+"valor \"random\"."
 
 #: config-layerslider/LayerSlider/config/defaults.php:177
 #: config-layerslider/LayerSlider_old/config/defaults.php:177
 msgid "Animate starting slide"
-msgstr ""
+msgstr "Animar primera diapositiva"
 
 #: config-layerslider/LayerSlider/config/defaults.php:179
 #: config-layerslider/LayerSlider_old/config/defaults.php:179
@@ -285,11 +309,13 @@ msgid ""
 "Disabling this option will result a static starting slide for the fisrt time "
 "on page load."
 msgstr ""
+"Desactivant aquesta opció resultarà en un inici estàtic del pas de "
+"diapositives quan es carregui la pàgina."
 
 #: config-layerslider/LayerSlider/config/defaults.php:185
 #: config-layerslider/LayerSlider_old/config/defaults.php:185
 msgid "Shuffle mode"
-msgstr ""
+msgstr "Mode aleatori"
 
 #: config-layerslider/LayerSlider/config/defaults.php:187
 #: config-layerslider/LayerSlider_old/config/defaults.php:187
@@ -297,28 +323,33 @@ msgid ""
 "Slideshow will proceed in random order. This feature does not work with "
 "looping."
 msgstr ""
+"El pas de diapositives es farà en ordre aleatori. Aquesta característica no "
+"funciona amb bucle."
 
 #: config-layerslider/LayerSlider/config/defaults.php:194
 #: config-layerslider/LayerSlider_old/config/defaults.php:194
 msgid "Two way slideshow"
-msgstr ""
+msgstr "Pas de diapositives en ambdós sentits"
 
 #: config-layerslider/LayerSlider/config/defaults.php:196
 #: config-layerslider/LayerSlider_old/config/defaults.php:196
 msgid "Slideshow can go backwards if someone switches to a previous slide."
 msgstr ""
+"El pas de diapositives pot anar enrere si es passa a la diapositiva anterior"
 
 #: config-layerslider/LayerSlider/config/defaults.php:203
 #: config-layerslider/LayerSlider/templates/tmpl-slider-settings.php:129
 #: config-layerslider/LayerSlider_old/config/defaults.php:203
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:129
 msgid "Loops"
-msgstr ""
+msgstr "Bucles"
 
 #: config-layerslider/LayerSlider/config/defaults.php:205
 #: config-layerslider/LayerSlider_old/config/defaults.php:205
 msgid "Number of loops if slideshow is enabled. Zero means infinite loops."
 msgstr ""
+"Número de bucles si el pas de diapositives està activat. Zero significa "
+"inifit."
 
 #: config-layerslider/LayerSlider/config/defaults.php:213
 #: config-layerslider/LayerSlider_old/config/defaults.php:213
@@ -370,7 +401,7 @@ msgstr ""
 #: config-layerslider/LayerSlider/config/defaults.php:251
 #: config-layerslider/LayerSlider_old/config/defaults.php:251
 msgid "Background color"
-msgstr ""
+msgstr "Color de fons"
 
 #: config-layerslider/LayerSlider/config/defaults.php:253
 #: config-layerslider/LayerSlider_old/config/defaults.php:253
@@ -385,7 +416,7 @@ msgstr ""
 #: config-layerslider/LayerSlider_old/config/defaults.php:259
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:178
 msgid "Background image"
-msgstr ""
+msgstr "Imatge de fons"
 
 #: config-layerslider/LayerSlider/config/defaults.php:261
 #: config-layerslider/LayerSlider_old/config/defaults.php:261
@@ -613,7 +644,7 @@ msgstr ""
 #: config-layerslider/LayerSlider/config/defaults.php:461
 #: config-layerslider/LayerSlider_old/config/defaults.php:461
 msgid "Youtube preview"
-msgstr ""
+msgstr "Vista prèvia de YouTube"
 
 #: config-layerslider/LayerSlider/config/defaults.php:463
 #: config-layerslider/LayerSlider_old/config/defaults.php:463
@@ -2131,7 +2162,7 @@ msgstr ""
 #: config-layerslider/LayerSlider/templates/tmpl-slider-settings.php:22
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:22
 msgid "Videos"
-msgstr ""
+msgstr "Videos"
 
 #: config-layerslider/LayerSlider/templates/tmpl-slider-settings.php:31
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:31
@@ -2153,7 +2184,7 @@ msgstr ""
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:69
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:138
 msgid "Other settings"
-msgstr ""
+msgstr "Altres opcions"
 
 #: config-layerslider/LayerSlider/templates/tmpl-slider-settings.php:89
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:89
@@ -2198,7 +2229,7 @@ msgstr ""
 #: config-layerslider/LayerSlider/templates/tmpl-slider-settings.php:210
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:210
 msgid "Show navigation buttons"
-msgstr ""
+msgstr "Mostrar botons de navegació"
 
 #: config-layerslider/LayerSlider/templates/tmpl-slider-settings.php:226
 #: config-layerslider/LayerSlider_old/templates/tmpl-slider-settings.php:226
@@ -2231,7 +2262,7 @@ msgstr ""
 #: config-layerslider/LayerSlider_old/views/style_editor.php:29
 #: config-layerslider/LayerSlider_old/views/transition_builder.php:51
 msgid "Show on screen"
-msgstr ""
+msgstr "Mostrar en pantalla"
 
 #: config-layerslider/LayerSlider/views/skin_editor.php:35
 #: config-layerslider/LayerSlider/views/slider_list.php:91
@@ -2358,7 +2389,7 @@ msgstr ""
 #: config-layerslider/LayerSlider/views/slider_edit.php:159
 #: config-layerslider/LayerSlider_old/views/slider_edit.php:159
 msgid "FAQ"
-msgstr ""
+msgstr "Preguntes més freqüents"
 
 #: config-layerslider/LayerSlider/views/slider_edit.php:163
 #: config-layerslider/LayerSlider_old/views/slider_edit.php:163
@@ -2368,12 +2399,12 @@ msgstr "Documentació"
 #: config-layerslider/LayerSlider/views/slider_edit.php:165
 #: config-layerslider/LayerSlider_old/views/slider_edit.php:165
 msgid "Need help? Try these: "
-msgstr ""
+msgstr "Necessites ajuda? Prova això"
 
 #: config-layerslider/LayerSlider/views/slider_edit.php:189
 #: config-layerslider/LayerSlider_old/views/slider_edit.php:189
 msgid "Add new slide"
-msgstr ""
+msgstr "Afegir nova diapositiva"
 
 #: config-layerslider/LayerSlider/views/slider_edit.php:204
 #: config-layerslider/LayerSlider_old/views/slider_edit.php:204
@@ -2671,7 +2702,7 @@ msgstr "Llegir més"
 #: config-layerslider/LayerSlider/views/slider_list.php:257
 #: config-layerslider/LayerSlider_old/views/slider_list.php:257
 msgid "This site is authorized to receive automatic updates."
-msgstr "Aquest lloc està autoritzat per rebre actualitzacions automàtiques"
+msgstr "Aquest lloc està autoritzat per rebre actualitzacions automàtiques."
 
 #: config-layerslider/LayerSlider/views/slider_list.php:259
 #: config-layerslider/LayerSlider_old/views/slider_list.php:259
@@ -6160,7 +6191,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/contact.php:188
 #: config-templatebuilder/avia-shortcodes/contact.php:333
 msgid "Your message has been sent!"
-msgstr ""
+msgstr "El teus missatge s'ha enviat!"
 
 #: config-templatebuilder/avia-shortcodes/contact.php:193
 #: config-templatebuilder/avia-shortcodes/mailchimp.php:236
@@ -6170,7 +6201,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/contact.php:194
 #: config-templatebuilder/avia-shortcodes/mailchimp.php:237
 msgid "To which page do you want the user send to?"
-msgstr ""
+msgstr "A quina página vols enviar l'usuari?"
 
 #: config-templatebuilder/avia-shortcodes/contact.php:209
 msgid "E-Mail Subject"
@@ -6185,7 +6216,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/contact.php:210
 #: framework/php/class-form-generator.php:789
 msgid "New Message"
-msgstr ""
+msgstr "Nou missatge"
 
 #: config-templatebuilder/avia-shortcodes/contact.php:210
 #: framework/php/class-form-generator.php:789
@@ -6568,7 +6599,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:578
 #: functions-enfold.php:1637
 msgid "Yes"
-msgstr ""
+msgstr "Sí"
 
 #: config-templatebuilder/avia-shortcodes/contentslider.php:159
 #: config-templatebuilder/avia-shortcodes/image.php:93
@@ -6584,7 +6615,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:578
 #: functions-enfold.php:1638
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: config-templatebuilder/avia-shortcodes/contentslider.php:162
 #: config-templatebuilder/avia-shortcodes/logoslider.php:199
@@ -6787,12 +6818,12 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:224
 #: config-templatebuilder/avia-shortcodes/textblock.php:61
 msgid "Default Size"
-msgstr ""
+msgstr "Tamany per defecte"
 
 #: config-templatebuilder/avia-shortcodes/countdown.php:140
 #: config-templatebuilder/avia-shortcodes/events_countdown.php:151
 msgid "Choose the colors here"
-msgstr ""
+msgstr "Escull els colors aquí"
 
 #: config-templatebuilder/avia-shortcodes/countdown.php:146
 #: config-templatebuilder/avia-shortcodes/events_countdown.php:157
@@ -7086,7 +7117,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/google_maps.php:19
 msgid "Google Map"
-msgstr ""
+msgstr "Mapa de Google"
 
 #: config-templatebuilder/avia-shortcodes/google_maps.php:26
 msgid "Display a google map with one or multiple locations"
@@ -7379,7 +7410,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/grid_row.php:100
 msgid "Edit Row"
-msgstr ""
+msgstr "Editar fila"
 
 #: config-templatebuilder/avia-shortcodes/grid_row.php:100
 msgid "edit"
@@ -7498,7 +7529,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/heading.php:58
 msgid "Hello"
-msgstr ""
+msgstr "Hola"
 
 #: config-templatebuilder/avia-shortcodes/heading.php:62
 msgid "Heading Type"
@@ -7624,7 +7655,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/headline_rotator.php:48
 msgid "We are "
-msgstr "Som"
+msgstr "Som "
 
 #: config-templatebuilder/avia-shortcodes/headline_rotator.php:53
 #: config-templatebuilder/avia-shortcodes/menu.php:74
@@ -7728,7 +7759,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/headline_rotator.php:184
 msgid "Text Size"
-msgstr ""
+msgstr "Tamany del text"
 
 #: config-templatebuilder/avia-shortcodes/headline_rotator.php:185
 msgid "Size of your Text in Pixel"
@@ -8299,7 +8330,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:493
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:480
 msgid "0.1"
-msgstr ""
+msgstr "0.1"
 
 #: config-templatebuilder/avia-shortcodes/image.php:200
 #: config-templatebuilder/avia-shortcodes/section.php:341
@@ -8307,7 +8338,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:494
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:481
 msgid "0.2"
-msgstr ""
+msgstr "0.2"
 
 #: config-templatebuilder/avia-shortcodes/image.php:201
 #: config-templatebuilder/avia-shortcodes/section.php:342
@@ -8315,7 +8346,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:495
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:482
 msgid "0.3"
-msgstr ""
+msgstr "0.3"
 
 #: config-templatebuilder/avia-shortcodes/image.php:202
 #: config-templatebuilder/avia-shortcodes/section.php:343
@@ -8323,7 +8354,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:496
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:483
 msgid "0.4"
-msgstr ""
+msgstr "0.4"
 
 #: config-templatebuilder/avia-shortcodes/image.php:203
 #: config-templatebuilder/avia-shortcodes/section.php:344
@@ -8331,7 +8362,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:497
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:484
 msgid "0.5"
-msgstr ""
+msgstr "0.5"
 
 #: config-templatebuilder/avia-shortcodes/image.php:204
 #: config-templatebuilder/avia-shortcodes/section.php:345
@@ -8339,7 +8370,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:498
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:485
 msgid "0.6"
-msgstr ""
+msgstr "0.6"
 
 #: config-templatebuilder/avia-shortcodes/image.php:205
 #: config-templatebuilder/avia-shortcodes/section.php:346
@@ -8347,7 +8378,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:499
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:486
 msgid "0.7"
-msgstr ""
+msgstr "0.7"
 
 #: config-templatebuilder/avia-shortcodes/image.php:206
 #: config-templatebuilder/avia-shortcodes/section.php:347
@@ -8355,7 +8386,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:500
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:487
 msgid "0.8"
-msgstr ""
+msgstr "0.8"
 
 #: config-templatebuilder/avia-shortcodes/image.php:207
 #: config-templatebuilder/avia-shortcodes/section.php:348
@@ -8363,7 +8394,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:501
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:488
 msgid "0.9"
-msgstr ""
+msgstr "0.9"
 
 #: config-templatebuilder/avia-shortcodes/image.php:208
 #: config-templatebuilder/avia-shortcodes/section.php:349
@@ -8371,7 +8402,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/slideshow_fullscreen.php:502
 #: config-templatebuilder/avia-shortcodes/slideshow_fullsize.php:489
 msgid "1.0"
-msgstr ""
+msgstr "1.0"
 
 #: config-templatebuilder/avia-shortcodes/image.php:213
 msgid "Caption Overlay Background Color"
@@ -8654,15 +8685,15 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/product_list.php:57
 #: config-templatebuilder/avia-shortcodes/productslider.php:59
 msgid "How many columns should be displayed?"
-msgstr ""
+msgstr "Quantes columnes s'haurien de mostrar?"
 
 #: config-templatebuilder/avia-shortcodes/logoslider.php:126
 msgid "7 Columns"
-msgstr ""
+msgstr "7 columnes"
 
 #: config-templatebuilder/avia-shortcodes/logoslider.php:127
 msgid "8 Columns"
-msgstr ""
+msgstr "8 columnes"
 
 #: config-templatebuilder/avia-shortcodes/logoslider.php:139
 msgid "Logo Image Size"
@@ -8869,7 +8900,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/mailchimp.php:129
 msgid "Lists"
-msgstr ""
+msgstr "Llistes"
 
 #: config-templatebuilder/avia-shortcodes/mailchimp.php:130
 msgid ""
@@ -8987,7 +9018,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/masonry_entries.php:120
 #: config-templatebuilder/avia-shortcodes/portfolio.php:156
 msgid "Order by"
-msgstr ""
+msgstr "Ordenar per"
 
 #: config-templatebuilder/avia-shortcodes/masonry_entries.php:121
 #: config-templatebuilder/avia-shortcodes/portfolio.php:157
@@ -9146,7 +9177,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/masonry_entries.php:213
 #: config-templatebuilder/avia-shortcodes/masonry_gallery.php:179
 msgid "Display Title"
-msgstr ""
+msgstr "Mostrar títol"
 
 #: config-templatebuilder/avia-shortcodes/masonry_entries.php:214
 #: config-templatebuilder/avia-shortcodes/masonry_gallery.php:180
@@ -9192,7 +9223,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/masonry_entries.php:241
 #: config-templatebuilder/avia-shortcodes/masonry_gallery.php:207
 msgid "Always Display"
-msgstr ""
+msgstr "Mostrar sempre"
 
 #: config-templatebuilder/avia-shortcodes/masonry_entries.php:242
 #: config-templatebuilder/avia-shortcodes/masonry_gallery.php:208
@@ -9228,7 +9259,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/masonry_gallery.php:68
 msgid "How many images should be displayed per page?"
-msgstr ""
+msgstr "Quantes imatges s'haurien de mostrar per pàgina?"
 
 #: config-templatebuilder/avia-shortcodes/masonry_gallery.php:92
 msgid ""
@@ -11212,7 +11243,7 @@ msgstr ""
 #: config-templatebuilder/avia-shortcodes/social_share.php:71
 #: includes/admin/register-admin-options.php:2178
 msgid "Facebook link"
-msgstr ""
+msgstr "Link de Facebook"
 
 #: config-templatebuilder/avia-shortcodes/social_share.php:72
 #: config-templatebuilder/avia-shortcodes/social_share.php:81
@@ -11282,7 +11313,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/table.php:18
 msgid "Table"
-msgstr ""
+msgstr "Taula"
 
 #: config-templatebuilder/avia-shortcodes/table.php:26
 msgid "Creates a data or pricing table"
@@ -11290,7 +11321,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/table.php:61
 msgid "Edit Table"
-msgstr ""
+msgstr "Editar taula"
 
 #: config-templatebuilder/avia-shortcodes/table.php:67
 msgid "Table Builder"
@@ -11302,7 +11333,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/table.php:72
 msgid "Default Row"
-msgstr ""
+msgstr "Fila per defecte"
 
 #: config-templatebuilder/avia-shortcodes/table.php:73
 msgid "Heading Row"
@@ -11318,7 +11349,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/table.php:78
 msgid "Default Column"
-msgstr ""
+msgstr "Columna per defecte"
 
 #: config-templatebuilder/avia-shortcodes/table.php:79
 msgid "Highlight Column"
@@ -11334,7 +11365,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/table.php:93
 msgid "Table Options"
-msgstr ""
+msgstr "Opcions de taula"
 
 #: config-templatebuilder/avia-shortcodes/table.php:98
 msgid "Table Purpose"
@@ -11462,15 +11493,15 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/tabs.php:88
 msgid "Tab 1"
-msgstr ""
+msgstr "Pestanya 1"
 
 #: config-templatebuilder/avia-shortcodes/tabs.php:89
 msgid "Tab 2"
-msgstr ""
+msgstr "Pestanya 2"
 
 #: config-templatebuilder/avia-shortcodes/tabs.php:97
 msgid "Tab Title"
-msgstr ""
+msgstr "Títol de pestanya"
 
 #: config-templatebuilder/avia-shortcodes/tabs.php:98
 msgid "Enter the tab title here (Better keep it short)"
@@ -11532,7 +11563,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/team.php:61
 msgid "Name of the person"
-msgstr ""
+msgstr "Nom de la persona"
 
 #: config-templatebuilder/avia-shortcodes/team.php:67
 msgid "Team Member Job title"
@@ -11624,7 +11655,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/testimonials.php:94
 msgid "Quote"
-msgstr ""
+msgstr "Cita"
 
 #: config-templatebuilder/avia-shortcodes/testimonials.php:95
 msgid "Enter the testimonial here"
@@ -11674,7 +11705,7 @@ msgstr ""
 
 #: config-templatebuilder/avia-shortcodes/testimonials.php:134
 msgid "How many columns do you want to display"
-msgstr ""
+msgstr "Quantes columnes vols mostrar"
 
 #: config-templatebuilder/avia-shortcodes/testimonials.php:174
 msgid "Name Font Color"
@@ -11710,7 +11741,7 @@ msgstr ""
 #: includes/admin/register-backend-advanced-styles.php:237
 #: includes/admin/register-backend-advanced-styles.php:254
 msgid "Font Size"
-msgstr ""
+msgstr "Tamany de font"
 
 #: config-templatebuilder/avia-shortcodes/textblock.php:58
 msgid "Size of the text in px"
@@ -12893,25 +12924,25 @@ msgstr ""
 
 #: config-woocommerce/config.php:220
 msgid "Select options"
-msgstr ""
+msgstr "Seleccionar opcions"
 
 #: config-woocommerce/config.php:225
 #: framework/php/class-tgm-plugin-activation.php:2070
 #: framework/php/class-tgm-plugin-activation.php:2079
 msgid "Show Details"
-msgstr ""
+msgstr "Mostrar detalls"
 
 #: config-woocommerce/config.php:309
 msgid "My Account"
-msgstr ""
+msgstr "El meu compte"
 
 #: config-woocommerce/config.php:311
 msgid "Change Password"
-msgstr ""
+msgstr "Canviar contrasenya"
 
 #: config-woocommerce/config.php:312
 msgid "Edit Address"
-msgstr ""
+msgstr "Editar adreça"
 
 #: config-woocommerce/config.php:316
 msgid "Log Out"
@@ -12932,23 +12963,23 @@ msgstr "Resultats de la cerca de:"
 
 #: config-woocommerce/config.php:504
 msgid "Tag"
-msgstr ""
+msgstr "Etiqueta"
 
 #: config-woocommerce/config.php:556
 msgid "Shop"
-msgstr ""
+msgstr "Botiga"
 
 #: config-woocommerce/config.php:1108
 msgid "Default Order"
-msgstr ""
+msgstr "Ordre per defecte"
 
 #: config-woocommerce/config.php:1110
 msgid "Price"
-msgstr ""
+msgstr "Preu"
 
 #: config-woocommerce/config.php:1112
 msgid "Popularity"
-msgstr ""
+msgstr "Popularitat"
 
 #: config-woocommerce/config.php:1114
 msgid "Click to order products ascending"
@@ -12960,11 +12991,11 @@ msgstr ""
 
 #: config-woocommerce/config.php:1117
 msgid "Products per page"
-msgstr ""
+msgstr "Productes per pàgina"
 
 #: config-woocommerce/config.php:1139
 msgid "Sort by"
-msgstr ""
+msgstr "Ordenar per"
 
 #: config-woocommerce/config.php:1158
 #: includes/admin/register-backend-advanced-styles.php:56
@@ -12984,7 +13015,7 @@ msgstr ""
 
 #: config-woocommerce/config.php:1462
 msgid "Learn more"
-msgstr ""
+msgstr "Llegir més"
 
 #: config-woocommerce/config.php:1471
 msgid ""
@@ -13002,16 +13033,16 @@ msgstr ""
 
 #: config-wpml/config.php:403
 msgid "Editing:"
-msgstr ""
+msgstr "Editant:"
 
 #: config-wpml/config.php:404
 msgid "Change"
-msgstr ""
+msgstr "Canviar"
 
 #: footer.php:80 includes/admin/register-admin-options.php:1995
 #: includes/admin/register-admin-options.php:1996
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: footer.php:190
 msgid "Scroll to top"
@@ -13019,7 +13050,7 @@ msgstr ""
 
 #: forum.php:13
 msgid "Forums"
-msgstr ""
+msgstr "Fòrums"
 
 #: forum.php:22
 msgid "Edit profile for User:"
@@ -13055,7 +13086,7 @@ msgstr "Inici"
 
 #: framework/php/class-breadcrumb.php:406
 msgid "g:i a"
-msgstr ""
+msgstr "g:i a"
 
 #: framework/php/class-breadcrumb.php:409
 #, php-format
@@ -13064,11 +13095,11 @@ msgstr ""
 
 #: framework/php/class-breadcrumb.php:409
 msgid "i"
-msgstr ""
+msgstr "i"
 
 #: framework/php/class-breadcrumb.php:412
 msgid "g a"
-msgstr ""
+msgstr "g a"
 
 #: framework/php/class-breadcrumb.php:423
 #: framework/php/class-breadcrumb.php:429
@@ -13076,26 +13107,26 @@ msgstr ""
 #: framework/php/class-breadcrumb.php:439
 #: framework/php/function-set-avia-frontend.php:989
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: framework/php/class-breadcrumb.php:424
 #: framework/php/class-breadcrumb.php:435
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #: framework/php/class-breadcrumb.php:425
 msgid "j"
-msgstr ""
+msgstr "j"
 
 #: framework/php/class-breadcrumb.php:430
 #, php-format
 msgid "Week %1$s"
-msgstr ""
+msgstr "Setmana %1$s"
 
 #: framework/php/class-breadcrumb.php:446
 #, php-format
 msgid "Search results for &quot;%1$s&quot;"
-msgstr ""
+msgstr "Resultats de la cerca de &quot;%1$s&quot;"
 
 #: framework/php/class-breadcrumb.php:450
 msgid "404 Not Found"
@@ -13116,11 +13147,11 @@ msgstr "obligatori"
 
 #: framework/php/class-form-generator.php:468
 msgid "Today"
-msgstr ""
+msgstr "Avui"
 
 #: framework/php/class-form-generator.php:470
 msgid "Prev"
-msgstr ""
+msgstr "Anterior"
 
 #: framework/php/class-form-generator.php:930
 msgid "Your Message:"
@@ -13143,16 +13174,16 @@ msgstr ""
 
 #: framework/php/class-framework-widgets.php:620
 msgid "You can select multiple categories here"
-msgstr ""
+msgstr "Pots seleccionar múltiples categories aquí"
 
 #: framework/php/class-framework-widgets.php:643
 msgid "How many entries do you want to display: "
-msgstr ""
+msgstr "Quantes entrades vols mostrar:"
 
 #: framework/php/class-framework-widgets.php:661
 msgid ""
 "Choose the categories you want to display (multiple selection possible):"
-msgstr ""
+msgstr "Escull les categories que vols mostrar (múltiple selecció possible):"
 
 #: framework/php/class-framework-widgets.php:666
 msgid "Display title only or title &amp; excerpt"
@@ -13160,7 +13191,7 @@ msgstr ""
 
 #: framework/php/class-framework-widgets.php:670
 msgid "show title only"
-msgstr ""
+msgstr "mostrar només títol"
 
 #: framework/php/class-framework-widgets.php:670
 msgid "display title and excerpt"
@@ -13180,7 +13211,7 @@ msgstr ""
 
 #: framework/php/class-framework-widgets.php:760
 msgid "on Twitter"
-msgstr ""
+msgstr "a Twitter"
 
 #: framework/php/class-framework-widgets.php:766
 msgid "to RSS Feed"
@@ -13188,7 +13219,7 @@ msgstr ""
 
 #: framework/php/class-framework-widgets.php:795
 msgid "Twitter Username:"
-msgstr ""
+msgstr "Nom d'usuari de Twitter"
 
 #: framework/php/class-framework-widgets.php:798
 msgid "Enter your feed url:"
@@ -13205,7 +13236,7 @@ msgstr ""
 
 #: framework/php/class-framework-widgets.php:885
 msgid "Image URL:"
-msgstr ""
+msgstr "URL de la imatge:"
 
 #: framework/php/class-framework-widgets.php:888
 msgid "Referal URL:"
@@ -13231,7 +13262,7 @@ msgstr ""
 
 #: framework/php/class-framework-widgets.php:956
 msgid "Popular"
-msgstr ""
+msgstr "Popular"
 
 #: framework/php/class-framework-widgets.php:961
 msgid "Recent"
@@ -14171,6 +14202,7 @@ msgstr ""
 #: includes/loop-index.php:301
 msgid "Sorry, no posts matched your criteria"
 msgstr ""
+"Ho sentim, no hi ha entrades que coincideixin amb els teus criteris de cerca"
 
 #: functions-enfold.php:134
 msgid "Please try another search term"
@@ -14231,7 +14263,7 @@ msgstr ""
 
 #: functions.php:136 template-archives.php:138
 msgid "Portfolio"
-msgstr ""
+msgstr "Galeria"
 
 #: functions.php:138
 msgid "Entry with Sidebar"
@@ -15145,7 +15177,7 @@ msgstr ""
 
 #: includes/admin/register-admin-options.php:1405
 msgid "Sidebar on Smartphones"
-msgstr ""
+msgstr "Barra lateral a smartphones"
 
 #: includes/admin/register-admin-options.php:1406
 msgid ""
@@ -15155,11 +15187,11 @@ msgstr ""
 
 #: includes/admin/register-admin-options.php:1411
 msgid "Hide sidebar on smartphones"
-msgstr ""
+msgstr "Amagar barra lateral a smartphones"
 
 #: includes/admin/register-admin-options.php:1412
 msgid "Show sidebar on smartphones"
-msgstr ""
+msgstr "Mostrar barra lateral a smartphones"
 
 #: includes/admin/register-admin-options.php:1418
 msgid "Page Sidebar navigation"
@@ -15189,12 +15221,12 @@ msgstr ""
 
 #: includes/admin/register-admin-options.php:1435
 msgid "With Border"
-msgstr ""
+msgstr "Amb vora"
 
 #: includes/admin/register-admin-options.php:1436
 #: includes/admin/register-backend-advanced-styles.php:334
 msgid "No Border"
-msgstr ""
+msgstr "Sense vora"
 
 #: includes/admin/register-admin-options.php:1439
 msgid "Create new Sidebar Widget Areas"
@@ -16207,7 +16239,7 @@ msgstr ""
 #: includes/admin/register-portfolio.php:9
 msgctxt "post type general name"
 msgid "Portfolio Items"
-msgstr ""
+msgstr "Elements de la galeria"
 
 #: includes/admin/register-portfolio.php:10
 msgctxt "post type singular name"
@@ -16456,7 +16488,7 @@ msgstr ""
 msgid "Sorry, no posts matched your criteria. Please try another search"
 msgstr ""
 "Ho sentim, no hi ha entrades que coincideixin amb els teus criteris de "
-"cerca. Si us plau, intenta-ho de nou."
+"cerca. Si us plau, intenta-ho de nou"
 
 #: includes/loop-search.php:130
 msgid ""
@@ -16487,7 +16519,7 @@ msgstr "Nova cerca"
 msgid "If you are not happy with the results below please do another search"
 msgstr ""
 "Si no estàs satisfet amb els resultats de sota, fes una altra cerca si us "
-"plau."
+"plau"
 
 #: template-archives.php:53
 msgid "The 20 latest Blog Posts"

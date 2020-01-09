@@ -1,54 +1,135 @@
 <?php 
+/**
+ * Base class for theme updates
+ * 
+ * @since 4.4.3 - supports the new Envato API 3.0
+ * @since 4.5.3 - change logic to get package download url when performing the actual update process only
+ */
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
 
-if(!function_exists('avia_backend_auto_updater'))
+if( ! class_exists( 'avia_auto_updates' ) )
 {
 
-	if(!current_theme_supports('avia_manual_updates_only'))
+	if( ! current_theme_supports( 'avia_manual_updates_only' ) )
 	{
-		add_action('admin_init', array('avia_auto_updates','init'), 1);
+		add_action( 'admin_init', array( 'avia_auto_updates', 'init' ), 1 );
 		
 		//since the avia framework is not included via hook there need to be some static functions since at the time of admin_init those hooks are already executed
-		add_action('avf_option_page_init', array('avia_auto_updates','add_updates_tab'), 1); 
-		add_action('avf_option_page_data_init', array('avia_auto_updates','option_page_data'));
+		add_action( 'avf_option_page_init', array( 'avia_auto_updates', 'add_updates_tab' ), 1, 1 ); 
+		add_action( 'avf_option_page_data_init', array( 'avia_auto_updates', 'option_page_data' ), 10, 1 );
 	}
 	
-	class avia_auto_updates{
+	class avia_auto_updates
+	{
+		/**
+		 * Envato author name for the theme/plugin
+		 * 
+		 * @var string 
+		 */
+		protected $author;
 		
-		var $author;
-		var $username;
-		var $apikey;
-		var $themename;
+		/**
+		 * Envato user name (will be deprecated with API 3.0)
+		 * 
+		 * @var string 
+		 */
+		protected $username;
 		
-		function __construct()
+		/**
+		 * Envato API key for the theme (will be deprecated with API 3.0)
+		 * @var string 
+		 */
+		protected $apikey;
+		
+		/**
+		 * Envato Personal Token Key
+		 * 
+		 * @since 4.4.3
+		 * @var string 
+		 */
+		protected $personal_token;
+		
+		/**
+		 *
+		 * @since 4.4.3
+		 * @var string			'' | timestamp of last check 
+		 */
+		protected $envato_token_state;
+
+		/**
+		 * Current theme directory name - in case of child theme the parent theme folder
+		 * 
+		 * @var string 
+		 */
+		protected $themename;
+		
+
+		/**
+		 * @since < 4.4.3
+		 */
+		public function __construct()
 		{
+			/**
+			 * will become deprecated and can be removed in future
+			 */
+			$this->username 	= trim( avia_get_option( 'updates_username' ) );
+			$this->apikey		= trim( avia_get_option( 'updates_api_key' ) );
+			
 			$this->author 		= "Kriesi";
-			$this->username 	= trim(avia_get_option('updates_username'));
-			$this->apikey		= trim(avia_get_option('updates_api_key'));
+			$this->personal_token = trim( avia_get_option( 'updates_envato_token' ) );	
+			$this->envato_token_state = trim( avia_get_option( 'updates_envato_token_state' ) );
 			$this->themename 	= self::get_themename();
+			
 			$this->includes();
 			$this->hooks();
 		}
 		
-		function hooks()
+		/**
+		 * @since < 4.4.3
+		 */
+		protected function hooks()
 		{
-			add_action('update_bulk_theme_complete_actions', array($this, 'update_complete'),10,2);	
-			add_action('upgrader_process_complete', array($this,'re_insert_custom_css'));
-			add_action('load-update.php', array($this, 'temp_save_custom_css'), 20 );
+			add_action( 'update_bulk_theme_complete_actions', array( $this, 'update_complete' ), 10, 2 );	
+			add_action( 'upgrader_process_complete', array( $this,'re_insert_custom_css' ) );
+			add_action( 'load-update.php', array( $this, 'temp_save_custom_css' ), 20 );
 			
 			$this->temp_save_custom_css();
 		}
 				
-		function includes()
+		/**
+		 * Include classes. We stay backwards compatible with the old API but request users to enter the personal token
+		 * 
+		 * @since < 4.4.3
+		 */
+		protected function includes()
 		{
-			if(!empty($this->username) && !empty($this->apikey))
+			require_once( 'class-avia-theme-updater.php' );
+			
+			$args = array(
+							'authors'			=> $this->author,
+							'personal_token'	=> ! empty( $this->envato_token_state ) ? $this->personal_token : '',
+						);
+			AviaThemeUpdater( $args );
+				
+			if( empty( $this->personal_token ) && ! empty( $this->username ) && ! empty( $this->apikey ) )
 			{
-				require_once("class-pixelentity-theme-update.php");
-				PixelentityThemeUpdate::init($this->username ,$this->apikey,$this->author);
+				/**
+				 * backwards comp. for old API - can be removed in some future 
+				 * support for new API added in 4.4.3
+				 */
+				require_once( "class-pixelentity-theme-update.php" );
+				PixelentityThemeUpdate::init( $this->username , $this->apikey, $this->author );
 			}
 		}
 		
-		
-		function update_complete($updates, $info)
+		/**
+		 * 
+		 * @since < 4.4.3
+		 * @param array $updates
+		 * @param WP_Theme $info
+		 * @return array
+		 */
+		public function update_complete( $updates, $info )
 		{
 			if(strtolower( $info->get('Name') ) == strtolower( $this->themename ) )
 			{
@@ -57,7 +138,11 @@ if(!function_exists('avia_backend_auto_updater'))
 			return $updates;
 		}
 		
-		function re_insert_custom_css()
+		/**
+		 * 
+		 * @since < 4.4.3
+		 */
+		public function re_insert_custom_css()
 		{
 			if(isset($this->custom_css_md5) && $this->custom_css_md5 == "1877fc72c3a2a4e3f1299ccdb16d0513") return;
 			
@@ -87,7 +172,11 @@ if(!function_exists('avia_backend_auto_updater'))
 			
 		}
 		
-		function temp_save_custom_css()
+		/**
+		 * 
+		 * @since < 4.4.3
+		 */
+		public function temp_save_custom_css()
 		{
 			if(empty($_GET['themes']) || $_GET['themes'] != strtolower( $this->themename ) ) return;
 		
@@ -110,108 +199,214 @@ if(!function_exists('avia_backend_auto_updater'))
 			}
 		}
 		
-		
-		public static function add_updates_tab($avia_pages)
+		/**
+		 * 
+		 * @since < 4.4.3
+		 * @param array $avia_pages
+		 * @return array
+		 */
+		public static function add_updates_tab( $avia_pages )
 		{
 			$title = __("Theme Update",'avia_framework');
-			if(self::check_for_theme_update()) 
+			if( false !== self::check_for_theme_update() ) 
 			{
 				$title .= "<span class='avia-update-count'>1</span>"; 
 				add_filter('avia_filter_backend_menu_title', array('avia_auto_updates','sidebar_menu_title'));
 			}
 			$avia_pages[] = apply_filters('avf_update_theme_tab', array( 'slug' => 'update', 'parent'=>'avia', 'icon'=>"update.png", 'title' =>  $title ));
 			
-			
-			
 			return $avia_pages;
 		}
 		
-		public static function sidebar_menu_title($title)
+		/**
+		 * 
+		 * @param string $title
+		 * @return string
+		 */
+		public static function sidebar_menu_title( $title )
 		{
 			$title .= '<span class="update-plugins count-1"><span class="plugin-count">1</span></span>';
 			return $title;
 		}
 		
-		
+		/**
+		 * 
+		 * @since < 4.4.3
+		 * @return array|false
+		 */
 		public static function check_for_theme_update()
 		{
 			$updates = get_site_transient('update_themes');
+			$version = self::get_version();
 			
-			if(!empty($updates) && !empty($updates->response))
+			if( ! empty( $updates ) && ! empty( $updates->response ) )
 			{
 				$theme = wp_get_theme();
-				if($key = array_key_exists($theme->get_template(), $updates->response))
+				$name = $theme->get_template();
+						
+				if( array_key_exists( $name, $updates->response ) )
 				{
-					return $updates->response[$theme->get_template()];
+					if( version_compare( $updates->response[ $name ]['new_version'], $version, '!=' ) )
+					{		
+						return $updates->response[ $name ];
+					}
 				}
 			}
 			
 			return false;
-			
 		}
 		
-		public static function option_page_data($avia_elements)
+		/**
+		 * 
+		 * @since < 4.4.3
+		 * @param array $avia_elements
+		 * @return array
+		 */
+		public static function option_page_data( $avia_elements )
 		{
-			$avia_elements[] = array(	"name" => "Update your Theme from the WordPress Dashboard",
-								"desc" => "If you want to get update notifications for your themes and if you want to be able to update your theme from your WordPress backend you need to enter your Themeforest account name as well as your Themeforest Secret API Key below:",
-								"std" => "",
-								"slug"	=> "update",
-								"type" => "heading",
-								"nodescription"=>true);
+			$desc = __( "If you want to get update notifications for your theme and if you want to be able to update your theme from your WordPress backend you need to enter your Envato Private Token below.", 'avia_framework' );
+			$desc .= '<br /><br />';
+			$desc .= sprintf( __( 'A detailed description for generating this token can be found %s here %s', 'avia_framework' ), '<a href="https://kriesi.at/documentation/enfold/theme-registration/" target="_blank" rel="noopener noreferrer">', '</a>' );
+			
+			$avia_elements[] = array(	
+						"name"			=> __( "Update your Theme from the WordPress Dashboard", 'avia_framework' ),
+						"desc"			=> $desc,
+						"std"			=> "",
+						"slug"			=> "update",
+						"type"			=> "heading",
+						"nodescription"	=> true
+				);
 								
 			
+			$avia_elements[] =	array(
+						"slug"				=> "update",
+						"name"				=> __( "Enter a valid Envato private token", 'avia_framework' ),
+						"desc"				=> "",
+						"id"				=> "updates_envato_token",
+						"type"				=> "verification_field",
+						"ajax"				=> "av_envato_token_check",
+						"class"				=> "av_full_description",
+						"button-label"		=> __( 'Check the private token', 'avia_framework' ),
+						"button-relabel"	=> __( 'Revalidate or remove the token', 'avia_framework' ),
+						"std"				=> '',
+						'force_callback'	=> true
+					);
+			
 			$avia_elements[] =	array(	
-						"slug"	=> "update",
-						"std"	=> "",
-						"name" 	=> "Your Themeforest User Name",
-						"desc" 	=> "Enter the Name of the User you used to purchase this theme",
-						"id" 	=> "updates_username",
-						"type" 	=> "text"
-						);
+						"slug"			=> "update",
+						"std"			=> "",
+						"name"			=> __( "Last verify state - hidden - used for internal use only", 'avia_framework' ),
+						"desc"			=> '',
+						"id"			=> "updates_envato_token_state",
+						"type"			=> "hidden",
+//						'readonly'		=> true
+					);
+			
+			$avia_elements[] =	array(	
+						"slug"			=> "update",
+						"std"			=> "",
+						"name"			=> __( "Last verify state - hidden - used for internal use only", 'avia_framework' ),
+						"desc"			=> '',
+						"id"			=> "updates_envato_verified_token",
+						"type"			=> "hidden",
+//						'readonly'		=> true
+					);
+			
+			/**
+			 * deprecated - can be removed in future releases
+			 */
+			$avia_elements[] =	array(	
+						"slug"			=> "update",
+						"std"			=> "",
+						"name"			=> __( "Your Themeforest User Name (will be deprecated and removed in future)  - hidden", 'avia_framework' ),
+						"desc"			=> '',
+						"id"			=> "updates_username",
+						"type"			=> "hidden",
+//						'readonly'		=> true
+					);
 						
+			/**
+			 * deprecated - can be removed in future releases
+			 */
 			$avia_elements[] =	array(	
-						"slug"	=> "update",
-						"std"	=> "",
-						"name" 	=> "Your Themeforest API Key",
-						"desc" 	=> "Enter the API Key of your Account here. <br/>You can <a target='_blank' href='".AVIA_IMG_URL."layout/FIND_API.jpg'>find your API Key here</a>",
-						"id" 	=> "updates_api_key",
-						"type" 	=> "text"
-						);
-				
+						"slug"			=> "update",
+						"std"			=> "",
+						"name"			=> __( "Your Themeforest API Key (will be deprecated and removed in future)  - hidden", 'avia_framework' ),
+//						"desc"			=> "Enter the API Key of your Account here. <br/>You can <a target='_blank' href='".AVIA_IMG_URL."layout/FIND_API.jpg' rel='noopener noreferrer'>find your API Key here</a>",
+						"desc"			=> '',
+						"id"			=> "updates_api_key",
+						"type"			=> "hidden",
+//						'readonly'		=> true
+					);
+			
 			$avia_elements[] =	array(	
-						"slug"	=> "update",
-						"std"	=> "",
-						"name" 	=> "",
-						"desc" 	=> false,
-						"id" 	=> "update_notification",
+						"slug"			=> "update",
+						"std"			=> "",
+						"name"			=> __( "Envato Reply - hidden - used for internal use only", 'avia_framework' ),
+						"desc"			=> '',
+						"id"			=> "updates_envato_info",
+						"type"			=> "hidden",
+//						'readonly'		=> true
+					);
+			
+			$avia_elements[] =	array(	
+						"slug"			=> "update",
+						"std"			=> "",
+						"name"			=> "",
+						"desc"			=> false,
+						"id"			=> "update_notification",
 						"use_function" 	=> true,
-						"type" 	=> "avia_backend_display_update_notification"
-						);				
+						"type"			=> "avia_backend_display_update_notification"
+					);				
 		
 			return $avia_elements;
 		}
 		
+		
+		/**
+		 * @since < 4.4.3
+		 * @return string
+		 */
 		public static function backend_html()
 		{
+			/**
+			 * will be deprecated in future
+			 */
 			$username 	= trim(avia_get_option('updates_username'));
 			$apikey		= trim(avia_get_option('updates_api_key'));
-			$output 	= "";
+			$old_keys_valid	= ! empty( $username ) && ! empty( $apikey );
+			
+			$updates_envato_token = trim( avia_get_option( 'updates_envato_token' ) );
+			$updates_envato_token_state	= trim( avia_get_option( 'updates_envato_token_state' ) );
+			$keys_valid = ! empty( $updates_envato_token ) && ! empty( $updates_envato_token_state );
+			
+			
+			$output 	= '';
 			$version 	= self::get_version();
 			$themename 	= self::get_themename();
-			$parent_string = is_child_theme() ? "Parent Theme (". ucfirst( $themename ).")" : "Theme";
+			$parent_string = is_child_theme() ? "Parent Theme (". ucfirst( $themename ).")" : ucfirst( $themename )." Theme";
+			$php_version = '<div class="avia_theme_update_php">' . sprintf( __( 'Your PHP version: %s', 'avia_framework' ), phpversion() ) . '</div>';
 			
-			
-			if(empty($username) || empty($apikey))
+			$update = self::check_for_theme_update();
+					
+			if( ( ! $keys_valid )  && ( ! $old_keys_valid ) )
 			{
-				$output  = "<div class='avia_backend_theme_updates'><h3>Theme Updates</h3>";
-				$output .= "Once you have entered and saved your Username and API Key WordPress will check for updates every 12 Hours and notify you here, if one is available <br/><br/> Your current ".$parent_string." Version Number is <strong>".$version."</strong></div>";
-			}
-			else if($update = self::check_for_theme_update())
-			{
+				$output .=	"<div class='avia_backend_theme_updates'>";
+				$output .=		"<h3>" . __( 'Theme Updates', 'avia_framework' ) . "</h3>";
+				$output .=		sprintf( __( "Once you have entered and verified your Envato Personal Token Key WordPress will check for updates every 12 Hours and notify you here, if one is available <br/><br/> Your current %s Version Number is <strong>%s</strong>", '' ), $parent_string, $version );
+
+				if( false !== $update )
+				{
+					$output .= ' - ' . sprintf( __( 'a new version %s is available.', 'avia_framework' ), $update['new_version'] );
+				}
 				
+				$output .=		$php_version;
+				$output .=	'</div>';
+			}
+			else if( false !== $update )
+			{
 				$target  	= network_admin_url('update-core.php?action=do-theme-upgrade');
 				$new		= $update['new_version'];
-				//$themename  = 'Platform'; //testing theme
 				
 				ob_start();
 				wp_nonce_field('upgrade-core');
@@ -219,11 +414,17 @@ if(!function_exists('avia_backend_auto_updater'))
 				
 				
 				
-				$output  = "<div class='avia_backend_theme_updates'>";
-				$output .= "<h3>Update Available!</h3>";
-				$output .= "A new Version (".$new.") of your ".$parent_string." is available! You are using Version ".$version.". <br/>Do you want to update?<br/><br/>";
+				$output .=	"<div class='avia_backend_theme_updates'>";
+				$output .=		"<h3>" . __( 'Update Available!', 'avia_framework' ) . "</h3>";
+				
+				$output .=		sprintf( __( "A new Version (%s) of your %s is available! You are using Version %s. <br/>See what's new in <a href='https://kriesi.at/documentation/enfold/enfold-changelog/' target='_blank' rel='noopener noreferrer'>change log</a>. Do you want to update?<br/><br/>", '' ), $new, $parent_string, $version );
 				//$output .= "";
-				$output .= '<span class="avia_style_wrap"><a href="#" data-avia-popup="avia-tmpl-theme-update" class="avia_button">Update Now!</a></span></div>';
+				$output .=		'<span class="avia_style_wrap">';
+				$output .=			'<a href="#" data-avia-popup="avia-tmpl-theme-update" class="avia_button">' . __( 'Update Now!', 'avia_framework' ) . '</a>';
+				$output .=		'</span>';
+				
+				$output .=		$php_version;
+				$output .=	'</div>';
 				
 				$form = '<form method="post" action="'.$target.'" name="upgrade-themes" class="upgrade">
 								<input type="hidden" name="checked[]" value="'.$themename.'" />
@@ -244,33 +445,167 @@ if(!function_exists('avia_backend_auto_updater'))
 			{
 				$target  	= network_admin_url('update-core.php?force-check=1');
 			
-				$output  = "<div class='avia_backend_theme_updates'><h3>Theme Updates</h3>";
-				$output .= "No Updates available. You are running the latest version! ({$version})";
-				$output .= "<br/><br/> <a href='{$target}'>Check Manually</a> </div>";
+				$output .=	"<div class='avia_backend_theme_updates'>";
+				$output .=		"<h3>" . __( 'Theme Updates', 'avia_framework' ) . "</h3>";
+				$output .=		sprintf( __( "No Updates available. You are running the latest version! (%s)", 'avia_framework' ), $version );
+				$output .=		"<br/><br/> <a href='{$target}'>" . __( 'Check Manually', 'avia_framework' ) . "</a>";
+				$output .=		$php_version;
+				$output .=	'</div>';
 			}
 			
+			if( empty( $updates_envato_token ) )
+			{
+				return $output;
+			}
 			
+			$log = AviaThemeUpdater()->get_updater_log();
+			
+			$has_errors = false;
+			
+			foreach( $log as $entry ) 
+			{
+				if( ! empty( $entry['errors'] ) )
+				{
+					$has_errors = true;
+					break;
+				}
+			}
+			
+			/**
+			 * Enable WP_DEBUG or theme support to show complete log for debugging purpose
+			 */
+			$show_all_entries = ( defined('WP_DEBUG') &&  WP_DEBUG ) || current_theme_supports( 'avia_envato_extended_log' );
+			
+			
+			if( empty( $log ) || ( ! $has_errors && ! $show_all_entries ) )
+			{
+				$output  .=	"<div class='avia_backend_theme_updates_log av-updates-sucessful'>";
+				if( empty( $log ) )
+				{
+					$output .=		__( 'There has been no check within the last month.', 'avia_framework' );
+				}
+				else
+				{
+					$output .=		sprintf( __( 'Last sucessful check was on %s.', 'avia_framework' ), $entry['time'] );
+				}
+				
+				$output .=	'</div>';
+				return $output;
+			}
 		
+			
+			$class = $has_errors ? 'av-updates-error' : 'av-updates-sucessful';
+			$output  .=	"<div class='avia_backend_theme_updates_log {$class}'>";
+			
+			$show_entries = $show_all_entries ? count( $log ) : 1;
+			$show_entries = apply_filters( 'avf_updater_show_entries', $show_entries, count( $log ) );
+			
+			$cut_log = ( count( $log ) > $show_entries ) ? array_slice( $log, - $show_entries ) : $log;
+			
+/*
+			if( defined('WP_DEBUG') &&  WP_DEBUG )
+			{
+				$output  .=	'<div class="avia_log_line avia_log_line_debug_mode">';
+				$output .=		__( 'Only in debug mode all log entries are shown. You can use filter avf_updater_show_entries if you want to show more than the last one only on production sites.', 'avia_framework' );
+				$output .=	'</div>';
+			}
+*/
+			
+			foreach( $cut_log as $entry ) 
+			{
+				if( ! empty( $entry['errors'] ) )
+				{
+					$output  .=	'<div class="avia_log_line avia_log_line_error">';
+					$output .=		sprintf( __( 'Errors occured checking on %s:', 'avia_framework' ), $entry['time'] );
+					$output .=		'<ul>';
+					foreach ( $entry['errors'] as $value ) 
+					{
+						$output .=		'<li>' . $value . '</li>';
+					}
+					$output .=		'</ul>';
+					$output .=	'</div>';
+				}
+				else if( ! empty( $entry['info'] ) )
+				{
+					$output  .=	'<div class="avia_log_line avia_log_line_success">';
+					$output .=		sprintf( __( 'Info - %s:', 'avia_framework' ), $entry['time'] ) . ' ' . $entry['info'];
+					$output .=	'</div>';
+				}
+				else
+				{
+					$output  .=	'<div class="avia_log_line avia_log_line_success">';
+					$output .=		sprintf( __( 'Sucessful check on %s.', 'avia_framework' ), $entry['time'] );
+					$output .=	'</div>';
+				}
+				
+				if( ! empty( $entry['package_errors'] ) )
+				{
+					if( ! is_array( $entry['package_errors'] ) )
+					{
+						$entry['package_errors'] = array( $entry['package_errors'] );
+					}
+					
+					$output	.=	'<div class="avia_log_line avia_log_line_error">';
+					$output .=			__( 'Following Envato package errors occured:', 'avia_framework' );
+					$output .=		'<ul>';
+					foreach ( $entry['package_errors'] as $value ) 
+					{
+						$output .=		'<li>' . $value . '</li>';
+					}
+					$output .=		'</ul>';
+					$output .=	'</div>';
+				}
+				
+				$output .=	'<hr class="avia_log_line_seperator" />';
+			}
+			
+/*
+			if( count( $log ) != $show_errors )
+			{
+				$left = count( $log ) - $show_errors;
+				$output  .=	'<div class="avia_log_line avia_log_line_error">';
+				$output .=		sprintf( __( 'There are %d older log entrie(s). If you want to see more use filter avf_updater_show_errors (or set WP_DEBUG to true).', 'avia_framework' ), $left );
+				$output .=	'</div>';
+			}
+*/
+			
+			$output .=	'</div>';
+			
 			return $output;
 		}
 		
-		public static function get_themename()
+		/**
+		 * Returns theme directory name depending on $which.
+		 * Defaults to parent theme directory name
+		 * 
+		 * @since < 4.4.3
+		 * @param string $which				'parent' | 'child'
+		 * @return string
+		 */
+		public static function get_themename( $which = 'parent' )
 		{
 			$theme = wp_get_theme();
 			
-			if(is_child_theme())
+			if( is_child_theme() && ( 'child' == $which ) )
 			{
-				$theme = wp_get_theme( $theme->get('Template') );
+				return $theme->get_stylesheet();
 			}
 			
 			return $theme->get_template();
 		}
 		
-		public static function get_version()
+		/**
+		 * Returns the theme version or the parent theme version in case of a child theme
+		 * 
+		 * @since < 4.4.3
+		 * @param string $which				'parent' | 'child'
+		 * @return string
+		 */
+		public static function get_version( $which = 'parent' )
 		{
 			$theme = wp_get_theme();
 			
-			if(is_child_theme())
+			if( is_child_theme() && ( $which != 'child' ) )
 			{
 				$theme = wp_get_theme( $theme->get('Template') );
 			}
@@ -278,22 +613,131 @@ if(!function_exists('avia_backend_auto_updater'))
 			return $theme->get('Version');
 		}
 		
+		/**
+		 * Returns the theme name found in stye.css "Theme Name"
+		 * 
+		 * @since 4.5.4
+		 * @param string $which				'parent' | 'child'
+		 * @return string
+		 */
+		public static function get_theme_name( $which = 'parent' )
+		{
+			$theme = wp_get_theme();
+			
+			if( is_child_theme() && ( $which != 'child' ) )
+			{
+				$theme = wp_get_theme( $theme->get('Template') );
+			}
+			
+			return $theme->Name;
+		}
 		
 
-		public static function init() {
+		/**
+		 * Adds the current theme key to the cached theme keys - structure of array as returned by envato - but only filled with info we need
+		 * to verify for update. Also makes sure that the actual version of theme is synchronised.
+		 * 
+		 * @added_by Günter
+		 * @since 4.5.3
+		 * @return array
+		 */
+		public static function get_theme_keys()
+		{
+			$theme_keys = get_option( 'avia_envato_keys', array() );
+			
+			$changed = false;
+			$installed_themes = wp_get_themes();
+			
+			foreach ( $installed_themes as $theme ) 
+			{
+				$id = $theme->get( 'Envato_ID' );
+				if( empty( $id ) )
+				{
+					continue;
+				}
+			
+				$name = $theme->Name;
+				$author = $theme->{'Author Name'};
+				$stylesheet = $theme->get_stylesheet();
+				$version = $theme->Version;
+				
+				/**
+				 * Ensure the datastructure and content is correct for already cached info 
+				 */
+				if( isset( $theme_keys[ $name ] ) && isset( $theme_keys[ $name ]['item']['id'] ) && ( $theme_keys[ $name ]['item']['id'] == $id ) )
+				{
+					if( isset( $theme_keys[ $name ]['item']['wordpress_theme_metadata']['version'] ) && ( $theme_keys[ $name ]['item']['wordpress_theme_metadata']['version'] == $version ) && 
+						isset( $theme_keys[ $name ]['item']['wordpress_theme_metadata']['theme_name'] ) && ( $theme_keys[ $name ]['item']['wordpress_theme_metadata']['theme_name'] == $name ) &&
+						isset( $theme_keys[ $name ]['item']['wordpress_theme_metadata']['stylesheet'] ) && ( $theme_keys[ $name ]['item']['wordpress_theme_metadata']['stylesheet'] == $stylesheet ) )
+					{
+						continue;
+					}
+				}
+
+				$changed = true;
+				
+				$new_item = array();
+				$new_item['item']['wordpress_theme_metadata']['theme_name'] = $name;
+				$new_item['item']['wordpress_theme_metadata']['stylesheet'] = $stylesheet;
+				$new_item['item']['wordpress_theme_metadata']['version'] = $version;
+			
+				$new_item['item']['id'] = $id;
+	
+				$theme_keys[ $name ] = $new_item;
+			}
+			
+			if( $changed )
+			{
+				update_option( 'avia_envato_keys', $theme_keys );
+			}
+
+			return $theme_keys;
+		}
+
+		/**
+		 * 
+		 */
+		public static function init() 
+		{
 			new avia_auto_updates();
 		}
+		
 	}
 
 }
 
 
-
-//wrapper function so that the html helper class can use the auto update class
-function avia_backend_display_update_notification()
+if( ! function_exists( 'avia_backend_display_update_notification' ) )
 {
-	return avia_auto_updates::backend_html();
+	/**
+	 * wrapper function so that the html helper class can use the auto update class
+	 * 
+	 * @since < 4.4.3
+	 * @return string
+	 */
+	function avia_backend_display_update_notification()
+	{
+		return avia_auto_updates::backend_html();
+	}
 }
 
 
+if( ! function_exists( 'av_envato_token_check' ) )
+{
+	/**
+	 * Callback function:
+	 *		- ajax callback from verification button
+	 *		- php callback when creating output on option page
+	 * 
+	 * @since 4.4.3
+	 * @param string $value
+	 * @param boolean $ajax
+	 * @return string
+	 */
+	function av_envato_token_check( $value, $ajax = true )
+	{
+		$api = AviaThemeUpdater();
+		return $api->backend_html( $value, $ajax );
+	}
 
+}

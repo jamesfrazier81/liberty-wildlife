@@ -4,50 +4,116 @@
 */
 
 // Don't load directly
-if ( !defined('ABSPATH') ) { die('-1'); }
+if ( ! defined( 'ABSPATH' ) ) { die('-1'); }
 
-if ( !class_exists( 'MetaBoxBuilder' ) ) {
+if ( ! class_exists( 'MetaBoxBuilder' ) ) 
+{
 
 	class MetaBoxBuilder 
 	{
-		var $configPath;
-	
-		function __construct($configPath)
+		/**
+		 *
+		 * @var string 
+		 */
+		protected $configPath;
+		
+		/**
+		 *
+		 * @var array 
+		 */
+		protected $default_boxes;
+		
+		/**
+		 *
+		 * @var array 
+		 */
+		protected $box_elements;
+		
+		/**
+		 * Allows to customize colorpicker default color boxes
+		 * 
+		 * @since 4.5.7.2
+		 * @var array 
+		 */
+		protected $colorpicker_palettes;
+		
+		/**
+		 * 
+		 * @param string $configPath
+		 */
+		public function __construct( $configPath )
 		{	
 			$this->configPath = $configPath;
+			$this->default_boxes = array();
+			$this->box_elements = array();
+			$this->colorpicker_palettes = null;
 			
-			add_action('load-post.php', array(&$this, 'setUp'));
-			add_action('load-post-new.php', array(&$this, 'setUp'));
+			add_action( 'load-post.php', array( $this, 'setUp' ) );
+			add_action( 'load-post-new.php', array( $this, 'setUp' ) );
 			
 		}
+		
+		/**
+		 * 
+		 * @since 4.2.1
+		 */
+		public function __destruct() 
+		{
+			unset( $this->default_boxes );
+			unset( $this->box_elements );
+			unset( $this->colorpicker_palettes );
+		}
 	 
-	 	function setUp()
+	 	public function setUp()
 	 	{
 	 		$this->add_actions();
 	 		$this->get_params();
 	 		$this->init_boxes();	
 	 	}
 	 	
-	 	function add_actions()
+	 	protected function add_actions()
 	 	{
 	 		add_action('admin_menu', array(&$this, 'init_boxes'));
 			add_action('save_post', array(&$this, 'save_post'),10,2);
 			add_action('wp_print_scripts',array(&$this, 'add_js_info'));
+			
+			add_filter( 'wp_insert_post_data', array( $this, 'handler_wp_insert_post_data'), 10, 2 );
 	 	}
 	 	
-	 	function get_params()
+		
+	 	protected function get_params()
 	 	{
 	 		require($this->configPath.'meta.php');
 	 	
-	 		if(isset($boxes)) 	 $this->default_boxes = apply_filters('avia_builder_metabox_filter',$boxes);
-			if(isset($elements)) $this->box_elements  = apply_filters('avia_builder_metabox_element_filter',$elements);
+			/**
+			 * @used_by:			AviaBuilder				10
+			 */
+	 		if(isset($boxes)) 	 $this->default_boxes = apply_filters( 'avia_builder_metabox_filter', $boxes );
+			
+			/**
+			 * @used_by:			currently unused
+			 */
+			if(isset($elements)) $this->box_elements  = apply_filters( 'avia_builder_metabox_element_filter', $elements );
 	 	}
 	 	
 	 	function add_js_info()
 	 	{
+			global $post_ID;
+			
 	 		$theme = wp_get_theme();
+			
+			if( is_null( $this->colorpicker_palettes ) )
+			{
+				$this->colorpicker_palettes = apply_filters( 'avf_colorpicker_colors', array( '#000000', '#ffffff', '#B02B2C', '#edae44', '#eeee22', '#83a846', '#7bb0e7', '#745f7e', '#5f8789', '#d65799', '#4ecac2' ) );
+			}
+			
+			$palettes = '';
+			if( ! empty( $this->colorpicker_palettes ) )
+			{
+				$palettes = array_map( function ( $value ) { return "'$value'"; }, $this->colorpicker_palettes );
+				$palettes = '    avia_globals.color_palettes = [' . implode( ', ', $palettes ) . "];\n";
+			}
 	 		
-	 		global $post_ID;
 			echo "\n <script type='text/javascript'>\n /* <![CDATA[ */  \n";
 			echo "var avia_globals = avia_globals || {};\n";
 			echo "    avia_globals.post_id = '".$post_ID."';\n";
@@ -55,6 +121,7 @@ if ( !class_exists( 'MetaBoxBuilder' ) ) {
 			echo "    avia_globals.themeversion = '".$theme->get('Version')."';\n";
 			echo "    avia_globals.builderversion = '".AviaBuilder::VERSION."';\n";
 			echo "    avia_globals.builderMode = '".AviaBuilder::$mode."';\n";
+			echo	  $palettes;
 			echo "/* ]]> */ \n";
 			echo "</script>\n \n ";
 	 	}
@@ -85,7 +152,7 @@ if ( !class_exists( 'MetaBoxBuilder' ) ) {
 						global $post_ID;
 			
 						//class filter for hiden items
-						if(('avia_builder' === $box['id'] && isset($_GET['post']) && AviaHelper::builder_status($_GET['post']) != 'active') || ('avia_builder' === $box['id'] && empty($_GET['post'])))
+						if(('avia_builder' === $box['id'] && isset($_GET['post']) && Avia_Builder()->get_alb_builder_status( $_GET['post'] ) != 'active') || ('avia_builder' === $box['id'] && empty($_GET['post'])))
 						{
 							add_filter( "postbox_classes_{$area}_{$box['id']}" , array($this, 'add_meta_box_hidden')); //postbox class filter
 						}
@@ -168,8 +235,77 @@ if ( !class_exists( 'MetaBoxBuilder' ) ) {
 		// end create
 		
 		
+		/**
+		 * Filter post data right before saving to database. 
+		 * Checks if it is a page/post with ALB metaboxes added and then calls a filter (e.g. used to balance the shortcodes in content)
+		 * 
+		 * @since 4.2.1
+		 * @param array $data			An array of slashed post data
+		 * @param array $postarr		An array of sanitized, but otherwise unmodified post data
+		 * @return array
+		 */
+		public function handler_wp_insert_post_data( array $data, array $postarr )
+		{
+			// don't run if the post array is no set - e.g. trash post
+			if( empty( $_POST ) || empty( $_POST['post_ID'] ) ) 
+			{
+				return $data;
+			}
+				
+			// don't run the saving if this is an auto save
+		    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+			{
+				return $data;
+			}
+			
+			// don't run the saving if the function is called for saving revision.
+			if( 'revision' == $data['post_type'] )
+			{
+				return $data;
+			}
+		        
+			// don't run the saving if no meta box was attached to this post type
+			$must_check = false;
+			foreach( $this->default_boxes as $default_box )
+			{
+				if( in_array( $data['post_type'], $default_box['page'] ) ) 
+				{
+					$must_check = true;
+					break;
+				}
+			}
+			if( ! $must_check )
+			{
+				return $data;
+			}
 		
-		
+			/**
+			 * Don't continue if the nonce field was not submitted - content of post is nothing we have to deal with
+			 */
+			if( false === check_ajax_referer( 'avia_nonce_save', 'avia-save-nonce', false ) )
+			{
+				return $data;
+			}
+			
+			
+			/**
+			 * Provide a hook for some additional data manipulation where users can modify the $data array or save additional information
+			 * 
+			 * @used_by						Avia_Gutenberg			 5
+			 * @used_by						AviaBuilder				10
+			 * 
+			 * @since 4.2.1
+			 * @param array $data
+			 * @param array $postarr
+			 * @return array
+			 */
+			$data = apply_filters('avf_before_save_alb_post_data', $data, $postarr );
+		    
+			return $data;
+		}
+
+
+
 		function save_post($id, $post_object)
 		{
 			// dont run if the post array is no set
@@ -240,9 +376,13 @@ if ( !class_exists( 'MetaBoxBuilder' ) ) {
 			return $class;
 		}
 		
-		function add_expanded_param($location, $id)
+		function add_expanded_param( $location, $id )
 		{
-			$location .= "&avia-expanded=".$_POST['avia-expanded-hidden'];
+			if( isset( $_POST['avia-expanded-hidden'] ) )
+			{
+				$location .= '&avia-expanded=' . $_POST['avia-expanded-hidden'];
+			}
+			
 			return $location;
 		}
 	
@@ -250,16 +390,4 @@ if ( !class_exists( 'MetaBoxBuilder' ) ) {
 	
 
 } // end if !class_exists
-
-
-
-
-
-
-
-
-
-
-
-
 

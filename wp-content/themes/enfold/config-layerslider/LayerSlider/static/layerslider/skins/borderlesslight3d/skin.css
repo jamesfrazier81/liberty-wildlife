@@ -218,3 +218,41 @@
 .ls-borderlesslight3d .ls-fullscreen:hover {
 	background-position: -525px -190px;
 }
+
+
+
+.ls-borderlesslight3d .ls-media-unmute {
+	left: 10px;
+	top: 10px;
+}
+
+.ls-borderlesslight3d .ls-media-unmute-active  {
+	opacity: 1 !important;
+}
+
+.ls-borderlesslight3d .ls-media-unmute-active .ls-media-unmute-bg {
+	opacity: 1 !important;
+	background-color: #fff !important;
+	box-shadow: none !important;
+	border-color: #fff !important;
+}
+
+.ls-borderlesslight3d .ls-media-unmute .ls-icon-unmuted {
+	background-image: url(../../img/icon-unmuted-black.png);
+	opacity: 0 !important;
+}
+
+.ls-borderlesslight3d .ls-media-unmute .ls-icon-muted {
+	background-image: url(../../img/icon-muted-black.png);
+	opacity: .3 !important;
+}
+
+.ls-borderlesslight3d .ls-media-unmute:hover .ls-icon-unmuted {
+	background-image: url(../../img/icon-unmuted-black.png);
+	opacity: .5 !important;
+}
+
+.ls-borderlesslight3d .ls-media-unmute:hover .ls-icon-muted {
+	background-image: url(../../img/icon-muted-black.png);
+	opacity: 0 !important;
+}

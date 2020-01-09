@@ -231,7 +231,7 @@
 				
 				if(gallery_mode)
 				{ 
-					insertInto.unbind('click').bind('click', function()
+					insertInto.off('click').on('click', function()
 					{
 						
 						var attachment_id = post_id,
@@ -254,7 +254,7 @@
 				}
 				else
 				{
-						insertInto.unbind('click').bind('click', function()
+						insertInto.off('click').on('click', function()
 						{
 							var attachment_id = this.name.replace(/send\[/,"").replace(/\]/,"");	
 										

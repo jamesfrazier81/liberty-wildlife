@@ -101,10 +101,16 @@ class Tribe__Cost_Utils {
 	 *
 	 * @param int|float|string $cost Cost to analyze
 	 *
-	 * return int|float|string
+	 * @return int|float|string
 	 */
 	public function maybe_replace_cost_with_free( $cost ) {
-		if ( '0' === (string) $cost ) {
+
+		$cost_with_period = $this->convert_decimal_separator( $cost );
+
+		if (
+			is_numeric( $cost_with_period )
+			&& '0.00' === number_format( $cost_with_period, 2, '.', ',' )
+		) {
 			return esc_html__( 'Free', 'the-events-calendar' );
 		}
 
@@ -114,15 +120,26 @@ class Tribe__Cost_Utils {
 	/**
 	 * Formats a cost with a currency symbol
 	 *
-	 * @param int|float|string $cost Cost to format
+	 * @param int|float|string $cost              Cost to format
 	 *
 	 * return string
+	 * @param int|WP_Post      $event             An event post ID or post object.
+	 * @param string           $currency_symbol
+	 * @param string           $currency_position Either "prefix" or "posfix"
+	 *
+	 * @return float|int|string
 	 */
-	public function maybe_format_with_currency( $cost ) {
+	public function maybe_format_with_currency( $cost, $event = null, $currency_symbol = null, $currency_position = null ) {
 		// check if the currency symbol is desired, and it's just a number in the field
 		// be sure to account for european formats in decimals, and thousands separators
 		if ( is_numeric( str_replace( $this->get_separators(), '', $cost ) ) ) {
-			$cost = tribe_format_currency( $cost );
+			$reverse_position = null;
+			// currency_position often gets passed as null or an empty string.
+			if ( ! empty( $currency_position ) ) {
+				$reverse_position = 'prefix' === $currency_position ? false : true;
+			}
+
+			$cost = tribe_format_currency( $cost, $event, $currency_symbol, $reverse_position );
 		}
 
 		return $cost;
@@ -279,11 +296,13 @@ class Tribe__Cost_Utils {
 	 * If a range isn't provided, the resulting array will hold a single
 	 * value.
 	 *
-	 * @param $cost string Cost to parse.
+	 * @param string|array $costs        A cost string or an array of cost strings.
+	 * @param null         $max_decimals The maximum number of decimal values that should be returned in the range.
+	 * @param bool         $sort         Whether the returned values should be sorted.
 	 *
-	 * @return array
+	 * @return array An associative array of parsed costs in [ <string cost> => <cost number> ] format.
 	 */
-	public function parse_cost_range( $costs, $max_decimals = null ) {
+	public function parse_cost_range( $costs, $max_decimals = null, $sort = true ) {
 		if ( ! is_array( $costs ) && ! is_string( $costs ) ) {
 			return array();
 		}
@@ -340,7 +359,9 @@ class Tribe__Cost_Utils {
 		}
 
 		// Filter keeping the Keys
-		ksort( $output_costs );
+		if ( $sort ) {
+			ksort( $output_costs );
+		}
 
 		return (array) $output_costs;
 	}
@@ -396,4 +417,121 @@ class Tribe__Cost_Utils {
 		return preg_match( $pattern, $value, $matches ) ? $matches[1] : $value;
 	}
 
+	/**
+	 * Parses the currency symbol part of a cost string.
+	 *
+	 * @param string|array $cost A string cost, a comma separated array of string costs or an array of costs.
+	 *
+	 * @return false|string Either the inferred currency symbol or `false` if the currency symbol is missing or not consistent.
+	 */
+	public function parse_currency_symbol( $cost ) {
+		if ( empty( $cost ) ) {
+			return false;
+		}
+
+		$original_costs = is_array( $cost ) ? $cost : preg_split( '/\\s*,\\s*/', $cost );
+		$costs = $this->parse_cost_range( $original_costs, null, false );
+
+		if ( empty( $costs ) ) {
+			return false;
+		}
+
+		$currency_symbols = array();
+		$i = 0;
+		foreach ( $costs as $string => $value ) {
+			if ( is_numeric( $string ) ) {
+				$currency_symbols[] = trim( str_replace( $value, '', $original_costs[ $i ] ) );
+				if ( end( $currency_symbols ) !== reset( $currency_symbols ) ) {
+					return false;
+				}
+			}
+
+			$i ++;
+		}
+
+		return ! empty( $currency_symbols ) ? reset( $currency_symbols ) : false;
+	}
+
+	/**
+	 * Parses the currency symbol position  part of a cost string.
+	 *
+	 * @param string|array $cost A string cost, a comma separated array of string costs or an array of costs.
+	 *
+	 * @return false|string Either the inferred currency symbol position or `false` if not present or not consistent.
+	 */
+	public function parse_currency_position( $cost ) {
+		if ( empty( $cost ) ) {
+			return false;
+		}
+
+		$original_costs = is_array( $cost ) ? $cost : preg_split( '/\\s*,\\s*/', $cost );
+		$currency_symbol = $this->parse_currency_symbol( $original_costs );
+
+		if ( empty( $currency_symbol ) ) {
+			return false;
+		}
+
+		$currency_positions = array();
+		foreach ( $original_costs as $original_cost ) {
+			$currency_symbol_position = strpos( trim( $original_cost ), $currency_symbol );
+			if ( false === $currency_symbol_position ) {
+				continue;
+			}
+
+			$currency_positions[] = 0 === $currency_symbol_position ? 'prefix' : 'postfix';
+			if ( end( $currency_positions ) !== reset( $currency_positions ) ) {
+				return false;
+			}
+		}
+
+		return ! empty( $currency_positions ) ? reset( $currency_positions ) : false;
+	}
+
+	/**
+	 * Parses the cost value and current locale to infer decimal and thousands separators.
+	 *
+	 * The cost values stored in the meta table might not use the same decimal and thousands separator as the current
+	 * locale.
+	 * To work around this we parse the value assuming the decimal separator will be the last non-numeric symbol,
+	 * if any.
+	 *
+	 * @since 4.9.12
+	 *
+	 * @param string|int|float $value The cost value to parse.
+	 *
+	 * @return array An array containing the parsed decimal and thousands separator symbols.
+	 */
+	public function parse_separators( $value ) {
+		global $wp_locale;
+		$locale_decimal_point = $wp_locale->number_format['decimal_point'];
+		$locale_thousands_sep = $wp_locale->number_format['thousands_sep'];
+		$decimal_sep          = $locale_decimal_point;
+		$thousands_sep        = $locale_thousands_sep;
+
+		preg_match_all( '/[\\.,]+/', $value, $matches );
+
+		if ( ! empty( $matches[0] ) ) {
+			$matched_separators = $matches[0];
+			if ( count( array_unique( $matched_separators ) ) > 1 ) {
+				// We have both, the decimal separator will be the last non-numeric symbol.
+				$decimal_sep   = end( $matched_separators );
+				$thousands_sep = reset( $matched_separators );
+			} else {
+				/*
+				 * We only have one, we can assume it's the decimal separator if it comes before a number of numeric
+				 * symbols that is not exactly 3. If there are exactly 3 number after the symbols we fall back on the
+				 * locale; we did our best and cannot guess any further.
+				 */
+				$frags = explode( end( $matched_separators ), $value );
+				if ( strlen( end( $frags ) ) !== 3 ) {
+					$decimal_sep   = end( $matched_separators );
+					$thousands_sep = $decimal_sep === $locale_decimal_point ?
+						$locale_thousands_sep
+						: $locale_decimal_point;
+				}
+			}
+		}
+
+		return [ $decimal_sep, $thousands_sep ];
+	}
 }

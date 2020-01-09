@@ -227,3 +227,39 @@
 .ls-lightskin .ls-fullscreen:hover {
 	background-position: -525px -190px;
 }
+
+
+
+.ls-lightskin .ls-media-unmute  {
+	left: 10px;
+	top: 10px;
+}
+
+.ls-lightskin .ls-media-unmute-active  {
+	opacity: 1 !important;
+}
+
+.ls-lightskin .ls-media-unmute-active .ls-media-unmute-bg {
+	opacity: 1 !important;
+	background-color: #eee !important;
+	box-shadow: none !important;
+	border-color: #eee !important;
+}
+
+.ls-lightskin .ls-media-unmute .ls-icon-unmuted {
+	background-image: url(../../img/icon-unmuted-black.png);
+	opacity: 0 !important;
+}
+
+.ls-lightskin .ls-media-unmute .ls-icon-muted {
+	background-image: url(../../img/icon-muted-black.png);
+	opacity: .5 !important;
+}
+
+.ls-lightskin .ls-media-unmute:hover .ls-icon-unmuted {
+	opacity: .5 !important;
+}
+
+.ls-lightskin .ls-media-unmute:hover .ls-icon-muted {
+	opacity: 0 !important;
+}

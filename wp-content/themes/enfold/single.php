@@ -37,15 +37,18 @@
                     * called loop-index.php and that will be used instead.
                     *
                     */
-
                         get_template_part( 'includes/loop', 'index' );
 						
-                        //show related posts based on tags if there are any
-                        get_template_part( 'includes/related-posts');
-
-                        //wordpress function that loads the comments template "comments.php"
-                        comments_template();
-
+						$blog_disabled = ( avia_get_option('disable_blog') == 'disable_blog' ) ? true : false;
+						
+						if(!$blog_disabled)
+						{
+	                        //show related posts based on tags if there are any
+	                        get_template_part( 'includes/related-posts');
+	
+	                        //wordpress function that loads the comments template "comments.php"
+	                        comments_template();
+						}
                     ?>
 
 				<!--end content-->
@@ -65,4 +68,7 @@
 		</div><!-- close default .container_wrap element -->
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();
+		
+		

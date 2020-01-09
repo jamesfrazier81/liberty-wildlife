@@ -23,7 +23,7 @@ $strings['avia_modal_js']  = array(
 				
 				'gmap_api_wrong' => __( 'It seems that your Google API key is not configured correctly', 'avia_framework' )."<br/><br/>".
 								   __( 'The key is probably either restricted to the wrong domain or the domain syntax you entered is wrong.', 'avia_framework' )." <br><br>".
-								   __( 'Please check your API key', 'avia_framework' )." <a target='_blank' href='https://console.developers.google.com/apis/credentials'>".__( 'here', 'avia_framework' )."</a><br><br>".
+								   __( 'Please check your API key', 'avia_framework' )." <a target='_blank' href='https://console.developers.google.com/apis/credentials' rel='noopener noreferrer'>".__( 'here', 'avia_framework' )."</a><br><br>".
 								   
 								   __( 'The domain that should be allowed is:', 'avia_framework' )." <br><strong>". trailingslashit(get_site_url()) ."*</strong>",
 								   

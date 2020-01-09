@@ -114,7 +114,10 @@ class avia_wp_import extends WP_Import
 		$import = new LS_ImportUtil( $downloadPath );
 	
 		// Remove package
-		unlink( $downloadPath );
+		if( file_exists( $downloadPath ) )
+		{
+			unlink( $downloadPath );
+		}
 	}
 	
 	
@@ -356,6 +359,8 @@ class avia_wp_import extends WP_Import
 	
 	function process_menu_item( $item ) {
 
+		@ini_set('max_execution_time', 300);
+		
 		// skip draft, orphaned menu items
 		if ( 'draft' == $item['status'] )
 			return;

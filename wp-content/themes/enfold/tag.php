@@ -40,6 +40,23 @@
                     }
 
                     $avia_config['blog_style'] = apply_filters('avf_blog_style', avia_get_option('blog_style','multi-big'), 'tag');
+					
+					$default_heading = 'h3';
+					$args = array(
+								'heading'		=> $default_heading,
+								'extra_class'	=> ''
+							);
+
+					/**
+					 * @since 4.5.5
+					 * @return array
+					 */
+					$args = apply_filters( 'avf_customize_heading_settings', $args, 'tag', array() );
+
+					$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+					$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+	
+					
                     if($avia_config['blog_style'] == 'blog-grid')
                     {
                         $output = '';
@@ -57,7 +74,7 @@
                                 if(isset($post_type_obj[$key]->labels->name))
                                 {
                                     $label = apply_filters('avf_tag_label_names', $post_type_obj[$key]->labels->name);
-                                    $output .= "<h3 class='post-title tag-page-post-type-title'>".$label."</h3>";
+								$output .= "<{$heading} class='post-title tag-page-post-type-title {$css}'>{$label}</{$heading}>";
                                 }
                                 else
                                 {
@@ -66,16 +83,25 @@
 
 
                                 $atts   = array(
-                                    'type' => 'grid',
-                                    'items' => get_option('posts_per_page'),
-                                    'columns' => 3,
-                                    'class' => 'avia-builder-el-no-sibling',
-                                    'paginate' => 'yes',
-                                    'use_main_query_pagination' => 'yes',
-                                    'custom_query' => array( 'post__in'=>$post_ids, 'post_type'=> $key )
-                                );
+												'type'			=> 'grid',
+												'items'			=> get_option( 'posts_per_page' ),
+												'columns'		=> 3,
+												'class'			=> 'avia-builder-el-no-sibling',
+												'paginate'		=> 'yes',
+												'use_main_query_pagination'	=> 'yes',
+												'custom_query'	=> array( 
+																		'post__in'	=> $post_ids,
+																		'post_type'	=> $key
+																	)
+											);
 
-                                $blog = new avia_post_slider($atts);
+								/**
+								 * @since 4.5.5
+								 * @return array
+								 */
+								$atts = apply_filters( 'avf_post_slider_args', $atts, 'tag' );
+						
+                                $blog = new avia_post_slider( $atts );
                                 $blog->query_entries();
                                 $output .= $blog->html();
                             }
@@ -97,7 +123,7 @@
                             if(isset($post_type_obj[$key]->labels->name))
                             {
                                 $label = apply_filters('avf_tag_label_names', $post_type_obj[$key]->labels->name);
-                                echo "<h3 class='post-title tag-page-post-type-title'>".$label."</h3>";
+                                echo "<{$heading} class='post-title tag-page-post-type-title {$css}'>{$label}</{$heading}>";
                             }
                             else
                             {
@@ -149,4 +175,7 @@
         </div><!-- close default .container_wrap element -->
 
 
-<?php get_footer(); ?>
+<?php 
+
+		get_footer();
+		

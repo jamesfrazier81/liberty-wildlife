@@ -21,17 +21,13 @@
 	$revisionsCount = count($revisions);
 
 	foreach( $revisions as $key => $revision ) {
-		$revisions[$key]->avatar 	= get_avatar_url( $revisions[$key]->author );
+
+		$revisions[$key]->avatar 	= function_exists( 'get_avatar_url' ) ? get_avatar_url( $revisions[$key]->author ) : '';
 		$revisions[$key]->nickname 	= get_userdata( $revisions[$key]->author )->user_nicename;
 		$revisions[$key]->time_diff =  sprintf(__(' %s ago', 'LayerSlider'), human_time_diff( $revision->date_c ) );
 		$revisions[$key]->created 	= date('M j @ H:i', $revision->date_c);
 
 		$slider = json_decode( $revision->data , true);
-
-		// Fixes
-		if(!isset($slider['layers'][0]['properties'])) {
-			$slider['layers'][0]['properties'] = array();
-		}
 
 
 		// Get yourLogo
@@ -69,6 +65,11 @@
 		}
 
 		foreach($slider['layers'] as $slideKey => $slideVal) {
+
+			// Make sure to each slide has a 'properties' object
+			if( ! isset( $slideVal['properties'] ) ) {
+				$slideVal['properties'] = array();
+			}
 
 			// Get slide background
 			if( ! empty($slideVal['properties']['backgroundId']) ) {
@@ -108,6 +109,11 @@
 						$layerVal['posterThumb'] = apply_filters('ls_get_thumbnail', $layerVal['posterId'], $layerVal['poster']);
 					}
 
+					if( ! empty($layerVal['layerBackgroundId']) ) {
+						$layerVal['layerBackground'] = apply_filters('ls_get_image', $layerVal['layerBackgroundId'], $layerVal['layerBackground']);
+						$layerVal['layerBackgroundThumb'] = apply_filters('ls_get_thumbnail', $layerVal['layerBackgroundId'], $layerVal['layerBackground']);
+					}
+
 					// Ensure that magic quotes will not mess with JSON data
 					if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
 						$layerVal['styles'] = stripslashes($layerVal['styles']);
@@ -131,8 +137,8 @@
 		}
 
 		if( ! empty( $slider['callbacks'] ) ) {
-			foreach( $slider['callbacks'] as $key => $callback ) {
-				$slider['callbacks'][$key] = stripslashes($callback);
+			foreach( $slider['callbacks'] as $CBkey => $callback ) {
+				$slider['callbacks'][$CBkey] = stripslashes($callback);
 			}
 		}
 
@@ -157,6 +163,7 @@
 
 </script>
 
+<?php include LS_ROOT_PATH . '/templates/tmpl-slide-tab.php'; ?>
 
 <div id="ls-revisions">
 
@@ -165,7 +172,7 @@
 			<?php _e('Revisions for Slider:', 'LayerSlider') ?>
 			<?php $sliderName = !empty($slider['properties']['title']) ? $slider['properties']['title'] : 'Unnamed'; ?>
 			<?php echo apply_filters('ls_slider_title', $sliderName, 30) ?>
-			<a href="<?php echo admin_url('admin.php?page=layerslider&action=edit&id='.$id) ?>" class="add-new-h2"><?php _e('Back to Slider', 'LayerSlider') ?></a>
+			<a href="<?php echo admin_url('admin.php?page=layerslider&action=edit&id='.$id) ?>" class="add-new-h2"><?php _e('&larr; Back to Slider', 'LayerSlider') ?></a>
 		</h2>
 		<form method="post" id="ls-revisions-form">
 			<?php wp_nonce_field('ls-revert-slider-' . $id); ?>
@@ -212,21 +219,31 @@
 
 		<h2 class="ls-revisions-h2"><?php _e('Preview for Selected Revision', 'LayerSlider') ?></h2>
 		<div id="ls-slider-form">
-			<div id="ls-layer-tabs">
+
+			<div id="ls-slide-tabs" class="clearfix">
 				<?php
 					foreach($slider['layers'] as $key => $layer) :
 					$active = empty($key) ? 'active' : '';
 					$name = !empty($layer['properties']['title']) ? $layer['properties']['title'] : sprintf(__('Slide #%d', 'LayerSlider'), ($key+1));
+
 					$bgImage = !empty($layer['properties']['background']) ? $layer['properties']['background'] : null;
 					$bgImageId = !empty($layer['properties']['backgroundId']) ? $layer['properties']['backgroundId'] : null;
-					$image = apply_filters('ls_get_image', $bgImageId, $bgImage, true);
+
+					$thumb = !empty($layer['properties']['thumbnail']) ? $layer['properties']['thumbnail'] : null;
+					$thumbId = !empty($layer['properties']['thumbnailId']) ? $layer['properties']['thumbnailId'] : null;
+
+					$image = ! empty( $thumb ) ? apply_filters('ls_get_image', $thumbId, $thumb, true) : apply_filters('ls_get_image', $bgImageId, $bgImage, true);
+
+
 				?>
-				<a href="#" class="<?php echo $active ?>" data-help="<div style='background-image: url(<?php echo $image?>);'></div>" data-help-class="ls-slide-preview-tooltip popover-light km-ui-popup" data-help-delay="1" data-help-transition="false">
-					<span><?php echo $name ?></span>
-					<span class="dashicons dashicons-dismiss"></span>
-				</a>
+				<div class="ls-slide-tab <?php echo $active ?>">
+					<span class="ls-slide-counter"></span>
+					<div class="ls-slide-preview" style="background-image: url(<?php echo $image?>)"></div>
+					<div class="ls-slide-name">
+						<input type="text" disabled value="<?php echo htmlspecialchars($name) ?>">
+					</div>
+				</div>
 				<?php endforeach; ?>
-				<div class="unsortable clear"></div>
 			</div>
 
 			<!-- Slides -->

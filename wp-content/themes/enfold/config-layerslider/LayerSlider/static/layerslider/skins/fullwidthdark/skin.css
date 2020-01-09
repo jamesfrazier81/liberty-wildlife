@@ -203,3 +203,37 @@
 .ls-fullwidthdark .ls-fullscreen:hover {
 	background-position: -525px -190px;
 }
+
+
+
+.ls-fullwidthdark .ls-media-unmute  {
+	left: 10px;
+	top: 10px;
+}
+
+.ls-fullwidthdark .ls-media-unmute-active  {
+	opacity: 1 !important;
+}
+
+.ls-fullwidthdark .ls-media-unmute-active .ls-media-unmute-bg {
+	opacity: 1 !important;
+	background-color: black !important;
+	box-shadow: none !important;
+	border-color: black !important;
+}
+
+.ls-fullwidthdark .ls-media-unmute .ls-icon-unmuted {
+	opacity: 0 !important;
+}
+
+.ls-fullwidthdark .ls-media-unmute .ls-icon-muted {
+	opacity: .4 !important;
+}
+
+.ls-fullwidthdark .ls-media-unmute:hover .ls-icon-unmuted {
+	opacity: .8 !important;
+}
+
+.ls-fullwidthdark .ls-media-unmute:hover .ls-icon-muted {
+	opacity: 0 !important;
+}

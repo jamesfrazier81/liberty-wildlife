@@ -55,7 +55,7 @@
 				<input type="hidden" name="image">
 				<div class="ls-image ls-upload ls-bulk-upload ls-layer-image not-set" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>">
 					<div><img src="<?php echo LS_ROOT_URL.'/static/admin/img/blank.gif' ?>" alt=""></div>
-					<a href="#" class="aviary"></a>
+					<a href="#" class="pixie"></a>
 					<a href="#" class="dashicons dashicons-dismiss"></a>
 				</div>
 				<p>
@@ -95,7 +95,7 @@
 									<input type="hidden" name="poster">
 									<div class="ls-image ls-upload ls-bulk-upload ls-media-image not-set" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>">
 										<div><img src="<?php echo LS_ROOT_URL.'/static/admin/img/blank.gif' ?>" alt=""></div>
-										<a href="#" class="aviary"></a>
+										<a href="#" class="pixie"></a>
 										<a href="#" class="dashicons dashicons-dismiss"></a>
 									</div>
 								</td>
@@ -125,24 +125,17 @@
 								<?php echo $lsDefaults['layers']['mediaAutoPlay']['name'] ?> <br>
 								<?php lsGetSelect($lsDefaults['layers']['mediaAutoPlay'], null, array('class' => 'sublayerprop')) ?>
 							</td>
-							<td>
-								<?php echo $lsDefaults['layers']['mediaFillMode']['name'] ?> <br>
-								<?php lsGetSelect($lsDefaults['layers']['mediaFillMode'], null, array('class' => 'sublayerprop')) ?>
-							</td>
-							<td>
-								<?php echo $lsDefaults['layers']['mediaControls']['name'] ?> <br>
-								<?php lsGetSelect($lsDefaults['layers']['mediaControls'], null, array('class' => 'sublayerprop')) ?>
-							</td>
-							<td>
-								<?php echo $lsDefaults['layers']['mediaInfo']['name'] ?> <br>
-								<?php lsGetSelect($lsDefaults['layers']['mediaInfo'], null, array('class' => 'sublayerprop')) ?>
+
+
+							<td class="muted">
+								<?php echo $lsDefaults['layers']['mediaMuted']['name'] ?> <br>
+								<?php lsGetSelect($lsDefaults['layers']['mediaMuted'], null, array('class' => 'sublayerprop')) ?>
 							</td>
 
 							<td class="volume">
 								<?php echo $lsDefaults['layers']['mediaVolume']['name'] ?> <br>
 								<?php lsGetInput($lsDefaults['layers']['mediaVolume'], null, array('class' => 'sublayerprop')) ?>
 							</td>
-
 							<td class="overlay">
 								<?php echo $lsDefaults['layers']['mediaOverlay']['name']; ?><br>
 								<?php
@@ -160,6 +153,33 @@
 									lsGetSelect($lsDefaults['layers']['mediaOverlay'], null, array('class' => 'sublayerprop', 'options' => $overlays ));
 								?>
 							</td>
+						</tr>
+					</table>
+					<table class="ls-media-options">
+						<tr>
+							<td>
+								<?php echo $lsDefaults['layers']['mediaFillMode']['name'] ?> <br>
+								<?php lsGetSelect($lsDefaults['layers']['mediaFillMode'], null, array('class' => 'sublayerprop')) ?>
+							</td>
+							<td>
+								<?php echo $lsDefaults['layers']['mediaControls']['name'] ?> <br>
+								<?php lsGetSelect($lsDefaults['layers']['mediaControls'], null, array('class' => 'sublayerprop')) ?>
+							</td>
+							<td>
+								<?php echo $lsDefaults['layers']['mediaInfo']['name'] ?> <br>
+								<?php lsGetSelect($lsDefaults['layers']['mediaInfo'], null, array('class' => 'sublayerprop')) ?>
+							</td>
+						</tr>
+					</table>
+
+					<table class="ls-media-options">
+						<tr>
+							<td class="loop">
+								<?php echo $lsDefaults['layers']['mediaLoop']['name'] ?> <br>
+								<?php lsGetSelect($lsDefaults['layers']['mediaLoop'], null, array('class' => 'sublayerprop')) ?>
+							</td>
+							<td class="loop"></td>
+							<td class="loop"></td>
 						</tr>
 					</table>
 				</div>
@@ -184,12 +204,15 @@
 						<li><span>[date-modified]</span></li>
 						<li><span>[image]</span></li>
 						<li><span>[image-url]</span></li>
+						<li><span>[thumbnail]</span></li>
+						<li><span>[thumbnail-url]</span></li>
 						<li><span>[title]</span></li>
 						<li><span>[content]</span></li>
 						<li><span>[excerpt]</span></li>
 						<li data-placeholder="<a href=&quot;[post-url]&quot;>Read more</a>"><span>[link]</span></li>
 						<li><span>[author]</span></li>
 						<li><span>[author-name]</span></li>
+						<li><span>[author-avatar]</span></li>
 						<li><span>[author-id]</span></li>
 						<li><span>[categories]</span></li>
 						<li><span>[tags]</span></li>
@@ -204,7 +227,16 @@
 					</p>
 				</div>
 			</div>
+
 		</div>
+
+		<div id="ls-background-notification">
+			<div class="ls-notification-info solid">
+				<i class="dashicons dashicons-info"></i>
+				This layer contains a background image. You can edit it under the <a href="#">Styles</a> tab.
+			</div>
+		</div>
+
 	</div>
 	<div class="ls-sublayer-page ls-sublayer-options">
 
@@ -513,15 +545,19 @@
 										<?php lsGetInput($lsDefaults['layers']['transitionInRadius'], null, array('class' => 'sublayerprop')) ?>
 									</div>
 								</li>
+								<?php if( ! LS_Config::get('theme_bundle') || $lsActivated ) : ?>
  								<li>
 									<div class="ls-premium">
-										<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+										<?php if( ! $lsActivated ) : ?>
+										<a class="ls-activation-lock dashicons dashicons-lock" target="_blank" href="<?php echo admin_url('admin.php?page=layerslider-addons' ) ?>" data-help="<?php _e('This feature requires product activation. Click on the padlock icon to learn more.', 'LayerSlider') ?>"></a>
+										<?php endif ?>
 										<a href="https://developer.mozilla.org/en/docs/Web/CSS/filter#Functions" target="_blank"><?php echo $lsDefaults['layers']['transitionInFilter']['name'] ?></a>
 									</div>
 									<div>
 										<?php lsGetInput($lsDefaults['layers']['transitionInFilter'], null, array('class' => 'sublayerprop')) ?>
 									</div>
 								</li>
+								<?php endif ?>
  							</ul>
 						</li>
 					</ul>
@@ -900,15 +936,19 @@
 										<?php lsGetInput($lsDefaults['layers']['loopOpacity'], null, array('class' => 'sublayerprop')) ?>
 									</div>
 								</li>
+ 								<?php if( ! LS_Config::get('theme_bundle') || $lsActivated ) : ?>
  								<li>
 									<div class="ls-premium">
-										<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+										<?php if( ! $lsActivated ) : ?>
+										<a class="ls-activation-lock dashicons dashicons-lock" target="_blank" href="<?php echo admin_url('admin.php?page=layerslider-addons' ) ?>" data-help="<?php _e('This feature requires product activation. Click on the padlock icon to learn more.', 'LayerSlider') ?>"></a>
+										<?php endif ?>
 										<a href="https://developer.mozilla.org/en/docs/Web/CSS/filter#Functions" target="_blank"><?php echo $lsDefaults['layers']['loopFilter']['name'] ?></a>
 									</div>
 									<div>
 										<?php lsGetInput($lsDefaults['layers']['loopFilter'], null, array('class' => 'sublayerprop')) ?>
 									</div>
 								</li>
+								<?php endif ?>
 							</ul>
 						</li>
 					</ul>
@@ -1313,15 +1353,19 @@
 										<?php lsGetInput($lsDefaults['layers']['transitionOutRadius'], null, array('class' => 'sublayerprop')) ?>
 									</div>
 								</li>
+ 								<?php if( ! LS_Config::get('theme_bundle') || $lsActivated ) : ?>
  								<li>
 									<div class="ls-premium">
-										<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+										<?php if( ! $lsActivated ) : ?>
+										<a class="ls-activation-lock dashicons dashicons-lock" target="_blank" href="<?php echo admin_url('admin.php?page=layerslider-addons' ) ?>" data-help="<?php _e('This feature requires product activation. Click on the padlock icon to learn more.', 'LayerSlider') ?>"></a>
+										<?php endif ?>
 										<a href="https://developer.mozilla.org/en/docs/Web/CSS/filter#Functions" target="_blank"><?php echo $lsDefaults['layers']['transitionOutFilter']['name'] ?></a>
 									</div>
 									<div>
 										<?php lsGetInput($lsDefaults['layers']['transitionOutFilter'], null, array('class' => 'sublayerprop')) ?>
 									</div>
 								</li>
+								<?php endif ?>
 							</ul>
 						</li>
 					</ul>
@@ -1640,6 +1684,16 @@
 
 		<div>
 
+			<div class="ls-h-actions">
+				<div>
+					<h5><?php _e('Actions', 'LayerSlider') ?></h5>
+					<div class="table-holder">
+						<a href="#" class="copy"><i class="dashicons dashicons-clipboard"></i> <?php _e('Copy layer styles', 'LayerSlider') ?></a>
+						<a href="#" class="paste"><i class="dashicons dashicons-admin-page"></i> <?php _e('Paste layer styles', 'LayerSlider') ?></a>
+					</div>
+				</div>
+			</div>
+
 			<div>
 				<div>
 					<h5><?php _e('Layout', 'LayerSlider') ?> <span>| <?php _e('sizing & position', 'LayerSlider') ?></span></h5>
@@ -1677,6 +1731,18 @@
 						<table>
 							<tbody>
 								<tr>
+									<td><?php echo $lsDefaults['layers']['borderRadius']['name'] ?></td>
+									<td><?php lsGetInput($lsDefaults['layers']['borderRadius'], null, array('class' => 'auto')) ?></td>
+								</tr>
+								<tr>
+									<td>
+										<?php echo $lsDefaults['layers']['zIndex']['name'] ?>
+									</td>
+									<td>
+										<?php lsGetInput($lsDefaults['layers']['zIndex'], null, array('class' => 'auto')) ?>
+									</td>
+								</tr>
+								<tr>
 									<td>
 										<?php echo $lsDefaults['layers']['position']['name'] ?>
 									</td>
@@ -1686,10 +1752,10 @@
 								</tr>
 								<tr>
 									<td>
-										<?php echo $lsDefaults['layers']['zIndex']['name'] ?>
+										<?php echo $lsDefaults['layers']['pointerEvents']['name'] ?>
 									</td>
 									<td>
-										<?php lsGetInput($lsDefaults['layers']['zIndex'], null, array('class' => 'auto')) ?>
+										<?php lsGetCheckbox($lsDefaults['layers']['pointerEvents'], null, array('class' => 'sublayerprop')) ?>
 									</td>
 								</tr>
 							</tbody>
@@ -1768,17 +1834,7 @@
 
 		<div>
 
-			<div class="ls-h-actions">
-				<div>
-					<h5><?php _e('Actions', 'LayerSlider') ?></h5>
-					<div class="table-holder">
-						<a href="#" class="copy"><i class="dashicons dashicons-clipboard"></i> <?php _e('Copy layer styles', 'LayerSlider') ?></a>
-						<a href="#" class="paste"><i class="dashicons dashicons-admin-page"></i> <?php _e('Paste layer styles', 'LayerSlider') ?></a>
-					</div>
-				</div>
-			</div>
-
-			<div>
+			<div class="ls-h-text">
 				<div>
 					<h5><?php _e('Text', 'LayerSlider') ?> <span>| <?php _e('font &amp; style', 'LayerSlider') ?></span></h5>
 					<div class="table-holder">
@@ -1870,46 +1926,91 @@
 				</div>
 			</div>
 
-			<div>
+			<div class="ls-h-background">
 				<div>
-					<h5><?php _e('Misc', 'LayerSlider') ?> <span>| <?php _e('other settings', 'LayerSlider') ?></span></h5>
+					<h5><?php _e('Background', 'LayerSlider') ?></h5>
+					<div class="table-holder">
+						<table class="ls-layer-background-image-table">
+							<tbody>
+								<tr>
+									<td>Image</td>
+									<td>
+										<!-- Image Layer -->
+										<div class="slide-image clearfix">
+											<input type="hidden" name="layerBackgroundId">
+											<input type="hidden" name="layerBackground">
+											<div class="ls-image ls-upload ls-bulk-upload ls-layer-background-image not-set" data-l10n-set="<?php _e('Click to set', 'LayerSlider') ?>" data-l10n-change="<?php _e('Click to change', 'LayerSlider') ?>" data-help="<?php echo $lsDefaults['layers']['background']['tooltip'] ?>">
+												<div><img src="<?php echo LS_ROOT_URL.'/static/admin/img/blank.gif' ?>" alt=""></div>
+												<a href="#" class="pixie"></a>
+												<a href="#" class="dashicons dashicons-dismiss"></a>
+											</div>
+											<span class="indent">
+												<a href="#" class="ls-url-prompt"><?php _e('enter URL', 'LayerSlider') ?></a> |
+												<a href="#" class="ls-post-image"><?php _e('use post image', 'LayerSlider') ?></a>
+											</span>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td><?php echo $lsDefaults['layers']['backgroundColor']['name'] ?></td>
+									<td><?php lsGetInput($lsDefaults['layers']['backgroundColor'], null, array('class' => 'auto ls-colorpicker')) ?></td>
+								</tr>
+								<tr>
+									<td><?php echo $lsDefaults['layers']['backgroundSize']['name'] ?></td>
+									<td><?php lsGetSelect($lsDefaults['layers']['backgroundSize'], null, array('class' => 'auto')) ?></td>
+								</tr>
+								<tr>
+									<td><?php echo $lsDefaults['layers']['backgroundPosition']['name'] ?></td>
+									<td><?php lsGetSelect($lsDefaults['layers']['backgroundPosition'], null, array('class' => 'auto')) ?></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="ls-h-effects">
+				<div>
+					<h5><?php _e('Effects', 'LayerSlider') ?></h5>
 					<div class="table-holder">
 						<table>
 							<tbody>
 								<tr>
-									<td><?php echo $lsDefaults['layers']['background']['name'] ?></td>
-									<td><?php lsGetInput($lsDefaults['layers']['background'], null, array('class' => 'auto ls-colorpicker')) ?></td>
-								</tr>
-								<tr>
 									<td><?php echo $lsDefaults['layers']['opacity']['name'] ?></td>
 									<td><?php lsGetInput($lsDefaults['layers']['opacity'], null, array('class' => 'auto')) ?></td>
 								</tr>
-								<tr>
-									<td><?php echo $lsDefaults['layers']['borderRadius']['name'] ?></td>
-									<td><?php lsGetInput($lsDefaults['layers']['borderRadius'], null, array('class' => 'auto')) ?></td>
-								</tr>
+								<?php if( ! LS_Config::get('theme_bundle') || $lsActivated ) : ?>
 								<tr>
 									<td>
 										<div class="ls-premium">
-											<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+											<?php if( ! $lsActivated ) : ?>
+											<a class="ls-activation-lock dashicons dashicons-lock" target="_blank" href="<?php echo admin_url('admin.php?page=layerslider-addons' ) ?>" data-help="<?php _e('This feature requires product activation. Click on the padlock icon to learn more.', 'LayerSlider') ?>"></a>
+											<?php endif ?>
 											<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/blend-mode" target="_blank">
 												<?php echo $lsDefaults['layers']['blendMode']['name'] ?>
 											</a>
 										</div>
 									</td>
-									<td><?php lsGetSelect($lsDefaults['layers']['blendMode'], null, array('class' => 'auto')) ?></td>
+									<td>
+										<?php lsGetSelect($lsDefaults['layers']['blendMode'], null, array('class' => 'auto')) ?>
+									</td>
 								</tr>
 								<tr>
 									<td>
 										<div class="ls-premium">
-											<a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="<?php _e('Premium feature. Click to learn more.', 'LayerSlider') ?>"></a>
+											<?php if( ! $lsActivated ) : ?>
+											<a class="ls-activation-lock dashicons dashicons-lock" target="_blank" href="<?php echo admin_url('admin.php?page=layerslider-addons' ) ?>" data-help="<?php _e('This feature requires product activation. Click on the padlock icon to learn more.', 'LayerSlider') ?>"></a>
+											<?php endif ?>
 											<a href="https://developer.mozilla.org/en/docs/Web/CSS/filter#Functions" target="_blank">
 												<?php echo $lsDefaults['layers']['filter']['name'] ?>
 											</a>
 										</div>
 									</td>
-									<td><?php lsGetInput($lsDefaults['layers']['filter'], null, array('class' => 'auto')) ?></td>
+									<td>
+										<?php lsGetInput($lsDefaults['layers']['filter'], null, array('class' => 'auto')) ?>
+									</td>
 								</tr>
+								<?php endif ?>
 							</tbody>
 						</table>
 					</div>
@@ -1919,7 +2020,8 @@
 		</div>
 
 		<div>
-			<div>
+
+			<div class="ls-h-customcss">
 				<h5><?php _e('Custom CSS', 'LayerSlider') ?> <span>| <?php _e('write your own code', 'LayerSlider') ?></span></h5>
 				<div class="textarea-helper">
 					<textarea rows="5" cols="50" name="style" class="style" data-help="<?php _e('If you want to set style settings other then above, you can use here any CSS codes. Please make sure to write valid markup.', 'LayerSlider') ?>"></textarea>

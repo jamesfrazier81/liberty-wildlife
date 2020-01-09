@@ -1,5 +1,32 @@
 <?php
 
+function lsGetOptionField( $type, $key, $default, $attrs = array() ) {
+
+	$value = get_option( 'ls_'.$key, $default );
+	$input = '<input type="'.$type.'" name="'.$key.'"';
+
+	if( $type === 'checkbox' && $value ) {
+		$input .= ' checked="checked"';
+
+	} else {
+		$input .= ' value="'.$value.'"';
+	}
+
+	// Theme forced settings
+	if( isset( LS_Config::$forced[ $key ] ) ) {
+		$help = sprintf(__('This setting is enforced by <b><i>%s</i></b> in order to maximize compatibility on your site.', 'LayerSlider'), LS_Config::$forcedBy[ $key ] );
+
+		$input .= ' class="locked yellow" data-help-delay="100" data-help="'.$help.'" disabled';
+	}
+
+	foreach ($attrs as $key => $value) {
+		$input .= $key.'="'.$value.'"';
+	}
+
+	return $input.'>';
+
+}
+
 function lsOptionRow( $type, $default, $current, $attrs = array(), $trClasses = '', $forceOptionVal = false) {
 
 	$wrapperStart = '';
@@ -15,9 +42,11 @@ function lsOptionRow( $type, $default, $current, $attrs = array(), $trClasses = 
 		$wrapperEnd = '</div>';
 
 	} else if( ! empty($default['premium']) ) {
-		$trClasses .= ' ls-premium';
-		$wrapperStart = '<div><a class="dashicons dashicons-star-filled" target="_blank" href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#activation" data-help="'.__('Premium feature. Click to learn more.', 'LayerSlider').'"></a>';
-		$wrapperEnd = '</div>';
+		if( ! LS_Config::isActivatedSite() ) {
+			$trClasses .= ' ls-premium';
+			$wrapperStart = '<div><a class="ls-activation-lock dashicons dashicons-lock" target="_blank" href="'.admin_url('admin.php?page=layerslider-addons' ).'" data-help="'.__('This feature requires product activation. Click on the padlock icon to learn more.', 'LayerSlider').'"></a>';
+			$wrapperEnd = '</div>';
+		}
 	}
 
 
@@ -79,6 +108,14 @@ function lsGetInput($default, $current, $attrs = array(), $return = false) {
 	$attributes['data-value'] = $attributes['value'];
 	$el->attr($attributes);
 
+	// Product activation check
+	if( ! empty( $default['premium'] ) ) {
+		if( ! LS_Config::isActivatedSite() ) {
+			$el->addClass('locked');
+			$el->attr('disabled', 'disabled');
+		}
+	}
+
 	$ret = (string) $el;
 	LayerSlider\PHPQuery\phpQuery::unloadDocuments();
 
@@ -118,6 +155,14 @@ function lsGetCheckbox($default, $current, $attrs = array(), $return = false) {
 
 	$attributes['value'] = $attributes['data-value'];
 	$el->attr($attributes);
+
+	// Product activation check
+	if( ! empty( $default['premium'] ) ) {
+		if( ! LS_Config::isActivatedSite() ) {
+			$el->addClass('locked');
+			$el->attr('disabled', 'disabled');
+		}
+	}
 
 	$ret = (string) $el;
 	LayerSlider\PHPQuery\phpQuery::unloadDocuments();
@@ -174,6 +219,14 @@ function lsGetSelect($default, $current, $attrs = array(), $forceOptionVal = fal
 
 	$attributes['data-value'] = $attributes['value'];
 	$el->append( implode('', $listItems) )->attr($attributes);
+
+	// Product activation check
+	if( ! empty( $default['premium'] ) ) {
+		if( ! LS_Config::isActivatedSite() ) {
+			$el->addClass('locked');
+			$el->attr('disabled', 'disabled');
+		}
+	}
 
 	$ret = (string) $el;
 	LayerSlider\PHPQuery\phpQuery::unloadDocuments();

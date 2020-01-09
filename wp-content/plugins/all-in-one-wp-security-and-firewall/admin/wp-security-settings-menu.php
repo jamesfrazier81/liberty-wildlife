@@ -1,4 +1,7 @@
 <?php
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
 
 class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
 {
@@ -13,6 +16,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
         'tab3' => 'render_tab3',
         'tab4' => 'render_tab4',
         'tab5' => 'render_tab5',
+        'tab6' => 'render_tab6',
         );
 
     function __construct() 
@@ -28,6 +32,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
             'tab3' => 'wp-config.php '.__('File', 'all-in-one-wp-security-and-firewall'),
             'tab4' => __('WP Version Info', 'all-in-one-wp-security-and-firewall'),
             'tab5' => __('Import/Export', 'all-in-one-wp-security-and-firewall'),
+            'tab6' => __('Advanced Settings', 'all-in-one-wp-security-and-firewall'),
         );
     }
 
@@ -146,7 +151,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
 
         ?>
         <div class="aio_grey_box">
- 	<p>For information, updates and documentation, please visit the <a href="https://www.tipsandtricks-hq.com/wordpress-security-and-firewall-plugin" target="_blank">AIO WP Security & Firewall Plugin</a> Page.</p>
+ 	<p><?php _e('For information, updates and documentation, please visit the', 'all-in-one-wp-security-and-firewall'); ?> <a href="https://www.tipsandtricks-hq.com/wordpress-security-and-firewall-plugin" target="_blank">AIO WP Security & Firewall Plugin</a> <?php _e('Page', 'all-in-one-wp-security-and-firewall'); ?>.</p>
         <p><a href="https://www.tipsandtricks-hq.com/development-center" target="_blank">Follow us</a> on Twitter, Google+ or via Email to stay upto date about the new security features of this plugin.</p>
         </div>
         
@@ -177,7 +182,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
             ?>
         </div>      
         <div class="submit">
-            <input type="submit" class="button" name="aiowpsec_disable_all_features" value="<?php _e('Disable All Security Features'); ?>" />
+            <input type="submit" class="button" name="aiowpsec_disable_all_features" value="<?php _e('Disable All Security Features', 'all-in-one-wp-security-and-firewall'); ?>" />
         </div>
         </form>   
         </div>
@@ -233,6 +238,10 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
     {
         global $aio_wp_security;
 
+        if ( !function_exists( 'get_home_path' ) ) require_once( ABSPATH. '/wp-admin/includes/file.php' );
+        $home_path = get_home_path();
+        $htaccess_path = $home_path . '.htaccess';
+
         if(isset($_POST['aiowps_save_htaccess']))//Do form submission tasks
         {
             $nonce=$_REQUEST['_wpnonce'];
@@ -241,7 +250,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
                 $aio_wp_security->debug_logger->log_debug("Nonce check failed on htaccess file save!",4);
                 die("Nonce check failed on htaccess file save!");
             }
-            $htaccess_path = ABSPATH . '.htaccess';
+            
             $result = AIOWPSecurity_Utility_File::backup_and_rename_htaccess($htaccess_path); //Backup the htaccess file
             
             if ($result)
@@ -289,8 +298,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
                 $is_htaccess = AIOWPSecurity_Utility_Htaccess::check_if_htaccess_contents($new_htaccess_file_path);
                 if ($is_htaccess == 1)
                 {
-                    $active_root_htaccess = ABSPATH.'.htaccess';
-                    if (!copy($new_htaccess_file_path, $active_root_htaccess)) 
+                    if (!copy($new_htaccess_file_path, $htaccess_path)) 
                     {
                         //Failed to make a backup copy
                         $aio_wp_security->debug_logger->log_debug("htaccess - Restore from .htaccess operation failed!",4);
@@ -319,8 +327,9 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
             </p>';
             ?>
         </div>
-        <?php 
-        if (AIOWPSecurity_Utility::is_multisite_install() && get_current_blog_id() != 1)
+        <?php
+        $blog_id = get_current_blog_id(); 
+        if (AIOWPSecurity_Utility::is_multisite_install() && !is_main_site( $blog_id ))
         {
            //Hide config settings if MS and not main site
            AIOWPSecurity_Utility::display_multisite_message();
@@ -346,7 +355,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
             <tr valign="top">
                 <th scope="row"><?php _e('.htaccess file to restore from', 'all-in-one-wp-security-and-firewall')?>:</th>
                 <td>
-                    <input type="button" id="aiowps_htaccess_file_button" name="aiowps_htaccess_file_button" class="button rbutton" value="Select Your htaccess File" />
+                    <input type="button" id="aiowps_htaccess_file_button" name="aiowps_htaccess_file_button" class="button rbutton" value="<?php _e('Select Your htaccess File', 'all-in-one-wp-security-and-firewall'); ?>" />
                     <input name="aiowps_htaccess_file" type="text" id="aiowps_htaccess_file" value="" size="80" />
                     <p class="description">
                         <?php
@@ -359,17 +368,6 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
         <input type="submit" name="aiowps_restore_htaccess_button" value="<?php _e('Restore .htaccess File', 'all-in-one-wp-security-and-firewall')?>" class="button-primary" />
         </form>
         </div></div>
-<!--        <div class="postbox">-->
-<!--        <h3 class="hndle"><label for="title">--><?php //_e('View Contents of the currently active .htaccess file', 'all-in-one-wp-security-and-firewall'); ?><!--</label></h3>-->
-<!--        <div class="inside">-->
-<!--            --><?php
-//            $ht_file = ABSPATH . '.htaccess';
-//            $ht_contents = AIOWPSecurity_Utility_File::get_file_contents($ht_file);
-//            //echo $ht_contents;
-//            ?>
-<!--            <textarea class="aio_text_area_file_output aio_half_width aio_spacer_10_tb" rows="15" readonly>--><?php //echo $ht_contents; ?><!--</textarea>-->
-<!--        </div></div>-->
-
         <?php
         } // End if statement
     }
@@ -431,7 +429,8 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
             ?>
         </div>
         <?php 
-        if (AIOWPSecurity_Utility::is_multisite_install() && get_current_blog_id() != 1)
+        $blog_id = get_current_blog_id(); 
+        if (AIOWPSecurity_Utility::is_multisite_install() && !is_main_site( $blog_id ))
         {
            //Hide config settings if MS and not main site
            AIOWPSecurity_Utility::display_multisite_message();
@@ -458,7 +457,7 @@ class AIOWPSecurity_Settings_Menu extends AIOWPSecurity_Admin_Menu
             <tr valign="top">
                 <th scope="row"><?php _e('wp-config file to restore from', 'all-in-one-wp-security-and-firewall')?>:</th>
                 <td>
-                    <input type="button" id="aiowps_wp_config_file_button" name="aiowps_wp_config_file_button" class="button rbutton" value="Select Your wp-config File" />
+                    <input type="button" id="aiowps_wp_config_file_button" name="aiowps_wp_config_file_button" class="button rbutton" value="<?php _e('Select Your wp-config File', 'all-in-one-wp-security-and-firewall'); ?>" />
                     <input name="aiowps_wp_config_file" type="text" id="aiowps_wp_config_file" value="" size="80" />                    
                     <p class="description">
                         <?php
@@ -693,7 +692,7 @@ function render_tab5()
                 <span class="description"><?php _e('Use this section to import your All In One WP Security & Firewall settings from a file. Alternatively, copy/paste the contents of your import file into the textarea below.', 'all-in-one-wp-security-and-firewall'); ?></span>
                 <th scope="row"><?php _e('Import File', 'all-in-one-wp-security-and-firewall')?>:</th>
                 <td>
-                    <input type="button" id="aiowps_import_settings_file_button" name="aiowps_import_settings_file_button" class="button rbutton" value="Select Your Import Settings File" />
+                    <input type="button" id="aiowps_import_settings_file_button" name="aiowps_import_settings_file_button" class="button rbutton" value="<?php _e('Select Your Import Settings File', 'all-in-one-wp-security-and-firewall'); ?>" />
                     <input name="aiowps_import_settings_file" type="text" id="aiowps_import_settings_file" value="" size="80" />
                     <p class="description">
                         <?php
@@ -715,6 +714,78 @@ function render_tab5()
     <?php
     }
 
+    function render_tab6()
+    {
+        global $aio_wp_security;
+        
+        $result = 1;
+        if (isset($_POST['aiowps_save_advanced_settings']))
+        {
+            $nonce=$_REQUEST['_wpnonce'];
+            if (!wp_verify_nonce($nonce, 'aiowpsec-ip-settings-nonce'))
+            {
+                $aio_wp_security->debug_logger->log_debug("Nonce check failed for save advanced settings!",4);
+                die(__('Nonce check failed for save advanced settings!','aiowpsecurity'));
+            }
+            
+            $aio_wp_security->configs->set_value('aiowps_ip_retrieve_method', sanitize_text_field($_POST["aiowps_ip_retrieve_method"]));
+            $aio_wp_security->configs->save_config(); //Save the configuration
+
+            //Clear logged in list because it might be showing wrong addresses
+            if (AIOWPSecurity_Utility::is_multisite_install()){
+                delete_site_transient('users_online');
+            }
+            else{
+                delete_transient('users_online');
+            }
+            
+            $this->show_msg_settings_updated();
+        }
+        ?>
+        <div class="postbox">
+        <h3 class="hndle"><label for="title"><?php _e('IP Retrieval Settings', 'all-in-one-wp-security-and-firewall'); ?></label></h3>
+        <div class="inside">
+        <div class="aio_blue_box">
+            <?php
+            echo '<p>'.__('The IP Retrieval Settings allow you to specify which $_SERVER global variable you want this plugin to use to retrieve the visitor IP address.', 'all-in-one-wp-security-and-firewall').
+            '<br />'.__('By default this plugin uses the $_SERVER[\'REMOTE_ADDR\'] variable to retrieve the visitor IP address. This should normally be the most accurate safest way to get the IP.', 'all-in-one-wp-security-and-firewall').
+            '<br />'.__('However in some setups such as those using proxies, load-balancers and CloudFlare, it may be necessary to use a different $_SERVER variable.', 'all-in-one-wp-security-and-firewall').
+            '<br />'.__('You can use the settings below to configure which $_SERVER global you would like to use for retrieving the IP address.', 'all-in-one-wp-security-and-firewall').'</p>';
+            ?>
+        </div>
+            
+        <form action="" method="POST">
+        <?php wp_nonce_field('aiowpsec-ip-settings-nonce'); ?>            
+        <table class="form-table">
+            <tr valign="top">
+                <td>
+                    <select id="aiowps_ip_retrieve_method" name="aiowps_ip_retrieve_method">
+                        <option value="0" <?php selected( $aio_wp_security->configs->get_value('aiowps_ip_retrieve_method'), '0' ); ?>><?php echo 'REMOTE_ADDR' .' ('.__('Default','all-in-one-wp-security-and-firewall').')'; ?></option>
+                        <option value="1" <?php selected( $aio_wp_security->configs->get_value('aiowps_ip_retrieve_method'), '1' ); ?>><?php echo 'HTTP_CF_CONNECTING_IP'; ?></option>
+                        <option value="2" <?php selected( $aio_wp_security->configs->get_value('aiowps_ip_retrieve_method'), '2' ); ?>><?php echo 'HTTP_X_FORWARDED_FOR'; ?></option>
+                        <option value="3" <?php selected( $aio_wp_security->configs->get_value('aiowps_ip_retrieve_method'), '3' ); ?>><?php echo 'HTTP_X_FORWARDED'; ?></option>
+                        <option value="4" <?php selected( $aio_wp_security->configs->get_value('aiowps_ip_retrieve_method'), '4' ); ?>><?php echo 'HTTP_CLIENT_IP'; ?></option>
+                    </select>
+                <span class="description"><?php _e('Choose a $_SERVER variable you would like to retrieve the visitor IP address from.', 'all-in-one-wp-security-and-firewall'); ?>
+                </span>
+                <span class="aiowps_more_info_anchor"><span class="aiowps_more_info_toggle_char">+</span><span class="aiowps_more_info_toggle_text"><?php _e('More Info', 'all-in-one-wp-security-and-firewall'); ?></span></span>
+                <div class="aiowps_more_info_body">
+                    <p class="description">
+                        <?php 
+                        _e('If your chosen server variable fails the plugin will automatically fall back to retrieving the IP address from $_SERVER["REMOTE_ADDR"]', 'all-in-one-wp-security-and-firewall');
+                        ?>
+                    </p>
+                </div>
+                </td> 
+            </tr>            
+        </table>
+        <input type="submit" name="aiowps_save_advanced_settings" value="<?php _e('Save Settings', 'all-in-one-wp-security-and-firewall')?>" class="button-primary" />
+        </form>
+        </div></div>
+        <?php
+        
+    }
+    
     function check_if_wp_config_contents($wp_file)
     {
         $is_wp_config = false;

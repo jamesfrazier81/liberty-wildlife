@@ -1,12 +1,9 @@
 <?php if(!defined('LS_ROOT_FILE')) { header('HTTP/1.0 403 Forbidden'); exit; } ?>
 <script type="text/html" id="tmpl-insert-media-modal">
 	<div id="tmpl-insert-media-modal-window">
-		<header>
-			<h1><?php _e('Insert Media', 'LayerSlider') ?></h1>
-			<b class="dashicons dashicons-no"></b>
-		</header>
-		<div class="km-ui-modal-scrollable">
+		<h1 class="kmw-modal-title"><?php _e('Insert Media', 'LayerSlider') ?></h1>
 
+		<div class="clearfix">
 			<div class="ls-left">
 
 				<div class="ls-url divider">
@@ -35,5 +32,6 @@
 				<div class="ls-media-preview"></div>
 			</div>
 		</div>
+
 	</div>
 </script>

@@ -192,7 +192,7 @@
 			var current = $(this), links = current.find('.avia-tab-title-container a'), tabs = current.find('.avia-tab'), currentLink;
 				
 				
-				links.unbind('click').bind('click', function()
+				links.off('click').on('click', function()
 				{
 					links.removeClass('active-tab');
 					currentLink = $(this).addClass('active-tab');
@@ -322,7 +322,7 @@
 			{
 				//create the cloned tab controls with buttons
 				button_container = $('<div class="avia-expanded-buttons"></div>').appendTo(clone_tab);
-				preview_button.clone(true).appendTo(button_container).bind('click', function()
+				preview_button.clone(true).appendTo(button_container).on('click', function()
 				{ 
 					//hackish way to switch to the wordpress preview window
 					 setTimeout( function(){ var wp_prev = window.open('', 'wp-preview', ''); wp_prev.focus(); },10);

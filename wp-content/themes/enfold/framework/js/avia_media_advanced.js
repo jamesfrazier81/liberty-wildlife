@@ -226,7 +226,7 @@
 				update_gal = $('<input type="submit" id="avia_insert_all" class="button savebutton" value="Add all Images to Slideshow"/>'),
 				loading 	= $('<div class="avia_gallery_loading avia_gallery_loading_all"></div>')		
 							
-				update_gal.appendTo(submit).bind('click', function()
+				update_gal.appendTo(submit).on('click', function()
 				{
 					var data = {};
 					data.activate_filter = 'avia_ajax_fetch_all';

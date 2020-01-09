@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
 
 function avia_prepare_dynamic_styles($options = false)
 {
@@ -120,9 +122,18 @@ function avia_prepare_dynamic_styles($options = false)
 			$repeat = $color_set[$key]['repeat'] == "fullscreen" ? "no-repeat" : $color_set[$key]['repeat'];
 			
 			$color_set[$key]['img'] = trim($color_set[$key]['img']);
+			
+			if(is_numeric($color_set[$key]['img']))
+			{
+				$color_set[$key]['img'] = wp_get_attachment_image_src($color_set[$key]['img'], 'full'); 
+				$color_set[$key]['img'] = $color_set[$key]['img'][0];
+			}
+			
 			$url = empty($color_set[$key]['img']) ? "" : "url(".$color_set[$key]['img'].")";
 
 			$color_set[$key]['background_image'] = "$bg $url ".$color_set[$key]['pos']."  ".$repeat." ".$color_set[$key]['attach'];
+			
+		
 		}
 
 		if(isset($color_set[$key]['customimage'])) unset($color_set[$key]['customimage']);

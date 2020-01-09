@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
 
 function avia_bbpress_enabled()
 {
@@ -49,9 +51,9 @@ add_filter('bbp_get_single_topic_description', 'avia_bbpress_filter_form_message
 
 
 
-add_filter('avia_style_filter', 'avia_bbpress_forum_colors');
+add_filter( 'avia_style_filter', 'avia_bbpress_forum_colors', 10, 1 );
 /* add some color modifications to the forum table items */
-function avia_bbpress_forum_colors($config)
+function avia_bbpress_forum_colors( array $config )
 {
 	
 	return $config;
@@ -185,4 +187,77 @@ if(!function_exists('avia_remove_bbpress_post_type_from_query'))
 	add_filter('avf_accordion_entries_query', 'avia_remove_bbpress_post_type_from_query', 10, 2);
 }
 
+
+
+if( ! function_exists( 'avia_bbpress_avf_post_nav_settings' ) )
+{
+	/**
+	 * Remove bbPress pottpes from post nav links
+	 * 
+	 * @since 4.5.6
+	 * @param array $settings
+	 * @return array
+	 */
+	function avia_bbpress_avf_post_nav_settings( array $settings )
+	{
+		if( in_array( $settings['type'], array( 'topic',  'reply' ) ) )
+		{
+			$settings['skip_output'] = true;
+		}
+		
+		return $settings;
+	}
+	
+	add_filter( 'avf_post_nav_settings', 'avia_bbpress_avf_post_nav_settings', 10, 1 );
+}
+
+
+if( ! function_exists( 'avia_bbpress_before_page_in_footer_compile' ) )
+{
+	/**
+	 * BBPress alters the content filter on its pages. We need to reset this to allow our shortcodes to run
+	 * 
+	 * @since 4.5.6.1
+	 * @param WP_Post $footer_page
+	 * @param int $post_id
+	 */
+	function avia_bbpress_before_page_in_footer_compile( WP_Post $footer_page, $post_id )
+	{
+		$current = get_post( $post_id );
+		$forum_page = false;
+		
+		if( bbp_is_single_user() || bbp_is_single_user_edit() || bbp_is_user_home() || bbp_is_user_home_edit()  )
+		{
+			$forum_page = true;
+		}
+		else if( bbp_is_topics_created() || bbp_is_replies_created() || bbp_is_favorites() || bbp_is_subscriptions() )
+		{
+			$forum_page = true;
+		}
+		else if( bbp_is_forum_archive() )
+		{
+			$forum_page = true;
+		}
+		else
+		{
+			if( ! $current instanceof WP_Post )
+			{
+				return;
+			}
+		}
+		
+		$bbp_post_types = array(
+								bbp_get_forum_post_type(),
+								bbp_get_topic_post_type(),
+								bbp_get_reply_post_type()
+							);
+		
+		if( $forum_page || in_array( $current->post_type, $bbp_post_types ) )
+		{
+			bbp_restore_all_filters( 'the_content' );
+		}
+	}
+	
+	add_action( 'ava_before_page_in_footer_compile', 'avia_bbpress_before_page_in_footer_compile', 10, 2 );
+}
 

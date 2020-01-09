@@ -1,29 +1,33 @@
 <?php
 /**
  * DROPCAPS
+ * 
  * Shortcode which creates dropcaps
  */
  
  // Don't load directly
-if ( !defined('ABSPATH') ) { die('-1'); }
+if ( ! defined('ABSPATH') ) { die( '-1' ); }
 
 
 
-if ( !class_exists( 'av_dropcap1' ) ) 
+if ( ! class_exists( 'av_dropcap1' ) ) 
 {
-	class av_dropcap1 extends aviaShortcodeTemplate{
+	class av_dropcap1 extends aviaShortcodeTemplate
+	{
 			
 			/**
 			 * Create the config array for the shortcode button
 			 */
 			function shortcode_insert_button()
 			{
-				$this->config['name']		= 'Dropcap 1 (Big Letter)';
-				$this->config['order']		= 100;
-				$this->config['shortcode'] 	= 'av_dropcap1';
-				$this->config['inline'] 	= true;
-				$this->config['html_renderer'] 	= false;
-				$this->config['tinyMCE'] 	= array('tiny_only'=>true, 'instantInsert' => "[av_dropcap1]H[/av_dropcap1]ello");
+				$this->config['self_closing']	=	'no';
+				
+				$this->config['name']			= 'Dropcap 1 (Big Letter)';
+				$this->config['order']			= 100;
+				$this->config['shortcode']		= 'av_dropcap1';
+				$this->config['inline']			= true;
+				$this->config['html_renderer']	= false;
+				$this->config['tinyMCE']		= array( 'tiny_only' => true, 'instantInsert' => "[av_dropcap1]H[/av_dropcap1]ello" );
 				
 			}
 			
@@ -35,12 +39,15 @@ if ( !class_exists( 'av_dropcap1' ) )
 			 * @param string $shortcodename the shortcode found, when == callback name
 			 * @return string $output returns the modified html string 
 			 */
-			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
+			function shortcode_handler( $atts, $content = "", $shortcodename = "", $meta = "" )
 			{
 				//this is a fix that solves the false paragraph removal by wordpress if the dropcaps shortcode is used at the beginning of the content of single posts/pages
 				global $post, $avia_add_p;
 
-				$atts =  shortcode_atts(array('color' => '','custom_bg' => '#444444'), $atts, $this->config['shortcode']);
+				$atts = shortcode_atts(array(
+							'color'		=> '',
+							'custom_bg'	=> '#444444'
+						), $atts, $this->config['shortcode'] );
 				
 				$add_p = "";
 				$custom_class = !empty($meta['custom_class']) ? $meta['custom_class'] : "";
@@ -69,22 +76,25 @@ if ( !class_exists( 'av_dropcap1' ) )
 }
 
 
-if ( !class_exists( 'av_dropcap2' ) ) 
+if ( ! class_exists( 'av_dropcap2' ) ) 
 {
-	class av_dropcap2 extends av_dropcap1{
+	class av_dropcap2 extends av_dropcap1
+	{
 			
 			/**
 			 * Create the config array for the shortcode button
 			 */
 			function shortcode_insert_button()
 			{
-				$this->config['name']		= 'Dropcap 2 (Colored Background)';
-				$this->config['order']		= 90;
-				$this->config['shortcode'] 	= 'av_dropcap2';
-				$this->config['html_renderer'] 	= false;
-				$this->config['inline'] 	= true;
-				$this->config['tinyMCE'] 	= array('tiny_only'=>true, 'templateInsert'=>'[av_dropcap2 color="{{color}}" custom_bg="{{custom_bg}}"]H[/av_dropcap2]ello');
-				//$this->config['modal_data'] = array('modal_class' => 'smallscreen');
+				$this->config['self_closing']	=	'no';
+				
+				$this->config['name']			= 'Dropcap 2 (Colored Background)';
+				$this->config['order']			= 90;
+				$this->config['shortcode']		= 'av_dropcap2';
+				$this->config['html_renderer']	= false;
+				$this->config['inline']			= true;
+				$this->config['tinyMCE']		= array( 'tiny_only' => true, 'templateInsert' => '[av_dropcap2 color="{{color}}" custom_bg="{{custom_bg}}"]H[/av_dropcap2]ello' );
+				//$this->config['modal_data']	= array('modal_class' => 'smallscreen');
 			}
 			
 			/**

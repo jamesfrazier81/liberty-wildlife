@@ -44,7 +44,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		public $allTabs;
 
 		/**
-		 * multidimentional array of the fields that will be generated
+		 * multidimensional array of the fields that will be generated
 		 * for the entire settings panel, tabs are represented in the array keys
 		 * @var array
 		 */
@@ -144,6 +144,18 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 			'the-events-calendar/the-events-calendar.php',
 			'event-tickets/event-ticket.php',
 		);
+
+		/**
+		 * An associative array in the form [ <tab-slug> => array(...<fields>) ]
+		 * @var array
+		 */
+		protected $fields_for_save = array();
+
+		/**
+		 * An array that contains the fields that are currently being validated.
+		 * @var array
+		 */
+		protected $current_fields = array();
 
 		/**
 		 * Static Singleton Factory Method
@@ -283,45 +295,51 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		 * @return void
 		 */
 		public function initTabs() {
-			if ( isset( $_GET['page'] ) && $_GET['page'] == $this->adminSlug ) {
-				// Load settings tab-specific helpers and enhancements
-				Tribe__Admin__Live_Date_Preview::instance();
-
-				do_action( 'tribe_settings_do_tabs' ); // this is the hook to use to add new tabs
-				$this->tabs       = (array) apply_filters( 'tribe_settings_tabs', array() );
-				$this->allTabs    = (array) apply_filters( 'tribe_settings_all_tabs', array() );
-				$this->noSaveTabs = (array) apply_filters( 'tribe_settings_no_save_tabs', array() );
-				if ( is_network_admin() ) {
-					$this->defaultTab = apply_filters( 'tribe_settings_default_tab_network', 'network' );
-					$this->currentTab = apply_filters( 'tribe_settings_current_tab', ( isset( $_GET['tab'] ) && $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : $this->defaultTab );
-					$this->url        = apply_filters(
-						'tribe_settings_url', add_query_arg(
-							array(
-								'page' => $this->adminSlug,
-								'tab'  => $this->currentTab,
-							), network_admin_url( 'settings.php' )
-						)
-					);
-				}
-				if ( ! is_network_admin() ) {
-					$tabs_keys        = array_keys( $this->tabs );
-					$this->defaultTab = in_array( apply_filters( 'tribe_settings_default_tab', 'general' ), $tabs_keys ) ? apply_filters( 'tribe_settings_default_tab', 'general' ) : $tabs_keys[0];
-					$this->currentTab = apply_filters( 'tribe_settings_current_tab', ( isset( $_GET['tab'] ) && $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : $this->defaultTab );
-					$this->url        = apply_filters(
-						'tribe_settings_url', add_query_arg(
-							array(
-								'page' => $this->adminSlug,
-								'tab'  => $this->currentTab,
-							),
-							admin_url( self::$parent_page )
-						)
-					);
-				}
-				$this->fields_for_save = (array) apply_filters( 'tribe_settings_fields', array() );
-				do_action( 'tribe_settings_after_do_tabs' );
-				$this->fields = (array) apply_filters( 'tribe_settings_fields', array() );
-				$this->validate();
+			if (
+				empty( $_GET['page'] )
+				|| $_GET['page'] != $this->adminSlug
+			) {
+				return;
 			}
+
+			// Load settings tab-specific helpers and enhancements
+			Tribe__Admin__Live_Date_Preview::instance();
+
+			do_action( 'tribe_settings_do_tabs' ); // this is the hook to use to add new tabs
+			$this->tabs       = (array) apply_filters( 'tribe_settings_tabs', [] );
+			$this->allTabs    = (array) apply_filters( 'tribe_settings_all_tabs', [] );
+			$this->noSaveTabs = (array) apply_filters( 'tribe_settings_no_save_tabs', [] );
+
+			if ( is_network_admin() ) {
+				$this->defaultTab = apply_filters( 'tribe_settings_default_tab_network', 'network' );
+				$this->currentTab = apply_filters( 'tribe_settings_current_tab', ( isset( $_GET['tab'] ) && $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : $this->defaultTab );
+				$this->url        = apply_filters(
+					'tribe_settings_url', add_query_arg(
+						[
+							'page' => $this->adminSlug,
+							'tab'  => $this->currentTab,
+						], network_admin_url( 'settings.php' )
+					)
+				);
+			} else {
+				$tabs_keys        = array_keys( $this->tabs );
+				$this->defaultTab = in_array( apply_filters( 'tribe_settings_default_tab', 'general' ), $tabs_keys ) ? apply_filters( 'tribe_settings_default_tab', 'general' ) : $tabs_keys[0];
+				$this->currentTab = apply_filters( 'tribe_settings_current_tab', ( isset( $_GET['tab'] ) && $_GET['tab'] ) ? esc_attr( $_GET['tab'] ) : $this->defaultTab );
+				$this->url        = apply_filters(
+					'tribe_settings_url', add_query_arg(
+						[
+							'page' => $this->adminSlug,
+							'tab'  => $this->currentTab,
+						],
+						admin_url( self::$parent_page )
+					)
+				);
+			}
+
+			$this->fields_for_save = (array) apply_filters( 'tribe_settings_fields', [] );
+			do_action( 'tribe_settings_after_do_tabs' );
+			$this->fields = (array) apply_filters( 'tribe_settings_fields', [] );
+			$this->validate();
 		}
 
 		/**
@@ -333,7 +351,6 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		public function generatePage() {
 			do_action( 'tribe_settings_top' );
 			echo '<div class="tribe_settings wrap">';
-			screen_icon();
 			echo '<h1>';
 			printf( esc_html__( '%s Settings', 'tribe-common' ), $this->menuName );
 			echo '</h1>';
@@ -436,7 +453,7 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 
 				// set the current tab and current fields
 				$tab    = $this->currentTab;
-				$fields = $this->fields_for_save[ $tab ];
+				$fields = $this->current_fields = $this->fields_for_save[ $tab ];
 
 				if ( is_array( $fields ) ) {
 					// loop through the fields and validate them
@@ -446,12 +463,15 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 						$value = apply_filters( 'tribe_settings_validate_field_value', $value, $field_id, $field );
 
 						// make sure it has validation set up for it, else do nothing
-						if ( ( ! isset( $field['conditional'] ) || $field['conditional'] ) && ( ! empty( $field['validation_type'] ) || ! empty( $field['validation_callback'] ) ) ) {
+						if (
+							( ! isset( $field['conditional'] ) || $field['conditional'] )
+							&& ( ! empty( $field['validation_type'] ) || ! empty( $field['validation_callback'] ) )
+						) {
 							// some hooks
 							do_action( 'tribe_settings_validate_field', $field_id, $value, $field );
 							do_action( 'tribe_settings_validate_field_' . $field_id, $value, $field );
 
-							// validate this sucka
+							// validate this field
 							$validate = new Tribe__Validate( $field_id, $field, $value );
 
 							if ( isset( $validate->result->error ) ) {
@@ -464,6 +484,13 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 								$this->validated[ $field_id ]->value = $validate->value;
 							}
 						}
+					}
+
+					// do not generate errors for dependent fields that should not show
+					if ( ! empty( $this->errors ) ) {
+						$keep         = array_filter( array_keys( $this->errors ), array( $this, 'dependency_checks' ) );
+						$compare = empty( $keep ) ? array() : array_combine( $keep, $keep );
+						$this->errors = array_intersect_key( $this->errors, $compare );
 					}
 
 					// run the saving method
@@ -719,6 +746,43 @@ if ( ! class_exists( 'Tribe__Settings' ) ) {
 		 */
 		public function set_root_plugins( array $root_plugins ) {
 			$this->root_plugins = $root_plugins;
+		}
+
+		/**
+		 * Whether the specified field dependency condition is valid or not depending on
+		 * its parent field value.
+		 *
+		 * @since 4.7.7
+		 *
+		 * @param string $field_id The id of the field that might be removed.
+		 *
+		 * @return bool `true` if the field dependency condition is valid, `false` if the field
+		 *              dependency condition is not valid.
+		 */
+		protected function dependency_checks( $field_id ) {
+			$does_not_exist = ! array_key_exists( $field_id, $this->current_fields );
+
+			if ( $does_not_exist ) {
+				return false;
+			}
+
+			$has_no_dependency = ! isset( $this->current_fields[ $field_id ]['validate_if'] );
+
+			if ( $has_no_dependency ) {
+				return true;
+			}
+
+			$condition = $this->current_fields[ $field_id ]['validate_if'];
+
+			if ( $condition instanceof Tribe__Field_Conditional ) {
+				$parent_field = Tribe__Utils__Array::get( $this->validated, $condition->depends_on(), null );
+
+				return $condition->check( $parent_field->value, $this->current_fields );
+			}
+
+			return is_callable( $condition )
+				? call_user_func( $condition, $this->current_fields )
+				: true == $condition;
 		}
 	} // end class
 } // endif class_exists

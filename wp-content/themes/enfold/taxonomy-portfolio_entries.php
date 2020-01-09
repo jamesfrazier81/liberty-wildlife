@@ -56,4 +56,7 @@
 		</div><!-- close default .container_wrap element -->
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();
+		
+		

@@ -1,3 +1,299 @@
+#ls-slide-tabs {
+	position: relative;
+	z-index: 1;
+	counter-reset: slides;
+
+	.ui-sortable-helper {
+		position: absolute !important;
+	}
+
+	.ls-slide-tab {
+		position: relative;
+		width: 145px;
+		height: 80px;
+		border: 3px solid white;
+		border-radius: 4px;
+		float: left;
+		margin: 0 15px 15px 0px;
+		overflow: hidden;
+		background: white;
+		box-shadow: 0 0 0 3px transparent;
+
+		&:not(.skip) {
+			counter-increment: slides;
+		}
+
+		.ls-slide-counter {
+			position: absolute;
+			left: 5px;
+			top: 5px;
+
+			min-width: 12px;
+			height: 18px;
+			padding: 0 3px;
+			background: rgba( 0, 0, 0, 0.6 );
+			border-radius: 100%;
+			z-index: 999;
+
+			line-height: 18px;
+			font-weight: 600;
+			font-size: 10px;
+			text-align: center;
+			color: white;
+
+
+			&:before {
+				content: counter(slides);
+			}
+		}
+
+		&.active {
+			border: 3px solid white;
+			box-shadow: 0 0 0 3px #bbb;
+		}
+
+		&.empty {
+		}
+
+		&.skip {
+
+			.ls-slide-preview {
+				opacity: 0.6;
+			}
+
+			.ls-slide-counter {
+				display: none !important;
+			}
+
+			.ls-slide-hidden {
+				display: block;
+			}
+
+			.ls-slide-visibility span {
+				&:first-child {
+					display: none;
+				}
+
+				&:last-child {
+					display: block;
+				}
+			}
+		}
+
+		&:hover {
+
+			.ls-slide-actions {
+				visibility: visible;
+				opacity: 1;
+			}
+		}
+
+		&.empty .ls-slide-preview span {
+			display: block !important;
+		}
+
+		&.slide-actions-opened .ls-slide-preview {
+			filter: blur(7px) saturate(120%);
+		}
+
+		.ls-slide-hidden {
+			display: none;
+			position: absolute;
+			top: 2px;
+			left: 2px;
+			z-index: 999;
+			font-size: 18px;
+			text-shadow: 0 0 12px white;
+		}
+
+		.ls-slide-actions {
+
+			position: absolute;
+			z-index: 3;
+			top: 5px;
+			right: 5px;
+
+			width: 18px;
+			height: 17px;
+			padding-top: 1px;
+			background: rgba( 0, 0, 0, 0.6 );
+			border-radius: 100%;
+
+			font-size: 16px;
+			cursor: pointer;
+			color: white;
+			line-height: 18px;
+			text-align: center;
+
+			visibility: hidden;
+			opacity: 0;
+			transition: opacity 0.5s;
+		}
+
+		.ls-slide-actions-sheet {
+			position: absolute;
+			z-index: 5;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+			background: rgba(0,0,0,0.5);
+			transform: translateY(-80px);
+			border-radius: 3px;
+
+			li {
+				position: relative;
+				top: 5px;
+				height: 20px;
+				padding-top: 3px;
+				margin: 0;
+				border-top: 1px solid rgba( 255, 255, 255, 0.05 );
+				border-bottom: 1px solid rgba( 255, 255, 255, 0.05 );
+				color: #fff;
+				font-size: 13px;
+				cursor: pointer;
+
+				&:first-child {
+					margin-bottom: -1px;
+					border-top: 0;
+				}
+
+				&:last-child {
+					margin-top: -1px;
+					border-bottom: 0;
+				}
+
+				&:hover {
+					background: rgba(255, 255, 255, 0.1);
+				}
+
+				span {
+					position: absolute;
+					top: 0;
+					bottom: 0;
+					left: 5px;
+					right: 5px;
+					padding: 2px;
+
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.dashicons {
+					font-size: 16px;
+				}
+			}
+		}
+
+		.ls-slide-preview {
+			position: absolute;
+			z-index: 2;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background-size: cover;
+			cursor: pointer;
+			border-radius: 3px;
+			border: 1px solid #ddd;
+
+			span {
+				display: none;
+				line-height: 60px;
+				text-align: center;
+				color: #666;
+				font-size: 14px;
+			}
+		}
+
+		.ls-slide-visibility {
+			span:last-child {
+				display: none;
+			}
+		}
+
+		.ls-slide-name {
+			position: absolute;
+			z-index: 3;
+			height: 20px;
+			bottom: 1px;
+			left: 1px;
+			right: 1px;
+			background: rgba(0,0,0,0.6);
+			border-bottom-left-radius: 3px;
+			border-bottom-right-radius: 3px;
+
+
+			input {
+				display: block;
+				width: 100%;
+				padding: 0 5px;
+				margin: 0;
+				border: 0;
+				outline: none;
+				background: transparent !important;
+				border-radius: 0 !important;
+				color: #fff;
+				line-height: 20px;
+				white-space: nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				border-bottom-left-radius: 3px;
+				border-bottom-right-radius: 3px;
+
+				&::placeholder {
+					color: #bbb !important;
+				}
+			}
+		}
+	}
+}
+
+.ls-slide-controls {
+	position: relative;
+	width: 78px;
+	height: 78px;
+	border: 1px dashed #ccc;
+	border-radius: 3px;
+	float: left;
+	margin: 3px 15px 15px 0px;
+	overflow: hidden;
+	color: #999;
+	text-align: center;
+	cursor: pointer;
+
+	div {
+		width: 100%;
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.dashicons {
+		display: block;
+		width: 100%;
+		height: 34px;
+
+		font-size: 36px;
+	}
+}
+
+#ls-add-slide {
+
+}
+
+#ls-import-slide {
+
+	.dashicons {
+		font-size: 30px;
+	}
+}
+
+
 #ls-layers .ls-slide-options span.desc {
 	color: #999;
 	font-size: 12px;
@@ -183,6 +479,15 @@
 				box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
 				min-height: 0 !important;
 
+				li {
+					padding: 0;
+				}
+
+				a {
+					display: block;
+					padding: 5px;
+				}
+
 				&:before {
 					background: white;
 					box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
@@ -304,6 +609,34 @@
 	}
 }
 
+#ls-layers .ls-custom-slide-properties {
+	margin: 7px 10px;
+
+	td {
+		border: 0 !important;
+	}
+
+	td:first-child {
+		width: 70px;
+		padding-right: 10px !important;
+
+		input {
+			width: 70px;
+		}
+	}
+
+	td:last-child {
+
+		input {
+			width: 100%;
+		}
+	}
+
+	input.error {
+		border: 1px solid #e11325;
+	}
+}
+
 
 .ls-slide-link {
 
@@ -371,14 +704,17 @@ div.ls-image {
 	&.has-image:hover:after {
 		content: attr(data-l10n-set);
 		position: absolute;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		top: 50%;
+		left: 50%;
+
+		width: 140px;
+		padding: 0 5px;
+		transform: translate(-50%, -50%);
+
+		white-space: normal;
 		cursor: pointer;
+		font-size: 13px;
 		text-align: center;
-		line-height: 50px;
-		font-size: 14px;
 		text-transform: uppercase;
 		color: #555;
 		text-shadow: 0 0 1px white;
@@ -408,31 +744,44 @@ div.ls-image {
 		border-radius: 50%;
 	}
 
-	&.hover a.aviary {
+	&.hover a.pixie {
 		top: -6px;
-		left: -10px;
-		width: 27px;
+		left: -8px;
+		width: 20px;
 		height: 20px;
-		background: url('../img/cclogo.png') 50% 50% no-repeat;
-	    background-size: contain;
-		border-radius: 0;
+	    background: transparent;
+	    color: #555;
+	    text-align: center;
+	    line-height: 20px;
 		cursor: pointer;
+		text-shadow: 0px 0px 5px white;
+
+
+		&:after {
+			content: "\f100";
+			font-family: dashicons;
+			font-size: 26px;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
 	}
 }
 
-#ls-post-options {
-	display: none;
+#ls-post-options-window {
+
+	.kmw-modal-inner {
+		margin: 0 0 10px 0 !important;
+	}
+}
+
+#tmpl-post-options {
+
+	#ls-post-options {
+		display: none;
+	}
 }
 
 .ls-configure-posts-modal {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	z-index: 2001;
-	width: 800px;
-	height: auto !important;
-	margin: -329px 0 0 -400px;
-	box-shadow: 0 0 5px 2px #666;
 
 	.header {
 		a {
@@ -445,7 +794,8 @@ div.ls-image {
 	}
 
 	.subheader {
-		margin: 0;
+		margin: 10px 0 10px 0;
+		font-size: 13px;
 	}
 
 	.preview-subheader {
@@ -453,7 +803,6 @@ div.ls-image {
 	}
 
 	.inner {
-		background: white;
 		text-align: center;
 	}
 
@@ -491,12 +840,12 @@ div.ls-image {
 }
 
 .ls-post-filters {
-	width: 720px;
+	width: 800px;
 	margin: 0 auto;
 
 	select {
 		float: left;
-		margin: 0 10px 10px 0;
+		margin: 0 14px 10px 14px;
 
 		&.ls-post-taxonomy {
 			height: 26px;
@@ -552,6 +901,7 @@ div.ls-image {
 		margin: 0;
 		padding: 10px;
 		border-bottom: 1px solid #dfdfdf;
+		overflow: hidden;
 
 		h4 {
 			margin-top: 80px;
@@ -591,7 +941,7 @@ div.ls-image {
 			font-family: Arial;
 		}
 
-		p {
+		.content {
 			height: 32px;
 			margin: 5px 0 0 105px;
 			text-align: justify;
@@ -605,6 +955,7 @@ div.ls-image {
 			top: 10px;
 			right: 10px;
 			color: #999;
+			font-size: 13px;
 		}
 
 	}
@@ -700,7 +1051,7 @@ div.ls-image {
 	display: inline-block;
 	height: 23px;
 	padding: 0 0 0 22px;
-	margin: 0 15px 8px 0;
+	margin: 0 20px 8px 0;
 	float: left;
 	background: url(../img/tag.png) no-repeat left top;
 	cursor: pointer;
@@ -1263,7 +1614,7 @@ select.sublayerprop.connect-hover {
 	transform-origin: 0 0;
 	pointer-events: none;
 
-	iframe {
+	iframe, video {
 		width: 100%;
 		height: 100%;
 	}
@@ -1280,6 +1631,10 @@ select.sublayerprop.connect-hover {
 		iframe, video {
 			width: 100% !important;
 			height: 100% !important;
+		}
+
+		video {
+			object-fit: cover;
 		}
 
 		.video-overlay {
@@ -1317,10 +1672,14 @@ select.sublayerprop.connect-hover {
 
 	.ls-layer-placeholder {
 		width: 144px !important;
-		background: rgba(0, 0, 0, 0.5);
-		color: white;
+		height: 144px !important;
+		background: rgba(0, 0, 0, 0.5) !important;
+		color: white !important;
+		font-family: inherit !important;
+		font-weight: normal !important;
+		line-height: 15px !important;
 		text-align: center !important;
-		border-radius: 5px;
+		border-radius: 5px !important;
 
 		.dashicons {
 			display: block;
@@ -1523,7 +1882,7 @@ $ruler-size: 16px;
 				.3em 0 0 0 $ruler-color,
 				.5em 0 0 0 $ruler-color,
 				.7em 0 0 0 $ruler-color,
-				.9em 0 0 0 $ruler-color,
+				.9em 0 0 0 $ruler-color;
 		}
 	}
 	.ls-ruler-num {
@@ -1649,6 +2008,7 @@ $ruler-size: 16px;
 
 .ls-preview-context-menu {
 	position: absolute;
+	z-index: 99999;
 
 	ul {
 		position: relative;
@@ -1658,7 +2018,6 @@ $ruler-size: 16px;
 		background: rgba(0, 0, 0, 0.9);
 		border-radius: 10px;
 		box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.6);
-		z-index: 99999;
 
 		.divider {
 			height: 1px;
@@ -1701,6 +2060,14 @@ $ruler-size: 16px;
 			.dashicons {
 				font-size: 16px;
 				line-height: 28px;
+				transition: none;
+			}
+
+			span {
+				width: 185px !important;
+				margin-left: 0 !important;
+				white-space: pre;
+				text-overflow: ellipsis;
 			}
 
 			p {
@@ -1994,6 +2361,7 @@ $ruler-size: 16px;
 #tmpl-import-slide-modal-window {
 
 	.columns {
+		text-align: center;
 
 		.half {
 			position: absolute;
@@ -2053,4 +2421,8 @@ $ruler-size: 16px;
 			}
 		}
 	}
+}
+
+#tmpl-import-layer-modal-window {
+	text-align: center;
 }

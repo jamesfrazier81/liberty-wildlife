@@ -25,4 +25,4 @@ if ( !defined('ABSPATH') ) { die('-1'); } ?>
 
 <div class="tribe-clear"></div>
 
-<?php do_action( 'tribe_events_after_template' ) ?>
+<?php do_action( 'tribe_events_after_template' );

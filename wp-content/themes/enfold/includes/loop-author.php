@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 global $avia_config, $post_loop_count;
 
 
@@ -168,12 +171,27 @@ if (have_posts()) :
 	$post_loop_count++;
 	endwhile;
 	else:
+		
+			$default_heading = 'h1';
+			$args = array(
+						'heading'		=> $default_heading,
+						'extra_class'	=> ''
+					);
+			
+			/**
+			 * @since 4.5.5
+			 * @return array
+			 */
+			$args = apply_filters( 'avf_customize_heading_settings', $args, 'loop_author::nothing_found', array() );
+			
+			$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+			$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
 
 ?>
 
         <article class="entry">
             <header class="entry-content-header">
-                <h1 class='post-title entry-title'><?php _e('Nothing Found', 'avia_framework'); ?></h1>
+				<?php echo "<{$heading} class='post-title entry-title {$css}'>" . __( 'Nothing Found', 'avia_framework' ) . "</{$heading}>"; ?>
             </header>
 
             <p class="entry-content" <?php avia_markup_helper(array('context' => 'entry_content')); ?>><?php _e('Sorry, no posts matched your criteria', 'avia_framework'); ?></p>
@@ -190,4 +208,3 @@ if (have_posts()) :
 		echo avia_pagination('', 'nav');
 		// paginate_links(); posts_nav_link(); next_posts_link(); previous_posts_link();
 	}
-?>

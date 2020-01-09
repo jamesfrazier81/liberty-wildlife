@@ -20,7 +20,7 @@
 
 #avia_options_page *{
 -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;
-font-size:13px;
+font-size:14px;
 line-height: 1.5em;
 }
 
@@ -183,14 +183,17 @@ font-size: 14px;
 }
 
 
-
 #avia_options_page .avia_sidebar_active .avia_checkbox .avia_description{
-	padding-left:0;
+	padding-left: 0;
 	position: relative;
-	left:-10px;
+	left: -10px;
 	top: -3px;
 }
 
+#avia_options_page.av-use-toggles .avia_sidebar_active .avia_checkbox .avia_description{
+	left: 25px;
+	top: 4px;
+}
 
 #avia_options_page .av-wizard-subcontainer .avia_style_wrap .avia_select_fake_val{
 	top:0;
@@ -424,6 +427,10 @@ background: #0085ba;
 	padding: 12px;
 }
 
+#avia_options_page textarea.av_small_textarea{
+	height:90px;
+}
+
 .inactive_visible .avia_inactive_overlay span{
 	    position: absolute;
   top: 50%;
@@ -514,12 +521,21 @@ right:28px;
 .av-verification-response-wrapper .av-text-notice{
 	border:none;
 	padding: 20px;
-	    background: #0085ba;
+	background: #0085ba;
+}
+
+.av-verification-result{
+	float: left;
+	width: 100%;
 }
 
 .av-verification-result .av-text-notice.av-notice-error{
-	    background: #23282d;
-	    border:none;
+	background: #23282d;
+	border:none;
+}
+
+.av-prev-el-notice{
+	margin-top: -25px;
 }
 
 .av-verification-cell{
@@ -708,6 +724,100 @@ div .avia_cur_lang{
 	color:#0085ba;
 }
 
+#wpwrap #avia_options_page .avia_section.av_3columns select, #wpwrap #avia_options_page .avia_section.av_3columns input{
+	width: 100%;
+}
+
+#wpwrap #avia_options_page .avia_section.av_3columns, #wpwrap #avia_options_page .avia_section.av_3col{
+    padding: 5px 0 5px 20px;
+}
+
+#wpwrap #avia_options_page .avia_section.av_2columns{
+	padding: 5px 0 5px 20px;
+}
+
+#avia_options_page .av-recaptcha-verify{
+	display: inline-block;
+	padding: 10px;
+	background-color: #fff;
+}
+
+/* ======================================================================================================================================================
+Toggles Backend
+====================================================================================================================================================== */
+ 
+#avia_options_page .av-toggle-switch{
+	position: relative;
+	top: -10px;
+	display: block; 
+	margin-bottom: 10px; 
+	margin-top:10px;	
+	opacity: 0;
+	text-align: left;
+} 
+
+#avia_options_page .av-toggle-switch.active{	
+	-webkit-animation: avia-fadein 1s 1 ease-in; /* Safari 4+ */
+	animation:         avia-fadein 1s 1 ease-in; /* IE 10+ */
+	opacity: 1;
+}
+
+#avia_options_page .av-toggle-switch input[type="checkbox"] {
+	display:none;
+}
+
+#avia_options_page .av-toggle-switch label {
+	cursor: pointer; 
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#avia_options_page .av-toggle-switch label .toggle-track {
+	display: block; 
+	height: 27px; 
+	width: 54px;
+	background: rgba(0, 0, 0, 0.08); 
+	border-radius: 100px;
+	position: relative;
+	margin-right: 15px;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	clear: both;
+	vertical-align: bottom;
+	float: left;
+	transition:all .1s ease-in;
+}
+
+#avia_options_page .av-toggle-switch .toggle-track:before{
+	content: '';
+	display: inline;
+	height: 25px;
+	width: 25px;
+	background: #fff;
+	border-radius: 100px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	transition: right .1s ease-in;
+	box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 1px 1px;
+}
+
+#avia_options_page .av-toggle-switch.av-cookie-sc-disabled .toggle-track{
+	opacity: 0.2;
+}
+
+#avia_options_page .av-toggle-switch input[type="checkbox"]:checked + .toggle-track:before{
+	right: 27px;
+}
+
+#avia_options_page .av-toggle-switch input[type="checkbox"]:checked +  .toggle-track{
+	background: #0285ba;
+}
+
+
 /*  #smaller screens (Portrait)
 ================================================== */
 
@@ -775,3 +885,5 @@ div .avia_cur_lang{
 		padding-right: 5px;
 	}
 }
+
+

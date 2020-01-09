@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 if(!is_admin())
 {
 	add_action('init', 'avia_woocommerce_bookings_register_assets');

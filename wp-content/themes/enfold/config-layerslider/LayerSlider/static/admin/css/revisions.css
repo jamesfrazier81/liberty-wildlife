@@ -78,9 +78,6 @@
 #ls-revisions-modal-window .ls-checkbox {
   margin-right: 10px; }
 
-#ls-revisions-modal-window div {
-  text-align: left; }
-
 #ls-revisions-modal-window h2 {
   margin: 50px 0 10px 0;
   font-size: 18px;
@@ -91,13 +88,6 @@
   width: 60px;
   margin: 0 5px;
   border-radius: 3px; }
-
-#ls-revisions-modal-window button {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 300px;
-  margin-left: -150px !important; }
 
 #ls-revisions-modal-window .ls-notification-info {
   box-sizing: border-box;
@@ -196,8 +186,8 @@
 .ui-selectable-helper {
   display: none !important; }
 
-#ls-layer-tabs {
+#ls-slide-tabs {
   z-index: 99999; }
 
-#ls-layer-tabs .dashicons-dismiss {
+#ls-slide-tabs .dashicons-dismiss {
   display: none !important; }

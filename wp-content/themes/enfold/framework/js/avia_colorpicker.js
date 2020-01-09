@@ -114,7 +114,7 @@ jQuery(function($)
 			adjustableImage.css('backgroundColor', avia_cp_div.css('backgroundColor') );	
 			
 			var picker = $('#'+avia_cp.data('colorpickerId'));
-			avia_cp.bind('change keyup', function()
+			avia_cp.on('change keyup', function()
 			{
 				var hexCol = $(this).val();
 				
@@ -130,7 +130,7 @@ jQuery(function($)
 			
 			});
 			
-			$('.avia_color_picker_div').bind('click', function()
+			$('.avia_color_picker_div').on('click', function()
 			{	
 				$(this).prev('.avia_color_picker').trigger('click');
 				return false;
@@ -261,8 +261,8 @@ jQuery(function($)
 					val: parseInt(field.val(), 10),
 					preview: $(this).parent().parent().data('colorpicker').livePreview					
 				};
-				$(document).bind('mouseup', current, upIncrement);
-				$(document).bind('mousemove', current, moveIncrement);
+				$(document).on('mouseup', current, upIncrement);
+				$(document).on('mousemove', current, moveIncrement);
 			},
 			moveIncrement = function (ev) {
 				ev.data.field.val(Math.max(0, Math.min(ev.data.max, parseInt(ev.data.val + ev.pageY - ev.data.y, 10))));
@@ -274,8 +274,8 @@ jQuery(function($)
 			upIncrement = function (ev) {
 				change.apply(ev.data.field.get(0), [true]);
 				ev.data.el.removeClass('colorpicker_slider').find('input').focus();
-				$(document).unbind('mouseup', upIncrement);
-				$(document).unbind('mousemove', moveIncrement);
+				$(document).off('mouseup', upIncrement);
+				$(document).off('mousemove', moveIncrement);
 				return false;
 			},
 			downHue = function (ev) {
@@ -284,8 +284,8 @@ jQuery(function($)
 					y: $(this).offset().top
 				};
 				current.preview = current.cal.data('colorpicker').livePreview;
-				$(document).bind('mouseup', current, upHue);
-				$(document).bind('mousemove', current, moveHue);
+				$(document).on('mouseup', current, upHue);
+				$(document).on('mousemove', current, moveHue);
 			},
 			moveHue = function (ev) {
 				change.apply(
@@ -301,8 +301,8 @@ jQuery(function($)
 			upHue = function (ev) {
 				fillRGBFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				fillHexFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
-				$(document).unbind('mouseup', upHue);
-				$(document).unbind('mousemove', moveHue);
+				$(document).off('mouseup', upHue);
+				$(document).off('mousemove', moveHue);
 				return false;
 			},
 			downSelector = function (ev) {
@@ -311,8 +311,8 @@ jQuery(function($)
 					pos: $(this).offset()
 				};
 				current.preview = current.cal.data('colorpicker').livePreview;
-				$(document).bind('mouseup', current, upSelector);
-				$(document).bind('mousemove', current, moveSelector);
+				$(document).on('mouseup', current, upSelector);
+				$(document).on('mousemove', current, moveSelector);
 			},
 			moveSelector = function (ev) {
 				change.apply(
@@ -331,8 +331,8 @@ jQuery(function($)
 			upSelector = function (ev) {
 				fillRGBFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
 				fillHexFields(ev.data.cal.data('colorpicker').color, ev.data.cal.get(0));
-				$(document).unbind('mouseup', upSelector);
-				$(document).unbind('mousemove', moveSelector);
+				$(document).off('mouseup', upSelector);
+				$(document).off('mousemove', moveSelector);
 				return false;
 			},
 			enterSubmit = function (ev) {
@@ -365,7 +365,7 @@ jQuery(function($)
 				if (cal.data('colorpicker').onShow.apply(this, [cal.get(0)]) != false) {
 					cal.show();
 				}
-				$(document).bind('mousedown', {cal: cal}, hide);
+				$(document).on('mousedown', {cal: cal}, hide);
 				return false;
 			},
 			hide = function (ev) {
@@ -377,7 +377,7 @@ jQuery(function($)
 					if (ev.data.cal.data('colorpicker').onHide.apply(this, [ev.data.cal.get(0)]) != false) {
 						ev.data.cal.hide();
 					}
-					$(document).unbind('mousedown', hide);
+					$(document).off('mousedown', hide);
 				}
 			},
 			isChildOf = function(parentEl, el, container) {
@@ -548,25 +548,25 @@ jQuery(function($)
 						}
 						options.fields = cal
 											.find('input')
-												.bind('keyup', keyDown)
-												.bind('change', change)
-												.bind('blur', blur)
-												.bind('focus', focus);
+												.on('keyup', keyDown)
+												.on('change', change)
+												.on('blur', blur)
+												.on('focus', focus);
 						cal
-							.find('span').bind('mousedown', downIncrement).end()
-							.find('>div.colorpicker_current_color').bind('click', restoreOriginal);
-						options.selector = cal.find('div.colorpicker_color').bind('mousedown', downSelector);
+							.find('span').on('mousedown', downIncrement).end()
+							.find('>div.colorpicker_current_color').on('click', restoreOriginal);
+						options.selector = cal.find('div.colorpicker_color').on('mousedown', downSelector);
 						options.selectorIndic = options.selector.find('div div');
 						options.el = this;
 						options.hue = cal.find('div.colorpicker_hue div');
-						cal.find('div.colorpicker_hue').bind('mousedown', downHue);
+						cal.find('div.colorpicker_hue').on('mousedown', downHue);
 						options.newColor = cal.find('div.colorpicker_new_color');
 						options.currentColor = cal.find('div.colorpicker_current_color');
 						cal.data('colorpicker', options);
 						cal.find('div.colorpicker_submit')
-							.bind('mouseenter', enterSubmit)
-							.bind('mouseleave', leaveSubmit)
-							.bind('click', clickSubmit);
+							.on('mouseenter', enterSubmit)
+							.on('mouseleave', leaveSubmit)
+							.on('click', clickSubmit);
 						fillRGBFields(options.color, cal.get(0));
 						fillHSBFields(options.color, cal.get(0));
 						fillHexFields(options.color, cal.get(0));
@@ -580,7 +580,7 @@ jQuery(function($)
 								display: 'block'
 							});
 						} else {
-							$(this).bind(options.eventName, show);
+							$(this).on(options.eventName, show);
 						}
 					}
 				});
@@ -944,7 +944,7 @@ if (!$.easing.easeout) {
 	var initLayout = function() {
 		var hash = window.location.hash.replace('#', '');
 		var currentTab = $('ul.navigationTabs a')
-							.bind('click', showTab)
+							.on('click', showTab)
 							.filter('a[rel="' + hash + '"]');
 		if (currentTab.length == 0) {
 			currentTab = $('ul.navigationTabs a:first');
@@ -960,7 +960,7 @@ if (!$.easing.easeout) {
 		});
 		$('#colorpickerHolder2>div').css('position', 'absolute');
 		var widt = false;
-		$('#colorSelector2').bind('click', function() {
+		$('#colorSelector2').on('click', function() {
 			$('#colorpickerHolder2').stop().animate({height: widt ? 0 : 173}, 500);
 			widt = !widt;
 		});
@@ -973,7 +973,7 @@ if (!$.easing.easeout) {
 				$(this).AviaColorPickerSetColor(this.value);
 			}
 		})
-		.bind('keyup', function(){
+		.on('keyup', function(){
 			$(this).AviaColorPickerSetColor(this.value);
 		});
 		$('#colorSelector').AviaColorPicker({

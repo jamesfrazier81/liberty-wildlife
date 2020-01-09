@@ -23,7 +23,7 @@ class AviaMedia{
 		{
 			$ver = AviaBuilder::VERSION;
 	
-			wp_enqueue_script('avia_media_js' , AviaBuilder::$path['assetsURL'].'js/avia-media.js' , array('avia_element_js'), $ver, TRUE );
+			wp_enqueue_script('avia_media_js' , AviaBuilder::$path['assetsURL'].'js/avia-media.js' , array('avia_element_js'), $ver, true );
 			wp_enqueue_style( 'avia-media-style' , AviaBuilder::$path['assetsURL'].'css/avia-media.css');
 		}
 	}

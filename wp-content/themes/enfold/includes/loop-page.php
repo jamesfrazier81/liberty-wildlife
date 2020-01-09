@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 global $avia_config, $post_loop_count;
 
 $post_loop_count= 1;
@@ -45,11 +48,27 @@ if (have_posts()) :
 	$post_loop_count++;
 	endwhile;
 	else:
+
+			$default_heading = 'h1';
+			$args = array(
+						'heading'		=> $default_heading,
+						'extra_class'	=> ''
+					);
+			
+			/**
+			 * @since 4.5.5
+			 * @return array
+			 */
+			$args = apply_filters( 'avf_customize_heading_settings', $args, 'loop_page::nothing_found', array() );
+			
+			$heading = ! empty( $args['heading'] ) ? $args['heading'] : $default_heading;
+			$css = ! empty( $args['extra_class'] ) ? $args['extra_class'] : '';
+
 ?>
 
     <article class="entry">
         <header class="entry-content-header">
-            <h1 class='post-title entry-title'><?php _e('Nothing Found', 'avia_framework'); ?></h1>
+            <?php echo "<{$heading} class='post-title entry-title {$css}'>" . __( 'Nothing Found', 'avia_framework' ) . "</{$heading}>"; ?>
         </header>
 
         <?php get_template_part('includes/error404'); ?>
@@ -60,4 +79,4 @@ if (have_posts()) :
 <?php
 
 	endif;
-?>
+

@@ -1,7 +1,11 @@
 <?php
 
 // Widget action
-add_action( 'widgets_init', create_function( '', 'register_widget("LayerSlider_Widget");' ) );
+add_action( 'widgets_init', 'layerslider_register_widget' );
+
+function layerslider_register_widget( ) {
+	register_widget( 'LayerSlider_Widget' );
+}
 
 class LayerSlider_Widget extends WP_Widget {
 
@@ -75,7 +79,7 @@ class LayerSlider_Widget extends WP_Widget {
 		</p>
 		<p style="margin-top: 20px; padding-top: 10px; border-top: 1px dashed #dedede; margin-bottom: 20px;">
 			<label for="<?php echo $this->get_field_id( 'filters' ); ?>"><?php _e('Optional filters:', 'LayerSlider'); ?></label>
-			<a href="https://support.kreaturamedia.com/docs/layersliderwp/documentation.html#publish-filters" target="_blank" style="float: right;"><?php _e('Learn more', 'LayerSlider') ?></a>
+			<a href="https://layerslider.kreaturamedia.com/documentation/#publish-filters" target="_blank" style="float: right;"><?php _e('Learn more', 'LayerSlider') ?></a>
 			<input type="text" id="<?php echo $this->get_field_id( 'filters' ); ?>" placeholder="<?php _e('e.g. homepage', 'LayerSlider') ?>" class="widefat" name="<?php echo $this->get_field_name( 'filters' ); ?>" value="<?php echo $instance['filters']; ?>">
 		</p>
 		<p>

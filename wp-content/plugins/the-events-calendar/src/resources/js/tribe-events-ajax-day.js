@@ -67,10 +67,14 @@
 				params = params + '&featured=1';
 			}
 
-			history.replaceState( {
-				"tribe_params"    : params,
-				"tribe_url_params": td.params
-			}, '', location.href );
+			var isShortcode = $( document.getElementById( 'tribe-events' ) ).is( '.tribe-events-shortcode' );
+
+			if( ! isShortcode || false !== config.update_urls.shortcode.day ){
+				history.replaceState( {
+					"tribe_params"    : params,
+					"tribe_url_params": td.params
+				}, '', location.href );
+			}
 
 			$( window ).on( 'popstate', function( event ) {
 
@@ -104,12 +108,9 @@
 			else {
 				td.cur_url = $this.attr( "href" );
 			}
-			if ( ts.datepicker_format !== '0' ) {
-				tf.update_picker( tribeDateFormat( ts.date, td.datepicker_formats.main[ts.datepicker_format] ) );
-			}
-			else {
-				tf.update_picker( ts.date );
-			}
+
+			tf.update_picker( ts.date );
+
 			tf.pre_ajax( function() {
 				tribe_events_day_ajax_post();
 			} );
@@ -159,8 +160,11 @@
 
 				if ( !tt.reset_on() ) {
 					ts.popping = false;
+
+					let maskKey = ts.datepicker_format.toString();
+
 					if ( ts.datepicker_format !== '0' ) {
-						ts.date = tribeDateFormat( $( this ).bootstrapDatepicker( 'getDate' ), "tribeQuery" );
+						ts.date = tribeUtils.formatDateWithMoment( $( this ).bootstrapDatepicker( 'getDate' ), "tribeQuery", maskKey );
 					}
 					else {
 						ts.date = $( this ).val();
@@ -220,6 +224,11 @@
 					action: 'tribe_event_day'
 				};
 
+				// add shortcode display value
+				if ( ! ts.url_params.hasOwnProperty( 'tribe_event_display' ) ) {
+					ts.url_params['tribe_event_display'] = ts.view;
+				}
+
 				if ( ts.category ) {
 					ts.params['tribe_event_category'] = ts.category;
 				}
@@ -255,7 +264,7 @@
 			if ( tt.pushstate && !ts.filter_cats ) {
 
 				// @ifdef DEBUG
-				dbug && debug.time( 'Day View Ajax Timer' );
+				dbug && tec_debug.time( 'Day View Ajax Timer' );
 				// @endif
 
 				$( te ).trigger( 'tribe_ev_ajaxStart' ).trigger( 'tribe_ev_dayView_AjaxStart' );
@@ -292,7 +301,9 @@
 							$( '.tribe-events-promo' ).next( '.tribe-events-promo' ).remove();
 
 							ts.page_title = $( '#tribe-events-header' ).data( 'title' );
+							ts.view_title = $( '#tribe-events-header' ).data( 'viewtitle' );
 							document.title = ts.page_title;
+							$( '.tribe-events-page-title' ).html(ts.view_title);
 
 							// @TODO: We need to D.R.Y. this assignment and the following if statement about shortcodes/do_string
 							// Ensure that the base URL is, in fact, the URL we want
@@ -310,14 +321,18 @@
 								td.cur_url = td.cur_url + '?' + ts.url_params;
 							}
 
-							if ( ts.do_string ) {
+							var isShortcode = $( document.getElementById( 'tribe-events' ) ).is( '.tribe-events-shortcode' );
+							var shouldUpdateHistory = ! isShortcode || false !== config.update_urls.shortcode.day;
+
+
+							if ( ts.do_string && shouldUpdateHistory ) {
 								history.pushState( {
 									"tribe_date"  : ts.date,
 									"tribe_params": ts.params
 								}, ts.page_title, td.cur_url );
 							}
 
-							if ( ts.pushstate ) {
+							if ( ts.pushstate && shouldUpdateHistory ) {
 								history.pushState( {
 									"tribe_date"  : ts.date,
 									"tribe_params": ts.params
@@ -330,7 +345,7 @@
 							$( te ).trigger( 'ajax-success.tribe' ).trigger( 'tribe_ev_dayView_AjaxSuccess' );
 
 							// @ifdef DEBUG
-							dbug && debug.timeEnd( 'Day View Ajax Timer' );
+							dbug && tec_debug.timeEnd( 'Day View Ajax Timer' );
 							// @endif
 
 						}
@@ -349,8 +364,8 @@
 		}
 
 		// @ifdef DEBUG
-		dbug && debug.info( 'TEC Debug: tribe-events-ajax-day.js successfully loaded' );
-		ts.view && dbug && debug.timeEnd( 'Tribe JS Init Timer' );
+		dbug && tec_debug.info( 'TEC Debug: tribe-events-ajax-day.js successfully loaded' );
+		ts.view && dbug && tec_debug.timeEnd( 'Tribe JS Init Timer' );
 		// @endif
 
 	} );

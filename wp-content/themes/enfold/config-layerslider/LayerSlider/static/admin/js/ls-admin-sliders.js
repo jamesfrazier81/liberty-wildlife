@@ -1,315 +1,151 @@
+var importModalWindowTimeline = null,
+	importModalWindowTransition = null,
+	importModalThumbnailsTransition = null,
+
+	draggedSliderItem = null,
+	targetSliderItem = null,
+
+	sliderDragGroupingTimeout = null,
+	sliderGroupRenameTimeout = null,
+
+	$lastOpenedGroup;
+
 jQuery(function($) {
-
-	var LS_GoogleFontsAPI = {
-
-		results : 0,
-		fontName : null,
-		fontIndex : null,
-
-		init : function() {
-
-			// Prefetch fonts
-			$('.ls-font-search input').focus(function() {
-				LS_GoogleFontsAPI.getFonts();
-			});
-
-			// Search
-			$('.ls-font-search > button').click(function(e) {
-				e.preventDefault();
-				var input = $(this).prev()[0];
-				LS_GoogleFontsAPI.timeout = setTimeout(function() {
-					LS_GoogleFontsAPI.search(input);
-				}, 500);
-			});
-
-			$('.ls-font-search input').keydown(function(e) {
-				if(e.which === 13) {
-					e.preventDefault();
-					var input = this;
-					LS_GoogleFontsAPI.timeout = setTimeout(function() {
-						LS_GoogleFontsAPI.search(input);
-					}, 500);
-				}
-			});
-
-			// Form save
-			$('form.ls-google-fonts').submit(function() {
-				$('ul.ls-font-list li', this).each(function(idx) {
-					$('input', this).each(function() {
-						$(this).attr('name', 'fontsData['+idx+']['+$(this).data('name')+']');
-					});
-				});
-
-				return true;
-			});
-
-			// Select font
-			$('.ls-google-fonts .fonts').on('click', 'li:not(.unselectable)', function() {
-				LS_GoogleFontsAPI.showVariants(this);
-			});
-
-			// Add font event
-			$('.ls-font-search').on('click', 'button.add-font', function(e) {
-				e.preventDefault();
-				LS_GoogleFontsAPI.addFonts(this);
-			});
-
-			// Back to results event
-			$('.ls-google-fonts .variants').on('click', 'button:last', function(e) {
-				e.preventDefault();
-				LS_GoogleFontsAPI.showFonts(this);
-			});
-
-			// Close event
-			$(document).on( 'click', '.ls-overlay', function() {
-
-				if($(this).data('manualclose')) {
-					return false;
-				}
-
-				if($('.ls-pointer').length) {
-					$(this).remove();
-					$('.ls-pointer').children('div.fonts').show().next().hide();
-					$('.ls-pointer').animate({ marginTop : 40, opacity : 0 }, 150, function() {
-						this.style.display = 'none';
-					});
-				}
-			});
-
-			// Remove font
-			$('.ls-font-list').on('click', 'a.remove', function(e) {
-				e.preventDefault();
-				$(this).parent().animate({ height : 0, opacity : 0 }, 300, function() {
-
-					// Add notice if needed
-					if($(this).siblings().length < 2) {
-						$(this).parent().append(
-							$('<li>', { 'class' : 'ls-notice', 'text' : LS_l10n.GFEmptyList })
-						);
-					}
-
-					$(this).remove();
-				});
-			});
-
-			// Add script
-			$('.ls-google-fonts .footer select').change(function() {
-
-				// Prevent adding the placeholder option tag
-				if($('option:selected', this).index() !== 0) {
-
-					// Selected item
-					var item = $('option:selected', this);
-					var hasDuplicate = false;
-
-					// Prevent adding duplicates
-					$('.ls-google-font-scripts input').each(function() {
-						if($(this).val() === item.val()) {
-							hasDuplicate = true;
-							return false;
-						}
-					});
-
-					// Add item
-					if(!hasDuplicate) {
-						var clone = $('.ls-google-font-scripts li:first').clone();
-							clone.find('span').text( item.text() );
-							clone.find('input').val( item.val() );
-							clone.removeClass('ls-hidden').appendTo('.ls-google-font-scripts');
-					}
-
-					// Show the placeholder option tag
-					$('option:first', this).prop('selected', true);
-				}
-			});
-
-			// Remove script
-			$('.ls-google-font-scripts').on('click', 'li a', function(event) {
-				event.preventDefault();
-
-				if($('.ls-google-font-scripts li').length > 2) {
-					$(this).closest('li').remove();
-				} else {
-					alert(LS_l10n.GFEmptyCharset);
-				}
-			});
-		},
-
-		getFonts : function() {
-
-			if(LS_GoogleFontsAPI.results == 0) {
-				var API_KEY = 'AIzaSyC_iL-1h1jz_StV_vMbVtVfh3h2QjVUZ8c';
-				$.getJSON('https://www.googleapis.com/webfonts/v1/webfonts?key=' + API_KEY, function(data) {
-					LS_GoogleFontsAPI.results = data;
-				});
-			}
-		},
-
-		search : function(input) {
-
-			// Hide overlay if any
-			$('.ls-overlay').remove();
-
-			// Get search field
-			var searchValue = $(input).val().toLowerCase();
-
-			// Wait until fonts being fetched
-			if(LS_GoogleFontsAPI.results != 0 && searchValue.length > 2 ) {
-
-				// Search
-				var indexes = [];
-				var found = $.grep(LS_GoogleFontsAPI.results.items, function(obj, index) {
-					if(obj.family.toLowerCase().indexOf(searchValue) !== -1) {
-						indexes.push(index);
-						return true;
-					}
-				});
-
-				// Get list
-				var list = $('.ls-font-search .ls-pointer .fonts ul');
-
-				// Remove previous contents and append new ones
-				list.empty();
-				if(found.length) {
-					for(c = 0; c < found.length; c++) {
-						list.append( $('<li>', { 'data-key' : indexes[c], 'text' : found[c]['family'] }));
-					}
-				} else {
-					list.append($('<li>', { 'class' : 'unselectable' })
-						.append( $('<h4>', { 'text' : 'No results were found' }))
-					);
-				}
-
-				// Show pointer and append overlay
-				$('.ls-font-search .ls-pointer').show().animate({ marginTop : 15, opacity : 1 }, 150);
-				$('<div>', { 'class' : 'ls-overlay dim'}).prependTo('body');
-			}
-		},
-
-		showVariants : function(li) {
-
-			// Get selected font
-			var fontName = $(li).text();
-			var fontIndex = $(li).data('key');
-			var fontObject = LS_GoogleFontsAPI.results.items[fontIndex]['variants'];
-			LS_GoogleFontsAPI.fontName = fontName;
-			LS_GoogleFontsAPI.fontIndex = fontIndex;
-
-			// Get and empty list
-			var list = $(li).closest('div').next().children('ul');
-				list.empty();
-
-
-			// Change header
-			var title = LS_l10n.GFFontVariant.replace('%s', fontName);
-			$(li).closest('.ls-box').children('.header').text(title);
-
-			// Append variants
-			for(c = 0; c < fontObject.length; c++) {
-				list.append( $('<li>', { 'class' : 'unselectable' })
-					.append( $('<input>', { 'type' : 'checkbox'} ))
-					.append( $('<span>', { 'text' : ucFirst(fontObject[c]) }))
-				);
-			}
-
-			// Init checkboxes
-			list.find(':checkbox').customCheckbox();
-
-			// Show variants
-			$(li).closest('.fonts').hide().next().show();
-		},
-
-		showFonts : function(button) {
-			$(button).closest('.ls-box').children('.header').text(LS_l10n.GFFontFamily);
-			$(button).closest('.variants').hide().prev().show();
-		},
-
-		addFonts: function(button) {
-
-			// Get variants
-			var variants = $(button).parent().prev().find('input:checked');
-
-			var apiUrl = [];
-			var urlVariants = [];
-			apiUrl.push(LS_GoogleFontsAPI.fontName.replace(/ /g, '+'));
-
-			if(variants.length) {
-				apiUrl.push(':');
-				variants.each(function() {
-					urlVariants.push( $(this).siblings('span').text().toLowerCase() );
-				});
-				apiUrl.push(urlVariants.join(','));
-			}
-
-			LS_GoogleFontsAPI.appendToFontList( apiUrl.join('') );
-		},
-
-		appendToFontList : function(url) {
-
-			// Empty notice if any
-			$('ul.ls-font-list li.ls-notice').remove();
-
-			var index = $('ul.ls-font-list li').length - 1;
-
-			// Append list item
-			var item = $('ul.ls-font-list li.ls-hidden').clone();
-				item.children('input:text').val(url);
-				item.appendTo('ul.ls-font-list').attr('class', '');
-
-			// Reset search field
-			$('.ls-font-search input').val('');
-
-			// Close pointer
-			$('.ls-overlay').click();
-		}
-	};
-
-	var importModalWindowTimeline = null,
-		importModalThumbnailsTransition = null;
-
-	// Checkboxes
-	$('.ls-global-settings :checkbox').customCheckbox();
-	$('.ls-google-fonts :checkbox').customCheckbox();
 
 	// Tabs
 	$('.km-tabs').kmTabs();
 
-	// Google Fonts API
-	LS_GoogleFontsAPI.init();
-
-	$('.ls-sliders-grid').on('click', '.slider-actions', function() {
-
-		var $this 		= $(this),
-			$item 		= $this.closest('.slider-item'),
-			$wrapper 	= $item.children(),
-			$sheet 		= $item.find('.slider-actions-sheet');
-
-			$item.addClass('ls-opened');
-			$sheet.removeClass('ls-hidden');
-			$('.ls-hover', $item).hide();
-			TweenLite.to($sheet[0], 0.3, {
-				y: 0
-			});
+	// Auto-submit filter/search bar when choosing different view mode
+	// from drop-down menus.
+	$('#ls-slider-filters').on('change', 'select', function() {
+		$(this).closest('#ls-slider-filters').submit();
 	});
 
-	$('.ls-sliders-grid').on('mouseleave', '.slider-item', function() {
 
-		var $this 	= $(this),
-			$item 	= $this.closest('.slider-item'),
-			$sheet 	= $item.find('.slider-actions-sheet');
+	$('.ls-sliders-grid').on('contextmenu', '.preview', function( e ) {
+		e.preventDefault();
+		$(this).parent().find('.slider-actions-button').click();
 
-			if( $item.hasClass('ls-opened') ) {
+	}).on('click', '.slider-item .checkbox', function() {
 
-				$item.removeClass('ls-opened');
-				$sheet.removeClass('ls-hidden');
-				$('.ls-hover', $item).show();
+		$( this ).closest('.slider-item').toggleClass('ls-selected');
+		checkSliderSelection();
 
-				TweenLite.to($sheet[0], 0.4, {
-					y: -150
+	}).on('click', '.slider-item .preview', function( event ) {
+
+		if( event.ctrlKey || event.metaKey ) {
+
+			event.preventDefault();
+
+			$( this ).closest('.slider-item').find('.checkbox').click();
+		}
+
+
+	}).on('click', '.slider-actions-button', function() {
+		$(this).closest('.slider-item').addClass('ls-opened');
+
+
+	}).on('click', '.slider-item.group-item', function( e ) {
+		e.preventDefault();
+
+		var $this 		= $( this ),
+			groupName 	= $.trim( $this.find('.name').html() ).replace(/"/g, '&quot;');
+
+		$lastOpenedGroup = $this;
+
+		kmw.modal.open({
+			into: '.ls-sliders-grid',
+			title: '<input value="'+groupName+'"><a href="#" class="button button-primary ls-remove-group-button" data-help="'+LS_l10n.SLRemoveGroupTooltip+'" data-help-delay="100">'+LS_l10n.SLRemoveGroupButton+'</a>',
+			content: $this.next().children(),
+			maxWidth: 1380,
+			minWidth: 600,
+			modalClasses: 'ls-slider-group-modal-window',
+			animationIn: 'scale',
+			overlaySettings: {
+				animationIn: 'fade'
+			}
+		});
+
+
+
+		setTimeout( function() {
+			removeSliderFromGroupDraggable();
+		}, 200);
+
+	});
+
+
+	$( document ).on('input', '.ls-slider-group-modal-window .kmw-modal-title input', function() {
+
+		$this = $( this );
+
+		clearTimeout( sliderGroupRenameTimeout );
+		sliderGroupRenameTimeout = setTimeout( function() {
+
+			$.get( ajaxurl, {
+				action: 'ls_rename_slider_group',
+				groupId: $lastOpenedGroup.data('id'),
+				name: $this.val()
+			});
+
+		}, 300 );
+
+
+		$lastOpenedGroup.find('.name').text( $this.val() );
+	});
+
+	$( document ).on('click', '.ls-slider-group-modal-window .ls-remove-group-button', function( e) {
+
+		e.preventDefault();
+		kmUI.popover.close();
+
+
+		setTimeout( function() {
+
+			if( confirm( LS_l10n.SLRemoveGroupConfirm ) ) {
+
+				$.get( ajaxurl, {
+					action: 'ls_delete_slider_group',
+					groupId: $lastOpenedGroup.data('id'),
 				});
+
+				var $sliders = $('.ls-slider-group-modal-window .slider-item');
+
+				// Destroy previous draggable instance (if any)
+				if( $sliders.hasClass('ui-draggable') ) {
+					$sliders.draggable('destroy');
+				}
+
+				// Destroy previous droppable instance (if any)
+				if( $sliders.hasClass('ui-droppable') ) {
+					$sliders.droppable('destroy');
+				}
+
+				$sliders.insertAfter('.ls-sliders-grid .ls-grid-buttons');
+
+				setTimeout( function() {
+					addSliderToGroupDraggable();
+					addSliderToGroupDroppable();
+
+					createSliderGroupDroppable();
+				}, 300 );
+
+
+				$lastOpenedGroup.next().remove();
+				$lastOpenedGroup.remove();
+
+				kmw.modal.close();
 			}
 
-	// Add sliderls-add-slider-template
+		}, 300 );
+	});
+
+
+	$('.ls-sliders-grid').on('mouseleave', '.slider-item', function() {
+		$(this).closest('.slider-item').removeClass('ls-opened').removeClass('ls-export-options-open');
+
+
+	// Add slider
 	}).on('click', '#ls-add-slider-button', function(e) {
 		e.preventDefault();
 
@@ -322,11 +158,17 @@ jQuery(function($) {
 		}
 
 		$sheet.find('input').focus();
-		TweenLite.set( $sheet, { x: 240 });
+		TweenLite.set( $sheet, { x: 235 });
 		TweenLite.to( [ $button[0], $sheet[0] ], 0.5, {
-			x: '-=240'
+			x: '-=235'
 		});
+
+	// Export options
+	}).on('click', '.ls-export-options-button', function( e ) {
+		e.preventDefault();
+		$(this).closest('.slider-item').addClass('ls-export-options-open');
 	});
+
 
 
 	$('.ls-sliders-list').on('click', '#ls-add-slider-button', function(e) {
@@ -347,7 +189,7 @@ jQuery(function($) {
 		$('<div>', { 'class' : 'ls-overlay dim'}).prependTo('body');
 
 
-	}).on('click', '.slider-actions', function() {
+	}).on('click', '.slider-actions-button', function() {
 
 		var $this = $(this);
 		setTimeout(function() {
@@ -365,9 +207,10 @@ jQuery(function($) {
 			$('#ls-slider-actions-template a:eq(0)').data('slug', $this.data('slug') );
 
 			$('#ls-slider-actions-template a:eq(1)').attr('href', $this.data('export-url') );
-			$('#ls-slider-actions-template a:eq(2)').attr('href', $this.data('duplicate-url') );
-			$('#ls-slider-actions-template a:eq(3)').attr('href', $this.data('revisions-url') );
-			$('#ls-slider-actions-template a:eq(4)').attr('href', $this.data('remove-url') );
+			$('#ls-slider-actions-template a:eq(2)').attr('href', $this.data('export-html-url') );
+			$('#ls-slider-actions-template a:eq(3)').attr('href', $this.data('duplicate-url') );
+			$('#ls-slider-actions-template a:eq(4)').attr('href', $this.data('revisions-url') );
+			$('#ls-slider-actions-template a:eq(5)').attr('href', $this.data('remove-url') );
 
 
 			setTimeout(function() {
@@ -389,18 +232,64 @@ jQuery(function($) {
 	// Upload
 	}).on('click', '#ls-import-button', function(e) {
 		e.preventDefault();
-		kmUI.modal.open('#tmpl-upload-sliders', { width: 700, height: 500 });
+
+		kmw.modal.open({
+			content: $('#tmpl-upload-sliders').text(),
+			minWidth: 400,
+			maxWidth: 700
+		});
+
 
 	// Embed
 	}).on('click', 'a.embed', function(e) {
 		e.preventDefault();
 
 		var $this 	= $(this),
-			$modal 	= kmUI.modal.open('#tmpl-embed-slider', { width: 900, height: 600 }),
+			$modal 	= kmw.modal.open({
+				content: $('#tmpl-embed-slider').text(),
+				minWidth: 400,
+				maxWidth: 980
+			}),
 			id 		= $this.data('id'),
 			slug 	= $this.data('slug') || id;
 
+
+
 		$modal.find('input.shortcode').val('[layerslider id="'+slug+'"]');
+
+		$('.km-accordion').kmAccordion();
+
+	// HTML export
+	}).on('click', 'a.ls-html-export', function( e ) {
+
+		if( ! window.lsSiteActivation ) {
+			e.preventDefault();
+
+			lsDisplayActivationWindow();
+
+			return false;
+		}
+
+
+
+		if( window.localStorage ) {
+
+			if( ! localStorage.lsExportHTMLWarning ) {
+				localStorage.lsExportHTMLWarning = 0;
+			}
+
+			var counter = parseInt( localStorage.lsExportHTMLWarning ) || 0;
+
+			if( counter < 3 ) {
+
+				localStorage.lsExportHTMLWarning = ++counter;
+
+				if( ! confirm( LS_l10n.SLExportSliderHTML ) ) {
+					e.preventDefault();
+					return false;
+				}
+			}
+		}
 	});
 
 	// Pagivation
@@ -409,13 +298,74 @@ jQuery(function($) {
 	});
 
 
+
+	// Drag and drop import
+	$( document ).on('dragover.ls', '.slider-item.import-sliders', function( e ) {
+		e.preventDefault();
+		$( this ).addClass('ls-dragover')
+
+	}).on('dragleave.ls drop.ls', '.slider-item.import-sliders', function( e ) {
+		e.preventDefault();
+		$( this ).removeClass('ls-dragover')
+	}).on('drop.ls', '.slider-item.import-sliders', function( event ) {
+
+		var oe 		= event.originalEvent,
+			files 	= event.originalEvent.dataTransfer.files,
+			$this 	= $( this ),
+			$form 	= $('#tmpl-quick-import-form');
+
+
+		// Prevent uploading empty or multiple file selection
+		if( files.length === 0 ||  files.length > 1 ) {
+			return false;
+		}
+
+		// Prevent uploading files other than ZIP packages
+		if( files[0].name.toLowerCase().indexOf('.zip') === -1 ) {
+			return false;
+		}
+
+
+		if( ! $form.length ) {
+			$form = $( $('#tmpl-quick-import').text() ).prependTo('body');
+		}
+
+		$this.addClass('importing');
+
+		$form.find('input[type="file"]')[0].files = files;
+		$form.submit();
+	});
+
+	// Import window file input
+	$( document ).on( 'change', '#ls-upload-modal-window .file input', function() {
+
+		var file = this.files[0],
+			$input = $(this),
+			$parent = $input.parent(),
+			$span = $input.prev();
+
+		if( !$input.data( 'original-text' ) ){
+			$input.data( 'original-text', $span.text() );
+		}
+
+		if( file ) {
+			$span.text( file.name );
+			$parent.addClass( 'file-chosen' );
+		} else {
+			$span.text( $input.data( 'original-text' ) );
+			$parent.removeClass( 'file-chosen' );
+		}
+	});
+
+
+
+
 	// Import sample slider
 	$( '#ls-import-samples-button' ).on( 'click', function( event ) {
 
 		event.preventDefault();
 
-		var	$modal,
-			width = jQuery( window ).width();
+		var	$modal;
 
 		// If the Template Store was previously opened on the current page,
 		// just grab the element, do not bother re-appending and setting
@@ -436,7 +386,6 @@ jQuery(function($) {
 			// Append the template & setup the live logo
 			$modal = jQuery( jQuery('#tmpl-import-sliders').text() ).hide().prependTo('body');
 			lsLogo.append( '#ls-import-modal-window .layerslider-logo', true );
-
 
 			// Update last store view date
 			if( $modal.hasClass('has-updates') ) {
@@ -487,32 +436,20 @@ jQuery(function($) {
 					});
 				},
 				onComplete: function(){
-					importModalWindowTimeline.remove( importModalThumbnailsTransition );
+					if( importModalWindowTimeline ) {
+						importModalWindowTimeline.remove( importModalThumbnailsTransition );
+					}
 				},
 				onReverseComplete: function(){
 					jQuery( 'html, body' ).removeClass( 'ls-no-overflow' );
 					jQuery(document).off( 'keyup.LS' );
 					jQuery( '#ls-import-modal-overlay' ).hide();
+					TweenMax.set( jQuery( '#ls-import-modal-window' )[0], { css: { y: -100000 } });
 				},
 				paused: true
 			});
 
 			$(this).data( 'lsModalTimeline', importModalWindowTimeline );
-
-			importModalWindowTimeline.fromTo( $modal[0], 0.75, {
-				autoCSS: false,
-				css: {
-					position: 'fixed',
-					display: 'block',
-					x: width
-				}
-			},{
-				autoCSS: false,
-				css: {
-					x: 0
-				},
-				ease: Quart.easeInOut
-			}, 0 );
 
 			importModalWindowTimeline.fromTo( $('#ls-import-modal-overlay')[0], 0.75, {
 				autoCSS: false,
@@ -548,6 +485,26 @@ jQuery(function($) {
 			}, 0.25 );
 		}
 
+		importModalWindowTimeline.remove( importModalWindowTransition );
+
+		importModalWindowTransition = TweenMax.fromTo( $modal[0], 0.75, {
+			autoCSS: false,
+			css: {
+				position: 'fixed',
+				display: 'block',
+				y: 0,
+				x: jQuery( window ).width()
+			}
+		},{
+			autoCSS: false,
+			css: {
+				x: 0
+			},
+			ease: Quart.easeInOut
+		}, 0 );
+
+		importModalWindowTimeline.add( importModalWindowTransition, 0 );
+
 		importModalWindowTimeline.play();
 	});
 
@@ -574,8 +531,9 @@ jQuery(function($) {
 
 	}).on('click', '.ls-open-template-store', function(e) {
 
-		kmUI.modal.close();
-		kmUI.overlay.close();
+		e.preventDefault();
+
+		kmw.modal.close();
 
 		setTimeout(function() {
 			$('#ls-import-samples-button').click();
@@ -598,6 +556,7 @@ jQuery(function($) {
 			x: '-='+width,
 			onComplete: function() {
 				$guide.hide();
+				$wrapper.addClass('ls-opened');
 			}
 		});
 	});
@@ -621,30 +580,53 @@ jQuery(function($) {
 		$button.data('text', $button.text() ).text(LS_l10n.working).addClass('saving');
 
 		// Post it
-		$.post( ajaxurl, $(this).serialize(), function(data) {
+		$.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: $(this).serialize(),
+			error: function( jqXHR, textStatus, errorThrown ) {
+				alert(LS_l10n.SLActivationError.replace('%s', errorThrown) );
+				$button.removeClass('saving').text( $button.data('text') );
+			},
+			success: function( data ) {
 
-			// Parse response and set message
-			data = $.parseJSON(data);
+				// Parse response and set message
+				data = $.parseJSON(data);
 
-			// Success
-			if(data && ! data.errCode ) {
+				// Success
+				if( data && ! data.errCode ) {
 
-				// Apply activated state to GUI
-				$form.closest('.ls-box').addClass('active');
+					// Apply activated state to GUI
+					$form.closest('.ls-box').addClass('active');
 
-				// Display activation message
-				$('p.note', $form).css('color', '#74bf48').text( data.message );
+					// Display activation message
+					$('p.note', $form).css('color', '#74bf48').text( data.message );
 
-				// Make sure that features requiring activation will
-				// work without refreshing the page.
-				window.lsSiteActivation = true;
+					// Make sure that features requiring activation will
+					// work without refreshing the page.
+					window.lsSiteActivation = true;
 
-			// Alert message (if any)
-			} else if(typeof data.message !== "undefined") {
-				alert(data.message);
+				// HTML-based error message (if any)
+				} else if( typeof data.messageHTML !== "undefined" ) {
+
+					kmw.modal.open({
+						title: data.titleHTML ? data.titleHTML : LS_l10n.activationErrorTitle,
+						content: '<div id="tmpl-activation-error-modal-window">'+data.messageHTML+'</div>',
+						maxWidth: 600,
+						minWidth: 400,
+						animationIn: 'scale',
+						overlaySettings: {
+							animationIn: 'fade'
+						}
+					});
+
+				// Alert message (if any)
+				} else if( typeof data.message !== "undefined" ) {
+					alert(data.message);
+				}
+
+				$button.removeClass('saving').text( $button.data('text') );
 			}
-
-			$button.removeClass('saving').text( $button.data('text') );
 		});
 	});
 
@@ -687,8 +669,11 @@ jQuery(function($) {
 		}
 	});
 
-	$('.ls-product-banner .unlock').click(function(e) {
-		e.preventDefault();
+	var lsShowActivationBox = function( activateBox ) {
+
+		document.location.hash = '';
+
+		kmw.modal.close();
 
 		var $box 	= $('.ls-product-banner.ls-auto-update'),
 			$window = $(window),
@@ -697,40 +682,59 @@ jQuery(function($) {
 			bh 		= $box.height(),
 			top 	= bt + (bh / 2) - (wh / 2);
 
-			$('html,body').animate({ scrollTop: top }, 200, function() {
-				setTimeout(function() {
+		$('html,body').animate({ scrollTop: top }, 500, function() {
+			setTimeout(function() {
 
-					TweenMax.to( $box[0], 0.2, {
-						yoyo: true,
-						repeat: 3,
-						ease: Quad.easeInOut,
-						scale: 1.1
-					});
-				}, 100);
-			});
-	});
+				TweenMax.to( $box[0], 0.2, {
+					yoyo: true,
+					repeat: 3,
+					ease: Quad.easeInOut,
+					scale: 1.1,
+					onComplete: function() {
 
-	// Permission form
-	$('#ls-permission-form').submit(function(e) {
+						if( activateBox && ! $box.hasClass('ls-opened') ) {
+							setTimeout(function() {
+								$box.find('.button-activation').click();
+							}, 300 );
+						}
+					}
+				});
+			}, 200);
+		});
+	};
+
+	$('.ls-product-banner .unlock, .ls-show-activation-box').click(function(e) {
 		e.preventDefault();
-		if(confirm(LS_l10n.SLPermissions)) {
-			this.submit();
+		lsShowActivationBox();
+	});
+
+	$( document ).on('click', '#activation-modal-window .button-activation', function( e ) {
+
+		e.preventDefault();
+
+		if( $(this).closest('#ls-import-modal-window').length ) {
+
+			jQuery(document).trigger( jQuery.Event('keyup', { keyCode: 27 }) );
+			setTimeout(function() {
+				lsShowActivationBox( true );
+			}, 800);
+
+		} else {
+
+			kmw.modal.close( false, {
+				onClose: function() {
+					lsShowActivationBox( true );
+				}
+			});
 		}
 	});
 
+	if( document.location.href.indexOf('#activationBox') !== -1 ) {
+		setTimeout(function() {
+			lsShowActivationBox( true );
+		}, 500 );
+	}
 
-	// Google CDN version warning
-	$('#ls_use_custom_jquery').on('click', '.ls-checkbox', function(e) {
-		if( $(this).hasClass('off') ) {
-			if( ! confirm(LS_l10n.SLJQueryConfirm) ) {
-				e.preventDefault();
-				return false;
-
-			}
-
-			alert(LS_l10n.SLJQueryReminder);
-		}
-	});
 
 
 	// News filters
@@ -763,40 +767,43 @@ jQuery(function($) {
 
 		var $item 	= jQuery(this),
 			$figure = $item.closest('figure'),
+			name 	= $figure.data('name'),
 			handle 	= $figure.data('handle'),
 			bundled = !! $figure.data('bundled'),
 			action 	= bundled ? 'ls_import_bundled' : 'ls_import_online';
 
 		// Premium notice
 		if( $figure.data('premium') && ! window.lsSiteActivation ) {
-			kmUI.modal.open( {
+
+			lsDisplayActivationWindow({
 				into: '#ls-import-modal-window',
-				title: LS_l10n.TSImportWarningTitle,
-				content: LS_l10n.TSImportWarningContent,
-				width: 700,
-				height: 200,
-				overlayAnimate: 'fade'
+				title: LS_l10n.activationTemplate
 			});
+
 			return;
 
 		} else if( $figure.data('version-warning') ) {
-			kmUI.modal.open( {
+
+			kmw.modal.open({
 				into: '#ls-import-modal-window',
 				title: LS_l10n.TSVersionWarningTitle,
-				content: LS_l10n.TSVersionWarningContent,
-				width: 700,
-				height: 200,
-				overlayAnimate: 'fade'
+				content: LS_l10n.TSVersionWarningContent
 			});
 			return;
 		}
 
-		kmUI.modal.open( '#tmpl-importing', {
+		kmw.modal.open({
+			content: '#tmpl-importing',
 			into: '#ls-import-modal-window',
-			width: 300,
-			height: 300,
-			close: false
+			minWidth: 380,
+			maxWidth: 380,
+			closeButton: false,
+			closeOnEscape: false,
+			overlaySettings: {
+				closeOnClick: false
+			}
 		});
+
 		lsLogo.append( '#ls-importing-modal-window .layerslider-logo', true );
 
 		jQuery.ajax({
@@ -804,45 +811,64 @@ jQuery(function($) {
 			data: {
 				action: action,
 				slider: handle,
+				name: name,
 				security: window.lsImportNonce
 			},
+
+			beforeSend: function( jqXHR, settings ) {
+
+				setTimeout( function( ) {
+
+					var $modal = jQuery('#ls-importing-modal-window').closest('.kmw-modal');
+
+					TweenLite.to( $modal[0], 0.5, {
+						minWidth: 580,
+						maxWidth: 580,
+						height: 446,
+						maxHeight: 480,
+
+						onComplete: function() {
+							$('<div class="ls-import-notice">'+LS_l10n.SLImportNotice+'</div>')
+							.hide()
+							.appendTo( $modal.find('.kmw-modal-content') )
+							.fadeIn( 250 );
+						}
+					});
+				}, 1000*60 );
+			},
+
 			success: function(data, textStatus, jqXHR) {
-				data = JSON.parse( data );
-				if( data && data.success ) {
+
+				data = data ? JSON.parse( data ) : {};
+
+				if( data.success ) {
 					document.location.href = data.url;
 
-				} else if(data.message) {
+				} else {
+
 					setTimeout(function() {
-						alert(data.message);
+						alert( data.message ? data.message : LS_l10n.SLImportError);
 						setTimeout(function() {
-							kmUI.modal.close();
-							kmUI.overlay.close();
+							kmw.modal.close();
 						}, 1000);
 					}, 600);
 
 					if( data.reload ) {
 						window.location.reload( true );
 					}
-
-				} else {
-					setTimeout(function() {
-						alert(LS_l10n.SLImportError);
-						setTimeout(function() {
-							kmUI.modal.close();
-							kmUI.overlay.close();
-						}, 1000);
-					}, 600);
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				setTimeout(function() {
-					kmUI.modal.close();
-							kmUI.overlay.close();
+
+					kmw.modal.close();
+
 					alert(LS_l10n.SLImportHTTPError.replace('%s', errorThrown) );
+
 					setTimeout(function() {
-						kmUI.modal.close();
-						kmUI.overlay.close();
+						kmw.modal.close();
 					}, 1000);
+
 				}, 600);
 			},
 			complete: function() {
@@ -851,53 +877,346 @@ jQuery(function($) {
 		});
 	});
 
-});
+	if( document.location.hash === '#open-template-store' ) {
+		setTimeout( function() {
+			$('#ls-import-samples-button').click();
+		}, 500);
+	}
 
-var addLSOverlay = function() {
 
-	var $overlay = jQuery('<div class="ls-overlay"></div>').prependTo('body');
+	$('.layerslider_notice_img .button-install').click(function( e ) {
 
-	TweenLite.fromTo( $overlay[0], 0.4, {
-		autoCSS: false,
-		css: {
-			y: -jQuery( window ).height()
-		}
-	},{
-		autoCSS: false,
-		ease: Quart.easeInOut,
-		css: {
-			y: 0
+		if( ! window.lsSiteActivation ) {
+			e.preventDefault();
+			lsDisplayActivationWindow({
+				title: LS_l10n.activationUpdate
+			});
 		}
 	});
 
-	setTimeout(function() {
 
-		jQuery( '.ls-overlay' ).one( 'click', function() {
 
-			// TweenLite.fromTo( this, 0.4, {
-			// 	autoCSS: false,
-			// 	css: {
-			// 		y: 0
-			// 	}
-			// },{
-			// 	autoCSS: false,
-			// 	ease: Quart.easeInOut,
-			// 	css: {
-			// 		y: -jQuery( window ).height()
-			// 	},
-			// 	onComplete: function(){
-			// 		jQuery('.ls-overlay,.ls-modal').remove();
-			// 		jQuery('body').css('overflow', 'auto');
-			// 	}
-			// });
 
-			jQuery('.ls-overlay,.ls-modal').remove();
-			jQuery('body').css('overflow', 'auto');
+	var addSliderToGroupDraggable = function() {
+
+		$('.ls-sliders-grid > .slider-item').draggable({
+			scope: 'add-to-group',
+			cancel: '.group-item, .hero',
+			handle: '.preview',
+			distance: 5,
+			helper: 'clone',
+			revert: 'invalid',
+			revertDuration: 300,
+			start: function( event, ui ) {
+
+				draggedSliderItem = event.target;
+				$( draggedSliderItem ).addClass('dragging-original');
+			},
+
+			stop: function( event, ui ) {
+				$( event.target ).removeClass('dragging-original');
+			}
 		});
+	};
 
-		jQuery( '.ls-modal b' ).one( 'click', function() {
-			jQuery( '.ls-overlay' ).click();
+
+	var addSliderToGroupDroppable = function() {
+
+		$('.ls-sliders-grid .group-item').droppable({
+			scope: 'add-to-group',
+			accept: '.slider-item',
+			tolerance: 'pointer',
+			hoverClass: 'slider-dropping',
+			over: function( event, ui ) {
+
+				ui.helper.find('.preview').addClass('slider-dropping');
+			},
+
+			out: function( event, ui ) {
+				ui.helper.find('.preview').removeClass('slider-dropping');
+			},
+
+
+			drop: function( event, ui ) {
+
+				addSliderToGroup( event.target, draggedSliderItem );
+			}
 		});
+	};
 
-	}, 300);
-};
+
+
+	var removeSliderFromGroupDraggable = function() {
+
+		$('.ls-sliders-grid .kmw-modal-inner .slider-item').draggable({
+			scope: 'remove-from-group',
+			handle: '.preview',
+			appendTo: '.ls-sliders-grid',
+			distance: 5,
+			helper: 'clone',
+			zIndex: 9999999,
+			revert: 'invalid',
+			revertDuration: 300,
+			start: function( event, ui ) {
+				draggedSliderItem = event.target;
+				$( draggedSliderItem ).addClass('dragging-original');
+				$('#ls-group-remove-area').addClass('active');
+			},
+
+			stop: function( event, ui ) {
+				$( draggedSliderItem ).removeClass('dragging-original');
+				$('#ls-group-remove-area').removeClass('active');
+			}
+		});
+	};
+
+
+	var removeSliderFromGroupDroppable = function() {
+
+		$('#ls-group-remove-area .ls-drop-area').droppable({
+			scope: 'remove-from-group',
+			accept: '.slider-item',
+			tolerance: 'pointer',
+
+			over: function( event, ui ) {
+				ui.draggable.addClass('over-drag-area');
+				ui.helper.find('.preview').addClass('cursor-default');
+				$( event.target ).addClass('over');
+			},
+
+			out: function( event, ui ) {
+				ui.draggable.removeClass('over-drag-area');
+				ui.helper.find('.preview').removeClass('cursor-default');
+				$( event.target ).removeClass('over');
+			},
+
+			drop: function( event, ui ) {
+
+				$( event.target ).removeClass('over');
+				ui.draggable.removeClass('over-drag-area');
+
+				removeSliderFromGroup(
+					$lastOpenedGroup,
+					ui.draggable
+				);
+			}
+		});
+	};
+
+
+
+	var createSliderGroupLastEvent;
+
+	var createSliderGroupDroppable = function() {
+
+		$('.ls-sliders-grid .slider-item:not(.hero,.group-item)').droppable({
+			scope: 'add-to-group',
+			accept: '.slider-item',
+			tolerance: 'pointer',
+			hoverClass: 'slider-dropping',
+
+			over: function( event, ui ) {
+
+				var f = function(){
+					targetSliderItem = event.target;
+					$( event.target ).addClass('create-group');
+					ui.helper.find('.preview').addClass('slider-dropping');
+					createSliderGroupLastEvent = 'over';
+				};
+
+				if( createSliderGroupLastEvent == 'over' ){
+					setTimeout( function(){
+						f();
+					}, 0 );
+				} else {
+					f();
+				}
+			},
+
+			out: function( event, ui ) {
+
+				var f = function(){
+					targetSliderItem = null;
+					$('.slider-item').removeClass('create-group');
+					ui.helper.find('.preview').removeClass('slider-dropping');
+					createSliderGroupLastEvent = 'out';
+				};
+
+				if( createSliderGroupLastEvent == 'out' ){
+
+					setTimeout( function(){
+						f();
+					}, 0 );
+				} else {
+					f();
+				}
+			},
+
+			deactivate: function( event, ui ) {
+				clearTimeout( sliderDragGroupingTimeout );
+				$('.slider-item').removeClass('create-group');
+				ui.helper.find('.preview').removeClass('slider-dropping');
+			},
+
+			drop: function( event, ui ) {
+
+				if( targetSliderItem ) {
+
+					var $template 	= $( $('#tmpl-slider-group-item').text() ),
+						$markup 	= $template.insertAfter( targetSliderItem ),
+						$group 		= $markup.filter('.group-item');
+
+					addSliderToGroup( $group, targetSliderItem, true );
+					addSliderToGroup( $group, draggedSliderItem, true );
+
+					$( targetSliderItem ).hide();
+					$( draggedSliderItem ).hide();
+
+					addSliderToGroupDroppable();
+
+					$.getJSON( ajaxurl, {
+						action: 'ls_create_slider_group',
+						items: [
+							$( targetSliderItem ).data('id'),
+							$( draggedSliderItem ).data('id')
+						]
+
+					}, function( data ) {
+						$group.data('id', data.groupId );
+					});
+				}
+			}
+		});
+	};
+
+
+
+
+
+
+	var addSliderToGroup = function( groupElement, sliderElement, withoutXHR ) {
+
+		var $group 			= $( groupElement ),
+			$groupItems 	= $group.find('.items'),
+			$slider 		= $( sliderElement ),
+			$sliderPreview 	= $slider.find('.preview'),
+			$groupItem 		= $( $('#tmpl-slider-group-placeholder').text() );
+
+		// XHR request to add slider to group
+		if( ! withoutXHR ) {
+			$.get( ajaxurl, {
+				action: 'ls_add_slider_to_group',
+				sliderId: $slider.data('id'),
+				groupId: $group.data('id')
+			});
+		}
+
+
+		// Add slider to group on UI
+		if( ! $sliderPreview.find('.no-preview').length ) {
+			$groupItem.find('.preview').css('background-image', $sliderPreview.css('background-image') );
+			$groupItem.find('.preview').empty();
+		}
+
+		// Destroy previous draggable instance (if any)
+		if( $slider.hasClass('ui-draggable') ) {
+			$slider.draggable('destroy');
+		}
+
+		// Destroy previous droppable instance (if any)
+		if( $slider.hasClass('ui-droppable') ) {
+			$slider.droppable('destroy');
+		}
+
+		$slider.clone( true, true )
+			.removeClass('dragging-original')
+			.removeClass('create-group')
+			.appendTo( $group.next().children() );
+
+		$groupItem.appendTo( $groupItems );
+		setTimeout( function() {
+			$groupItem.removeClass('scale0');
+		}, 100 );
+
+		// Remove the original element
+		$slider.remove();
+	};
+
+
+
+	var removeSliderFromGroup = function( groupElement, sliderElement, withoutXHR ) {
+
+		var $group 			= $( groupElement ),
+			$groupItems 	= $group.find('.items'),
+			$slider 		= $( sliderElement ),
+			$sliderPreview 	= $slider.find('.preview'),
+			$siblings 		= $slider.siblings();
+
+		// XHR request to add slider to group
+		if( ! withoutXHR ) {
+			$.get( ajaxurl, {
+				action: 'ls_remove_slider_from_group',
+				sliderId: $slider.data('id'),
+				groupId: $group.data('id')
+			});
+		}
+
+		// Remove from preview items
+		$groupItems.children().eq( $slider.index() ).remove();
+
+		// Destroy previous draggable instance (if any)
+		if( $slider.hasClass('ui-draggable') ) {
+			$slider.draggable('destroy');
+		}
+
+		// Destroy previous droppable instance (if any)
+		if( $slider.hasClass('ui-droppable') ) {
+			$slider.droppable('destroy');
+		}
+
+		// Remove slider from group
+		$slider.insertAfter('.ls-sliders-grid .ls-grid-buttons');
+
+		setTimeout( function() {
+			addSliderToGroupDraggable();
+			addSliderToGroupDroppable();
+
+			createSliderGroupDroppable();
+		}, 300 );
+
+
+		// Handle auto-group deletion in case of removing
+		// the last element.
+		if( $siblings.length < 1 ) {
+
+			$group.next().remove();
+			$group.remove();
+
+			kmw.modal.close();
+		}
+	};
+
+
+
+	var checkSliderSelection = function() {
+
+		$selected = $('.ls-sliders-grid .slider-item.ls-selected' );
+
+		if( $selected.length ) {
+			$('.ls-sliders-grid').addClass('ls-has-selection');
+		} else {
+			$('.ls-sliders-grid').removeClass('ls-has-selection');
+		}
+	};
+
+
+	// Group draggable & droppable
+	addSliderToGroupDraggable();
+	addSliderToGroupDroppable();
+
+	createSliderGroupDroppable();
+
+	removeSliderFromGroupDraggable();
+	removeSliderFromGroupDroppable();
+
+});

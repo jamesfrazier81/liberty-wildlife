@@ -31,9 +31,9 @@ global 	$avia_config;
 $output = "";
 $body_color = "";
 
-extract($color_set);
-if ($main_color !== NULL) { extract($main_color); }
-extract($styles);
+extract( $color_set );
+if ( $main_color !== null ) { extract( $main_color ); }
+extract( $styles );
 
 unset($background_image);
 ######################################################################
@@ -67,7 +67,6 @@ if($default_font_size)
 {
 	$output .= "body, body .avia-tooltip {font-size: $default_font_size; }";
 }
-
 
 /*color sets*/
 foreach ($color_set as $key => $colors) // iterates over the color sets: usually $key is either: header_color, main_color, footer_color, socket_color
@@ -117,10 +116,20 @@ $key a:hover, $key h1 a:hover, $key h2 a:hover, $key h3 a:hover, $key h4 a:hover
 color: $secondary;
 }
 
-$key .primary-background, $key .primary-background a, div $key .button, $key #submit, $key input[type='submit'], $key .small-preview:hover, $key .avia-menu-fx, $key .avia-menu-fx .avia-arrow, $key.iconbox_top .iconbox_icon, $key .iconbox_top a.iconbox_icon:hover, $key .avia-data-table th.avia-highlight-col, $key .avia-color-theme-color, $key .avia-color-theme-color:hover, $key .image-overlay .image-overlay-inside:before, $key .comment-count, $key .av_dropcap2, #top #wrap_all $key .av-menu-button-colored > a .avia-menu-text, $key .av-colored-style .av-countdown-cell-inner, .responsive #top $key .av-open-submenu.av-subnav-menu > li > a:hover, #top $key .av-open-submenu.av-subnav-menu li > ul a:hover{
+$key .primary-background, $key .primary-background a, div $key .button, $key #submit, $key input[type='submit'], $key .small-preview:hover, $key .avia-menu-fx, $key .avia-menu-fx .avia-arrow, $key.iconbox_top .iconbox_icon, $key .iconbox_top a.iconbox_icon:hover, $key .avia-data-table th.avia-highlight-col, $key .avia-color-theme-color, $key .avia-color-theme-color:hover, $key .image-overlay .image-overlay-inside:before, $key .comment-count, $key .av_dropcap2, $key .av-colored-style .av-countdown-cell-inner, .responsive #top $key .av-open-submenu.av-subnav-menu > li > a:hover, #top $key .av-open-submenu.av-subnav-menu li > ul a:hover{
 background-color: $primary;
 color:$constant_font;
 border-color:$button_border;
+}
+
+#top #wrap_all $key .av-menu-button-colored > a .avia-menu-text{
+background-color: $primary;
+color:$constant_font;
+border-color:$primary;
+}
+
+#top #wrap_all $key .av-menu-button-colored > a .avia-menu-text:after{
+background-color:$button_border;
 }
 
 #top $key .mobile_menu_toggle{
@@ -143,19 +152,22 @@ color:$bg;
 border-color:$button_border2;
 }
 
-$key .ajax_controlls a:hover{
-border-color:$secondary;
-}
+$key .avia-toc-style-elegant a.avia-toc-level-0:last-child:after, $key .avia-toc-style-elegant a:first-child:after, $key .avia-toc-style-elegant a.avia-toc-level-0:after {background-color:$bg; border-color: $secondary }
+$key .avia-toc-style-elegant a:first-child span:after, $key .avia-toc-style-elegant a.avia-toc-level-0 span:after {background-color:$bg;}
+$key .avia-toc-style-elegant a:first-child:hover span:after, $key .avia-toc-style-elegant a.avia-toc-level-0:hover span:after {border-color: $secondary}
+
+$key .avia-toc-style-elegant a:before{border-color: $border}
+$key .avia-toc-style-elegant a:first-child:after, $key .avia-toc-style-elegant a.avia-toc-level-0:after {border-color: $secondary; background-color: $bg;}
+$key .avia-toc-style-elegant a:last-child:after{ background-color:$border;}
 
 $key .timeline-bullet{
 background-color:$border;
 border-color: $bg;
 }
 
-$key table, $key .widget_nav_menu ul:first-child>.current-menu-item, $key .widget_nav_menu ul:first-child>.current_page_item, $key .widget_nav_menu ul:first-child>.current-menu-ancestor, $key .pagination .current, $key .pagination a, $key.iconbox_top .iconbox_content, $key .av_promobox, $key .toggle_content, $key .toggler:hover, #top $key .av-minimal-toggle .toggler, $key .related_posts_default_image, $key .search-result-counter, $key .container_wrap_meta, $key .avia-content-slider .slide-image, $key .avia-slider-testimonials .avia-testimonial-content, $key .avia-testimonial-arrow-wrap .avia-arrow, $key .news-thumb, $key .portfolio-preview-content, $key .portfolio-preview-content .avia-arrow, $key .av-magazine .av-magazine-entry-icon, $key .related_posts.av-related-style-full a, $key .aviaccordion-slide, $key.avia-fullwidth-portfolio .pagination, $key .isotope-item.special_av_fullwidth .av_table_col.portfolio-grid-image, $key .av-catalogue-list li:hover, $key .wp-playlist, $key .avia-slideshow-fixed-height > li, $key .avia-form-success, $key .av-boxed-grid-style .avia-testimonial{
+$key table, $key .widget_nav_menu ul:first-child>.current-menu-item, $key .widget_nav_menu ul:first-child>.current_page_item, $key .widget_nav_menu ul:first-child>.current-menu-ancestor, $key .pagination .current, $key .pagination a, $key.iconbox_top .iconbox_content, $key .av_promobox, $key .toggle_content, $key .toggler:hover, #top $key .av-minimal-toggle .toggler, $key .related_posts_default_image, $key .search-result-counter, $key .container_wrap_meta, $key .avia-content-slider .slide-image, $key .avia-slider-testimonials .avia-testimonial-content, $key .avia-testimonial-arrow-wrap .avia-arrow, $key .news-thumb, $key .portfolio-preview-content, $key .portfolio-preview-content .avia-arrow, $key .av-magazine .av-magazine-entry-icon, $key .related_posts.av-related-style-full a, $key .aviaccordion-slide, $key.avia-fullwidth-portfolio .pagination, $key .isotope-item.special_av_fullwidth .av_table_col.portfolio-grid-image, $key .av-catalogue-list li:hover, $key .wp-playlist, $key .avia-slideshow-fixed-height > li, $key .avia-form-success, $key .avia-form-error, $key .av-boxed-grid-style .avia-testimonial{
 background: $bg2;
 }
-
 
 
 #top $key .post_timeline li:hover .timeline-bullet{
@@ -189,6 +201,7 @@ border-color:$button_border;
 #top $key .av-masonry-entry.format-quote:hover .av-icon-display{
 color:$primary;
 }
+
 
 
 $key ::-webkit-input-placeholder {color: $meta; }
@@ -254,13 +267,27 @@ border-color:$border;
 
 @media only screen and (max-width: 767px) { 
 
-#top #wrap_all .av_header_transparency{
-	background-color:$bg;
-	color: $color;
-	border-color: $border;
-}
+	#top #wrap_all .av_header_transparency{
+		background-color:$bg;
+		color: $color;
+		border-color: $border;
+	}
 
 }
+
+@media only screen and (max-width: 989px) { 
+
+	.html_mobile_menu_tablet #top #wrap_all .av_header_transparency{
+		background-color:$bg;
+		color: $color;
+		border-color: $border;
+	}
+
+}
+
+
+
+
 
 ";
 
@@ -289,7 +316,7 @@ background-color: $bg;
 color: $meta;
 }
 
-$key .ajax_search_image{
+$key .av_ajax_search_image{
 background-color: $primary;
 color:$bg;
 }
@@ -298,15 +325,15 @@ $key .ajax_search_excerpt{
 color: $meta;
 }
 
-#top $key .ajax_search_entry:hover{
-background-color:$bg2;
-}
-
-$key .ajax_search_title{
+$key .av_ajax_search_title{
 color: $heading;
 }
 
 $key .ajax_load{
+background-color:$primary;
+}
+
+$key .av_searchsubmit_wrapper{
 background-color:$primary;
 }
 
@@ -359,6 +386,45 @@ color:$meta;
 
 ";
 
+// timeline
+
+$timeline = avia_backend_calculate_similar_color($border, 'darker', 1);
+$timeline_date = avia_backend_calculate_similar_color($border, 'darker', 4);
+
+$output.= "
+$key .avia-timeline .milestone_icon{
+background-color:$timeline;
+}
+
+$key .avia-timeline .milestone_inner{
+background-color:$timeline;
+}
+
+$key .avia-timeline{
+border-color:$timeline;
+}
+
+$key .av-milestone-icon-wrap:after{
+border-color:$timeline;
+}
+
+$key .avia-timeline .av-milestone-date {
+color:$timeline_date;
+}
+
+$key .avia-timeline .av-milestone-date span{
+background-color:$timeline;
+}
+
+$key .avia-timeline-horizontal .av-milestone-content-wrap footer{
+background-color:$timeline;
+}
+
+$key .av-timeline-nav a span{
+background-color:$timeline;
+}
+
+";
 
 
 
@@ -414,7 +480,6 @@ background-color: $bg;
 }
 
 ";
-
 
 
 //sidebar tab & Tabs shortcode
@@ -478,7 +543,7 @@ background-color: $meta;
 
 
 //pricing table
-$stripe = avia_backend_calculate_similar_color($primary, 'lighter', 2);
+$stripe  = avia_backend_calculate_similar_color($primary, 'lighter', 2);
 $stripe2 = avia_backend_calculate_similar_color($primary, 'lighter', 1);
 
 $output.= "
@@ -525,8 +590,6 @@ $key .theme-color-bar .bar{
 background: $primary;
 }
 
-
-
 $key .mejs-controls .mejs-time-rail .mejs-time-current, $key .mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-current, $key .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current, $key .button.av-sending-button, $key .av-striped-bar .theme-color-bar .bar{
 
 background: $primary;
@@ -547,6 +610,29 @@ $key .progress{
 background-color:$bg2;
 }
 
+";
+
+
+
+// ajax search shortcode
+
+$output.= "
+$key .av_searchform_element_results .av_ajax_search_entry,
+$key .av_searchform_element_results .av_ajax_search_title,
+$key.av_searchform_element_results .av_ajax_search_entry,
+$key.av_searchform_element_results .av_ajax_search_title{
+color: $primary;
+}
+
+$key .av_searchform_element_results .ajax_search_excerpt,
+$key.av_searchform_element_results .ajax_search_excerpt{
+color: $meta;
+}
+
+$key .av_searchform_element_results .av_ajax_search_image,
+$key.av_searchform_element_results .av_ajax_search_image{
+color: $meta;
+}
 ";
 
 /*contact form send button*/
@@ -698,6 +784,7 @@ background-color:$bg2;
 			}
 			";
 		}
+		
 			
 		if(!empty($avia_config['backend_colors']['menu_transparent']))
 		{
@@ -727,6 +814,26 @@ background-color:$bg2;
 				}
 			}
 			";
+			
+			$output .= " @media only screen and (max-width: 989px) {
+				.html_mobile_menu_tablet #top #wrap_all {$key}.av_header_transparency, .html_mobile_menu_tablet #top #wrap_all {$key}.av_header_transparency .phone-info.with_nav span,
+				.html_mobile_menu_tablet #top #header{$key}.av_header_transparency .av-main-nav > li > a .avia-menu-text, .html_mobile_menu_tablet #top #header{$key}.av_header_transparency .av-main-nav > li > a .avia-menu-subtex{ color: $meta }
+				
+				.html_mobile_menu_tablet $key div .av-hamburger-inner, .html_mobile_menu_tablet $key div .av-hamburger-inner::before, .html_mobile_menu_tablet $key div .av-hamburger-inner::after{
+					background-color:$meta;
+				}
+				
+				.html_mobile_menu_tablet #top .av_header_with_border.av_header_transparency .avia-menu.av_menu_icon_beside{
+					border-color:$border;
+				}
+			}
+			";
+			
+			
+			
+			
+			
+			
 		}
 		
 		if(!empty($avia_config['backend_colors']['burger_flyout_width']))
@@ -753,8 +860,8 @@ background-color:$bg2;
 			
 			#main{ border-color: $border;  }
 			
-			#scroll-top-link:hover{ background-color: $bg2; color: $primary; border:1px solid $border; }
-
+			#scroll-top-link:hover, #av-cookie-consent-badge:hover{ background-color: $bg2; color: $primary; border:1px solid $border; }
+			
 			";
 
 			/*contact form picker*/
@@ -786,7 +893,8 @@ background-color:$bg2;
 			#top a.av-active-tab-title{color:$primary;}
 			#top .av-tab-arrow-container span{background-color: $bg;}
 			";
-		break;
+			
+            break;
 
 
 
@@ -805,8 +913,8 @@ background-color:$bg2;
 
 			$output .= "
 
-			html, #scroll-top-link{ background-color: $bg; }
-			#scroll-top-link{ color: $color; border:1px solid $border; }
+			html, #scroll-top-link, #av-cookie-consent-badge{ background-color: $bg; }
+			#scroll-top-link, #av-cookie-consent-badge{ color: $color; border:1px solid $border; }
 			
 			.html_stretched #wrap_all{
 			background-color:$bg;
@@ -878,39 +986,51 @@ $output = preg_replace('/\r|\n|\t/', '', $output);
 
 //todo: if the style are generated for the wordpress header call the generating script, otherwise create a simple css file and link to that file
 
-
 $avia_config['style'] = array(
 
 		array(
-		'key'	=>	'direct_input',
-		'value'		=> $output
+			'key'	=> 'direct_input',
+			'value'	=> $output
 		),
 
 		array(
-		'key'	=>	'direct_input',
-		'value'	=> ".html_header_transparency #top .avia-builder-el-0 .container, .html_header_transparency #top .avia-builder-el-0 .slideshow_caption{padding-top:".avia_get_header_scroll_offset()."px;}"
-		),
-
-		//google webfonts
-		array(
-		'elements'	=> 'h1, h2, h3, h4, h5, h6, #top .title_container .main-title, tr.pricing-row td, #top .portfolio-title, .callout .content-area, .avia-big-box .avia-innerbox, .av-special-font, .av-current-sort-title, .html_elegant-blog #top .minor-meta, #av-burger-menu-ul li',
-		'key'	=>	'google_webfont',
-		'value'		=> avia_get_option('google_webfont')
+			'key'	=> 'direct_input',
+			'value'	=> ".html_header_transparency #top .avia-builder-el-0 .container, .html_header_transparency #top .avia-builder-el-0 .slideshow_caption{padding-top:".avia_get_header_scroll_offset()."px;}"
 		),
 
 		//google webfonts
 		array(
-		'elements'	=> 'body',
-		'key'	=>	'google_webfont',
-		'value'		=> avia_get_option('default_font')
+			'elements'			=> 'h1, h2, h3, h4, h5, h6, #top .title_container .main-title, tr.pricing-row td, #top .portfolio-title, .callout .content-area, .avia-big-box .avia-innerbox, .av-special-font, .av-current-sort-title, .html_elegant-blog #top .minor-meta, #av-burger-menu-ul li',
+			'key'				=> 'google_webfont',
+			'value'				=> avia_get_option( 'google_webfont' ),
+			'font_source'		=> 'google_webfont',
+			'add_font_class'	=> false
 		),
-		
+
+		//google webfonts
 		array(
-		'key'	=>	'direct_input',
-		'value'		=> avia_get_option('quick_css')
+			'elements'			=> 'body',
+			'key'				=> 'google_webfont',
+			'value'				=> avia_get_option( 'default_font' ),
+			'font_source'		=> 'default_font',
+			'add_font_class'	=> true
 		),
 );
 
+$quick_css = avia_get_option( 'quick_css' );
+if( ! empty( $quick_css ) )
+{
+	$avia_config['style'][] =
+			array(
+					'key'	=> 'direct_input',
+					'value'	=> avia_get_option( 'quick_css' )
+				);
+}
 
+
+/**
+ * @used_by		functions-enfold.php	avia_generate_grid_dimension()
+ * @used_by		functions-enfold.php	avia_framed_layout()
+ */
 do_action('ava_generate_styles', $options, $color_set, $styles);
 

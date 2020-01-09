@@ -1,4 +1,4 @@
-<?php
+<?php 
 	if ( !defined('ABSPATH') ){ die(); }
 	
 	global $avia_config;
@@ -41,7 +41,7 @@
 
 				//get the sidebar
 				$avia_config['currently_viewing'] = 'page';
-				get_sidebar();
+				//get_sidebar();
 
 				?>
 
@@ -52,4 +52,5 @@
 
 
 
-<?php get_footer(); ?>
+<?php 
+		get_footer();

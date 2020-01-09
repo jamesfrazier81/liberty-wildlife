@@ -91,7 +91,7 @@ var scnDialogHelper = {
             jQuery("<span/>").addClass("scn-input-help").html(a).appendTo(b)
         }
         var h = this;
-        b.find("#" + g).bind("keydown focusout", function (e) {
+        b.find("#" + g).on("keydown focusout", function (e) {
             if (e.type == "keydown" && e.which != 13 && e.which != 9 && !e.shiftKey) h.needsPreview = true;
             else if (h.needsPreview && (e.type == "focusout" || e.which == 13)) {
                 h.previewAction(e.target);
@@ -130,7 +130,7 @@ var scnDialogHelper = {
             jQuery("<span/>").addClass("scn-input-help").html(a).appendTo(b)
         }
         var h = this;
-        b.find("#" + g).bind("change", function (e) {
+        b.find("#" + g).on("change", function (e) {
             if ((e.type == "change" || e.type == "focusout") || e.which == 9) {
                 h.needsPreview = true;
             }

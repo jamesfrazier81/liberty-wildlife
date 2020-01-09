@@ -249,6 +249,10 @@ z-index: 300;
 right: -2px;
 }
 
+.html_burger_menu_active.html_visible_cart .cart_dropdown{
+	display: block;
+}
+
 .html_visible_cart .av-burger-menu-main{
 	padding-right: 25px;
 }
@@ -1784,6 +1788,14 @@ border-radius: 0;
 padding: 11px 11px 0;
 }
 
+.rtl div #reviews #comments ol.commentlist li .comment-text {
+	margin: 0 50px;
+}
+
+.rtl .av-woo-product-review #reviews #comments ol.commentlist li .comment-text {
+	margin: 0 50px 0 0;
+}
+
 div #reviews #comments ol.commentlist li .avatar {
 float: left;
 position: absolute;
@@ -1834,6 +1846,8 @@ border: 0;
 position: relative;
 background: 0;
 border: 0;
+display: inline-block;
+width: 100%;
 }
 
 #top #review_form #respond .comment-form-rating{
@@ -2699,6 +2713,12 @@ margin:0;
 
 
 
+/*enfold 4.3*/
+#top .woocommerce-terms-and-conditions-link{text-decoration: underline;}
+#top .template-page .product_meta { margin-bottom: 7px; }
+#top .template-page .product_meta > span { margin-right: 5px; font-size: 11px; }
+
+
 
 /* #Media Queries
 ================================================== */
@@ -2886,7 +2906,7 @@ margin:0;
 		
 		
 		
-		.responsive #top #menu-item-shop .cart_dropdown_link{line-height: 80px;}
+		.responsive #top #header_main #menu-item-shop .cart_dropdown_link{line-height: 80px;}
 		.responsive.html_cart_at_menu.html_header_sidebar #top #menu-item-shop .dropdown_widget.dropdown_widget_cart { width: 300px; }
 		.responsive.html_cart_at_menu.html_header_sidebar #menu-item-shop .dropdown_widget .avia-arrow {right:40px;}
 		.responsive.html_cart_at_menu.html_bottom_nav_header.html_logo_right #menu-item-shop{left:auto;}

@@ -398,7 +398,19 @@ var LS_TransitionGallery = {
 
 	openTransitionGallery: function() {
 
-		kmUI.modal.open( '#tmpl-ls-transition-modal', { width: 900, height: 1500 } );
+		kmw.modal.open({
+			content: '#tmpl-ls-transition-modal',
+			minWidth: 980,
+			maxWidth: 980,
+			maxHeight: '100%',
+
+			onBeforeClose: function() {
+
+				if( window.lsHideTransition ) {
+					window.lsHideTransition();
+				}
+			}
+		});
 
 		// Append transitions
 		LS_TransitionGallery.appendTransition(0, '', '2d_transitions', layerSliderTransitions.t2d);
@@ -411,8 +423,7 @@ var LS_TransitionGallery = {
 
 	closeTransitionGallery: function() {
 
-		kmUI.modal.close();
-		kmUI.overlay.close();
+		kmw.modal.close();
 	},
 
 

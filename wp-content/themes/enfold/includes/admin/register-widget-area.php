@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 // global $wp_registered_sidebars;
 #########################################
 	
@@ -62,7 +66,7 @@
 	//dynamic widgets
 	
 	#footer
-	$footer_columns = avia_get_option('footer_columns','5');
+	$footer_columns = avia_get_option( 'footer_columns', '5' );
 	
 	for ($i = 1; $i <= $footer_columns; $i++)
 	{
@@ -76,8 +80,21 @@
 		));
 	}
 
-	
-	//dummy widgets
+	// Register separate Archives sidebar if activated in theme options
+    if (avia_get_option('archive_sidebar') == 'archive_sidebar_separate') {
+
+        register_sidebar(array(
+            'name' => 'Sidebar Archives',
+            'before_widget' => '<section id="%1$s" class="widget clearfix %2$s">',
+            'after_widget' => '<span class="seperator extralight-border"></span></section>',
+            'before_title' => '<h3 class="widgettitle">',
+            'after_title' => '</h3>',
+            'id' => 'av_archives'
+        ));
+    }
+
+
+    //dummy widgets
 	
 	function avia_dummy_widget($number)
 	{

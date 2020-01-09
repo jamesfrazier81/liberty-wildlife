@@ -29,6 +29,14 @@ if( ! class_exists( 'avia_superobject' ) )
 	{
 	
 		/**
+		 * Holds the instance of this class
+		 * 
+		 * @since 4.3
+		 * @var avia_superobject 
+		 */
+		static protected $_instance = null;
+		
+		/**
 		 * This object holds basic information like theme or plugin name, version, description etc
 		 * @var obj
 		 */
@@ -72,37 +80,111 @@ if( ! class_exists( 'avia_superobject' ) )
 		 */
 		var $style;
 
+		/**
+		 *
+		 * @since 4.3
+		 * @var AviaTypeFonts 
+		 */
+		protected $type_fonts;
 		
+		
+		/**
+		 * Return the instance of this class
+		 * 
+		 * @since 4.3
+		 * @param array|null $base_data
+		 * @return avia_superobject
+		 */
+		static public function instance( $base_data = null )
+		{
+			if( is_null( avia_superobject::$_instance ) )
+			{
+				avia_superobject::$_instance = new avia_superobject( $base_data );
+			}
+			
+			return avia_superobject::$_instance;
+		}
 		
 	    /**
          * The constructor sets up  $base_data and $option_prefix. It then gets database values and if we are viewing the backend it calls the option page creator as well
+		 * 
+		 * @param array|null $base_data
          */
-		public function __construct( $base_data )
+		protected function __construct( $base_data )
 		{	
 			$this->base_data = $base_data;
 			$this->option_prefix = 'avia_options_'.avia_backend_safe_string( $this->base_data['prefix'] );
 			
+			$this->style = null;
+			$this->type_fonts = null;
+		}
+
+		/**
+		 * @since 4.3
+		 */
+		public function __destruct() 
+		{
+			unset( $this->base_data );
+			unset( $this->subpages );
+			unset( $this->options );
+			unset( $this->option_pages );
+			unset( $this->option_page_data );
+			unset( $this->style );
+			unset( $this->type_fonts );
+		}
+		
+		
+		/**
+		 * Must be called immediately after creating the class.
+		 * Removed from constructor due to endless loop
+		 * 
+		 * @since 4.3
+		 */
+		public function init()
+		{
 			//set option array
 			$this->_create_option_arrays();
 			
-			if(current_theme_supports( 'avia_mega_menu' ) ) { new avia_megamenu($this); }
+			if( current_theme_supports( 'avia_mega_menu' ) ) 
+			{ 
+				new avia_megamenu( $this ); 
+			}
 			
-			$this->style = new avia_style_generator($this);
+			$this->style = new avia_style_generator( $this );
 			
-			add_action('wp_footer',array(&$this, 'set_javascript_framework_url'));
+			add_action( 'wp_footer', array( &$this, 'set_javascript_framework_url' ) );
 			
 			if( is_admin() ) 
 			{
-				add_action('admin_print_scripts',array(&$this, 'set_javascript_framework_url'));
-				new avia_adminpages($this);
-				new avia_meta_box($this);
-				new avia_wp_export($this);
+				add_action( 'admin_print_scripts',array( $this, 'set_javascript_framework_url' ) );
+				new avia_adminpages( $this );
+				new avia_meta_box( $this );
+				new avia_wp_export( $this );
 			}
 			
-			if(get_theme_support( 'avia_sidebar_manager' )) new avia_sidebar();
+			if( get_theme_support( 'avia_sidebar_manager' )) 
+			{
+				new avia_sidebar();
+			}
 		}
 
 		
+
+		/**
+		 * Get the instance of AviaTypeFonts object
+		 * 
+		 * @return AviaTypeFonts
+		 */
+		public function type_fonts() 
+		{
+			if( is_null( $this->type_fonts ) )
+			{
+				$this->type_fonts = new AviaTypeFonts();
+			}
+			
+			return $this->type_fonts;
+		}
+				
 		
 		
 		
@@ -204,8 +286,20 @@ if( ! class_exists( 'avia_superobject' ) )
 			echo "</script>\n \n ";
 		}
 		
-		
 	}
+	
+	/**
+	 * Returns the main instance of avia_superobject to prevent the need to use globals
+	 * 
+	 * @since 4.3
+	 * @param array|null $base_data
+	 * @return avia_superobject
+	 */
+	function AviaSuperobject( $base_data = null ) 
+	{
+		return avia_superobject::instance( $base_data );
+	}
+	
 }
 
 

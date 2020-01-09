@@ -1,10 +1,16 @@
 <?php 
+
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 /**
  * Envato Protected API
  *
  * Wrapper class for the Envato marketplace protected API methods specific
  * to the Envato WordPress Toolkit plugin.
  *
+ * @modified_by		Günter	v4.2.4 (PHP 7.2 array errors)
+ * 
  * @package     WordPress
  * @subpackage  Envato WordPress Toolkit
  * @author      Derek Herman <derek@envato.com>
@@ -49,7 +55,7 @@ class Envato_Protected_API {
    * @access    public
    * @since     1.0
    */
-  public $errors = array( 'errors' => '' );
+  public $errors;
   
   /**
    * Class contructor method
@@ -61,7 +67,12 @@ class Envato_Protected_API {
    * @access    public
    * @since     1.0
    */
-  public function __construct( $user_name = '', $api_key = '' ) {
+  public function __construct( $user_name = '', $api_key = '' ) 
+  {
+	  
+	$this->errors = array(
+							'errors' =>	array()
+						);
   
     if ( $user_name == '' ) {
       $this->set_error( 'user_name', __( 'Please enter your Envato Marketplace Username.', 'envato' ) );
@@ -73,7 +84,17 @@ class Envato_Protected_API {
       
     $this->user_name  = $user_name;
     $this->api_key    = $api_key;
-    
+	
+  }
+  
+  /**
+   * 
+   * @added_by	Günter
+   * @since		4.2.4 
+   */
+  public function __destruct() 
+  {
+	  unset( $this->errors );
   }
   
   /**

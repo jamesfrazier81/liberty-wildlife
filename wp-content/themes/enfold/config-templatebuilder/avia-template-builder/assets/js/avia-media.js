@@ -133,8 +133,13 @@
 						
 			var clicked = $(this), 
 				options = clicked.data(),
-				parent 	= clicked.parents('.avia-form-element-container:last'),
- 				target 	= parent.find('#'+options.target),
+				parent 	= clicked.closest('.avia-modal-group-wrapper');
+				if( parent.length == 0 )
+				{
+					parent 	= clicked.closest('.avia-form-element-container');
+				}
+				
+ 			var	target 	= parent.find('#'+options.target),			    
  				fakeImg = target.next('input'),
  				hidde_attachment_id = parent.find('.hidden-attachment-id'),
  				hidde_attachment_size = parent.find('.hidden-attachment-size'),
@@ -324,6 +329,7 @@
 						{
 							preview_img = typeof element.sizes['thumbnail'] != 'undefined'  ? element.sizes['thumbnail'].url : element.url ;
 							preview_html += "<span class='avia-builder-prev-img'><img src='"+preview_img+"' /></span>";
+							del_btn.removeClass('avia-hidden');
 							
 							if(fakeImg.length)
 							{
@@ -349,7 +355,7 @@
 							
 							values.img_fakeArg = '<img src="'+values.img_fakeArg +'" title="" alt="" />';
 							
-							var htmlVal 	 = $.avia_builder.update_builder_html(new_template, values, true),
+							var htmlVal 	 = $.avia_builder.update_builder_html(new_template, values, false),
 								saveTo 		 = new_template.find($.avia_builder.datastorage + ":eq(0)");
 					
 							saveTo[0].innerHTML = htmlVal.output;

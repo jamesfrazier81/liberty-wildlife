@@ -68,7 +68,7 @@ class Tribe__Events__Aggregator__Event {
 		$event = array();
 		$item = (object) $item;
 
-		$field_map = array(
+		$field_map = [
 			'title'              => 'post_title',
 			'description'        => 'post_content',
 			'excerpt'            => 'post_excerpt',
@@ -84,8 +84,9 @@ class Tribe__Events__Aggregator__Event {
 			'url'                => 'EventURL',
 			'all_day'            => 'EventAllDay',
 			'image'              => 'image',
-			'facebook_id'        => 'EventFacebookID',
 			'meetup_id'          => 'EventMeetupID',
+			'eventbrite_id'      => 'EventBriteID',
+			'eventbrite'         => 'eventbrite',
 			'uid'                => 'uid',
 			'parent_uid'         => 'parent_uid',
 			'recurrence'         => 'recurrence',
@@ -100,30 +101,65 @@ class Tribe__Events__Aggregator__Event {
 			'hide_from_listings' => 'hide_from_listings',
 			'sticky'             => 'sticky',
 			'featured'           => 'feature_event',
-		);
+		];
 
-		$venue_field_map = array(
-			'facebook_id' => 'VenueFacebookID',
-			'meetup_id' => 'VenueMeetupID',
-			'venue' => 'Venue',
-			'address' => 'Address',
-			'city' => 'City',
-			'country' => 'Country',
-			'state' => 'State',
-			'stateprovince' => 'Province',
-			'zip' => 'Zip',
-			'phone' => 'Phone',
-			'website' => 'URL'
-		);
+		$venue_field_map = [
+			'_venue_id'             => 'VenueID',
+			'meetup_id'             => 'VenueMeetupID',
+			'eventbrite_id'         => 'VenueEventBriteID',
+			'venue'                 => 'Venue',
+			'address'               => 'Address',
+			'city'                  => 'City',
+			'country'               => 'Country',
+			'state'                 => 'State',
+			'stateprovince'         => 'Province',
+			'zip'                   => 'Zip',
+			'phone'                 => 'Phone',
+			'website'               => 'URL',
+			'overwrite_coordinates' => 'OverwriteCoords',
+			'latitude'              => 'Lat',
+			'longitude'             => 'Lng',
+		];
 
-		$organizer_field_map = array(
-			'facebook_id' => 'OrganizerFacebookID',
-			'meetup_id' => 'OrganizerMeetupID',
-			'organizer' => 'Organizer',
-			'phone' => 'Phone',
-			'email' => 'Email',
-			'website' => 'Website',
-		);
+		$organizer_field_map = [
+			'_organizer_id' => 'OrganizerID',
+			'meetup_id'     => 'OrganizerMeetupID',
+			'eventbrite_id' => 'OrganizerEventBriteID',
+			'organizer'     => 'Organizer',
+			'phone'         => 'Phone',
+			'email'         => 'Email',
+			'website'       => 'Website',
+		];
+
+		/**
+		 * Allows filtering to add other field mapping values.
+		 *
+		 * @since 4.6.24
+		 *
+		 * @param array  $field_map Field map for event object.
+		 * @param object $item      Item being translated.
+		 */
+		$field_map = apply_filters( 'tribe_aggregator_event_translate_service_data_field_map', $field_map, $item );
+
+		/**
+		 * Allows filtering to add other field mapping values.
+		 *
+		 * @since 4.6.24
+		 *
+		 * @param array  $venue_field_map Field map for venue object.
+		 * @param object $item            Item being translated.
+		 */
+		$venue_field_map = apply_filters( 'tribe_aggregator_event_translate_service_data_venue_field_map', $venue_field_map, $item );
+
+		/**
+		 * Allows filtering to add other field mapping values.
+		 *
+		 * @since 4.6.24
+		 *
+		 * @param array  $organizer_field_map Field map for organizer object.
+		 * @param object $item                Item being translated.
+		 */
+		$organizer_field_map = apply_filters( 'tribe_aggregator_event_translate_service_data_organizer_field_map', $organizer_field_map, $item );
 
 		foreach ( $field_map as $origin_field => $target_field ) {
 			if ( ! isset( $item->$origin_field ) ) {
@@ -146,12 +182,20 @@ class Tribe__Events__Aggregator__Event {
 
 		if ( ! empty( $item->organizer ) ) {
 			$event['Organizer'] = array();
-			foreach ( $organizer_field_map as $origin_field => $target_field ) {
-				if ( ! isset( $item->organizer->$origin_field ) ) {
-					continue;
+			$organizer_entries = is_array( $item->organizer ) ? $item->organizer : array( $item->organizer );
+
+			foreach ( $organizer_entries as $organizer_entry ) {
+				$this_organizer = array();
+
+				foreach ( $organizer_field_map as $origin_field => $target_field ) {
+					if ( ! isset( $organizer_entry->$origin_field ) ) {
+						continue;
+					}
+
+					$this_organizer[ $target_field ] = $organizer_entry->$origin_field;
 				}
 
-				$event['Organizer'][ $target_field ] = $item->organizer->$origin_field;
+				$event['Organizer'][] = $this_organizer;
 			}
 		}
 
@@ -188,15 +232,22 @@ class Tribe__Events__Aggregator__Event {
 		}
 
 		$key = "_{$fields[ $origin ]['target']}";
+		$post_type = Tribe__Events__Main::POSTTYPE;
+		$interval = "('" . implode( "','", array_map( 'esc_sql', $values ) ) . "')";
 
 		$sql = "
 			SELECT
-				meta_value,
-				post_id
+				pm.meta_value,
+				pm.post_id
 			FROM
-				{$wpdb->postmeta}
+				{$wpdb->postmeta} pm
+			JOIN
+				{$wpdb->posts} p
+			ON
+				pm.post_id = p.ID
 			WHERE
-				meta_value IN ( '" . implode( "','", $values ) ."' )
+				p.post_type = '{$post_type}'
+				AND meta_value IN {$interval}
 		";
 
 		/**

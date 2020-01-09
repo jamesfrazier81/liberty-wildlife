@@ -6,6 +6,8 @@
 	if(typeof avia_globals == "undefined") return;
 
 	var av_key = "avia_builder_button";	// $this->button['id']
+	var access_key = typeof avia_globals.sc[av_key].access_key != 'undefined' && avia_globals.sc[av_key].access_key != '' ? avia_globals.sc[av_key].access_key : '';
+	var title = avia_globals.sc[av_key].title;
 	
     tinymce.create('tinymce.plugins.'+av_key, 													
     {  
@@ -17,13 +19,12 @@
         	editor.addButton( av_key, {
         		type: 'menubutton',
         		text: "",
-                title : avia_globals.sc[av_key].title,
+                title : title,
                 image : avia_globals.sc[av_key].image,
                 icons : av_key,
             	menu: _self.createMenuValues(editor)
-           });
-        
-        
+			});
+		   
 			editor.addCommand("openAviaModal", function (ui, params) 
 			{
 				var modal = new $.AviaModal(params);
@@ -90,7 +91,7 @@
         			paramOnclick 	= (typeof shortcode_array[z].tinyMCE.instantInsert != 'undefined') ? _self.instantInsert : _self.modalInsert;
         			
         			
-            		current_menu.push({text: paramText, onclick: paramOnclick, av_shortcode: shortcode_array[z]});
+            		current_menu.push({text: paramText, onclick: paramOnclick, av_shortcode: shortcode_array[z], scope: editor });
         		}
         	}
         	
@@ -102,16 +103,15 @@
         			if(final_options[title].menu.length === 0) delete(final_options[title]);
         		}
         	}
-        	
-        	
+
 			return final_options;
         },
         
         instantInsert: function () 
         {
         	var shortcode = this.settings.av_shortcode;
-        
-            tinyMCE.activeEditor.execCommand("mceInsertContent", false, window.switchEditors.wpautop(shortcode.tinyMCE.instantInsert))
+			
+            this.settings.scope.execCommand("mceInsertContent", false, window.switchEditors.wpautop(shortcode.tinyMCE.instantInsert))
         },
         
         modalInsert: function (menu, shortcode) 
@@ -119,14 +119,16 @@
         	var shortcode = this.settings.av_shortcode,
         		modalData = $.extend({}, {modal_class:'', before_save:'' }, shortcode.modal_data);
         		
-		if(typeof shortcode.modal_on_load == "object") {
-			shortcode.modal_on_load = $.map(shortcode.modal_on_load, function(modal){
-				return modal;
-			});
-		}
+			if(typeof shortcode.modal_on_load == "object") {
+				shortcode.modal_on_load = $.map(shortcode.modal_on_load, function(modal){
+					return modal;
+				});
+			}
 		
         	if(typeof shortcode.modal_on_load != "undefined" && typeof shortcode.modal_on_load != "string") shortcode.modal_on_load = shortcode.modal_on_load.join(', ');
         	
+			var scope = this.settings.scope;
+			
             tinyMCE.activeEditor.execCommand("openAviaModal", false, 
             {
 				modal_class: 		modalData.modal_class,
@@ -178,22 +180,22 @@
 						}
 						else
 						{
-							values = window.switchEditors.wpautop( $.avia_builder.createShortcode( values, shortcode.shortcode ) );
+							var	tag = {},
+								force_content_close = typeof shortcode.self_closing != 'undefined' && 'yes' == shortcode.self_closing ? false : true;
+									
+							values = window.switchEditors.wpautop( $.avia_builder.createShortcode( values, shortcode.shortcode, tag, force_content_close ) );
 						}
 					}
 	
-					
-					tinyMCE.activeEditor.execCommand("mceInsertContent", false, values)
+					scope.execCommand("mceInsertContent", false, values);
 				}
-            })
+            });
                
         }
         
-        
-        
     });  
-    
     
     tinymce.PluginManager.add(av_key, tinymce.plugins[av_key]);
     
 })(jQuery);	 
+

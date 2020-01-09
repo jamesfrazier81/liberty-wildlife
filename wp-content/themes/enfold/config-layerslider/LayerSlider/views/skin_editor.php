@@ -47,7 +47,7 @@
 	<!-- Page title -->
 	<h2>
 		<?php _e('LayerSlider Skin Editor', 'LayerSlider') ?>
-		<a href="?page=layerslider" class="add-new-h2"><?php _e('Back to the list', 'LayerSlider') ?></a>
+		<a href="<?php echo admin_url('admin.php?page=layerslider-options') ?>" class="add-new-h2"><?php _e('&larr; Options', 'LayerSlider') ?></a>
 	</h2>
 
 	<!-- Error messages -->

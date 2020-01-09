@@ -27,7 +27,7 @@ class LS_Popups {
 
 		// Popup is an exclusive feature, don't try to initialize it
 		// in case of unactivated sites.
-		if( ! get_option('layerslider-authorized-site', false) ) {
+		if( ! LS_Config::isActivatedSite() ) {
 			return false;
 		}
 
@@ -56,7 +56,7 @@ class LS_Popups {
 		self::autoinclude();
 		self::display();
 
-		add_action('get_footer', array(__CLASS__, 'render'));
+		add_action('wp_footer', array(__CLASS__, 'render'), 1);
 	}
 
 

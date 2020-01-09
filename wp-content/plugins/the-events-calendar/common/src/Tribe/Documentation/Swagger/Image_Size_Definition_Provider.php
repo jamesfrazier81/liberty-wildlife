@@ -20,11 +20,11 @@ class Tribe__Documentation__Swagger__Image_Size_Definition_Provider
 			'type'       => 'object',
 			'properties' => array(
 				'width' => array(
-					'type' => 'int',
+					'type' => 'integer',
 					'description' => __( 'The image width in pixels in the specified size', 'tribe-common' ),
 				),
 				'height' => array(
-					'type' => 'int',
+					'type' => 'integer',
 					'description' => __( 'The image height in pixels in the specified size', 'tribe-common' ),
 				),
 				'mime-type' => array(
@@ -33,6 +33,7 @@ class Tribe__Documentation__Swagger__Image_Size_Definition_Provider
 				),
 				'url' => array(
 					'type' => 'string',
+					'format' => 'uri',
 					'description' => __( 'The link to the image in the specified size on the site', 'tribe-common' ),
 				),
 			),

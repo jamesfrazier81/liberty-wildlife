@@ -2,7 +2,8 @@
 
 if ( !defined('WP_LOAD_IMPORTERS') ) define('WP_LOAD_IMPORTERS', true);
 
-
+//heavily increased the execution time. if an image optimization plugin is active this will be necessary when importing larger demos
+@ini_set('max_execution_time', 1200);
 
 // Load Importer API
 require_once ABSPATH . 'wp-admin/includes/import.php';

@@ -30,6 +30,50 @@ html, body {
 #screen-meta-links {
 	position: relative;
 	z-index: 10;
+	float: right;
+}
+
+#contextual-help-link-wrap,
+#screen-options-link-wrap,
+#show-guides-link-wrap {
+	float: left;
+	border: 0 !important;
+
+	button {
+		border: 1px solid #ccc !important;
+		border-top: 0 !important;
+		box-shadow: none !important;
+	}
+}
+
+#show-guides-link-wrap {
+	margin: 0 30px 0 6px;
+
+	button {
+		background: #f1f1f1 !important;
+	}
+}
+
+#ls-guides-wrap {
+	padding: 8px 20px 12px;
+
+	h5 {
+		margin: 0;
+		padding: 8px 0;
+		font-size: 13px;
+		font-weight: 600;
+	}
+}
+
+#ls-screen-options-form {
+
+	input[type="number"] {
+		width: 50px;
+	}
+
+	button {
+		margin-left: 10px;
+	}
 }
 
 .ls-hidden {

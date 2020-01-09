@@ -55,6 +55,7 @@ class Tribe__Events__JSON_LD__Venue extends Tribe__JSON_LD__Abstract {
 
 		$data->address = array();
 
+		$data->address['@type'] = 'PostalAddress';
 		$data->address['streetAddress'] = tribe_get_address( $post_id );
 		$data->address['addressLocality'] = tribe_get_city( $post_id );
 		$data->address['addressRegion'] = tribe_get_region( $post_id );
@@ -76,6 +77,7 @@ class Tribe__Events__JSON_LD__Venue extends Tribe__JSON_LD__Abstract {
 		$data->telephone = tribe_get_phone( $post_id );
 		$data->sameAs = tribe_get_venue_website_url( $post_id );
 
+		$data = $this->apply_object_data_filter( $data, $args, $post );
 		return array( $post_id => $data );
 	}
 

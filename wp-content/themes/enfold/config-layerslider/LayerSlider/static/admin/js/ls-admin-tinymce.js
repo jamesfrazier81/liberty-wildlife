@@ -1,5 +1,13 @@
 jQuery(document).ready(function($) {
 
+	// In some rare cases the globally loaded LS_MCE_l10n
+	// variable might not be available due to plugins making
+	// changes in the WP script queue. The below makes sure
+	// that we can at least avoid undef JS errors.
+	if( typeof LS_MCE_l10n === 'undefined' ) {
+		LS_MCE_l10n = {};
+	}
+
 	tinymce.create('tinymce.plugins.layerslider_plugin', {
 
 		init : function(ed, url) {

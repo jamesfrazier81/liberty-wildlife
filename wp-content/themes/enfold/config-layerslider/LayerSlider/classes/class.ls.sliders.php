@@ -52,7 +52,9 @@ class LS_Sliders {
 	 * @param mixed $args Find any slider with the provided filters
 	 * @return mixed Array on success, false otherwise
 	 */
-	public static function find($args = array()) {
+	public static function find( $args = array() ) {
+
+		$userArgs = $args;
 
 		// Find by slider ID
 		if(is_numeric($args) && intval($args) == $args) {
@@ -80,20 +82,23 @@ class LS_Sliders {
 				'exclude' => array('removed'),
 				'orderby' => 'date_c',
 				'order' => 'DESC',
-				'limit' => 10,
+				'limit' => 30,
 				'page' => 1,
+				'groups' => false,
 				'data' => true
 			);
 
 			// Merge user data with defaults
-			foreach($defaults as $key => $val) {
-				if(!isset($args[$key])) { $args[$key] = $val; }
+			foreach( $defaults as $key => $val ) {
+				if( ! isset( $args[ $key ] ) ) {
+					$args[ $key ] = $val;
+				}
 			}
 
 			// Escape user data
-			foreach($args as $key => $val) {
+			foreach( $args as $key => $val ) {
 				if( $key !== 'where' ) {
-					$args[$key] = esc_sql($val);
+					$args[ $key ] = esc_sql( $val );
 				}
 			}
 
@@ -112,21 +117,32 @@ class LS_Sliders {
 			$args['order'] 		= ($args['order'] === 'DESC') ? 'DESC' : 'ASC';
 			$args['limit'] 		= (int)  $args['limit'];
 			$args['page'] 		= (int)  $args['page'];
+			$args['groups'] 	= (bool) $args['groups'];
 			$args['data'] 		= (bool) $args['data'];
 
 
 
 
-			// Exclude
-			if(!empty($args['exclude'])) {
-				if(in_array('hidden', $args['exclude'])) {
-					$exclude[] = "flag_hidden = '0'"; }
-
-				if(in_array('removed', $args['exclude'])) {
-					$exclude[] = "flag_deleted = '0'"; }
-
-				$args['exclude'] = implode(' AND ', $exclude);
+			$exclude = array();
+			if( $args['groups'] ) {
+				$exclude[] = "group_id IS NULL";
+			} else {
+				$exclude[] = "flag_group = '0'";
 			}
+
+
+			if( ! empty( $args['exclude'] ) ) {
+
+				if( in_array( 'hidden', $args['exclude'] ) ) {
+					$exclude[] = "flag_hidden = '0'";
+				}
+
+				if( in_array( 'removed', $args['exclude'] ) ) {
+					$exclude[] = "flag_deleted = '0'";
+				}
+			}
+
+			$args['exclude'] = implode(' AND ', $exclude);
 
 			// Where
 			$where = '';
@@ -152,6 +168,7 @@ class LS_Sliders {
 				$where
 				ORDER BY `{$args['orderby']}` {$args['order']}
 				LIMIT {$args['limit']}
+
 			", ARRAY_A);
 
 			// Set counter
@@ -165,6 +182,17 @@ class LS_Sliders {
 			if($args['data']) {
 				foreach($sliders as $key => $val) {
 					$sliders[$key]['data'] = json_decode($val['data'], true);
+				}
+			}
+
+
+			if( $args['groups'] ) {
+				foreach( $sliders as $key => $val ) {
+
+					if( $val['flag_group'] ) {
+
+						$sliders[ $key ]['items'] = self::_getGroupItems( (int) $val['id'], $userArgs );
+					}
 				}
 			}
 
@@ -184,7 +212,7 @@ class LS_Sliders {
 	 * @param array $data The settings of the slider to create
 	 * @return int The slider database ID inserted
 	 */
-	public static function add($title = 'Unnamed', $data = array(), $slug = '') {
+	public static function add($title = 'Unnamed', $data = array(), $slug = '', $groupId = NULL ) {
 
 		global $wpdb;
 
@@ -213,6 +241,7 @@ class LS_Sliders {
 
 		// Insert slider, WPDB will escape data automatically
 		$wpdb->insert($wpdb->prefix.LS_DB_TABLE, array(
+			'group_id' => $groupId,
 			'author' => get_current_user_id(),
 			'name' => $title,
 			'slug' => $slug,
@@ -221,7 +250,7 @@ class LS_Sliders {
 			'date_m' => time(),
 			'flag_popup' => $popup
 		), array(
-			'%d', '%s', '%s', '%s', '%d', '%d', '%d'
+			'%d', '%d', '%s', '%s', '%s', '%d', '%d', '%d'
 		));
 
 		// Return insert database ID
@@ -342,9 +371,18 @@ class LS_Sliders {
 		// Check ID
 		if(!is_int($id)) { return false; }
 
+		// Get slider data before deleting
+		$slider = self::_getById( $id );
+
 		// Delete
 		global $wpdb;
 		$wpdb->delete($wpdb->prefix.LS_DB_TABLE, array('id' => $id), '%d');
+
+		// Check if the slider was part of a group
+		// that might also need to be deleted.
+		if( ! empty( $slider['group_id'] ) ) {
+			self::checkForEmptyGroup( (int) $slider['group_id'] );
+		}
 
 		return true;
 	}
@@ -375,6 +413,250 @@ class LS_Sliders {
 		return true;
 	}
 
+
+	/**
+	 * Adds the specified slider to the specified group
+	 *
+	 * @since 6.9.0
+	 * @access public
+	 * @param string $sliderId The slider database ID
+	 * @param string $groupId The group database ID
+	 * @return bool Returns true on success, false otherwise
+	 */
+	public static function addSliderToGroup( $sliderId, $groupId ) {
+
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix.LS_DB_TABLE,
+			array( 'group_id' => $groupId ),
+			array( 'id' => $sliderId ),
+			'%d',
+			'%d'
+		);
+
+		return true;
+	}
+
+
+	/**
+	 * Removes the specified slider from its group
+	 *
+	 * @since 6.9.0
+	 * @access public
+	 * @param string $sliderId The slider database ID
+	 * @param string $groupId The group database ID
+	 * @return bool Returns true on success, false otherwise
+	 */
+	public static function removeSliderFromGroup( $sliderId, $groupId ) {
+
+		global $wpdb;
+		$wpdb->update( $wpdb->prefix.LS_DB_TABLE,
+			array( 'group_id' => null ),
+			array( 'id' => $sliderId ),
+			'%d',
+			'%d'
+		);
+
+		self::checkForEmptyGroup( $groupId );
+
+		return true;
+	}
+
+
+	/**
+	 * Checks whether a slider group is empty and delete
+	 * it if it is.
+	 *
+	 * @since 6.9.0
+	 * @access public
+	 * @param string $groupId The group database ID
+	 * @return void
+	 */
+	public static function checkForEmptyGroup( $groupId ) {
+
+		$sliders = self::_getGroupItems( $groupId, array(
+			'exclude' => ''
+		));
+
+
+		if( empty( $sliders ) ) {
+			self::removeGroup( $groupId );
+		}
+	}
+
+
+
+	/**
+	 * Adds group with the provided group name
+	 *
+	 * @since 6.9.0
+	 * @access public
+	 * @param string $name The group name
+	 * @return int The group database ID inserted
+	 */
+	public static function addGroup( $name = 'Unnamed' ) {
+
+		if( strlen( $name ) > 99) {
+			$name = substr( $name, 0, ( 99 - strlen( $name ) ) );
+		}
+
+		global $wpdb;
+
+		// Insert slider, WPDB will escape data automatically
+		$wpdb->insert($wpdb->prefix.LS_DB_TABLE, array(
+			'author' => get_current_user_id(),
+			'name' => $name,
+			'data' => '',
+			'date_c' => time(),
+			'date_m' => time(),
+			'flag_popup' => 0,
+			'flag_group' => 1
+		), array(
+			'%d', '%s', '%s', '%s', '%d', '%d', '%d', '%d'
+		));
+
+		return $wpdb->insert_id;
+	}
+
+
+
+	/**
+	 * Removes the specified group
+	 *
+	 * @since 6.9.0
+	 * @access public
+	 * @param string $groupId The group database ID
+	 * @return bool Returns true on success, false otherwise
+	 */
+	public static function removeGroup( $groupId = 0 ) {
+
+		global $wpdb;
+
+		// Attempt to remove any sliders from group
+		// before deleting it.
+		$wpdb->update(
+			$wpdb->prefix.LS_DB_TABLE,
+			array( 'group_id' => null ),
+			array( 'group_id' => $groupId ),
+			array( '%d' ),
+			array( '%d' )
+		);
+
+		// Delete the group
+		$wpdb->delete(
+			$wpdb->prefix.LS_DB_TABLE,
+			array( 'id' => $groupId ),
+			array( '%d' )
+		);
+
+		return true;
+	}
+
+
+
+	/**
+	 * Adds group with the provided group name
+	 *
+	 * @since 6.9.0
+	 * @access public
+	 * @param int $groupId The group ID
+	 * @param string $name The group name
+	 * @return bool Returns true on success, false otherwise
+	 */
+	public static function renameGroup( $groupId = 0, $name = 'Unnamed' ) {
+
+		if( strlen( $name ) > 99) {
+			$name = substr( $name, 0, ( 99 - strlen( $name ) ) );
+		}
+
+		global $wpdb;
+
+		// Insert slider, WPDB will escape data automatically
+		$wpdb->update(
+			$wpdb->prefix.LS_DB_TABLE,
+			array( 'name' => $name ),
+			array( 'id' => $groupId ),
+			array( '%s' ),
+			array( '%d' )
+		);
+
+		// Return insert database ID
+		return true;
+	}
+
+
+
+	private static function _getGroupItems( $id = null, $args = array() ) {
+
+		// Check ID
+		if( ! is_int( $id ) ) { return false; }
+
+		// Defaults
+		$defaults = array(
+			'exclude' => array('removed'),
+			'orderby' => 'date_c',
+			'order' => 'DESC',
+			'limit' => 30,
+			'page' => 1,
+			'data' => true
+		);
+
+		// Merge user data with defaults
+		foreach( $defaults as $key => $val ) {
+			if( ! isset( $args[ $key ] ) ) {
+				$args[ $key ] = $val;
+			}
+		}
+
+		$where = array();
+		$where[] = "group_id = '$id'";
+
+		if( ! empty( $args['exclude'] ) ) {
+
+			if( in_array( 'hidden', $args['exclude'] ) ) {
+				$where[] = "flag_hidden = '0'";
+			}
+
+			if( in_array( 'removed', $args['exclude'] ) ) {
+				$where[] = "flag_deleted = '0'";
+			}
+		}
+
+		$where = implode(' AND ', $where );
+
+		$args['order'] 		= ($args['order'] === 'DESC') ? 'DESC' : 'ASC';
+		$args['limit'] 		= (int)  $args['limit'];
+		$args['page'] 		= (int)  $args['page'];
+		$args['data'] 		= (bool) $args['data'];
+
+		// DB stuff
+		global $wpdb;
+		$table = $wpdb->prefix.LS_DB_TABLE;
+
+		// Make the call
+		$result = $wpdb->get_results("
+			SELECT *
+			FROM $table
+			WHERE $where
+			ORDER BY `{$args['orderby']}` {$args['order']}
+			LIMIT {$args['limit']}
+		", ARRAY_A );
+
+		// Decode slider data
+		if(is_array($result) && !empty($result)) {
+
+			if( ! empty( $args['data'] ) ) {
+				foreach($result as $key => $slider) {
+					$result[$key]['data'] = json_decode($slider['data'], true);
+				}
+			}
+
+			return $result;
+
+		// Failed query
+		} else {
+			return false;
+		}
+	}
 
 
 

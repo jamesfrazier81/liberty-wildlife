@@ -1,12 +1,29 @@
 <?php 
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 global $avia_config;
 
 $responsive		= avia_get_option('responsive_active') != "disabled" ? "responsive" : "fixed_layout";
 $headerS 		= avia_header_setting();
 $social_args 	= array('outside'=>'ul', 'inside'=>'li', 'append' => '');
 $icons 			= !empty($headerS['header_social']) ? avia_social_media_icons($social_args, false) : "";
+$alternate_menu_id = ! empty( $headerS['alternate_menu'] ) && is_numeric( $headerS['alternate_menu'] ) && empty( $headerS['menu_display'] ) ? $headerS['alternate_menu'] : false;
 
-if(isset($headerS['disabled'])) return;
+/**
+ * For sidebar menus this filter allows to activate alternate menus - are disabled by default
+ * 
+ * @since 4.5
+ * @param int|false $alternate_menu_id 
+ * @param array $headerS
+ * @return int|false
+ */
+$alternate_menu_id = apply_filters( 'avf_alternate_mobile_menu_id', $alternate_menu_id, $headerS );
+
+if( isset( $headerS['disabled'] ) ) 
+{    
+	return;   
+}
 
 ?>
 
@@ -107,9 +124,9 @@ if($headerS['header_topbar'] == true)
 						*   the function is located at framework/php/function-set-avia-frontend-functions.php in case you need to edit the output
 						*/
 						$addition = false;
-						if( !empty($headerS['header_transparency']) && !empty($headerS['header_replacement_logo']) )
+						if( ! empty( $headerS['header_transparency'] ) && ! empty( $headerS['header_replacement_logo'] ) )
 						{
-							$addition = "<img src='".$headerS['header_replacement_logo']."' class='alternate' alt='' title='' />";
+							$addition = "<img src='{$headerS['header_replacement_logo']}' class='alternate' alt='{$headerS['header_replacement_logo_alt']}' title='{$headerS['header_replacement_logo_title']}' />";
 						}
 						
 						$output .= avia_logo(AVIA_BASE_URL.'images/layout/logo.png', $addition, 'span', true);
@@ -147,11 +164,12 @@ if($headerS['header_topbar'] == true)
 								$output .= "<div class='container'>";
 							}
 						
-						
+							$avia_theme_location = 'avia';
+							$avia_menu_class = $avia_theme_location . '-menu';
+		
 						    $main_nav = "<nav class='main_menu' data-selectname='".__('Select a page','avia_framework')."' ".avia_markup_helper(array('context' => 'nav', 'echo' => false)).">";
-						        $avia_theme_location = 'avia';
-						        $avia_menu_class = $avia_theme_location . '-menu';
-						        $args = array(
+						        
+							$args = array(
 						            'theme_location'	=> $avia_theme_location,
 						            'menu_id' 			=> $avia_menu_class,
 						            'menu_class'		=> 'menu av-main-nav',
@@ -208,7 +226,71 @@ if($headerS['header_topbar'] == true)
 
 		<!-- end container_wrap-->
 		</div>
+<?php
+		/**
+		 * Add a hidden container for alternate mobile menu
+		 * 
+		 * We use the same structure as main menu to be able to use same logic in js to build burger menu
+		 * 
+		 * @added_by Günter
+		 * @since 4.5
+		 */
+		$out_alternate = '';
+		$avia_alternate_location = 'avia_alternate';
+		$avia_alternate_menu_class = $avia_alternate_location . '_menu';
 		
+		if( false !== $alternate_menu_id && is_nav_menu( $alternate_menu_id ) )
+		{
+			$out_alternate .= '<div id="avia_alternate_menu" style="display: none;">';
+			
+			$alternate_nav =	"<nav class='main_menu' data-selectname='" . __( 'Select a page', 'avia_framework' ) . "' " . avia_markup_helper( array( 'context' => 'nav', 'echo' => false ) ) . ">";
+			
+			$args = array(
+							'menu'				=> $alternate_menu_id,
+							'menu_id' 			=> $avia_alternate_menu_class,
+							'menu_class'		=> 'menu av-main-nav',
+							'container_class'	=> $avia_alternate_menu_class.' av-main-nav-wrap',
+							'fallback_cb' 		=> 'avia_fallback_menu',
+							'echo' 				=> false, 
+							'walker' 			=> new avia_responsive_mega_menu()
+						);
+
+			$wp_nav_alternate = wp_nav_menu( $args );
+			
+			/**
+			 * Hook that can be used for plugins and theme extensions
+			 * 
+			 * @since 4.5
+			 * @return string
+			 */
+			$alternate_nav .=		apply_filters( 'avf_inside_alternate_main_menu_nav', $wp_nav_alternate, $avia_alternate_location, $avia_alternate_menu_class );
+			
+			$alternate_nav .=	'</nav>';
+
+			/**
+			 * Allow to modify or remove alternate menu for special pages.
+			 * 
+			 * @since 4.5
+			 * @return string
+			 */
+			$out_alternate .= apply_filters( 'avf_alternate_main_menu_nav', $alternate_nav );
+
+			$out_alternate .= '</div>';
+		}
+		
+		/**
+		 * Hook to remove or modify alternate mobile menu
+		 * 
+		 * @since 4.5
+		 * @return string
+		 */
+		$out_alternate = apply_filters( 'avf_alternate_mobile_menu', $out_alternate );
+		
+		if( ! empty ( $out_alternate ) )
+		{
+			echo $out_alternate; 
+		}
+?>
 		<div class='header_bg'></div>
 
 <!-- end header -->

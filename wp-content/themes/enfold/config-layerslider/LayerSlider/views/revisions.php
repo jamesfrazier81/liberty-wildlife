@@ -6,7 +6,7 @@ if(!defined('LS_ROOT_FILE')) {
 }
 
 // Show the welcome screen when the slider ID is missing or the plugin is not yet activated
-if( empty( $_GET['id'] ) ||  ! get_option('layerslider-authorized-site', false) ) {
+if( empty( $_GET['id'] ) ||  ! LS_Config::isActivatedSite() ) {
 
 	include LS_ROOT_PATH . '/templates/tmpl-revisions-welcome.php';
 

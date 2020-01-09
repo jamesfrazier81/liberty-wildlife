@@ -1,22 +1,39 @@
 #ls-transition-window {
 
-	header {
-
+	&.hide-special-effects {
 		#tryorigami {
-			margin-top: 60px;
-			width: 100%;
-			height: 250px;
-			background-image: url(../img/origami-bg.png);
-			text-align: center;
-			border-radius: 5px;
-			cursor: pointer;
-
-			img {
-				height: 100%;
-			}
+			display: none;
 		}
 
+		#ls-transitions-list {
+			top: 60px;
+		}
+	}
+
+	#transitiongallery-header {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+	}
+
+
+	#tryorigami {
+		width: 100%;
+		height: 160px;
+		background-image: url(../img/origami-bg.png);
+		text-align: center;
+		border-radius: 5px;
+		cursor: pointer;
+
+		img {
+			height: 100%;
+		}
+	}
+
+
 	#transitionmenu {
+
 		margin-top: 20px;
 		line-height: 40px;
 		font-size: 14px;
@@ -26,7 +43,7 @@
 		color: white;
 
  			&.buildermenu {
-				margin-top: 60px;
+				margin: 0;
 			}
 
 			span, i {
@@ -34,6 +51,7 @@
 			}
 
 			ul {
+				margin: 0;
 				list-style: none;
 				height: inherit;
 				line-height: inherit;
@@ -92,9 +110,16 @@
 				float: right;
 			}
 		}
-	}
+
 
 	#ls-transitions-list {
+
+		position: absolute;
+		top: 240px;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		overflow: auto;
 
 		section {
 			display: none;
@@ -105,11 +130,12 @@
 			}
 
 			h4 {
-				margin-top: 0;
+				margin: 10px 0 10px 0;
 				text-transform: uppercase;
 				color: #00a0d2;
 				font-size: 16px !important;
 			}
+
 
 			small {
 				display: inline-block;
@@ -118,7 +144,6 @@
 
 			.ls-description {
 				padding: 0 20px !important;
-				text-align: justify;
 			}
 
 			.button-hero {
@@ -139,9 +164,6 @@
 				}
 			}
 
-			div {
-				text-align: justify;
-			}
 
 			.tr-item,
 			.separated {
@@ -185,14 +207,10 @@
 				h4 {
 					font-size: 20px !important;
 					margin: 0 !important;
-
-					.dashicons-star-filled {
-						color: #fd9148 !important;
-						margin: 4px 0 0 10px;
-					}
 				}
 
 				.ls-select-special-transition {
+					position: relative;
 					display: inline-block !important;
 					border-radius: 50px !important;
 					border: 3px solid #00a0d2 !important;
@@ -207,7 +225,7 @@
 					padding: 0 30px !important;
 					cursor: pointer !important;
 
-					.dashicons {
+					.dashicons-yes {
 						font-size: 50px !important;
 						height: 100% !important;
 						line-height: 42px !important;
@@ -216,10 +234,30 @@
 						display: none !important;
 					}
 
+					.dashicons-lock {
+						position: absolute;
+						left: 50%;
+						top: 6px;
+						width: 30px;
+						height: 30px;
+						margin-left: -11px;
+
+						color: #0085af !important;
+						font-size: 30px;
+						line-height: 30px;
+					}
+
 					&:hover,
 					&.on {
 						background: #00a0d2 !important;
 						color: white !important;
+					}
+
+					&.locked {
+						background: white !important;
+						color: rgba( 0, 160, 210, 0.3) !important;
+						border: 3px solid rgba( 0, 160, 210, 0.3) !important;
+						cursor: default !important;
 					}
 
 					&.on {

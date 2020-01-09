@@ -476,3 +476,18 @@
 .ls-numbers .ls-ct-center {
 	border-width: 2px;
 }
+
+.ls-numbers .ls-media-unmute {
+	opacity: .7;
+}
+
+.ls-numbers .ls-media-unmute:hover {
+	opacity: 1;
+}
+
+.ls-numbers .ls-media-unmute-bg {
+	border-radius: 0;
+	background: rgba(0, 0, 0, 0.9);
+	border: 0 !important;
+	box-shadow: none !important;
+}

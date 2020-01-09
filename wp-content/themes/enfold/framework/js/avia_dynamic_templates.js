@@ -46,18 +46,18 @@ jQuery(function($) { $('#avia_options_page').avia_dynamic_templates(); });
 			//bind actions:	
 						
 			//add page
-			createButton.bind('click', {set: saveData}, methods.add_options_page);
+			createButton.on('click', {set: saveData}, methods.add_options_page);
 			
 			//add element
-			createElementButton.live('click', {set: saveData}, methods.add_element);
+			createElementButton.on('click', {set: saveData}, methods.add_element);
 			
-			deletePage.live('click', {set: saveData}, methods.delete_options_page);
+			deletePage.on('click', {set: saveData}, methods.delete_options_page);
 			
-			deleteElement.live('click', {set: saveData}, methods.delete_element);
+			deleteElement.on('click', {set: saveData}, methods.delete_element);
 			
 			
 			//prevent activating of default save buttons, instead activate the template creation button
-			nameElement.bind('keydown change keyup', function(event)
+			nameElement.on('keydown change keyup', function(event)
 			{
 				if(nameElement.val() != "" && nameElement.val().length > 2)
 				{

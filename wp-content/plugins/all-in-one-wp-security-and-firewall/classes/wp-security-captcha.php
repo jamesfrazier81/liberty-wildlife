@@ -1,12 +1,37 @@
 <?php
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
+
 class AIOWPSecurity_Captcha
 {
+    private $google_verify_recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
 
     function __construct() 
     {
         //NOP
     }
     
+    /**
+     * Displays Google reCaptcha form v2
+     * @global type $aio_wp_security
+     */
+    function display_recaptcha_form()
+    {
+        global $aio_wp_security;
+        if($aio_wp_security->configs->get_value('aiowps_enable_bp_register_captcha') == '1' && defined('BP_VERSION')){
+            //if buddy press feature active add action hook so buddy press can display our errors properly on bp registration form
+            do_action( 'bp_aiowps-captcha-answer_errors' );
+        }
+        $site_key = esc_html( $aio_wp_security->configs->get_value('aiowps_recaptcha_site_key') );
+        $cap_form = '<div class="g-recaptcha-wrap" style="padding:10px 0 10px 0"><div class="g-recaptcha" data-sitekey="'.$site_key.'"></div></div>';
+        echo $cap_form;
+    }
+
+    /**
+     * Displays simple maths captcha form
+     * @global type $aio_wp_security
+     */
     function display_captcha_form()
     {
         global $aio_wp_security;
@@ -117,6 +142,97 @@ class AIOWPSecurity_Captcha
             20 => __('twenty', 'all-in-one-wp-security-and-firewall'),
         ); 
         return $number_map[$num];
+    }
+    
+     
+    /**
+     * Verifies the math or Google recaptcha v2 forms
+     * Returns TRUE if correct answer.
+     * Returns FALSE on wrong captcha result or missing data.
+     * @global type $aio_wp_security
+     * @return boolean
+     */
+    function verify_captcha_submit () {
+        global $aio_wp_security;
+        if($aio_wp_security->configs->get_value('aiowps_default_recaptcha')) {
+            //Google reCaptcha enabled
+            if (array_key_exists('g-recaptcha-response', $_POST)) {
+                $g_recaptcha_response = isset($_POST['g-recaptcha-response'])?sanitize_text_field($_POST['g-recaptcha-response']):'';
+                $verify_captcha = $this->verify_google_recaptcha($g_recaptcha_response);
+                return $verify_captcha;
+            }else {
+                // Expected captcha field in $_POST but got none!
+                return false;
+            }            
+        } else {
+            // math captcha is enabled
+            if (array_key_exists('aiowps-captcha-answer', $_POST)) {
+                $captcha_answer = isset($_POST['aiowps-captcha-answer'])?sanitize_text_field($_POST['aiowps-captcha-answer']):'';
+
+                $verify_captcha = $this->verify_math_captcha_answer($captcha_answer);
+                return $verify_captcha;
+            } else {
+                // Expected captcha field in $_POST but got none!
+                return false;
+            } 
+        }
+    }
+    
+    /**
+     * Verifies the math captcha answer entered by the user
+     * @param type $captcha_answer
+     * @return boolean
+     */
+    function verify_math_captcha_answer($captcha_answer='') {
+        global $aio_wp_security;
+        $captcha_secret_string = $aio_wp_security->configs->get_value('aiowps_captcha_secret_key');
+        $captcha_temp_string = sanitize_text_field($_POST['aiowps-captcha-temp-string']);
+        $submitted_encoded_string = base64_encode($captcha_temp_string.$captcha_secret_string.$captcha_answer);
+        $trans_handle = sanitize_text_field($_POST['aiowps-captcha-string-info']);
+        $captcha_string_info_trans = (AIOWPSecurity_Utility::is_multisite_install() ? get_site_transient('aiowps_captcha_string_info_'.$trans_handle) : get_transient('aiowps_captcha_string_info_'.$trans_handle));
+        if($submitted_encoded_string === $captcha_string_info_trans) {
+            return true;
+        }else{
+            return false; // wrong answer was entered
+        }
+    }
+
+    /**
+     * Send a query to Google api to verify reCaptcha submission
+     * @global type $aio_wp_security
+     * @param type $resp_token
+     * @return boolean
+     */
+    function verify_google_recaptcha($resp_token='') {
+        global $aio_wp_security;
+        $is_humanoid = false;
+
+        if ( empty( $resp_token ) ) {
+            return $is_humanoid;
+        }
+
+        $url = $this->google_verify_recaptcha_url;
+        
+        $sitekey = $aio_wp_security->configs->get_value('aiowps_recaptcha_site_key');
+        $secret = $aio_wp_security->configs->get_value('aiowps_recaptcha_secret_key');
+        $ip_address = AIOWPSecurity_Utility_IP::get_user_ip_address();
+        $response = wp_safe_remote_post( $url, array(
+            'body' => array(
+                'secret' => $secret,
+                'response' => $resp_token,
+                'remoteip' => $ip_address,
+            ),
+        ) );
+
+        if ( wp_remote_retrieve_response_code( $response ) != 200 ) {
+            return $is_humanoid;
+        }
+        $response = wp_remote_retrieve_body( $response );
+        $response = json_decode( $response, true );
+        if(isset( $response['success'] ) && $response['success'] == true) {
+            $is_humanoid = true;
+        }
+        return $is_humanoid;    
     }
 
 }

@@ -4,6 +4,10 @@
  * global $aio_wp_security;
  * $aio_wp_security->debug_logger->log_debug("Log messaged goes here");
  */
+if(!defined('ABSPATH')){
+    exit;//Exit if accessed directly
+}
+
 class AIOWPSecurity_Logger
 {
     var $log_folder_path;
@@ -22,7 +26,7 @@ class AIOWPSecurity_Logger
     
     function get_debug_timestamp()
     {
-        return '['.date('m/d/Y g:i A').'] - ';
+        return '['.current_time( 'mysql' ).'] - ';
     }
     
     function get_debug_status($level)

@@ -653,7 +653,7 @@ if(!function_exists('avia_ajax_create_dynamic_options'))
 	}
 	
 	//hook into wordpress admin.php
-	add_action('wp_ajax_avia_ajax_create_dynamic_options', 'avia_ajax_create_dynamic_options');
+//	add_action('wp_ajax_avia_ajax_create_dynamic_options', 'avia_ajax_create_dynamic_options');
 }
 
 
@@ -710,8 +710,13 @@ if(!function_exists('avia_ajax_verify_input'))
 {
 	function avia_ajax_verify_input()
 	{
+		header( "Content-Type: application/json" );
+		
 		//check if user is allowed to save and if its his intention with a nonce check
 		if(function_exists('check_ajax_referer')) { check_ajax_referer('avia_nonce_save_backend'); }
+		
+		$response['success'] = true;
+		$response['html'] = '';
 		
 		$result = "";
 		$callback = "";
@@ -722,16 +727,27 @@ if(!function_exists('avia_ajax_verify_input'))
 			if(isset($option['id']) && $option['id'] == $_POST['key'] && isset($option['ajax']))
 			{
 				$callback = $option['ajax'];
+				break;
 			}
 		}
 		
 		if(function_exists($callback))
 		{
-			$js_callback_value = isset($_POST['js_value']) ? $_POST['js_value'] : NULL;
+			$js_callback_value = isset($_POST['js_value']) ? $_POST['js_value'] : null;
 			$result = $callback( $_POST['value'] , true, $js_callback_value );
+			
+			if( ! is_array( $result ) )
+			{
+				$response['html'] = $result;
+			}
+			else
+			{
+				$response = array_merge( $response, $result );
+			}
 		}
 		
-		die($result);
+		echo json_encode( $response );
+		exit;
 	}
 	
 	//hook into wordpress admin.php

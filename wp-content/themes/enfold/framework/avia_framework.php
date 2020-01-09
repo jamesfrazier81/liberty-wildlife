@@ -16,7 +16,7 @@
  * @version 	4.6
 
 */ 
-define( 'AV_FRAMEWORK_VERSION', "4.6" ); 
+define( 'AV_FRAMEWORK_VERSION', "5.0" ); 
 
 
 
@@ -93,7 +93,8 @@ $avia_base_data = apply_filters( 'avia_filter_base_data', $avia_base_data );
  * ------------------------------------------------------
  */
  
- $avia = new avia_superobject($avia_base_data);
+$avia = AviaSuperobject( $avia_base_data );
+$avia->init();
 
 
 // ------------------------------------------------------------------------

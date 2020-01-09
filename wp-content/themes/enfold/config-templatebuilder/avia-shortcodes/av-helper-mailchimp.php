@@ -1,6 +1,10 @@
 <?php
+/**
+ * a very small and basic toolset for the for mailchimp 3.0 API, inspired by the mailchimp-for-wp-plugins 2.0 API
+ * 
+ */
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
 
-/*a very small and basic toolset for the for mailchimp 3.0 API, inspired by the mailchimp-for-wp-plugins 2.0 API */
 
 if ( !class_exists( 'av_mailchimp_api' ) )
 {
@@ -25,32 +29,50 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 	 	*/
 	 	private $api_old = '';	
 	 	
-	 	
 	 	/**
 		 * @var string
 	 	*/
 	    private $api_key = '';
+		
+		/**
+		 * Stores the actual saved key value
+		 * 
+		 * @since 4.5.7.1
+		 * @var string 
+		 */
+		protected $stored_key;
+		
+		/**
+		 * Stores the last verified key to check
+		 * 
+		 * @since 4.5.7.1
+		 * @var string 
+		 */
+		protected $verified_key;
+
+
+		/**
+		 * @var array
+	 	*/
+	    private $msg;
 	    
 	    /**
 		 * @var array
 	 	*/
-	    private $msg = array();
-	    
-	    /**
-		 * @var array
-	 	*/
-	    public $lists = array();
+	    public $lists;
 	    
 	    
 	    /**
 		 * @var array
 	 	*/
-	    public $fields = array();
+	    public $fields;
 	    
 	    
-	    public function __construct( $api_key ) 
+	    public function __construct( $api_key = '' ) 
 	    {
 		    $server = "";
+			$this->verified_key = '';
+			
 			$this->api_key = $api_key;
 			$dash_position = strpos( $api_key, '-' );
 			
@@ -64,17 +86,62 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 			
 			
 			$this->msg = apply_filters( 'avf_mailchimp_messages' , array(
-				'email' 		=> __('Please provide a valid email address.', 'avia_framework'),
-				'all' 			=> __('Please fill in all required fields.', 'avia_framework'),
-				'already' 		=> __('This email address is already subscribed, thank you!', 'avia_framework'),
-				'general' 		=> __('We are very sorry but something went wrong. Please try again later.', 'avia_framework'),
-				'invalid_field' => __('Please make sure that your fields are filled in correctly', 'avia_framework'),
-				
-			));
+							'email' 		=> __( 'Please provide a valid email address.', 'avia_framework' ),
+							'all' 			=> __( 'Please fill in all required fields.', 'avia_framework' ),
+							'already' 		=> __( 'This email address is already subscribed, thank you!', 'avia_framework' ),
+							'general' 		=> __( 'We are very sorry but something went wrong. Please try again later.', 'avia_framework' ),
+							'invalid_field' => __( 'Please make sure that your fields are filled in correctly', 'avia_framework' ),
+
+						));
 			
+			$this->lists = array();
+			$this->fields = array();
 		}
 		
+		/**
+		 * 
+		 * @since 4.5.7.2
+		 */
+		public function __destruct() 
+		{
+			unset( $this->msg );
+			unset( $this->fields );
+			unset( $this->lists );
+		}
 		
+		/**
+		 * Returns the last entered key in theme options
+		 * 
+		 * @since 4.5.7.2
+		 * @return string
+		 */
+		protected function get_stored_key()
+		{
+			if( empty( $this->stored_key ) )
+			{
+				$this->stored_key = avia_get_option( 'mailchimp_api', '' );
+			}
+			
+			return $this->stored_key;
+		}
+
+		/**
+		 * Returns the last verified key - allows to check for a changed key without validation
+		 * 
+		 * @since 4.5.7.2
+		 * @return string
+		 */
+		protected function get_last_verified_key()
+		{
+			if( empty( $this->verified_key ) )
+			{
+				$this->verified_key = avia_get_option( 'mailchimp_verified_key', '' );
+			}
+			
+			return $this->verified_key;
+		}
+		
+
 		public function get( $url = "" , $data = array())
 		{
 			$url = $this->api_url . $url ;
@@ -330,56 +397,89 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 			}
 		}
 		
-		static function backend_html($value = "", $ajax = true)
+		public function backend_html( $value = '', $ajax = true )
 		{
+			$return = array(
+							'html'                 => '',
+							'update_input_fields'  => array()
+						);
+			
 			$owner = false;
 			$response = array();
-			$response_text  = __("Could not connect to Mailchimp with this API Key. Please try again with a different key",'avia_framework');
-			$response_class = "av-notice-error";
+			$response_text  = __( 'Could not connect to Mailchimp with this API Key. Please try again with a different key', 'avia_framework' );
+			$response_class = 'av-notice-error';
 			$trigger_global_save = false;
-			$list_output_default  = __("You might also want to check your internet connection and make sure that mailchimp.com is available",'avia_framework');
+			$list_output_default  = __( 'You might also want to check your internet connection and make sure that mailchimp.com is available', 'avia_framework' );
 			
-			if($ajax)
+			if( $ajax )
 			{
-				if(!empty($value))
+				$api_key = '';
+				
+				if( ! empty( $value ) )
 				{
-					$api = new av_mailchimp_api($value);
+					$api = new av_mailchimp_api( $value );
 					$owner = $api->api_owner();
 				}
 				
-				if($owner)
+				if( $owner )
 				{
+					$api_key = $value;
 					$api->store_lists();
 					$trigger_global_save = true;
-					$response_class = "";
-					$response_text  = __("We were able to connect to your Mailchimp account",'avia_framework');
+					$response_class = '';
+					$response_text  = __( 'We were able to connect to your Mailchimp account', 'avia_framework' );
 					$response_text .= " ($owner)";
 					
-					$response_text .= " avia_trigger_save";
+					$response_text .= ' avia_trigger_save';
 				}
+				
+				$return['update_input_fields']['mailchimp_verified_key'] = $api_key;
 			}
 			else
 			{
-				$owner = get_option('av_mailchimp_owner');
-				if($owner)
+				$old_key = $this->get_stored_key();
+				$last_verified_key = $this->get_last_verified_key();
+				$owner = get_option( 'av_mailchimp_owner' );
+				
+				if( '' == $old_key )
 				{
-					$response_class = "";
-					$response_text  = __("Last time we checked we were able to connected to your Mailchimp account",'avia_framework');
-					$response_text .= " ($owner)";
+					$response_class = '';
+					$response_text = '';
+				}
+				else
+				{
+					if( ( $owner != '' ) && ( $old_key == $last_verified_key ) )
+					{
+						$response_class = '';
+						$response_text  = __( 'Last time we checked we were able to connected to your Mailchimp account', 'avia_framework' );
+						$response_text .= " ($owner)";
+					}
+					else if( 'verify_error' == $last_verified_key )
+					{
+						$response_text  = __( 'A connection error occured last time we tried verify your key with your Mailchimp account - please revalidate the key.', 'avia_framework' );
+					}
+					else if( '' == $last_verified_key )
+					{
+						$response_text  = __( 'Please verify the key.', 'avia_framework' );
+					}
+					else
+					{
+						$response_text  = __( 'Please verify the key - the last verified key is different.', 'avia_framework' );
+					}
 				}
 			}
 			
-			if($owner)
+			if( $owner )
 			{
-				$lists = get_option('av_chimplist');
-				$list_fields = get_option('av_chimplist_field');
+				$lists = get_option( 'av_chimplist' );
+				$list_fields = get_option( 'av_chimplist_field' );
 				
-				$list_output_default = __("We were not able to find any Newsletter List on your Mailchimp that your visitors can subscribe to. Please create at least one in your Mailchimp back-end and refresh the list data here to use Mailchimp with this theme.",'avia_framework');
+				$list_output_default = __( 'We were not able to find any Newsletter List on your Mailchimp that your visitors can subscribe to. Please create at least one in your Mailchimp back-end and refresh the list data here to use Mailchimp with this theme.', 'avia_framework' );
 				
-				if(!empty($list_fields))
+				if( ! empty( $list_fields ) )
 				{
-					$list_output = "";
-					$list_output_default = "";
+					$list_output = '';
+					$list_output_default = '';
 					
 					$list_output .= "<div class='av-verification-cell'><strong>".__('Available Lists', 'avia_framework').":</strong></div>";
 					
@@ -409,14 +509,14 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 				
 			}
 
-			$output  = "<div class='av-verification-response-wrapper'>";
-			$output .= "<div class='av-text-notice {$response_class}'>";
-			$output .= $response_text;
-			$output .= "</div>";
+			$output  =	"<div class='av-verification-response-wrapper'>";
+			$output .=		"<div class='av-text-notice {$response_class}'>";
+			$output .=			$response_text;
+			$output .=		"</div>";
 			
 			if(!empty($list_output) || !empty($list_output_default))
 			{
-				$output .= "<div class='av-verification-mailchimp-list'>";
+				$output .=	"<div class='av-verification-mailchimp-list'>";
 				
 				if(!empty($list_output))
 				{
@@ -425,28 +525,35 @@ if ( !class_exists( 'av_mailchimp_api' ) )
 				
 				if(!empty($list_output_default))
 				{
-					$output .= "<div class='av-verification-cell'>".$list_output_default."</div>";
+					$output .=		"<div class='av-verification-cell'>".$list_output_default."</div>";
 				}
 				
-				$output .= "</div>";
+				$output .=	"</div>";
 			}
 			
+			$output .=	"</div>";
 			
-			$output .= "</div>";
+			if( $ajax )
+			{
+				$return['html'] = $output;
+			}
+			else
+			{
+				$return = $output;
+			}
 			
-			
-			return $output;
+			return $return;
 		}
 	}
 }
 
 
-if (!function_exists('av_mailchimp_check_ajax'))
+if ( ! function_exists( 'av_mailchimp_check_ajax' ) )
 {
-	function av_mailchimp_check_ajax($value, $ajax = true, $js_callback = false)
+	function av_mailchimp_check_ajax( $value, $ajax = true, $js_callback = false )
 	{
-		
-		return av_mailchimp_api::backend_html($value, $ajax);	
+		$api = new av_mailchimp_api();
+		return $api->backend_html( $value, $ajax );	
 		
 	}
 }

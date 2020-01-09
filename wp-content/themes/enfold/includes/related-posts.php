@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
 
 /**
  *  These functions shows a number of posts related to the currently displayed post.
@@ -91,7 +92,7 @@ if (!empty($tags) && is_array($tags))
 
   			//create seperator
 
-     		$output .= "<div class ='related_posts {$rp}'>";
+     		$output .= "<div class ='related_posts clearfix {$rp}'>";
 
 
      		$output .= "<h5 class='related_title'>".__('You might also like', 'avia_framework')."</h5>";

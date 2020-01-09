@@ -14,7 +14,15 @@ jQuery(document).ready(function($) {
 	jQuery( 'body.single-product' ).on( 'click', '.single-product-main-image .avia-wc-30-product-gallery-lightbox', function( e ){
 		e.preventDefault();
 		var clicked = $(this), container = clicked.parents('.single-product-main-image');
-		container.find('.flex-active-slide a.lightbox-added').eq(0).trigger('click');
+		var img = container.find('.flex-active-slide a.lightbox-added').eq(0);
+		
+		//if no gallery is used we need to find the original image size differently
+		if(img.length == 0)
+		{
+			img = container.find('a.lightbox-added').eq(0);
+		}
+		
+		img.trigger('click');
 	});
 	
 	

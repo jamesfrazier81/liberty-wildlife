@@ -1,4 +1,6 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
 
 if( !class_exists( 'avia_responsive_mega_menu' ) )
 {
@@ -104,7 +106,12 @@ if( !class_exists( 'avia_responsive_mega_menu' ) )
 			);
 			
 			$this->top_menu 	= avia_get_option('header_position','header_top') == 'header_top' ? true : false;
-			$this->icon_menu 	= avia_is_burger_menu();
+			
+			/**
+			 * Allows to alter default settings Enfold-> Main Menu -> General -> Menu Items for Desktop
+			 * @since 4.4.2
+			 */
+			$this->icon_menu 	= apply_filters( 'avf_burger_menu_active', avia_is_burger_menu(), $this );
 			
 			if(avia_get_option('frontpage') && avia_get_option('blogpage'))
 			{

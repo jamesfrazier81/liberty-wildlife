@@ -68,7 +68,7 @@ if(!class_exists('avia_breadcrumb'))
 				if(isset($category[0]))
 				{
 					$ID = $category[0]->cat_ID;
-					$parents = get_category_parents($ID, TRUE, $markup, FALSE );
+					$parents = get_category_parents( $ID, true, $markup, false );
 					if(!is_object($parents)) echo $parents;
 					previous_post_link("%link $markup");
 				}
@@ -80,7 +80,7 @@ if(!class_exists('avia_breadcrumb'))
 				if($postType == 'post')
 				{
 					$ID = $category[0]->cat_ID;
-					echo get_category_parents($ID, TRUE, $markup, FALSE );
+					echo get_category_parents( $ID, true, $markup, false );
 				}
 				else if($postType == 'portfolio')
 				{
@@ -105,10 +105,10 @@ if(!class_exists('avia_breadcrumb'))
 			$i = $category[0]->cat_ID;
 			$parent = $category[0]-> category_parent;
 
-			if($parent > 0 && $category[0]->cat_name == single_cat_title("", false)){
-				echo get_category_parents($parent, TRUE, $markup, FALSE);
+			if($parent > 0 && $category[0]->cat_name == single_cat_title( "", false ) ){
+				echo get_category_parents( $parent, true, $markup, false );
 			}
-		return single_cat_title('',FALSE);
+		return single_cat_title( '', false );
 		}
 
 
@@ -116,7 +116,7 @@ if(!class_exists('avia_breadcrumb'))
 			$curauth = get_userdatabylogin(get_query_var('author_name'));
 			return "Author: ".$curauth->nickname;
 		}
-		if(is_tag()){ return "Tag: ".single_tag_title('',FALSE); }
+		if(is_tag()){ return "Tag: " . single_tag_title( '', false ); }
 
 		if(is_404()){ return __("404 - Page not Found",'avia_framework'); }
 
@@ -219,7 +219,7 @@ function avia_breadcrumbs( $args = array() ) {
 
 	/* If viewing the "home"/posts page. */
 	elseif ( is_home() ) {
-		$home_page = get_page( $wp_query->get_queried_object_id() );
+		$home_page = get_post( $wp_query->get_queried_object_id() );
 		$trail = array_merge( $trail, avia_breadcrumbs_get_parents( $home_page->post_parent, '' ) );
 		$trail['trail_end'] = get_the_title( $home_page->ID );
 	}
@@ -287,7 +287,7 @@ function avia_breadcrumbs( $args = array() ) {
                 {
                     if(!empty($cat->parent))
                     {
-                        $parents = get_category_parents($cat->cat_ID, TRUE, '$$$', FALSE );
+                        $parents = get_category_parents( $cat->cat_ID, true, '$$$', false );
                         $parents = explode("$$$", $parents);
                         foreach ($parents as $parent_item)
                         {
@@ -451,6 +451,19 @@ function avia_breadcrumbs( $args = array() ) {
 
 	/* Allow child themes/plugins to filter the trail array. */
 	$trail = apply_filters( 'avia_breadcrumbs_trail', $trail, $args );
+	
+	/**
+	 * Allow to filter trail to return unique links only (href and text)
+	 * 
+	 * @since 4.3.2
+	 * @param boolean
+	 * @param mixed|array $trail
+	 * @return mixed|true
+	 */
+	if( true === apply_filters( 'avf_breadcrumb_trail_unique', true, $trail ) )
+	{
+		$trail = avia_make_unique_breadcrumbs( $trail );
+	}
 
 	/* Connect the breadcrumb trail if there are items in the trail. */
 	if ( is_array( $trail ) ) {
@@ -490,7 +503,7 @@ function avia_breadcrumbs( $args = array() ) {
 		{
 			foreach($trail as $key => &$link)
 			{
-				if("trail_end" == $key) continue;
+				if("trail_end" === $key) continue;
 
 				$link = preg_replace('!rel=".+?"|rel=\'.+?\'|!',"", $link);
 				$link = str_replace('<a ', '<a rel="v:url" property="v:title" ', $link);
@@ -612,14 +625,27 @@ function avia_breadcrumbs_get_parents( $post_id = '', $path = '' ) {
 		}
 	}
 
+	$parents = array();
+	
 	/* While there's a post ID, add the post link to the $parents array. */
 	while ( $post_id ) {
 
 		/* Get the post by ID. */
-		$page = get_page( $post_id );
+		$page = get_post( $post_id );
+		
+		/**
+		 * Allow to translate breadcrumb trail - fixes a problem with parent page for portfolio
+		 * https://kriesi.at/support/topic/parent-page-link-works-correct-but-translation-doesnt/
+		 * 
+		 * @used_by				config-wpml\config.php						10
+		 * @since 4.5.1
+		 * @param int $post_id
+		 * @return int
+		 */
+		$translated_id = apply_filters( 'avf_breadcrumbs_get_parents', $post_id );
 
 		/* Add the formatted post link to the array of parents. */
-		$parents[]  = '<a href="' . get_permalink( $post_id ) . '" title="' . esc_attr( get_the_title( $post_id ) ) . '">' . get_the_title( $post_id ) . '</a>';
+		$parents[]  = '<a href="' . get_permalink( $translated_id ) . '" title="' . esc_attr( get_the_title( $translated_id ) ) . '">' . get_the_title( $translated_id ) . '</a>';
 
 		/* Set the parent post's parent to the post ID. */
 		if(is_object($page))
@@ -633,8 +659,10 @@ function avia_breadcrumbs_get_parents( $post_id = '', $path = '' ) {
 	}
 
 	/* If we have parent posts, reverse the array to put them in the proper order for the trail. */
-	if ( isset( $parents ) )
+	if ( ! empty( $parents ) )
+	{
 		$trail = array_reverse( $parents );
+	}
 
 	/* Return the trail of parent posts. */
 	return $trail;
@@ -684,3 +712,73 @@ function avia_breadcrumbs_get_term_parents( $parent_id = '', $taxonomy = '' ) {
 	return $trail;
 
 } // End avia_breadcrumbs_get_term_parents()
+
+
+/**
+ * Filters the trail and removes the first entries that have the same href's and link text
+ * Trail must be an array
+ * 
+ * @since 4.3.2
+ * @param mixed|array $trail
+ * @return mixed|array
+ */
+function avia_make_unique_breadcrumbs( $trail )
+{
+	if( ! is_array( $trail ) || empty( $trail ) )
+	{
+		return $trail;
+	}
+	
+	$splitted = array();
+	
+	foreach( $trail as $key => $link ) 
+	{
+		$url = array();
+		$text = array();
+		preg_match( '/href=["\']?([^"\'>]+)["\']?/', $link, $url );
+		preg_match( '/<\s*a[^>]*>([^<]*)<\s*\/\s*a\s*>/', $link, $text );
+		
+		$splitted[] = array( 
+						'url'	=> isset( $url[1] ) ? $url[1] : '',
+						'text'	=> isset( $text[1] ) ? $text[1] : $link
+				);
+	}
+	
+	$last_index = count( $trail );
+	foreach( $splitted as $key => $current ) 
+	{
+		for( $i = $key + 1; $i < $last_index; $i++ )
+		{
+			$check = $splitted[ $i ];
+			
+			//	entry without url we do not remove - normally the last entry
+			if( empty( $check['url'] ) )
+			{
+				continue;
+			}
+			
+			if( ( strcasecmp( $current['url'], $check['url'] ) == 0 ) && ( strcasecmp( $current['text'], $check['text'] ) == 0 ) )
+			{
+				$splitted[ $key ]['delete'] = true;
+				break;
+			}
+		}
+	}
+	
+	$deleted = false;
+	foreach( $splitted as $key => $current )
+	{
+		if( ! empty( $current['delete'] ) && ( true === $current['delete'] ) )
+		{
+			unset( $trail[ $key ] );
+			$deleted = true;
+		}
+	}
+	
+	if( $deleted )
+	{
+		$trail = array_merge( $trail );
+	}
+	
+	return $trail;
+}

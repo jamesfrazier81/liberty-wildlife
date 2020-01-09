@@ -65,7 +65,7 @@ var av_backend_maps_loaded, gm_authFailure;
 	avia_callback.av_maps_js_api_check = function(value, callback)
 	{
 								//	this is only a fallback setting 
-		var src			= 'https://maps.googleapis.com/maps/api/js?v=3.30&callback=av_backend_maps_loaded&key=' + value;
+		var src	= 'https://maps.googleapis.com/maps/api/js?v=3.30&callback=av_backend_maps_loaded&key=' + value;
 		
 		if( 'undefined' != typeof avia_framework_globals.gmap_backend_maps_loaded && avia_framework_globals.gmap_backend_maps_loaded != '' )
 		{
@@ -73,8 +73,10 @@ var av_backend_maps_loaded, gm_authFailure;
 		}		
 
 		var	script 		= document.createElement('script');
+			script.id	= 'av-google-maps-api';
 			script.type = 'text/javascript';	
 			script.src 	= src;
+			script.onerror = av_google_maps_api_load_error;
 			
 			avia_callback.gmaps_values = {
 				
@@ -89,6 +91,19 @@ var av_backend_maps_loaded, gm_authFailure;
 			document.body.appendChild(script);
 	};
 	
+	av_google_maps_api_load_error = function()
+	{
+		var msg = 'Google Maps API could not be loaded. We are not able to verify the key. Check your internet connection and try again.';
+		
+		if( 'undefined' != typeof AviaMapData.api_load_error && '' != AviaMapData.api_load_error )
+		{
+			msg = AviaMapData.api_load_error;
+		}
+		
+		avia_callback.gmaps_values.callback.call(this, 'error');
+		
+		alert( msg );
+	};
 	
 	av_backend_maps_loaded = function()
 	{
@@ -127,8 +142,237 @@ var av_backend_maps_loaded, gm_authFailure;
 
 
 
-
-
+(function($)
+{
+	avia_callback.av_recaptcha_values = { 
+									callback: false, 
+									version: '', 
+									sitekey: '', 
+									secretkey: '', 
+									container: false, 
+									current_id: false, 
+									widget_id: false,
+									monitor_check: false,
+									theme: 'light'
+								};
+	
+	
+	avia_callback.av_recaptcha_js_api_check = function( value, callback )
+	{
+		var clicked      = $(this),
+			container    = clicked.closest('.av-verify-button-container'),
+			input_fields = clicked.data('av-verify-fields'),
+			defer        = false,
+			src          = '',
+			version      = '',
+			sitekey      = '', 
+			secretkey    = '',
+			theme        = 'light';
+	
+		input_fields = input_fields.split(',');
+		
+		//	remove any existing error widgets
+		$('.av-recaptcha-callback-error').hide();
+		
+				//	this is a fallback only
+		src = 'https://www.google.com/recaptcha/api.js';
+		
+		if( 'undefined' != typeof AviaReCAPTCHA_data.api && '' != AviaReCAPTCHA_data.api )
+		{
+			src = AviaReCAPTCHA_data.api;
+		}
+		
+		if( 'undefined' != typeof AviaReCAPTCHA_data.theme && '' != AviaReCAPTCHA_data.theme )
+		{
+			theme = AviaReCAPTCHA_data.theme;
+		}
+		
+//		var version_container = 'undefined' != typeof input_fields[0] ? container.find('select[name="' + input_fields[0] + '"]') : '';
+//		version = ( version_container.length == 0 ) ? '' : version_container.find('option:selected').val();
+		
+		var id_btn = clicked.attr('id').trim();
+		if( id_btn.indexOf( 'recaptcha_key_verify_v2' ) >= 0 )
+		{
+			version = 'avia_recaptcha_v2';
+		}
+		else if( id_btn.indexOf( 'recaptcha_key_verify_v3' ) >= 0 )
+		{
+			version = 'avia_recaptcha_v3';
+		}
+		
+		switch( version )
+		{
+			case 'avia_recaptcha_v2':
+				sitekey = 'undefined' != typeof input_fields[1] ? container.find('input[name="' + input_fields[1] + '"]').val().trim() : '';
+				secretkey = 'undefined' != typeof input_fields[2] ? container.find('input[name="' + input_fields[2] + '"]').val().trim() : '';
+				theme = 'undefined' != typeof input_fields[5] ? container.find('select[name="' + input_fields[5] + '"]').find(":selected").attr('value').trim() : 'light';
+				if( '' == theme )
+				{
+					theme = 'light';
+				}
+				src += '?onload=av_recaptcha_api_loaded&render=explicit';
+				defer = true;
+				break;
+			case 'avia_recaptcha_v3':
+				sitekey = 'undefined' != typeof input_fields[3] ? container.find('input[name="' + input_fields[3] + '"]').val().trim() : '';
+				secretkey = 'undefined' != typeof input_fields[4] ? container.find('input[name="' + input_fields[4] + '"]').val().trim() : '';
+				src += '?onload=av_recaptcha_api_loaded&render=' + sitekey;
+				break;
+			default:
+				version = '';
+				break;
+		}
+		
+		if( '' == version || '' == sitekey || '' == secretkey )
+		{
+			var msg = ( '' == version ) ? AviaReCAPTCHA_data.invalid_version : AviaReCAPTCHA_data.invalid_keys;
+			
+			msg = '<div class="av-notice-error">' + msg + '</div>';
+			container.find('.av-verification-result').html( msg );
+			return false;
+		}
+		
+		avia_callback.av_recaptcha_values.callback = callback;
+		avia_callback.av_recaptcha_values.version = version;
+		avia_callback.av_recaptcha_values.sitekey =  sitekey, 
+		avia_callback.av_recaptcha_values.secretkey = secretkey;
+		avia_callback.av_recaptcha_values.container = container;
+		avia_callback.av_recaptcha_values.current_id = false;
+		avia_callback.av_recaptcha_values.widget_id = false;
+		avia_callback.av_recaptcha_values.theme = theme;
+		
+		
+			//find a current google recaptcha link and remove it, then append the new one
+		$('script[src*="recaptcha/api.js"]').remove();
+		$('#av-recaptcha-api-script').remove();
+		
+		var	script 		= document.createElement('script');
+			script.id	= 'av-recaptcha-api-script';
+			script.type = 'text/javascript';	
+			script.src 	= src;
+			script.onerror = av_recaptcha_api_load_error;
+			if( defer )
+			{
+				script.defer = true;
+			}
+		
+		//	Warning: there is no feedback if API script is not loaded correctly
+		document.body.appendChild(script);
+	};
+	
+	av_recaptcha_api_load_error = function()
+	{
+		var msg = 'Google reCAPTCHA API could not be loaded. We are not able to verify keys. Check your internet connection and try again.';
+		
+		if( 'undefined' != typeof AviaReCAPTCHA_data.v3_timeout && '' != AviaReCAPTCHA_data.v3_timeout )
+		{
+			msg = AviaReCAPTCHA_data.api_load_error;
+		}
+		
+		avia_callback.av_recaptcha_values.callback.call(this, 'error');
+		
+		alert( msg );
+	};
+	
+	av_recaptcha_api_loaded = function()
+	{
+		var result = avia_callback.av_recaptcha_values.container.find('.av-verification-result');
+		
+		if( 'avia_recaptcha_v2' == avia_callback.av_recaptcha_values.version )
+		{
+			var unique_id = av_recaptcha_unique_id();
+			var div = '<div id="' + unique_id + '" class="av-recaptcha-verify"></div>';
+			avia_callback.av_recaptcha_values.container.find('.av-verification-result').first().before( div );
+			
+			avia_callback.av_recaptcha_values.current_id = unique_id;
+ 
+			avia_callback.av_recaptcha_values.widget_id = grecaptcha.render( unique_id, {
+																	'sitekey': avia_callback.av_recaptcha_values.sitekey,
+																	'callback': av_recaptcha_verify_VerifyCallback,
+																	'error-callback': av_recaptcha_verify_ErrorCallback,
+																	'theme': avia_callback.av_recaptcha_values.theme
+																});
+		}
+		else if( 'avia_recaptcha_v3' == avia_callback.av_recaptcha_values.version )
+		{
+			grecaptcha.ready(function() {
+							avia_callback.av_recaptcha_values.monitor_check = setTimeout(av_recaptcha_verify_MonitorVerify, 5000);
+							grecaptcha.execute( avia_callback.av_recaptcha_values.sitekey, {action: 'verify_keys'}).then( av_recaptcha_verify_VerifyCallback );
+					});
+		}
+	};
+	
+	//	Fix a bug in V3 that a wrong sitekey does not return or throw any error - only a message in console
+	av_recaptcha_verify_MonitorVerify = function()
+	{
+		avia_callback.av_recaptcha_values.monitor_check = false;
+		
+		var msg = 'A network timeout problem occured. Could be caused by an invalid V3 sitekey. Please recheck the key and try again.';
+		
+		if( 'undefined' != typeof AviaReCAPTCHA_data.v3_timeout && '' != AviaReCAPTCHA_data.v3_timeout )
+		{
+			msg = AviaReCAPTCHA_data.v3_timeout;
+		}
+		
+		avia_callback.av_recaptcha_values.callback.call(this, 'error');
+		
+		alert( msg );
+	};
+	
+	av_recaptcha_verify_VerifyCallback = function( token )
+	{
+		//	v3 fix: wrong sitekey interrupts program flow, if it returns sitekey is valid
+		if( avia_callback.av_recaptcha_values.monitor_check !== false )
+		{
+			clearTimeout( avia_callback.av_recaptcha_values.monitor_check );
+			avia_callback.av_recaptcha_values.monitor_check = false;
+		}
+		
+		var params = {
+							token: token,
+							version: avia_callback.av_recaptcha_values.version,
+							sitekey: avia_callback.av_recaptcha_values.sitekey,
+							secretkey: avia_callback.av_recaptcha_values.secretkey,
+							current_id: avia_callback.av_recaptcha_values.current_id
+						};
+						
+		$('#av-recaptcha-api-script').remove();
+		
+		if( false !== avia_callback.av_recaptcha_values.widget_id )
+		{
+			//	Needed to avoid a timeout callback to recaptcha - this also occurs when api script is removed
+			grecaptcha.reset( avia_callback.av_recaptcha_values.widget_id );
+		}
+		
+		$( '#' + avia_callback.av_recaptcha_values.current_id ).remove();
+		
+		avia_callback.av_recaptcha_values.callback.call(this, params);
+	};
+	
+	av_recaptcha_verify_ErrorCallback = function()
+	{
+		$( '#' + avia_callback.av_recaptcha_values.current_id ).addClass('av-recaptcha-callback-error');
+		avia_callback.av_recaptcha_values.callback.call(this, 'error');
+	};
+	
+	av_recaptcha_unique_id = function()
+	{
+		var body = $('body');
+		var id = 'av-verify-recaptcha-';
+		var cnt = 0;
+		
+		do
+		{
+			var unique = id + cnt;
+			if( 0 == body.find( '#' + unique ).length )
+			{
+				return unique;
+			}
+			cnt ++;
+		}while( true )
+	};
+	
+})(jQuery);	
 
 
 /************************************************************************
@@ -140,10 +384,12 @@ verifies an input field by calling a user defined ajax function
 {
 	$.fn.avia_verify_input = function(variables) 
 	{
-		var button = $(this), testing = false;
+		var button = $(this);
 		
-		button.on('click', function()
+		button.on( 'click', function(e)
 		{
+			e.preventDefault();
+			
 			var clicked   		= $(this),
 			container 			= clicked.parents('.avia_verification_field'),
 			input				= container.find('.avia_verify_input input'),
@@ -156,15 +402,33 @@ verifies an input field by calling a user defined ajax function
 			loader				= $('.avia_header .avia_loading, .avia_footer .avia_loading'),
 			js_callback_value 	= false;
 			
-			if(testing) return false;
+
+			if( clicked.hasClass( 'avia_button_inactive' ) ) 
+			{
+				return false;
+			}
 			
 			var server_callback = function(js_value_passed)
 			{
 				
-						//send ajax request to the ajax-admin.php script	
-						$.ajax({
+				if( 'undefined' == typeof js_value_passed ) 
+				{
+					js_value_passed = '';
+				}
+				
+				if( 'error' == js_value_passed )
+				{
+					loader.fadeOut();
+					clicked.removeClass('avia_button_inactive');
+					return;
+				}
+				
+				//send ajax request to the ajax-admin.php script	
+				$.ajax({
 								type: "POST",
 								url: window.ajaxurl,
+								dataType: 'json',
+								cache: false,
 								data: 
 								{
 									action: 'avia_ajax_verify_input',
@@ -182,7 +446,6 @@ verifies an input field by calling a user defined ajax function
 									//show loader
 									 loader.css({opacity:0, display:"block", visibility:'visible'}).animate({opacity:1});
 									 clicked.addClass('avia_button_inactive');
-									 testing = true;
 								},
 								error: function()
 								{
@@ -190,23 +453,35 @@ verifies an input field by calling a user defined ajax function
 								},
 								success: function(response)
 								{
-									if(response.indexOf('avia_trigger_save') !== -1)
+									if( response.success !== true )
 									{
-										$('.avia_submit:eq(0)').trigger('click');
-										response = response.replace('avia_trigger_save', "");
+										return;
 									}
 									
-									answer.html(response);
+									if( 'undefined' != typeof response.update_input_fields )
+									{
+										$.each( response.update_input_fields, function( id, value ) {
+														$( "input[name='" + id + "']" ).val( value );
+													});
+									}
+									
+									var result = response.html;
+									if(result.indexOf('avia_trigger_save') !== -1)
+									{
+										$('.avia_submit:eq(0)').removeClass('avia_button_inactive').trigger('click');
+										result = result.replace('avia_trigger_save', "");
+									}
+									
+									answer.html(result);
 									
 								},
 								complete: function(response)
 								{	
 									loader.fadeOut();
 									clicked.removeClass('avia_button_inactive');
-									testing = false;
 								}
 							});	
-			}
+			};
 			
 			//start the validation
 			value = input.val();
@@ -216,17 +491,18 @@ verifies an input field by calling a user defined ajax function
 				loader.css({opacity:0, display:"block", visibility:'visible'}).animate({opacity:1});
 				clicked.addClass('avia_button_inactive');
 				
-				window.avia_callback[js_callback_action].call(this, value, server_callback);
+				var result = window.avia_callback[js_callback_action].call(this, value, server_callback);
+				if( false === result )
+				{
+					loader.fadeOut();
+					clicked.removeClass('avia_button_inactive');
+				}
 			}
 			else
 			{
 				server_callback();
 			}
 			
-			
-			
-			
-
 			return false;
 		});
 
@@ -267,8 +543,8 @@ event binding fake plugin to circumvent event cloning problems with external plu
 			
 			var saveButton = $('.avia_submit'),
 				elements = $('input, select, textarea', container).not('.avia_button_inactive');
-			elements.bind('keydown change', function(){saveButton.removeClass('avia_button_inactive'); });
-			$('.avia_clone_set, .avia_remove_set, .avia_dynamical_add_elements', container).bind('click', function(){ saveButton.removeClass('avia_button_inactive'); });
+			elements.on('keydown change', function(){saveButton.removeClass('avia_button_inactive'); });
+			$('.avia_clone_set, .avia_remove_set, .avia_dynamical_add_elements', container).on('click', function(){ saveButton.removeClass('avia_button_inactive'); });
 			$('.avia_select_unify select').not('.avia_multiple_select select').css('opacity',0);
 			
 		});
@@ -281,7 +557,7 @@ event binding fake plugin to circumvent event cloning problems with external plu
 {
 	$.fn.avia_event_listener = function(variables) 
 	{	
-		this.bind('avia_event_binding', function(event, element)
+		this.on('avia_event_binding', function(event, element)
 		{
 			parent.jQuery(element).avia_event_binding('skip');
 		});
@@ -313,7 +589,7 @@ Styling WIzard function
 			tmpl.find('.av-wizard-subcontainer-colorpicker').avia_color_picker_activation();
 			
 			//activate change method so 
-			tmpl.find('input, select, textarea').bind('keydown change', function(){_self.saveButton.removeClass('avia_button_inactive'); });
+			tmpl.find('input, select, textarea').on('keydown change', function(){_self.saveButton.removeClass('avia_button_inactive'); });
 			
 			methods.recalc(_self.insertContainer);
 			return false;
@@ -399,24 +675,29 @@ execute a function after change event was fired
 				{
 				
 					var current 	= $(this),
-						value 		= current.val();
+						value 		= current.val(),
+						parentItem 	= current.parents('.avia_control:eq(0)'),
+						cssRule 	= parentItem.find('.webfont_'+this.id).remove();
 						
 					if(!value) return;
 						
 					var cssValue 	= value.replace(/ /g, "+", value),
-						parentItem 	= current.parents('.avia_control:eq(0)'),
-						cssRule 	= parentItem.find('.webfont_'+this.id).remove(),
 						insert		= "";
 					
 					if(value.indexOf("-websave") != -1)
 					{
-						value = value.replace(/-websave/g, "", value),
-						value = value.replace(/-/g, "", value)
-						insert = '<style type="text/css">.webfont_'+this.id+'{font-family:'+value.replace(/:(\d+)$/,"")+';}</style>';
+						value = value.replace(/-websave/g, "", value);
+						value = value.replace(/-/g, "", value);
+						insert = '<style type="text/css">.webfont_'+this.id+'{font-family:\''+value.replace(/:(\d+)$/,"")+'\';}</style>';
+					}
+					else if(value.indexOf("-custom") != -1)
+					{
+						value = value.replace(/-custom/g, "", value);
+						insert = '<style type="text/css">.webfont_'+this.id+'{font-family:\'' + value + '\';}</style>';
 					}
 					else
 					{
-						insert = '<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family='+cssValue+'" /> <style type="text/css">.webfont_'+this.id+'{font-family:'+value.replace(/:(.+)$/,"")+';}</style>';
+						insert = '<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family='+cssValue+'" /> <style type="text/css">.webfont_'+this.id+'{font-family:\''+value.replace(/:(.+)$/,"")+'\';}</style>';
 					}
 					
 					cssRule = $('<div class="webfont_'+this.id+'">'+insert+'</div>');
@@ -425,7 +706,7 @@ execute a function after change event was fired
 			};
 			
 			
-			item.bind('change', methods[event]).trigger('change');
+			item.on('change', methods[event]).trigger('change');
 		});
 	};
 })(jQuery);	
@@ -481,7 +762,7 @@ sets element to certain values when a controll element is clicked
 				};
 								
 				
-			item.bind('click', methods.apply );
+			item.on('click', methods.apply );
 			
 			
 				
@@ -591,7 +872,7 @@ injects data into a target field, based on type of data providing element
 				
 				if(typeof monitorItem != "string")
 				{
-					monitorItem.bind('change', function()
+					monitorItem.on('change', function()
 					{
 						methods.apply();
 					});				
@@ -665,7 +946,7 @@ divs with elements get hidden or shown depending on the value of other elements
 				//set current state:
 				if(elementToWatch.is(':checkbox'))
 				{	
-					if((elementToWatch.attr('checked') && basicData.required[1]) || (!elementToWatch.attr('checked') && !basicData.required[1]) ) 
+					if((elementToWatch.prop('checked') && basicData.required[1]) || (!elementToWatch.prop('checked') && !basicData.required[1]) ) 
 					{ 
 						if(container.is('.inactive_visible'))
 						{
@@ -713,7 +994,7 @@ divs with elements get hidden or shown depending on the value of other elements
 		
 				
 				//bind change event for future state changes
-				elementToWatch.bind('change', {set: basicData}, methods.change);
+				elementToWatch.on('change', {set: basicData}, methods.change);
 						
 		});
 	};
@@ -747,7 +1028,7 @@ divs with elements get hidden or shown depending on the value of other elements
 					
 			if(elVal == data.required[1] ||
 				(elVal != "" && data.required[1] == "{true}") || (elVal == "" && data.required[1] == "{false}") ||
-				(elToCheck.is(':checkbox') && (elToCheck.attr('checked') && data.required[1] || !elToCheck.attr('checked') && !data.required[1])) ||
+				(elToCheck.is(':checkbox') && (elToCheck.prop('checked') && data.required[1] || !elToCheck.prop('checked') && !data.required[1])) ||
 				(data.required[1].indexOf('{contains}') !== -1 && elVal.indexOf(data.required[1].replace('{contains}','')) !== -1) ||
 				(data.required[1].indexOf('{higher_than}') !== -1 && parseInt(elVal) >= parseInt((data.required[1].replace('{higher_than}','')))) ||
 				array_check
@@ -839,8 +1120,8 @@ avia_clone_sets: function to modify sets: add them, remove them and recalculate 
 			
 			
 			//bind actions:
-			saveData.createButton.unbind('click').bind('click', {set: saveData}, methods.add); 	//creates a new set
-			saveData.removeButton.unbind('click').bind('click', {set: saveData}, methods.remove); 	//remove a  set
+			saveData.createButton.off('click').on('click', {set: saveData}, methods.add); 	//creates a new set
+			saveData.removeButton.off('click').on('click', {set: saveData}, methods.remove); 	//remove a  set
 			
 			
 		});
@@ -1269,7 +1550,7 @@ avia_clone_sets: function to modify sets: add them, remove them and recalculate 
 						output = output.replace(/\n/g,"</br>");
 						
 						close_element.html(output).removeClass('avia_active_editor');
-						win.unbind('.avia_instant_edit');
+						win.off('.avia_instant_edit');
 						editing = false;
 					}
 				
@@ -1319,7 +1600,7 @@ avia_clone_sets: function to modify sets: add them, remove them and recalculate 
 				
 				closeListener: function(container, close_element)
 				{
-					win.unbind('.avia_instant_edit').bind(container.options.start+".avia_instant_edit", function(event)
+					win.off('.avia_instant_edit').on(container.options.start+".avia_instant_edit", function(event)
 					{
 						if(close_element.get(0) != event.target /* && close_element.find(event.target).length == 0 */) //2nd if clause caused problems in FF and Opera so it was removed
 						{
@@ -1342,14 +1623,4 @@ avia_clone_sets: function to modify sets: add them, remove them and recalculate 
 		});
 	};
 })(jQuery);	
-
-
-
-
-
-
-
-
-
-
 

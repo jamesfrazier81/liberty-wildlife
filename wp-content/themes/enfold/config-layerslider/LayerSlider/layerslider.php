@@ -2,11 +2,11 @@
 
 /*
 Plugin Name: LayerSlider WP
-Plugin URI: https://codecanyon.net/item/layerslider-responsive-wordpress-slider-plugin-/1362246
-Description: LayerSlider is the most advanced responsive WordPress slider plugin with the famous Parallax Effect and over 200 2D & 3D transitions.
-Version: 6.6.1
+Plugin URI: https://layerslider.kreaturamedia.com
+Description: LayerSlider is a premium multi-purpose content creation and animation platform. Easily create sliders, image galleries, slideshows with mind-blowing effects, popups, landing pages, animated page blocks, or even a full website. It empowers more than 1.5 million active websites on a daily basis with stunning visuals and eye-catching effects.
+Version: 6.9.2
 Author: Kreatura Media
-Author URI: https://layerslider.kreaturamedia.com
+Author URI: https://kreaturamedia.com
 Text Domain: LayerSlider
 */
 
@@ -25,17 +25,10 @@ if( defined('LS_PLUGIN_VERSION') || isset($GLOBALS['lsPluginPath']) ) {
 }
 
 
-// Used to enable/disable the activation box in older versions.
-// Nowadays, it displays a notification warning theme users about
-// potential activation issues and purchase codes. A more convenient
-// solution will replace this in future versions.
-$GLOBALS['lsAutoUpdateBox'] = true;
-
-
 // Basic configuration
 define('LS_DB_TABLE', 'layerslider');
-define('LS_DB_VERSION', '6.5.5');
-define('LS_PLUGIN_VERSION', '6.6.1');
+define('LS_DB_VERSION', '6.9.0');
+define('LS_PLUGIN_VERSION', '6.9.2');
 
 
 // Path info
@@ -58,6 +51,10 @@ if( ! defined('NL')  ) { define('NL', "\r\n"); }
 if( ! defined('TAB') ) { define('TAB', "\t");  }
 
 
+// Load & initialize plugin config class
+include LS_ROOT_PATH.'/classes/class.ls.config.php';
+LS_Config::init();
+
 // Shared
 include LS_ROOT_PATH.'/wp/scripts.php';
 include LS_ROOT_PATH.'/wp/menus.php';
@@ -73,11 +70,15 @@ include LS_ROOT_PATH.'/classes/class.ls.popups.php';
 
 // Back-end only
 if( is_admin() ) {
+
 	include LS_ROOT_PATH.'/wp/actions.php';
 	include LS_ROOT_PATH.'/wp/activation.php';
-	include LS_ROOT_PATH.'/wp/tinymce.php';
 	include LS_ROOT_PATH.'/wp/notices.php';
 	include LS_ROOT_PATH.'/classes/class.ls.revisions.php';
+
+	if( get_option('ls_tinymce_helper', true ) ) {
+		include LS_ROOT_PATH.'/wp/tinymce.php';
+	}
 
 	LS_Revisions::init();
 }
@@ -100,30 +101,52 @@ LS_Popups::init();
 
 // Setup auto updates. This class also has additional features for
 // non-activated sites such as fetching update info.
-$GLOBALS['LS_AutoUpdate'] = new KM_PluginUpdatesV3(array(
-	'name' => 'LayerSlider WP',
-	'repoUrl' => LS_REPO_BASE_URL,
-	'root' => LS_ROOT_FILE,
-	'version' => LS_PLUGIN_VERSION,
-	'itemID' => LS_MARKETPLACE_ID,
-	'codeKey' => 'layerslider-purchase-code',
-	'authKey' => 'layerslider-authorized-site',
-	'channelKey' => 'layerslider-release-channel'
+$GLOBALS['LS_AutoUpdate'] = new KM_PluginUpdatesV3( array(
+	'name' 			=> 'LayerSlider WP',
+	'repoUrl' 		=> LS_REPO_BASE_URL,
+	'root' 			=> LS_ROOT_FILE,
+	'version' 		=> LS_PLUGIN_VERSION,
+	'itemID' 		=> LS_MARKETPLACE_ID,
+	'codeKey' 		=> 'layerslider-purchase-code',
+	'authKey' 		=> 'layerslider-authorized-site',
+	'channelKey' 	=> 'layerslider-release-channel',
+	'activationKey' => 'layerslider-activation-id'
 ));
-
-
-// Offering a way for authors to override LayerSlider resources by
-// triggering filter and action hooks after the theme has loaded.
-add_action('after_setup_theme', 'layerslider_after_setup_theme');
-function layerslider_after_setup_theme() {
-	$url = apply_filters('layerslider_root_url', plugins_url('', __FILE__));
-	define('LS_ROOT_URL', $url);
-	layerslider_loaded();
-}
 
 
 // Load locales
 add_action('plugins_loaded', 'layerslider_plugins_loaded');
 function layerslider_plugins_loaded() {
 	load_plugin_textdomain('LayerSlider', false, LS_PLUGIN_SLUG . '/locales/' );
+}
+
+
+// Offering a way for authors to override LayerSlider resources by
+// triggering filter and action hooks after the theme has loaded.
+add_action('after_setup_theme', 'layerslider_after_setup_theme');
+function layerslider_after_setup_theme() {
+
+	// Set the LS_ROOT_URL constant
+	$url = apply_filters('layerslider_root_url', plugins_url('', __FILE__));
+	define('LS_ROOT_URL', $url);
+
+	// Trigger the layerslider_ready action hook
+	layerslider_loaded();
+
+	// Backwards compatibility for theme authors
+	LS_Config::checkCompatibility();
+}
+
+
+
+// Sets up LayerSlider as theme-bundled version by
+// disabling certain features and hiding premium notices.
+function layerslider_set_as_theme() {
+
+	LS_Config::setAsTheme();
+}
+
+
+function layerslider_hide_promotions() {
+	LS_Config::set('promotions', false);
 }

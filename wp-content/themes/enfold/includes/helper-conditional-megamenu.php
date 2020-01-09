@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
+
+
 if( !class_exists( 'avia_conditional_mega_menu' ) )
 {
     add_filter('avf_mega_menu_post_meta_fields','avia_save_conditional_menu_options',10,3);

@@ -86,6 +86,53 @@
 	}
 }
 
+#ls-popout-desc {
+
+	display: none;
+
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+
+	width: 400px;
+	height: 170px;
+	margin: -85px 0 0 -50px;
+
+
+	table {
+		width: auto;
+
+
+		td {
+			line-height: 26px;
+			font-size: 17px;
+			text-align: center;
+			color: #999;
+			vertical-align: middle !important;
+		}
+
+		.ls-popout-desc-text {
+			text-align: left;
+		}
+	}
+
+
+	.dashicons {
+		width: 100px;
+		height: 100px;
+		font-size: 100px;
+		margin-right: 10px;
+	}
+
+	.button {
+		height: 32px;
+		padding: 0 20px;
+		margin-top: 20px;
+		text-transform: uppercase;
+	}
+}
+
 #ls-layers-settings-popout-handler {
 	left: 0px;
 	right: 0px;
@@ -107,6 +154,12 @@
 	cursor: move;
 }
 
+.ls-popout-editor-open {
+	#ls-popout-desc {
+		display: block !important;
+	}
+}
+
 .ls-layers-settings-floating {
 	position: absolute;
 	border-radius: 5px !important;
@@ -116,11 +169,11 @@
 	box-shadow: 0 10px 70px rgba(0,0,0,.5);
 	background: white !important;
 
-	#menu-set-float {
+	#ls-open-popout-editor {
 		display: none;
 	}
 
-	#menu-set-putback {
+	#ls-close-popout-editor {
 		display: block;
 		position: absolute;
 		top: 0;
@@ -312,7 +365,7 @@ tr.active .ls-sublayer-controls {
 		border-radius: 5px;
 		border: 1px solid #dedede;
 
-		&.hover:hover {
+		&.hover.opened {
 			border: 1px solid #ccc;
 			box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.1);
 
@@ -329,8 +382,10 @@ tr.active .ls-sublayer-controls {
 			position: absolute;
 			top: 7px;
 			right: 10px;
+			pointer-events: none;
 			line-height: 28px;
 			font-size: 26px;
+			color: #333;
 		}
 
 		ul {
@@ -553,13 +608,15 @@ tr.active .ls-sublayer-controls {
 
 #tmpl-button-presets-modal-window {
 
+	text-align: center;
+
 	ul {
 		margin-top: 16px;
 
 		li {
 			width: 170px;
 			display: inline-block;
-			text-align: center;
+			margin: 0 15px 10px 15px;
 			padding: 5px 0;
 			cursor: pointer;
 
@@ -935,6 +992,7 @@ tr.ls-separator td {
 
 
 .ls-media-options td {
+	width: 33%;
 	text-align: center;
 
 	input, select, .ls-checkbox {
@@ -997,9 +1055,14 @@ tr.ls-separator td {
 }
 
 .ls-sublayer-style td:first-child {
-	width: 150px;
 	text-align: right;
 	color: #333;
+}
+
+.ls-h-text td:first-child,
+.ls-h-effects td:first-child,
+.ls-h-background td:first-child {
+	width: 150px !important;
 }
 
 .ls-sublayer-style > div {
@@ -1032,7 +1095,7 @@ tr.ls-separator td {
 	}
 
 	&:last-child textarea {
-		height: 643px;
+		height: 828px;
 	}
 
 	div.ls-h-actions .table-holder {
@@ -1097,10 +1160,6 @@ tr.ls-separator td {
 
 	> div:first-child {
 		margin-top: 0 !important;
-
-		.table-holder input {
-			width: 100% !important;
-		}
 	}
 }
 
@@ -1124,23 +1183,34 @@ tr.ls-separator td {
 	}
 }
 
-.ls-sublayer-style > div:first-child > div:first-child h5 {
-	text-align: left;
-	text-indent: 59px;
+.ls-sublayer-style .ls-h-actions a {
+	white-space: nowrap;
 }
 
 .ls-border-padding,
 .ls-position {
 	max-width: 380px;
-
 }
 
-.ls-position td {
+.ls-sublayer-style .ls-border-padding {
+
+	input {
+		width: 100% !important;
+	}
+}
+
+.ls-sublayer-style .ls-position td {
 	width: 50%;
 	text-align: right !important;
+	padding: 5px 10px 0 10px;
 
-	select.sublayerprop {
+	input,
+	select {
 		width: 100% !important;
+	}
+
+	.ls-checkbox {
+
 	}
 }
 
@@ -1364,6 +1434,16 @@ span.ls-layer-left,
 span.ls-layer-top,
 .ls-wh {
 	text-transform: uppercase;
+}
+
+#ls-background-notification {
+	width: 610px;
+	margin: 0 auto 10px auto;
+
+	.ls-notification-info {
+		width: auto !important;
+		margin: 0 !important;
+	}
 }
 
 #ls-transition-warning {
@@ -1935,7 +2015,6 @@ span.ls-layer-top,
 	}
 
 	.ls-h-actions {
-		border-left: 0 !important;
 		margin: 0 !important;
 	}
 
@@ -2138,6 +2217,11 @@ span.ls-layer-top,
 	}
 }
 
+.ls-layer-background-image-table .indent {
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
 #ls-insert-icons-modal-window {
 
 	h2 {
@@ -2208,23 +2292,15 @@ span.ls-layer-top,
 
 #tmpl-insert-media-modal-window {
 
-	.km-ui-modal-scrollable {
-		text-align: left;
-	}
-
 	.ls-left {
-		position: absolute;
-		left: 0;
+		float: left;
 		width: 580px;
+		padding-right: 40px;
+		border-right: 1px solid #dedede;
 	}
 
 	.ls-right {
-		position: absolute;
-		left: 619px;
-		right: 0;
-		height: 100%;
-		padding-left: 40px;
-		border-left: 1px solid #dedede;
+		float: right;
 	}
 
 	h3 {

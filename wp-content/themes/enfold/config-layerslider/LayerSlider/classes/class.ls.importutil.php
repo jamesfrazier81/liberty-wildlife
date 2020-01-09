@@ -34,7 +34,7 @@ class LS_ImportUtil {
 
 
 	// Accepts $_FILES
-	public function __construct($archive, $name = null) {
+	public function __construct( $archive, $name = null, $groupName = null ) {
 
 		// Attempt to workaround memory limit & execution time issues
 		@ini_set( 'max_execution_time', 0 );
@@ -63,7 +63,14 @@ class LS_ImportUtil {
 					if($this->unpack($archive)) {
 
 						// Uploaded folders
-						foreach(glob($this->tmpDir.'/*', GLOB_ONLYDIR) as $key => $dir) {
+						$folders = glob($this->tmpDir.'/*', GLOB_ONLYDIR);
+
+						$groupId = NULL;
+						if( ! empty( $groupName ) && count( $folders ) > 1 ) {
+							$groupId = LS_Sliders::addGroup( $groupName );
+						}
+
+						foreach( $folders as $key => $dir) {
 
 							$this->imported = array();
 
@@ -72,7 +79,7 @@ class LS_ImportUtil {
 							}
 
 							if(file_exists($dir.'/settings.json')) {
-								$this->lastImportId = $this->addSlider($dir.'/settings.json');
+								$this->lastImportId = $this->addSlider($dir.'/settings.json', $groupId);
 							}
 						}
 
@@ -237,7 +244,7 @@ class LS_ImportUtil {
 
 
 
-	public function addSlider($file) {
+	public function addSlider( $file, $groupId = NULL ) {
 
 		// Increment the slider counter
 		$this->sliderCount++;
@@ -298,11 +305,16 @@ class LS_ImportUtil {
 					$layer['posterId'] = $this->attachIDForImage($layer['poster']);
 					$layer['poster'] = $this->attachURLForImage($layer['poster']);
 				}
+
+				if( ! empty($layer['layerBackground']) ) {
+					$layer['layerBackgroundId'] = $this->attachIDForImage($layer['layerBackground']);
+					$layer['layerBackground'] = $this->attachURLForImage($layer['layerBackground']);
+				}
 			}}
 		}}
 
 		// Add slider
-		return LS_Sliders::add($title, $data, $slug);
+		return LS_Sliders::add( $title, $data, $slug, $groupId );
 	}
 
 

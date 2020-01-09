@@ -1,10 +1,13 @@
 <?php
 /**
- * Sidebar
+ * Widget Area
+ * 
  * Displays one of the registered Widget Areas of the theme
  */
+if ( ! defined( 'ABSPATH' ) ) {  exit;  }    // Exit if accessed directly
 
-if ( !class_exists( 'avia_sc_widgetarea' ) )
+
+if ( ! class_exists( 'avia_sc_widgetarea' ) )
 {
 	class avia_sc_widgetarea extends aviaShortcodeTemplate
 	{
@@ -13,14 +16,16 @@ if ( !class_exists( 'avia_sc_widgetarea' ) )
 			 */
 			function shortcode_insert_button()
 			{
-				$this->config['name']		= __('Widget Area', 'avia_framework' );
-				$this->config['tab']		= __('Content Elements', 'avia_framework' );
+				$this->config['self_closing']	=	'yes';
+				
+				$this->config['name']		= __( 'Widget Area', 'avia_framework' );
+				$this->config['tab']		= __( 'Content Elements', 'avia_framework' );
 				$this->config['icon']		= AviaBuilder::$path['imagesURL']."sc-sidebar.png";
 				$this->config['order']		= 10;
 				$this->config['target']		= 'avia-target-insert';
 				$this->config['shortcode'] 	= 'av_sidebar';
-				$this->config['tinyMCE'] 	= array('instantInsert' => "[av_sidebar widget_area='Displayed Everywhere']");
-				$this->config['tooltip'] 	= __('Display one of the themes widget areas', 'avia_framework' );
+				$this->config['tinyMCE'] 	= array( 'instantInsert' => "[av_sidebar widget_area='Displayed Everywhere']" );
+				$this->config['tooltip'] 	= __( 'Display one of the themes widget areas', 'avia_framework' );
 			}
 
 			/**
@@ -52,7 +57,7 @@ if ( !class_exists( 'avia_sc_widgetarea' ) )
 				$inner		.= AviaHtmlHelper::render_element($element);
 
 				$params['class'] = "";
-				$params['content']	 = NULL;
+				$params['content']	 = null;
 				$params['innerHtml'] = $inner;
 
 				return $params;
@@ -66,19 +71,22 @@ if ( !class_exists( 'avia_sc_widgetarea' ) )
 			 * @param string $shortcodename the shortcode found, when == callback name
 			 * @return string $output returns the modified html string
 			 */
-			function shortcode_handler($atts, $content = "", $shortcodename = "", $meta = "")
+			function shortcode_handler( $atts, $content = '', $shortcodename = '', $meta = '' )
 			{
-				$output = "";
+				$output = '';
 
-				if(!isset($atts['widget_area'])) return $output;
-
+				if( ! isset( $atts['widget_area'] ) ) 
+				{
+					return $output;
+				}
+				
 				if( is_dynamic_sidebar( $atts['widget_area'] ) )
 				{
 					ob_start();
 					dynamic_sidebar( $atts['widget_area'] );
-					$output = ShortcodeHelper::avia_remove_autop(ob_get_clean(), true);
+					$output = ShortcodeHelper::avia_remove_autop( ob_get_clean(), true );
 
-					if($output) $output = "<div class='avia-builder-widget-area clearfix ".$meta['el_class']."'>".$output."</div>";
+					if($output) $output = "<div {$meta['custom_el_id']} class='avia-builder-widget-area clearfix {$meta['el_class']}'>{$output}</div>";
 				}
 
 
