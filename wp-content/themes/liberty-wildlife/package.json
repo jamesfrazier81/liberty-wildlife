@@ -20,5 +20,6 @@
     "gulp-uglify": "^3.0.0",
     "jshint": "^2.9.5"
   },
+  "dependencies": {},
   "description": ""
 }
