@@ -21,7 +21,7 @@ gulp.task("serve", function() {
   var files = ["./*.php", "./sass/*.scss", "./js/*.js", "./includes/*.php"];
 
   browserSync.init(files, {
-    proxy: "libertywildlife.test"
+    proxy: "http://test.libertywildlife.org"
   });
 
   gulp.watch("./sass/*.scss", ["sass"]);
